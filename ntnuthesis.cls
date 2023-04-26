@@ -196,6 +196,18 @@
 \pagenumbering{roman}
 \setcounter{page}{1}
 
+% Add item number to \fullcite command
+\DeclareCiteCommand{\fullcite}
+  {\usebibmacro{prenote}}
+   {{\printtext[labelnumberwidth]{% New
+        \printfield{prefixnumber}% New
+        \printfield{labelnumber}}} % New
+  \usedriver
+     {\DeclareNameAlias{sortname}{default}}
+     {\thefield{entrytype}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
 % Switch to Arabic page numbering at the beginning of the first numbered chapter
 \newif\iffirstchapter
 \firstchaptertrue
@@ -292,6 +304,7 @@
         {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
         {€}{{\euro}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
         {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1
+        {š}{\v{s}}
 }
 
 % Ensure list of listings have additional spacing between chapters to match figures and tables
