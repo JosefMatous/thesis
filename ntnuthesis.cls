@@ -29,9 +29,7 @@
 % Title Page
 \DeclareOption{titlepage}{
     \AtBeginDocument{
-        \begin{titlepage}
             \maketitle
-        \end{titlepage}
     }
 }
 
@@ -54,7 +52,7 @@
             \renewcommand{\listfigurename}{Figures}
             \renewcommand{\listtablename}{Tables}
             \renewcommand{\glossaryname}{Glossary}
-            \renewcommand{\acronymname}{Acronyms}
+            \renewcommand{\acronymname}{Abbreviations}
         }
     }
 }
@@ -77,7 +75,7 @@
             \renewcommand{\listfigurename}{Figures}
             \renewcommand{\listtablename}{Tables}
             \renewcommand{\glossaryname}{Glossary}
-            \renewcommand{\acronymname}{Acronyms}
+            \renewcommand{\acronymname}{Abbreviations}
         }
     }
 }
@@ -137,7 +135,7 @@
 
 %% CLASS FILE LOADING
 
-\LoadClass[a4paper,11pt,openright,\paging]{report}
+\LoadClass[b5paper,11pt,openright,\paging]{report}
 
 %% PACKAGE LOADING
 
@@ -191,12 +189,12 @@
 %% CUSTOMISATION
 
 % Page geometry and spacing (same for even and odd pages)
-\geometry{left=4cm, right=4cm, top=4cm, bottom=4.5cm}
-\frenchspacing
+%\geometry{left=4cm, right=4cm, top=4cm, bottom=4.5cm}
+%\frenchspacing
 
 % Roman page numbers from the beginning of the document
 \pagenumbering{roman}
-\setcounter{page}{3}
+\setcounter{page}{1}
 
 % Switch to Arabic page numbering at the beginning of the first numbered chapter
 \newif\iffirstchapter
@@ -321,3 +319,71 @@
        \@starttoc{lol}%
        \endgroup%
        }%
+
+% Front page
+\newcommand{\printandscreen}[2]{\ifthenelse{\isundefined{\ScreenMode}}{#1}{#2}}
+\newcommand{\ISBNPrinted}{N/A}
+\newcommand{\ISBNElectronic}{N/A}
+\newcommand{\SerialNumber}{\number\year:N/A}
+\newcommand{\Month}{\ifcase\month\or
+	January\or February\or March\or April\or May\or June\or
+	July\or August\or September\or October\or November\or December\fi}
+\newcommand{\Year}{\number\year}
+
+\newcommand{\isbnprinted}[1]{\renewcommand{\ISBNPrinted}{#1}}
+\newcommand{\isbnelectronic}[1]{\renewcommand{\ISBNElectronic}{#1}}
+\newcommand{\serialnumber}[1]{\renewcommand{\SerialNumber}{#1}}
+\newcommand{\setyear}[1]{\renewcommand{\Year}{#1}}
+\newcommand{\setmonth}[1]{\renewcommand{\Month}{#1}}
+%
+% Override the \maketitle command
+%
+\renewcommand{\maketitle}{
+	\begin{titlepage}
+	\parindent=0cm
+	\addtolength{\parskip}{\baselineskip}
+	{\Huge \@author}
+	\printandscreen{\vspace{2cm}}{\vspace{0.5cm}}
+
+	{\Huge \textbf{\@title}}
+
+	\vfill
+
+	{\large Thesis for the degree of Philosophiae Doctor
+
+	Trondheim, \Month\ \Year
+
+	Norwegian University of Science and Technology\\
+	Faculty of Information Technology and Electrical Engineering \\
+	Department of Engineering Cybernetics }
+	\printandscreen{\vspace{2cm}}{\vspace{0.75cm}}
+
+	\includegraphics[width=0.4\textwidth]{figures/NTNUlogo.png}
+
+	\newpage
+	{~}
+	\vfill
+	{
+	\scriptsize
+	\textbf{NTNU}
+
+	Norwegian University of Science and Technology
+
+	Thesis for the degree of Philosophiae Doctor
+
+    Faculty of Information Technology and Electrical Engineering \\
+	Department of Engineering Cybernetics
+
+	\copyright\ \Year\ \@author.
+
+	ISBN \ISBNPrinted\ (printed version)\\
+	ISBN \ISBNElectronic\ (electronic version)\\
+	ISSN 1503-8181 (printed version)\\
+	ISBN 2703-8084 (electronic version)\\
+
+	Doctoral theses at NTNU, \SerialNumber
+
+	Printed by NTNU-trykk
+	}
+	\end{titlepage}
+}

@@ -1,13 +1,9 @@
 
 SRCS=\
-	$(wildcard appendices/*) \
 	$(wildcard chapters/*) \
-	$(wildcard csvtables/*) \
 	$(wildcard figures/*) \
-	$(wildcard listings/*) \
-	$(wildcard papers/*) \
 	ntnuthesis.cls \
-	thesis.bib \
+	references.bib \
 	glossary.tex \
 	thesis.tex
 
