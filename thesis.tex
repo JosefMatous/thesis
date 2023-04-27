@@ -1,5 +1,20 @@
 \documentclass[american]{ntnuthesis}
 
+\usepackage{epigraph}
+\setlength{\epigraphwidth}{0.5\textwidth}
+
+\usepackage{amsfonts,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{multirow,multicol}
+
+\newcommand*{\scale}[2][1]{\scalebox{#1}{\ensuremath{#2}}}
+\newcommand{\mat}[1]{\mathbf{#1}} % vectors/matrices
+\newcommand{\bs}[1]{\bm{#1}}      % bold Greek symbols
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\blkdiag}{blkdiag}
+
 \title{Cooperative Control of Formations of Underwater Vehicles}
 \shorttitle{Cooperative Control of Formations of Underwater Vehicles}
 \author{Josef Matou\v{s}}
@@ -10,7 +25,7 @@
 \isbnelectronic{}
 \serialnumber{}
 
-\addbibresource{references.bib}
+\addbibresource{references-ccta.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
 
