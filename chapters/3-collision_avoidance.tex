@@ -440,17 +440,23 @@ When it comes to the choice of the coefficient $k_v$, introduced in \eqref{eq:cc
 Intuitively, increasing $k_v$ increases the size of the ``unsafe'' region where the barrier function is negative, causing the system to react sooner in situations where two vehicles are on collision course.
 Conversely, increasing the slope of $\gamma$ decreases the size of the region where the constraint \eqref{eq:ccta_combined_avoidance_allocation_constraint} is active, causing the system to react later.
 
+\pgfplotsset{table/search path={figures/ccta/data}}
 \begin{figure*}[t]
     \centering
-    \begin{subfigure}{0.8\linewidth}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/milliAmpere_orig.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_orig.pdf}
+        \input{figures/ccta/milliAmpere_orig.tex}
+        \vspace{-0.5em}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four \emph{milliAmpere} vessels}
-        \vspace*{1em}
+        %\vspace*{1em}
     \end{subfigure}
-    \begin{subfigure}{0.8\linewidth}
+    \vspace{-1em}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/drillship_orig.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_orig.pdf}
+        \input{figures/ccta/drillship_orig.tex}
+        \vspace{-2em}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four drillships}
     \end{subfigure}
     \caption{Simulations of the control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation}}
@@ -459,15 +465,17 @@ Conversely, increasing the slope of $\gamma$ decreases the size of the region wh
 
 \begin{figure*}[t]
     \centering
-    \begin{subfigure}{0.8\linewidth}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified.pdf}
+        \input{figures/ccta/milliAmpere_modified.tex}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels}
         \vspace*{1em}
     \end{subfigure}
-    \begin{subfigure}{0.8\linewidth}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/drillship_modified.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified.pdf}
+        \input{figures/ccta/drillship_modified.tex}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships}
     \end{subfigure}
     \caption{Simulations of the modified control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}}
@@ -476,15 +484,17 @@ Conversely, increasing the slope of $\gamma$ decreases the size of the region wh
 
 \begin{figure*}[t]
     \centering
-    \begin{subfigure}{0.8\linewidth}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified_uncontrolled.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified_uncontrolled.pdf}
+        \input{figures/ccta/milliAmpere_modified_uncontrolled.tex}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels with one uncontrolled vessel}
         \vspace{0em}
     \end{subfigure}
-    \begin{subfigure}{0.8\linewidth}
+    \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width = \textwidth]{figures/ccta/drillship_modified_uncontrolled.pdf}
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified_uncontrolled.pdf}
+        \input{figures/ccta/drillship_modified_uncontrolled.tex}
         \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships with one uncontrolled vessel}
         \label{fig:ccta_drillship_unc}
         \vspace{-1.5mm}

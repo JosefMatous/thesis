@@ -1,0 +1,48 @@
+\def\xposition{0}
+\def\yposition{0}
+\def\angle{0}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=0.5\columnwidth,
+    height=0.5\columnwidth, 
+    %at={(0.772in,0.473in)},
+    scale only axis,
+    xmin=-10,
+    xmax=10,
+    xlabel style={font=\color{white!15!black}},
+    xlabel={$x$},
+    ymin=-10,
+    ymax=10,
+    ylabel style={font=\color{white!15!black}, yshift=-3mm},
+    ylabel={$y$},
+    axis background/.style={fill=white},
+    %title style={font=\bfseries},
+    %title={Surge velocities},
+    xmajorgrids,
+    ymajorgrids,
+    ticklabel style = {font=\small},
+    legend columns=3, 
+    legend style={/tikz/column 2/.style={column sep=5pt,}, font=\small},
+]
+
+\pgfplotstableread{
+    x1       y1         x2       y2         x3        y3        x4        y4       x5         y5       x6         y6       x7        y7        x8        y8
+   -1.0000   -8.0000    5.6312   -5.7697    8.0219    0.8052    4.3720    6.7739   -2.5701    7.6416   -7.5769    2.7551   -6.8781   -4.2061   -1.0000   -8.0000
+    1.0000   -8.0000    6.8781   -4.2061    7.5769    2.7551    2.5701    7.6416   -4.3720    6.7739   -8.0219    0.8052   -5.6312   -5.7697    1.0000   -8.0000
+    1.0000   -5.3333    4.7933   -2.5434    4.9771    2.1617    1.4131    5.2391   -3.2150    4.3713   -5.4221    0.2119   -3.5463   -4.1071    1.0000   -5.3333
+    0.0000   -4.0000    3.1273   -2.4940    3.8997    0.8901    1.7355    3.6039   -1.7355    3.6039   -3.8997    0.8901   -3.1273   -2.4940   -0.0000   -4.0000
+   -1.0000   -5.3333    3.5463   -4.1071    5.4221    0.2119    3.2150    4.3713   -1.4131    5.2391   -4.9771    2.1617   -4.7933   -2.5434   -1.0000   -5.3333
+   -1.0000   -8.0000    5.6312   -5.7697    8.0219    0.8052    4.3720    6.7739   -2.5701    7.6416   -7.5769    2.7551   -6.8781   -4.2061   -1.0000   -8.0000
+}\asvplots
+
+\pgfplotstablegetcolsof{\asvplots}
+\pgfmathparse{\pgfplotsretval / 2}
+\foreach \i in {1,...,\pgfmathresult}
+    \addplot[area legend, draw=black, fill=blue, fill opacity=0.15, line width=0.75pt, forget plot]
+    table[x=x\i, y=y\i] {\asvplots};
+
+\end{axis}
+
+\end{tikzpicture}
