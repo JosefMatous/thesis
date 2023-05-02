@@ -21,6 +21,8 @@
 \newcommand*{\scale}[2][1]{\scalebox{#1}{\ensuremath{#2}}}
 \newcommand{\mat}[1]{\mathbf{#1}} % vectors/matrices
 \newcommand{\bs}[1]{\bm{#1}}      % bold Greek symbols
+\newcommand{\T}{^{\mathrm{T}}}
+\newcommand{\inlinevector}[1]{\left[#1\right]\T}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\diag}{diag}
@@ -37,6 +39,7 @@
 \serialnumber{}
 
 \addbibresource{references-ccta.bib}
+\addbibresource{references-background.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
 

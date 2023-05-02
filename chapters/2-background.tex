@@ -2,3 +2,32 @@
 \label{chap:background}
 
 Information on background theory, methods, etc.
+
+\section{Geometric Paths}
+\label{sec:background_paths}
+
+This section presents the definitions of paths in the context of guidance.
+The theory presented in this section applies to two- and three-dimensional Euclidean spaces.
+Let $n_d \in \{2,3\}$ denote the number of dimensions.
+
+\subsubsection*{Paths and their parametrizations}
+A \emph{path} is a curve in $n_d$-dimensional space.
+A \emph{parametrization} of a path is a function $\mat{p}_p : \mathbb{R} \mapsto \mathbb{R}^{n_d}$ that describes the curve.
+Note that there exist infinitely many parametrizations of the same path.
+For example, the following two functions
+\begin{align}
+    \mat{p}_{p, 1}(s) &= \inlinevector{s, 0, 0}, &
+    \mat{p}_{p, 1}(s) &= \inlinevector{s^3, 0, 0}, &
+\end{align}
+represent the same path --- a straight line going through the origin, parallel to the $x$-axis.
+
+\subsubsection*{Continuity and regularity}
+There are two types of continuity --- \emph{parametric} and \emph{geometric}.
+Parametric continuity is related to a specific parametrization of a path, while geometric continuity is related to the curve itself.
+Here, we will only present the definition of parametric continuity, as it will be used furhter in the thesis.
+For details on geometric continuity, the reader is referred to \cite{barsky_geometric_1984}.
+Parametric continuity is denoted $\mathcal{C}_n$, where $n \in \mathbb{Z}_{\geq 0}$ is the order.
+A parametrization $\mat{p}_p(s)$ is $\mathcal{C}_n$ if it is $n$-times continuously differentiable.
+
+A parametrization if \emph{regular} if 
+
