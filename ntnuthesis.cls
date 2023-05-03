@@ -141,7 +141,7 @@
 
 \RequirePackage[utf8]{inputenc}             % for special characters in input
 \RequirePackage[T1]{fontenc}                % modern font encoding
-\RequirePackage[charter, cal=cmcal]{mathdesign} % main font with math support
+%\RequirePackage[charter, cal=cmcal]{mathdesign} % main font with math support
 \RequirePackage[scaled=.88]{berasans}       % sans serif font
 \RequirePackage[scaled=.82]{DejaVuSansMono} % monospace font (for code)
 \RequirePackage{listings}                   % code listings
@@ -151,6 +151,8 @@
 \RequirePackage{enumitem}                   % customising list appearance
 \RequirePackage{graphicx}                   % including figures
 \RequirePackage{amsmath}                    % advanced math typesetting
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
 \RequirePackage[                            % subfigures with captions within figures
     font=small,                             % and customisation of captions
     labelfont=bf,
@@ -189,7 +191,7 @@
 %% CUSTOMISATION
 
 % Page geometry and spacing (same for even and odd pages)
-%\geometry{left=4cm, right=4cm, top=4cm, bottom=4.5cm}
+\geometry{inner=3cm, outer=2cm, top=2.5cm, bottom=2.7cm}
 %\frenchspacing
 
 % Roman page numbers from the beginning of the document
@@ -260,7 +262,24 @@
     \def\@oddhead{\small\textit{\ch@ptermark}\hfil\thepage}
     \def\chaptermark##1{\def\ch@ptermark{\chaptername\ \thechapter: ##1}}
 }
-\pagestyle{ntnuheadings}
+%\pagestyle{ntnuheadings}
+
+\RequirePackage{fancyhdr}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\pagestyle{fancy}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\small\thepage}
+\fancyhead{}
+\fancyhead[LE]{\small\nouppercase{\leftmark}}
+\fancyhead[RO]{\small\nouppercase{\rightmark}}
+% Redefine the plain page style for chapter pages
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
 
 % Itemize and enumerate: tighter and with other symbols
 \setlist[enumerate]{itemsep=0mm, topsep=5pt, partopsep=0mm, parsep=0mm}
