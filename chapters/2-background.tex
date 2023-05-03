@@ -17,8 +17,9 @@ Let $n_d \in \{2,3\}$ denote the number of dimensions.
 
 \subsubsection*{Paths and their parametrizations}
 A \emph{path} is a curve in $n_d$-dimensional space.
-A \emph{parametrization} of a path is a function $\mat{p}_p : \mathbb{R} \mapsto \mathbb{R}^{n_d}$ that describes the curve.
-Note that there exist infinitely many parametrizations of the same path.
+A path can be expressed as a set $P \subset \mathbb{R}^{n_d}$.
+A \emph{parametrization} of a path is a function $\mat{p}_p : \mathbb{R} \mapsto \mathbb{R}^{n_d}$ whose image space represents the given path, \emph{i.e.,} $\{\mat{p}_p(s) | s \in \mathbb{R}\} = P$.
+Note for a given path, there exist infinitely many parametrizations.
 For example, the following two functions
 \begin{align}
     \mat{p}_{p, 1}(s) &= \inlinevector{s, 0, 0}, &
@@ -27,6 +28,7 @@ For example, the following two functions
 represent the same path --- a straight line going through the origin, parallel to the $x$-axis.
 
 \subsubsection*{Continuity and regularity}
+\emph{Continuity}, also referred to as smoothness, is an important property, as some vehicles are not able to follow a path that has discontinuities or sharp turns.
 There are two types of continuity --- \emph{parametric} and \emph{geometric}.
 Parametric continuity is related to a specific parametrization of a path, while geometric continuity is related to the curve itself.
 Here, we will only present the definition of parametric continuity, as it will be used furhter in the thesis.
@@ -38,7 +40,7 @@ A parametrization if \emph{regular} if
 \begin{equation}
     \norm{\frac{\partial \mat{p}_p}{\partial s}} \neq 0.
 \end{equation}
-A regular parametric means that there are no ``stops'' along the path.
+A regular parametrization means that there are no ``stops'' along the path.
 Regularity is an important property when defining the path-tangential vector and the path-tangential coordinate frame, as we discuss next.
 
 \subsubsection*{Path-tangential vector and coordinate frame}
@@ -46,20 +48,77 @@ If a parametrization is $\mathcal{C}_1$ and regular, then the \emph{path-tangent
 
 A \emph{path-tangential coordinate frame} has its origin at $\mat{p}_p(s)$, and is oriented such that the path-tangential vector is aligned with the $x$-axis.
 In the case of two-dimensional paths, this frame is uniquely defined.
-Let $\mat{R}_p \in SO(2)$ be the rotation matrix between the path-tangential and the inertial frame.
+Let $\mat{R}_p(s) \in SO(2)$ be the rotation matrix between the path-tangential and the inertial frame.
 This matrix is given by
-\begin{align}
-    \mat{R}_p &= 
+\begin{equation}
+    \mat{R}_p(s) = 
     \begin{bmatrix}
-        \cos\left(\psi_p(s)\right) & -\sin\left(\psi_p(s)\right) \\ \sin\left(\psi_p(s)\right) & \cos\left(\psi_p(s)\right)
-    \end{bmatrix}, &
-    \psi_p(s) &= \mathrm{arctan}_2\left(\frac{\partial y_p(s)}{\partial s}, \frac{\partial x_p(s)}{\partial s}\right),
-\end{align}
+        \cos\left(\psi_{p}(s)\right) & -\sin\left(\psi_{p}(s)\right) \\ \sin\left(\psi_{p}(s)\right) & \cos\left(\psi_{p}(s)\right)
+    \end{bmatrix}, \,
+    \psi_{p}(s) = \mathrm{arctan}_{2}\left(\frac{\partial  y_{p}(s)}{\partial s}, \frac{\partial  x_{p}(s)}{\partial s}\right),
+\end{equation}
 where $x_p(s)$ and $y_p(s)$ are the components of $\mat{p}_p(s)$, and $\mathrm{arctan}_2$ is the four quadrant inverse tan.
 
 In the case of three-dimensional paths, the path-tangential frame is not unique.
-To make the $x$-axis of the coordinate frame aligned with the path-tangential vector, the rotation matrix $\mat{R}_p \in SO(3)$ must satisfy
+To make the $x$-axis of the coordinate frame aligned with the path-tangential vector, the rotation matrix $\mat{R}_p(s) \in SO(3)$ must satisfy
 \begin{equation}
-    \mat{R}_p \inlinevector{1, 0, 0} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \frac{\partial \mat{p}_p(s)}{\partial s}.
+    \mat{R}_p(s) \inlinevector{1, 0, 0} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \frac{\partial \mat{p}_p(s)}{\partial s}.
+    \label{eq:background_R_p_equation}
 \end{equation}
+There exists a subspace of rotation matrices $\mat{R}_p(s)$ that satisfy \eqref{eq:background_R_p_equation}.
+For the purposes of this thesis, the choice of $\mat{R}_p(s)$ is not important as long as it is smooth (\emph{i.e.,} the partial derivative of $\mat{R}_p(s)$ with respect to $s$ exists and is continuous).
+
+One potential method for choosing $\mat{R}_p(s)$ is to use Euler angles and enforce a zero roll angle.
+The rotation matrix is then given by
+\begin{equation}
+    \mat{R}_p(s) =
+    \begin{bmatrix}
+         \cos\left(\psi_{p}(s)\right)\,\cos\left(\theta_{p}(s)\right) & -\sin\left(\psi_{p}(s)\right) & \cos\left(\psi_{p}(s)\right)\,\sin\left(\theta_{p}(s)\right) \\ \cos\left(\theta_{p}(s)\right)\,\sin\left(\psi_{p}(s)\right) & \cos\left(\psi_{p}(s)\right) & \sin\left(\psi_{p}(s)\right)\,\sin\left(\theta_{p}(s)\right) \\ -\sin\left(\theta_{p}(s)\right) & 0 & \cos\left(\theta_{p}(s)\right)
+    \end{bmatrix}\mathrlap{,}
+    \label{eq:background_R_p_zero_roll}
+\end{equation}
+where
+\begin{align}
+    \theta_{p}(s) &= - \arcsin\left(\frac{\partial z_p(s) / \partial s}{\norm{\partial \mat{p}_p(s) / \partial s}}\right), &
+    \psi_{p}(s) = \mathrm{arctan}_{2}\left(\frac{\partial  y_{p}(s)}{\partial s}, \frac{\partial  x_{p}(s)}{\partial s}\right).
+\end{align}
+Note that the yaw angle $\psi_{p}(s)$ is not defined if the path-tangential vector is aligned with the $z$-axis (\emph{i.e.,} if both $\partial x_p(s) / \partial s$ and $\partial y_p(s) / \partial s$ are zero).
+However, we also note that most commercial \glspl{auv} can only reach a limited range of pitch angles, making them unable to move vertically.
+Consequently, we should avoid designing vertical paths, where the limitations of the Euler angles become an issue.
+
+\subsubsection*{Curvature}
+As previously mentioned, some vehicles are unable to follow paths with ``sharp turns''.
+For the purposes of this thesis, we define \emph{curvature} as a measure of change of the path-tangential coordinate frame.
+
+In the two-dimensional case, the curvature, $\kappa(s)$, is defined as
+\begin{equation}
+    \kappa(s) = \frac{\partial \psi_{p}(s)}{\partial s}.
+\end{equation}
+
+In the three-dimensional case, the curvature is not defined as a scalar, but rather as a vector $\bs{\omega}_p(s) \in \mathbb{R}^3$ such that
+\begin{equation}
+    \frac{\partial \mat{R}_p(s)}{\partial s} = \mat{R}_p(s) \mat{S}\left(\bs{\omega}_p(s)\right).
+\end{equation}
+If the rotation matrix $\mat{R}_p(s)$ was chosen according to \eqref{eq:background_R_p_zero_roll}, then we can also define curvature in pitch and yaw, $\kappa(s)$ and $\iota(s)$, as
+\begin{align}
+    \kappa(s) &= \frac{\partial \theta_{p}(s)}{\partial s}, &
+    \iota(s) &= \frac{\partial \psi_{p}(s)}{\partial s}.
+\end{align}
+The vector $\bs{\omega}_p(s)$ is then given by
+\begin{equation}
+    \bs{\omega}_p(s) = \inlinevector{-\iota(s)\sin\left(\theta_{p}(s)\right), \kappa(s), \iota(s)\cos\left(\theta_{p}(s)\right)}.
+\end{equation}
+
+\subsection*{Parametrization by arc length}
+\emph{Parametrization by arc length} means that the path parameter can be interpreted as distance along the path.
+Mathematically, a path parametrization $\mat{p}_p(s)$ is said to be a parametrization by arc length if for all $s_1, s_2 \in \mathbb{R}, s_2 > s_1$, we have
+\begin{equation}
+    \int_{s_1}^{s_2} \norm{\frac{\partial \mat{p}_p(s)}{\partial s}} {\rm d}s = s_2 - s_1.
+\end{equation}
+This condition is equivalent to
+\begin{equation}
+    \norm{\frac{\partial \mat{p}_p(s)}{\partial s}} = 1.
+\end{equation}
+
+
 
