@@ -3,7 +3,7 @@ SRCS=\
 	$(wildcard chapters/*) \
 	$(wildcard figures/*) \
 	ntnuthesis.cls \
-	references.bib \
+	$(wildcard *.bib) \
 	glossary.tex \
 	thesis.tex
 

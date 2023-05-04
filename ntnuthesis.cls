@@ -186,7 +186,7 @@
 \else
     \RequirePackage[noabbrev]{cleveref}
 \fi
-\RequirePackage[acronym]{glossaries}        % create a glossary and acronym list
+\RequirePackage[acronym,nonumberlist]{glossaries}        % create a glossary and acronym list
 
 %% CUSTOMISATION
 

@@ -1,0 +1,89 @@
+\section{Mathematical Models of Marine Vehicles}
+\label{sec:model}
+
+This section presents control-oriented models of \glspl{asv} and \glspl{auv}.
+
+\subsubsection*{State variables and degrees of freedom}
+Marine vehicles are typically modeled as rigid bodies.
+A rigid body moving in three-dimensional space has six \glspl{dof}, three for position and three for orientation.
+
+The position of a marine vehicle is commonly expressed in a local \gls{ned} coordinate frame.
+Although the \gls{ned} frame is not inertial, it is often used as an approximation of an inertial coordinate frame for short-term and short-distance missions, since the effect of Earth's rotation on the vehicles is negligible.
+In general, we will denote the position of the vehicles as $\mat{p} = \inlinevector{x, y, z}$.
+
+The orientation of a vehicle can be expressed using \emph{Euler angles}, $\bs{\Theta} = \inlinevector{\phi, \theta, \psi}$, where $\phi$ is the roll angle, $\theta$ is the pitch angle, and $\psi$ is the yaw angle.
+The complete position and orientation vector of the vehicle is then given by $\bs{\eta}\T = \left[\mat{p}\T, \bs{\Theta}\T\right]$.
+
+Euler angles can represent any orientation.
+However, in some cases, this representation is not unique.
+For example, the following two sets of Euler angles represent the same attitude
+\begin{align}
+    \bs{\Theta}_1 &= \inlinevector{\frac{\pi}{2}, \frac{\pi}{2}, 0}, &
+    \bs{\Theta}_2 &= \inlinevector{0, \frac{\pi}{2}, -\frac{\pi}{2}}. &
+\end{align}
+At these attitudes, there exist mathematical singularities called \emph{gimbal locks} \cite{chaturvedi_rigid-body_2011}.
+Furthermore, the use of Euler angles in control may lead to a phenomenon called \emph{unwinding} \cite{sanjay_topological_2000}, in which the vehicle performs an unnecessary rotation to reach the desired attitude.
+
+The orientation of a vehicle can also be described using a \emph{rotation matrix}.
+Rotation matrices are members of the special orthogonal group $SO(3)$.
+Unlike Euler angles, rotation matrices do not suffer from singularities.
+For a given set of Euler angles, the corresponding rotation matrix is given by \cite{fossen_handbook_2011}
+\begin{equation}
+    \mat{R}(\phi, \theta, \psi)
+    =
+    \begin{bmatrix} 
+        {\rm c}_{\psi}\,{\rm c}_{\theta} & {\rm c}_{\psi}\,{\rm s}_{\phi}\,{\rm s}_{\theta}-{\rm c}_{\phi}\,{\rm s}_{\psi} & {\rm s}_{\phi}\,{\rm s}_{\psi}+{\rm c}_{\phi}\,{\rm c}_{\psi}\,{\rm s}_{\theta}\\ {\rm c}_{\theta}\,{\rm s}_{\psi} & {\rm c}_{\phi}\,{\rm c}_{\psi}+{\rm s}_{\phi}\,{\rm s}_{\psi}\,{\rm s}_{\theta} & {\rm c}_{\phi}\,{\rm s}_{\psi}\,{\rm s}_{\theta}-{\rm c}_{\psi}\,{\rm s}_{\phi}\\ -{\rm s}_{\theta} & {\rm c}_{\theta}\,{\rm s}_{\phi} & {\rm c}_{\phi}\,{\rm c}_{\theta} 
+    \end{bmatrix},
+    \label{eq:background_Rzyx}
+\end{equation}
+where ${\rm c}_x$ and ${\rm s}_x$ represent the cosine and sine of the corresponding angle.
+
+Next, let us discuss the representation of velocities.
+The velocities of the vehicle are expressed in the \emph{body-fixed} frame, a non-inertial coordinate frame attached to the vehicle, with the $x$-axis pointing towards the bow (front) side, the $y$-axis pointing to the starboard (right) side, and the $z$-axis pointing to the bottom side of the vehicle.
+The \emph{linear velocities} of the vehicle $\mat{v} = \inlinevector{u, v, w}$ consist of the surge, sway, and heave velocities.
+The \emph{angular velocities} of the vehicle $\bs{\omega} = \inlinevector{p, q, r}$ consist of the roll, pitch, and yaw rates.
+The full velocity vector is then given by $\bs{\nu}\T = \left[\mat{v}\T, \bs{\omega}\T\right]$.
+
+Finally, let us discuss simplified 3\gls{dof} and 5\gls{dof} models.
+In the case of \glspl{asv} or \glspl{auv} moving in the horizontal plane, we often assume that the roll and pitch angles are zero, and the depth is constant.
+Consequently, we can disregard the roll, pitch, and heave motion of the vehicle, and derive a simplified 3\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, \psi}$ and $\bs{\nu} = \inlinevector{u, v, r}$.
+In the case slender, torpedo shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
+Consequently, we can disregard the roll motion and derive a simplified 5\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, z, \theta, \psi}$ and $\bs{\nu} = \inlinevector{u, v, w, q, r}$.
+
+\subsubsection*{Kinematics}
+First, let us discuss the kinematics of the vehicles, starting with the 6\gls{dof} model.
+The time-derivative of the position is
+\begin{equation}
+    \dot{\mat{p}} = \mat{R} \mat{v}.
+    \label{eq:background_p_dot_6DOF}
+\end{equation}
+The time-derivative of Euler angles is given by \cite{fossen_handbook_2011}
+\begin{align}
+    \dot{\bs{\Theta}} &= \mat{T}(\bs{\Theta}) \bs{\omega}, &
+    \mat{T}(\bs{\Theta}) &= 
+    \begin{bmatrix}
+        1 & {\rm s}_{\phi}{\rm t}_{\theta} & {\rm c}_{\phi}{\rm t}_{\theta} \\ 0 & {\rm c}_{\phi} & -{\rm s}_{\phi} \\ 0 & {\rm s}_{\phi}/{\rm c}_{\theta} & {\rm c}_{\phi}/{\rm c}_{\theta}
+    \end{bmatrix},
+    \label{eq:background_theta_dot_6DOF}
+\end{align}
+where ${\rm t}_{\theta} = \tan(\theta)$.
+Due to the aforementioned singularities, $\dot{\bs{\Theta}}$ is not defined for $\theta = \pm \pi/2$.
+The time-derivative of a rotation matrix is given by
+\begin{align}
+    \dot{\mat{R}} &= \mat{R} \mat{S}(\omega), &
+    \mat{S}(\omega) &=
+    \begin{bmatrix}
+        0 & -r & q\\ r & 0 & -p\\ -q & p & 0
+    \end{bmatrix}.
+\end{align}
+
+To derive the kinematics of the 5\gls{dof} model, we simply substitute $\phi = 0$ and $p = 0$ into \eqref{eq:background_p_dot_6DOF} and \eqref{eq:background_theta_dot_6DOF}
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{p}} &= \mat{R}(0, \theta, \psi) \mat{v}, \\
+        \dot{\theta} &= q, \\
+        \dot{\psi} &= \frac{r}{\cos(\theta)}.
+    \end{align}
+\end{subequations}
+
+
