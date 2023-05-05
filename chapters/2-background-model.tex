@@ -86,4 +86,144 @@ To derive the kinematics of the 5\gls{dof} model, we simply substitute $\phi = 0
     \end{align}
 \end{subequations}
 
+Similarly, we can derive the kinematics of the 3\gls{dof} model by substituting $z = \phi = \theta = w = p = q = 0$ into \eqref{eq:background_p_dot_6DOF} and \eqref{eq:background_theta_dot_6DOF}
+\begin{align}
+    \dot{\bs{\eta}} &= \mat{J}(\psi) \bs{\nu}, &
+    \mat{J}(\psi) &=
+    \begin{bmatrix}
+        {\rm c}_{\psi} & -{\rm s}_{\psi} & 0 \\
+        {\rm s}_{\psi} & {\rm c}_{\psi} & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}.
+\end{align}
 
+\subsubsection*{Dynamics}
+When modeling the dynamics of marine vehicles, we often need to consider the effect of \emph{sea loads} such as waves, wind, and ocean currents.
+Let $\mat{V}_c \in \mathbb{R}^3$ be a vector that represents the velocity of the ocean current in the inertial coordinate frame.
+Since the dynamics of ocean currents is typically much slower than the dynamics of the vehicle, the ocean current can be considered constant.
+Let $\mat{v}_c = \mat{R}\T \mat{V}_c$ denote the velocity of the ocean current expressed in the vehicle's body-fixed frame.
+Furthermore, let $\mat{v}_r = \mat{v} - \mat{v}_c \triangleq \inlinevector{u_r, v_r, w_r}$ denote the relative surge, sway, and heave velocity of the vehicle, and let $\bs{\nu}_r\T = \left[\mat{v}_r\T, \bs{\omega}\T\right]$ denote the full relative velocity vector.
+The dynamics of the vehicle can then be expressed using the following matrix-vector model \cite{fossen_handbook_2011}
+\begin{equation}
+    \mat{M} \dot{\bs{\nu}}_r + \mat{C}(\bs{\nu}_r)\bs{\nu}_r + \mat{D}(\bs{\nu}_r)\bs{\nu}_r + \mat{g}(\mat{R}) = \bs{\tau},
+    \label{eq:background_nu_dot_relative}
+\end{equation}
+where $\mat{M}$ is the mass and inertia matrix, including the added mass effects, $\mat{C}(\bs{\nu}_r)$ is the Coriolis and centripetal matrix, also including the added mass, $\mat{D}(\bs{\nu}_r)$ is the hydrodynamic damping matrix, $\mat{g}(\mat{R})$ represents the effects of gravity and buoyancy, and $\bs{\tau}$ represents additional forces and torques such as the effects of actuators and external disturbances.
+
+The model in \eqref{eq:background_nu_dot_relative} can also be expressed in terms of absolute velocities
+\begin{equation}
+    \mat{M} \left(\dot{\bs{\nu}} - \dot{\bs{\nu}}_c\right) + \mat{C}(\bs{\nu} - \bs{\nu}_c)(\bs{\nu} - \bs{\nu}_c) + \mat{D}(\bs{\nu} - \bs{\nu}_c)(\bs{\nu} - \bs{\nu}_c) + \mat{g}(\mat{R}) = \bs{\tau},
+\end{equation}
+where $\bs{\nu}_c\T = \left[\mat{v}_c\T, \mat{0}\T\right]$.
+
+The inertia matrix $\mat{M}$ is symmetric positive definite, the damping matrix $\mat{D}$ is positive definite, and the Coriolis matrix $\mat{C}$ is skew-symmetric.
+There exist multiple expressions for the Coriolis matrix, \emph{e.g.,}
+\begin{equation}
+    \label{eq:background_coriolis}
+    \mat{C}(\bs{\nu}_r)\! =\!
+    \begin{bmatrix}
+        \mat{O}_{3 \times 3} & \!\!-\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) \\
+        -\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{21}\bs{\omega}) & \!\!-\mat{S}(\mat{M}_{21}\mat{v}_r + \mat{M}_{22}\bs{\omega})
+    \end{bmatrix}, \,
+    \begin{bmatrix}
+        \mat{M}_{11} & \!\!\!\mat{M}_{12} \\ \mat{M}_{21} & \!\!\!\mat{M}_{22}
+    \end{bmatrix}\!
+    = \!\mat{M}.
+\end{equation}
+The gravity and buoyancy vector is given by \cite{fossen_handbook_2011}
+\begin{equation}
+    \mat{g}(\mat{R}) = -
+    \begin{bmatrix}
+        (W - B) \mat{R}\T \mat{e}_3 \\
+        (W\mat{r}_g - B\mat{r}_b) \times \mat{R}\T \mat{e}_3
+    \end{bmatrix},
+\end{equation}
+where $W \in \mathbb{R}_{> 0}$ is the gravitational force, $B \in \mathbb{R}_{> 0}$ is the buoyant force, $\mat{r}_g$ is the position of the center of gravity, $\mat{r}_b$ is the position of the center of buoyancy, and $\mat{e}_3 = \inlinevector{0, 0, 1}$.
+
+\subsubsection*{Control-oriented model of underactuated \glspl{auv}}
+The goal of this section is to present a control-oriented model, a simplified mathematical model that is then used to design a controller and analyze its closed-loop properties.
+We begin by presenting the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
+
+\begin{asm}
+    \label{asm:symmetric}
+    The vehicle is slender, torpedo-shaped with rotational symmetry around its $x$-axis.
+\end{asm}
+
+\begin{asm}
+    \label{asm:damping}
+    The vehicle is maneuvering at low speeds.
+    Consequently, the hydrodynamic damping can be considered linear.
+\end{asm}
+
+\noindent Under Assumption~\ref{asm:damping}, the hydrodynamic damping matrix is constant.
+Under Assumption~\ref{asm:symmetric}, the inertia and damping matrices have the following structure
+\begin{align}
+    \mat{M}\! &= \!\!
+    \begin{bmatrix}
+        m_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!m_{22}\! & 0 & 0 & 0 & m_{26}\\ 0 & 0 & \!m_{33}\! & 0 & \!m_{35}\! & 0\\ 0 & 0 & 0 & \!m_{44}\! & 0 & 0\\ 0 & 0 & \!m_{35}\! & 0 & \!m_{55}\! & 0\\ 0 & \!m_{26}\! & 0 & 0 & 0 & m_{66}
+    \end{bmatrix}\!, &
+    \mat{D}\! &= \!\!
+    \begin{bmatrix}
+        d_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!d_{22}\! & 0 & 0 & 0 & d_{26}\\ 0 & 0 & \!d_{33}\! & 0 & \!d_{35}\! & 0\\ 0 & 0 & 0 & \!d_{44}\! & 0 & 0\\ 0 & 0 & \!d_{53}\! & 0 & \!d_{55}\! & 0\\ 0 & \!d_{62}\! & 0 & 0 & 0 & d_{66}
+    \end{bmatrix}\!,
+\end{align}
+where $m_{22} = m_{33}$, $m_{35} = m_{26}$, and $m_{55} = m_{66}$.
+
+\begin{asm}
+    \label{asm:actuators}
+    The vehicle is equipped with a propeller and fins.
+    Consequently, the vehicle is capable of generating force in the surge direction and torque around all three axes.
+\end{asm}
+Under this assumption, the external forces acting on the vehicle are given by
+\begin{align}
+    \bs{\tau} &= \mat{B}\mat{u}, &
+    \mat{B} &= 
+    \begin{bmatrix}
+        b_{11} & 0 & 0 & 0 \\ 0 & 0 & 0 & b_{24} \\ 0 & 0 & b_{33} & 0 \\ 0 & b_{42} & 0 & 0 \\ 0 & 0 & b_{53} & 0 \\ 0 & 0 & 0 & b_{64}
+    \end{bmatrix},
+\end{align}
+where $\mat{u} = \inlinevector{f_u, t_p, t_q, t_r}$ is the control input consisting of surge thrust and the forces produced by the fins.
+
+\begin{prop}
+    \label{prop:neutral_point}
+    If a vehicle model satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then the origin of the body-fixed coordinate frame can be chosen such that the actuators produce no sway or heave acceleration.
+    In other words, the following equality
+    \begin{equation}
+        \mat{M}^{-1}\bs{\tau} = \mat{M}^{-1}\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r},
+    \end{equation}
+    where $\tau_u, \tau_p, \tau_p, \tau_p \in \mathbb{R}$, holds.
+\end{prop}
+\begin{proof}
+    Let CO denote the original body-fixed coordinate frame, and let $\bs{\nu}$ denote the velocities of the vehicle expressed in CO.
+    Consider a new coordinate frame, ${\rm CO}^{\prime}$, that is parallel to CO.
+    Let $\bs{\varepsilon} \in \mathbb{R}^3$ be the displacement between ${\rm CO}^{\prime}$ and CO, and let $\bs{\nu}^{\prime}$ denote the velocities of the vehicle expressed in ${\rm CO}^{\prime}$.
+    The relation between $\bs{\nu}$ and $\bs{\nu}^{\prime}$ is
+    \begin{align}
+        \bs{\nu} &= \mat{H}(\bs{\varepsilon}) \bs{\nu}^{\prime}, &
+        \mat{H}(\bs{\varepsilon}) &=
+        \begin{bmatrix}
+            \mat{I}_3 & -\mat{S}(\bs{\varepsilon}) \\
+            \mat{O}_{3 \times 3} & \mat{I}_3
+        \end{bmatrix}.
+    \end{align}
+    The equations of motion expressed in ${\rm CO}^{\prime}$ are thus given by
+    \begin{equation}
+        \mat{M}^{\prime}\dot{\bs{\nu}}_r^{\prime} + \mat{C}^{\prime}(\bs{\nu}^{\prime}_r)\bs{\nu}^{\prime}_r + \mat{D}^{\prime}\bs{\nu}^{\prime}_r + \mat{H}(\bs{\varepsilon})\T\mat{g}(\mat{R}) = \mat{H}(\bs{\varepsilon})\T\bs{\tau},
+    \end{equation}
+    where $\mat{M}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{M} \mat{H}(\bs{\varepsilon})$, $\mat{D}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{D} \mat{H}(\bs{\varepsilon})$, and $\mat{C}^{\prime}$ is the Coriolis matrix calculated from \eqref{eq:background_coriolis} using $\mat{M}^{\prime}$ as the inertia matrix.
+
+
+\end{proof}
+
+\begin{asm}
+    \label{asm:buoyancy}
+    The vehicle is neutrally buoyant, with the centers of gravity and buoyancy located on one vertical axis.
+\end{asm}
+\noindent Under this assumption, $\mat{g}(\mat{R})$ has the following shape
+\begin{align}
+    \mat{g}(\mat{R}) &= \begin{bmatrix}
+        \mat{0}_3 \\ Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3
+    \end{bmatrix},
+    \label{eq:gravity}
+\end{align}
+where $z_{gb}$ is the distance between the centers of gravity and buoyancy.
