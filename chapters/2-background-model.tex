@@ -142,6 +142,7 @@ where $W \in \mathbb{R}_{> 0}$ is the gravitational force, $B \in \mathbb{R}_{> 
 
 \subsubsection*{Control-oriented model of underactuated \glspl{auv}}
 The goal of this section is to present a control-oriented model, a simplified mathematical model that is then used to design a controller and analyze its closed-loop properties.
+The model in this section is similar to the one presented in \cite{borhaug_straight_2007}.
 We begin by presenting the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
 
 \begin{asm}
@@ -167,11 +168,12 @@ Under Assumption~\ref{asm:symmetric}, the inertia and damping matrices have the 
         d_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!d_{22}\! & 0 & 0 & 0 & d_{26}\\ 0 & 0 & \!d_{33}\! & 0 & \!d_{35}\! & 0\\ 0 & 0 & 0 & \!d_{44}\! & 0 & 0\\ 0 & 0 & \!d_{53}\! & 0 & \!d_{55}\! & 0\\ 0 & \!d_{62}\! & 0 & 0 & 0 & d_{66}
     \end{bmatrix}\!,
 \end{align}
-where $m_{22} = m_{33}$, $m_{35} = m_{26}$, and $m_{55} = m_{66}$.
+where $m_{22} = m_{33}$, $m_{35} = -m_{26}$, and $m_{55} = m_{66}$.
 
 \begin{asm}
     \label{asm:actuators}
     The vehicle is equipped with a propeller and fins.
+    The fins are placed symmetrically around the $x$-axis of the vehicle.
     Consequently, the vehicle is capable of generating force in the surge direction and torque around all three axes.
 \end{asm}
 Under this assumption, the external forces acting on the vehicle are given by
@@ -183,37 +185,79 @@ Under this assumption, the external forces acting on the vehicle are given by
     \end{bmatrix},
 \end{align}
 where $\mat{u} = \inlinevector{f_u, t_p, t_q, t_r}$ is the control input consisting of surge thrust and the forces produced by the fins.
+Furthermore, due to the symmetry assumption, it follows that $b_{33} = -b_{24}$ and $b_{53} = b_{64}$.
 
 \begin{prop}
     \label{prop:neutral_point}
     If a vehicle model satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then the origin of the body-fixed coordinate frame can be chosen such that the actuators produce no sway or heave acceleration.
-    In other words, the following equality
+    In other words, for all inputs $\mat{u}$, there exist $\tau_u, \tau_p, \tau_q, \tau_r \in \mathbb{R}$ such that
     \begin{equation}
-        \mat{M}^{-1}\bs{\tau} = \mat{M}^{-1}\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r},
+        \mat{M}^{-1}\bs{\tau} = \mat{M}^{-1}\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r}.
+        \label{eq:neutral_point_force}
     \end{equation}
-    where $\tau_u, \tau_p, \tau_p, \tau_p \in \mathbb{R}$, holds.
 \end{prop}
+\begin{figure}[b]
+    \centering
+    \def\svgwidth{0.4\textwidth}
+    \import{figures/background}{auv_frames.pdf_tex}
+    \caption{Illustration of the coordinate frames. CN denotes the origin of the \gls{ned} frame, CO is the origin of the body-fixed frame, and ${\rm CO}^{\prime}$ is the transformed body-fixed coordinate frame.}
+    \label{fig:background_auv_frames}
+\end{figure}
 \begin{proof}
     Let CO denote the original body-fixed coordinate frame, and let $\bs{\nu}$ denote the velocities of the vehicle expressed in CO.
-    Consider a new coordinate frame, ${\rm CO}^{\prime}$, that is parallel to CO.
-    Let $\bs{\varepsilon} \in \mathbb{R}^3$ be the displacement between ${\rm CO}^{\prime}$ and CO, and let $\bs{\nu}^{\prime}$ denote the velocities of the vehicle expressed in ${\rm CO}^{\prime}$.
+    Consider a new coordinate frame, ${\rm CO}^{\prime}$, created by translating CO by a distance $x_{\varepsilon}$ along the $x$-axis (see Figure~\ref{fig:background_auv_frames}).
+    Let $\bs{\nu}^{\prime}$ denote the velocities of the vehicle expressed in ${\rm CO}^{\prime}$.
     The relation between $\bs{\nu}$ and $\bs{\nu}^{\prime}$ is
     \begin{align}
         \bs{\nu} &= \mat{H}(\bs{\varepsilon}) \bs{\nu}^{\prime}, &
         \mat{H}(\bs{\varepsilon}) &=
         \begin{bmatrix}
-            \mat{I}_3 & -\mat{S}(\bs{\varepsilon}) \\
+            \mat{I}_3 & \mat{S}(\bs{\varepsilon}) \\
             \mat{O}_{3 \times 3} & \mat{I}_3
-        \end{bmatrix}.
+        \end{bmatrix},
     \end{align}
-    The equations of motion expressed in ${\rm CO}^{\prime}$ are thus given by
+    where $\bs{\varepsilon} = \inlinevector{x_{\varepsilon}, 0, 0}$.
+    The equations of motion expressed in ${\rm CO}^{\prime}$ are then given by \cite{fossen_handbook_2011}
     \begin{equation}
         \mat{M}^{\prime}\dot{\bs{\nu}}_r^{\prime} + \mat{C}^{\prime}(\bs{\nu}^{\prime}_r)\bs{\nu}^{\prime}_r + \mat{D}^{\prime}\bs{\nu}^{\prime}_r + \mat{H}(\bs{\varepsilon})\T\mat{g}(\mat{R}) = \mat{H}(\bs{\varepsilon})\T\bs{\tau},
     \end{equation}
-    where $\mat{M}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{M} \mat{H}(\bs{\varepsilon})$, $\mat{D}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{D} \mat{H}(\bs{\varepsilon})$, and $\mat{C}^{\prime}$ is the Coriolis matrix calculated from \eqref{eq:background_coriolis} using $\mat{M}^{\prime}$ as the inertia matrix.
+    where $\mat{M}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{M} \mat{H}(\bs{\varepsilon})$, $\mat{D}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{D} \mat{H}(\bs{\varepsilon})$ are the transformed mass and damping matrices, and $\mat{C}^{\prime}(\bs{\nu}^{\prime}_r) = \mat{H}(\bs{\varepsilon})\T\mat{C}(\bs{\nu}_r)\mat{H}(\bs{\varepsilon})$.
 
-
+    The effect of actuators on $\bs{\nu}^{\prime}$ is then given by
+    \begin{equation}
+        {\mat{M}^{\prime}}^{-1}\mat{H}(\bs{\varepsilon})\T\mat{B}\mat{u} =
+        \begin{bmatrix}
+            \frac{b_{11}}{m_{11}} f_{u}\\ \frac{\left(b_{24}\,m_{66}-b_{64}\,m_{26}-b_{24}\,m_{26}\,x_{\varepsilon}+b_{64}\,m_{22}\,x_{\varepsilon}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r} \\ \frac{\left(b_{33}\,m_{55}-b_{53}\,m_{35}+b_{33}\,m_{35}\,x_{\varepsilon}-b_{53}\,m_{33}\,x_{\varepsilon}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q} \\ \frac{b_{42}}{m_{44}} t_{p}\\ \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q} \\ \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}
+        \end{bmatrix}.
+    \end{equation}
+    Due to the symmetry assumptions, we can choose $x_{\varepsilon}$ such that
+    \begin{equation}
+        x_{\varepsilon} = 
+        \frac{b_{24}\,m_{66}-b_{64}\,m_{26}}{b_{24}\,m_{26}-b_{64}\,m_{22}} = 
+        -\frac{b_{33}\,m_{55}-b_{53}\,m_{35}}{b_{33}\,m_{35}-b_{53}\,m_{33}},
+    \end{equation}
+    and the effect of actuators on $\bs{\nu}^{\prime}$ thus becomes
+    \begin{equation}
+        {\mat{M}^{\prime}}^{-1}\mat{H}(\bs{\varepsilon})\T\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r},
+    \end{equation} \vspace{-1.5em}
+    \begin{subequations}
+        \begin{align}
+            \tau_u &= \frac{b_{11}}{m_{11}} f_{u}, &
+            \tau_p &= \frac{b_{42}}{m_{44}} t_{p}, \\
+            \tau_q &= \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q}, &
+            \tau_r &= \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}.
+        \end{align} 
+        \label{eq:tau_upqr}
+    \end{subequations}
+    We have thus shown that for all inputs $\mat{u}$, there exist $\tau_u, \tau_p, \tau_q, \tau_r$ such that \eqref{eq:neutral_point_force} holds.
+    Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $\tau_u, \tau_p, \tau_q, \tau_r$, there exists an input $\mat{u}$ such that \eqref{eq:neutral_point_force} holds.
 \end{proof}
+
+Now, let us present a modified Assumption~\ref{asm:symmetric} and Proposition~\ref{prop:neutral_point} for 5\gls{dof} vehicles.
+
+\begin{customasm}{1 (5DOF)}
+    The vehicle is slender, torpedo-shaped with port-starboard symmetry.
+\end{customasm}
 
 \begin{asm}
     \label{asm:buoyancy}

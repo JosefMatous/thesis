@@ -20,6 +20,10 @@
 
 \newtheorem{asm}{Assumption}
 \newtheorem{prop}{Proposition}
+\newtheorem{innercustomasm}{Assumption} % assumption with custom number
+\newenvironment{customasm}[1]
+  {\renewcommand\theinnercustomasm{#1}\innercustomasm}
+  {\endinnercustomasm}
 
 \newcommand*{\scale}[2][1]{\scalebox{#1}{\ensuremath{#2}}}
 \newcommand{\mat}[1]{\mathbf{#1}} % vectors/matrices
