@@ -233,6 +233,9 @@
 % Dotted line and tighter vertical spacing for chapters in the table of contents
 \def\l@chapter#1#2{\@dottedtocline{1}{0em}{1.5em}{\bf #1}{\bf #2}}
 
+% Only show parts, chapters, and sections in the table of contents
+\setcounter{tocdepth}{1}
+
 % Support for included papers (for compiled PhD theses)
 \newcounter{paper}
 \setcounter{paper}{0}

@@ -3,7 +3,7 @@
 
 This section presents control-oriented models of \glspl{asv} and \glspl{auv}.
 
-\subsubsection*{State variables and degrees of freedom}
+\subsection{State variables and degrees of freedom}
 Marine vehicles are typically modeled as rigid bodies.
 A rigid body moving in three-dimensional space has six \glspl{dof}, three for position and three for orientation.
 
@@ -50,7 +50,7 @@ Consequently, we can disregard the roll, pitch, and heave motion of the vehicle,
 In the case slender, torpedo shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
 Consequently, we can disregard the roll motion and derive a simplified 5\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, z, \theta, \psi}$ and $\bs{\nu} = \inlinevector{u, v, w, q, r}$.
 
-\subsubsection*{Kinematics}
+\subsection{Kinematics}
 First, let us discuss the kinematics of the vehicles, starting with the 6\gls{dof} model.
 The time-derivative of the position is
 \begin{equation}
@@ -97,10 +97,10 @@ Similarly, we can derive the kinematics of the 3\gls{dof} model by substituting 
     \end{bmatrix}.
 \end{align}
 
-\subsubsection*{Dynamics}
+\subsection{Dynamics}
 When modeling the dynamics of marine vehicles, we often need to consider the effect of \emph{sea loads} such as waves, wind, and ocean currents.
 Let $\mat{V}_c \in \mathbb{R}^3$ be a vector that represents the velocity of the ocean current in the inertial coordinate frame.
-Since the dynamics of ocean currents is typically much slower than the dynamics of the vehicle, the ocean current can be considered constant.
+Since the dynamics of ocean currents are typically much slower than the dynamics of the vehicle, the ocean current can be considered constant.
 Let $\mat{v}_c = \mat{R}\T \mat{V}_c$ denote the velocity of the ocean current expressed in the vehicle's body-fixed frame.
 Furthermore, let $\mat{v}_r = \mat{v} - \mat{v}_c \triangleq \inlinevector{u_r, v_r, w_r}$ denote the relative surge, sway, and heave velocity of the vehicle, and let $\bs{\nu}_r\T = \left[\mat{v}_r\T, \bs{\omega}\T\right]$ denote the full relative velocity vector.
 The dynamics of the vehicle can then be expressed using the following matrix-vector model \cite{fossen_handbook_2011}
@@ -123,7 +123,7 @@ There exist multiple expressions for the Coriolis matrix, \emph{e.g.,}
     \mat{C}(\bs{\nu}_r)\! =\!
     \begin{bmatrix}
         \mat{O}_{3 \times 3} & \!\!-\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) \\
-        -\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{21}\bs{\omega}) & \!\!-\mat{S}(\mat{M}_{21}\mat{v}_r + \mat{M}_{22}\bs{\omega})
+        \mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) & \!\!-\mat{S}(\mat{M}_{21}\mat{v}_r + \mat{M}_{22}\bs{\omega})
     \end{bmatrix}, \,
     \begin{bmatrix}
         \mat{M}_{11} & \!\!\!\mat{M}_{12} \\ \mat{M}_{21} & \!\!\!\mat{M}_{22}
@@ -140,14 +140,15 @@ The gravity and buoyancy vector is given by \cite{fossen_handbook_2011}
 \end{equation}
 where $W \in \mathbb{R}_{> 0}$ is the gravitational force, $B \in \mathbb{R}_{> 0}$ is the buoyant force, $\mat{r}_g$ is the position of the center of gravity, $\mat{r}_b$ is the position of the center of buoyancy, and $\mat{e}_3 = \inlinevector{0, 0, 1}$.
 
-\subsubsection*{Control-oriented model of underactuated \glspl{auv}}
+\subsection{Control-oriented model of underactuated \glspl{auv}}
+\label{sec:model_control_oriented}
 The goal of this section is to present a control-oriented model, a simplified mathematical model that is then used to design a controller and analyze its closed-loop properties.
 The model in this section is similar to the one presented in \cite{borhaug_straight_2007}.
 We begin by presenting the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
 
 \begin{asm}
     \label{asm:symmetric}
-    The vehicle is slender, torpedo-shaped with rotational symmetry around its $x$-axis.
+    The vehicle is slender, torpedo-shaped with port-starboard symmetry.
 \end{asm}
 
 \begin{asm}
@@ -166,98 +167,85 @@ Under Assumption~\ref{asm:symmetric}, the inertia and damping matrices have the 
     \mat{D}\! &= \!\!
     \begin{bmatrix}
         d_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!d_{22}\! & 0 & 0 & 0 & d_{26}\\ 0 & 0 & \!d_{33}\! & 0 & \!d_{35}\! & 0\\ 0 & 0 & 0 & \!d_{44}\! & 0 & 0\\ 0 & 0 & \!d_{53}\! & 0 & \!d_{55}\! & 0\\ 0 & \!d_{62}\! & 0 & 0 & 0 & d_{66}
-    \end{bmatrix}\!,
+    \end{bmatrix}\!.
 \end{align}
-where $m_{22} = m_{33}$, $m_{35} = -m_{26}$, and $m_{55} = m_{66}$.
 
 \begin{asm}
     \label{asm:actuators}
     The vehicle is equipped with a propeller and fins.
-    The fins are placed symmetrically around the $x$-axis of the vehicle.
     Consequently, the vehicle is capable of generating force in the surge direction and torque around all three axes.
 \end{asm}
 Under this assumption, the external forces acting on the vehicle are given by
 \begin{align}
-    \bs{\tau} &= \mat{B}\mat{u}, &
+    \bs{\tau} &= \mat{B}\mat{f}, &
     \mat{B} &= 
     \begin{bmatrix}
         b_{11} & 0 & 0 & 0 \\ 0 & 0 & 0 & b_{24} \\ 0 & 0 & b_{33} & 0 \\ 0 & b_{42} & 0 & 0 \\ 0 & 0 & b_{53} & 0 \\ 0 & 0 & 0 & b_{64}
     \end{bmatrix},
 \end{align}
-where $\mat{u} = \inlinevector{f_u, t_p, t_q, t_r}$ is the control input consisting of surge thrust and the forces produced by the fins.
-Furthermore, due to the symmetry assumption, it follows that $b_{33} = -b_{24}$ and $b_{53} = b_{64}$.
+where $\mat{f} = \inlinevector{T_u, T_p, T_q, T_r}$ is the control input consisting of surge thrust and the forces produced by the fins.
 
-\begin{prop}
-    \label{prop:neutral_point}
-    If a vehicle model satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then the origin of the body-fixed coordinate frame can be chosen such that the actuators produce no sway or heave acceleration.
-    In other words, for all inputs $\mat{u}$, there exist $\tau_u, \tau_p, \tau_q, \tau_r \in \mathbb{R}$ such that
-    \begin{equation}
-        \mat{M}^{-1}\bs{\tau} = \mat{M}^{-1}\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r}.
-        \label{eq:neutral_point_force}
-    \end{equation}
-\end{prop}
-\begin{figure}[b]
-    \centering
-    \def\svgwidth{0.4\textwidth}
-    \import{figures/background}{auv_frames.pdf_tex}
-    \caption{Illustration of the coordinate frames. CN denotes the origin of the \gls{ned} frame, CO is the origin of the body-fixed frame, and ${\rm CO}^{\prime}$ is the transformed body-fixed coordinate frame.}
-    \label{fig:background_auv_frames}
-\end{figure}
-\begin{proof}
-    Let CO denote the original body-fixed coordinate frame, and let $\bs{\nu}$ denote the velocities of the vehicle expressed in CO.
-    Consider a new coordinate frame, ${\rm CO}^{\prime}$, created by translating CO by a distance $x_{\varepsilon}$ along the $x$-axis (see Figure~\ref{fig:background_auv_frames}).
-    Let $\bs{\nu}^{\prime}$ denote the velocities of the vehicle expressed in ${\rm CO}^{\prime}$.
-    The relation between $\bs{\nu}$ and $\bs{\nu}^{\prime}$ is
+If the vehicle model \eqref{eq:background_nu_dot_relative} satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then it can be transformed such that the actuators produce no sway or heave acceleration.
+In other words, for all inputs $\mat{f}$, there exist $f_u, t_p, t_q, t_r \in \mathbb{R}$ such that
+\begin{equation}
+    \mat{M}^{-1}\mat{B}\mat{f} = \inlinevector{f_u, 0, 0, t_p, t_q, t_r}.
+    \label{eq:neutral_point_force}
+\end{equation}
+The transformation was demonstrated for 5\gls{dof} vehicles in \cite{borhaug_straight_2007}, and can be trivially extended to 6\glspl{dof}.
+The transformed body-fixed velocities, $\bs{\nu}_r^{\prime}$, are
+\begin{equation}
+    \bs{\nu}_r^{\prime} = \inlinevector{u_r, v_r + \varepsilon_1 r, w_r + \varepsilon_2 q, p, q, r},
+\end{equation}
+where $\varepsilon_1, \varepsilon_2 \in \mathbb{R}$.
+This transformation can also be written as
+\begin{align}
+    \bs{\nu}_r &= \mat{H}\bs{\nu}_r^{\prime}, &
+    \mat{H} &=
+    \begin{bmatrix}
+        { \mat{I}_3} & {\small \begin{array}{ccc} 0 & 0 & 0 \\ 0 & 0 & -\varepsilon_1 \\ 0 & -\varepsilon_2 & 0 \end{array}} \\
+        { \mat{O}_{3 \times 3}} & {\mat{I}_3}
+    \end{bmatrix}.
+    \label{eq:background_transformation}
+\end{align}
+The transformed dynamics are then given by
+\begin{equation}
+    \mat{M}^{\prime}\dot{\bs{\nu}}_r^{\prime} + \mat{C}^{\prime}(\bs{\nu}^{\prime}_r)\bs{\nu}^{\prime}_r + \mat{D}^{\prime}\bs{\nu}^{\prime}_r + \mat{H}\T\mat{g}(\mat{R}) = \mat{H}\T\bs{\tau},
+\end{equation}
+where $\mat{M}^{\prime} = \mat{H}\T \mat{M} \mat{H}$, $\mat{D}^{\prime} = \mat{H}\T \mat{D} \mat{H}$ are the transformed inertia and damping matrices, and $\mat{C}^{\prime}(\bs{\nu}^{\prime}_r) = \mat{H}\T\mat{C}(\bs{\nu}_r)\mat{H}$.
+
+If we choose
+\begin{align}
+    \varepsilon_1 &= \frac{b_{24}\,m_{66}-b_{64}\,m_{26}}{b_{24}\,m_{26}-b_{64}\,m_{22}}, &
+    \varepsilon_2 &= \frac{b_{33}\,m_{55}-b_{53}\,m_{35}}{b_{33}\,m_{35}-b_{53}\,m_{33}},
+\end{align}
+the effect of actuators on $\bs{\nu}^{\prime}$ is given by
+\begin{equation}
+    {\mat{M}^{\prime}}^{-1}\mat{H}\T\mat{B}\mat{u} =
+    \begin{bmatrix}
+        \frac{b_{11}}{m_{11}} T_{u} \\
+        0 \\ 
+        0 \\ 
+        \frac{b_{42}}{m_{44}} T_{p} \\ 
+        \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} T_{q} \\ 
+        \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} T_{r}
+    \end{bmatrix}.
+\end{equation}
+We have thus shown that \eqref{eq:neutral_point_force} is satisfied with
+\begin{subequations}
     \begin{align}
-        \bs{\nu} &= \mat{H}(\bs{\varepsilon}) \bs{\nu}^{\prime}, &
-        \mat{H}(\bs{\varepsilon}) &=
-        \begin{bmatrix}
-            \mat{I}_3 & \mat{S}(\bs{\varepsilon}) \\
-            \mat{O}_{3 \times 3} & \mat{I}_3
-        \end{bmatrix},
-    \end{align}
-    where $\bs{\varepsilon} = \inlinevector{x_{\varepsilon}, 0, 0}$.
-    The equations of motion expressed in ${\rm CO}^{\prime}$ are then given by \cite{fossen_handbook_2011}
-    \begin{equation}
-        \mat{M}^{\prime}\dot{\bs{\nu}}_r^{\prime} + \mat{C}^{\prime}(\bs{\nu}^{\prime}_r)\bs{\nu}^{\prime}_r + \mat{D}^{\prime}\bs{\nu}^{\prime}_r + \mat{H}(\bs{\varepsilon})\T\mat{g}(\mat{R}) = \mat{H}(\bs{\varepsilon})\T\bs{\tau},
-    \end{equation}
-    where $\mat{M}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{M} \mat{H}(\bs{\varepsilon})$, $\mat{D}^{\prime} = \mat{H}(\bs{\varepsilon})\T \mat{D} \mat{H}(\bs{\varepsilon})$ are the transformed mass and damping matrices, and $\mat{C}^{\prime}(\bs{\nu}^{\prime}_r) = \mat{H}(\bs{\varepsilon})\T\mat{C}(\bs{\nu}_r)\mat{H}(\bs{\varepsilon})$.
+        t_u &= \frac{b_{11}}{m_{11}} f_{u}, &
+        t_p &= \frac{b_{42}}{m_{44}} t_{p}, \\
+        t_q &= \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q}, &
+        t_r &= \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}.
+    \end{align} 
+    \label{eq:tau_upqr}
+\end{subequations}
+Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $t_u, t_p, t_q, t_r$, there exists an input $\mat{f}$ such that \eqref{eq:neutral_point_force} holds.
+Consequently, we can treat $t_u, t_p, t_q, t_r$ as the new inputs to the system.
 
-    The effect of actuators on $\bs{\nu}^{\prime}$ is then given by
-    \begin{equation}
-        {\mat{M}^{\prime}}^{-1}\mat{H}(\bs{\varepsilon})\T\mat{B}\mat{u} =
-        \begin{bmatrix}
-            \frac{b_{11}}{m_{11}} f_{u}\\ \frac{\left(b_{24}\,m_{66}-b_{64}\,m_{26}-b_{24}\,m_{26}\,x_{\varepsilon}+b_{64}\,m_{22}\,x_{\varepsilon}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r} \\ \frac{\left(b_{33}\,m_{55}-b_{53}\,m_{35}+b_{33}\,m_{35}\,x_{\varepsilon}-b_{53}\,m_{33}\,x_{\varepsilon}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q} \\ \frac{b_{42}}{m_{44}} t_{p}\\ \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q} \\ \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}
-        \end{bmatrix}.
-    \end{equation}
-    Due to the symmetry assumptions, we can choose $x_{\varepsilon}$ such that
-    \begin{equation}
-        x_{\varepsilon} = 
-        \frac{b_{24}\,m_{66}-b_{64}\,m_{26}}{b_{24}\,m_{26}-b_{64}\,m_{22}} = 
-        -\frac{b_{33}\,m_{55}-b_{53}\,m_{35}}{b_{33}\,m_{35}-b_{53}\,m_{33}},
-    \end{equation}
-    and the effect of actuators on $\bs{\nu}^{\prime}$ thus becomes
-    \begin{equation}
-        {\mat{M}^{\prime}}^{-1}\mat{H}(\bs{\varepsilon})\T\mat{B}\mat{u} = \inlinevector{\tau_u, 0, 0, \tau_p, \tau_q, \tau_r},
-    \end{equation} \vspace{-1.5em}
-    \begin{subequations}
-        \begin{align}
-            \tau_u &= \frac{b_{11}}{m_{11}} f_{u}, &
-            \tau_p &= \frac{b_{42}}{m_{44}} t_{p}, \\
-            \tau_q &= \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q}, &
-            \tau_r &= \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}.
-        \end{align} 
-        \label{eq:tau_upqr}
-    \end{subequations}
-    We have thus shown that for all inputs $\mat{u}$, there exist $\tau_u, \tau_p, \tau_q, \tau_r$ such that \eqref{eq:neutral_point_force} holds.
-    Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $\tau_u, \tau_p, \tau_q, \tau_r$, there exists an input $\mat{u}$ such that \eqref{eq:neutral_point_force} holds.
-\end{proof}
-
-Now, let us present a modified Assumption~\ref{asm:symmetric} and Proposition~\ref{prop:neutral_point} for 5\gls{dof} vehicles.
-
-\begin{customasm}{1 (5DOF)}
-    The vehicle is slender, torpedo-shaped with port-starboard symmetry.
-\end{customasm}
+\begin{rmk}
+    If the vehicle has rotational symmetry around the $x$-axis (\emph{i.e.,} if $m_{22} = m_{33}$, $m_{35} = -m_{26}$, $m_{55} = m_{66}$, $b_{33} = -b_{24}$, and $b_{53} = b_{64}$), then we have $\varepsilon_1 = -\varepsilon_2$, and the transformation \eqref{eq:background_transformation} corresponds to moving the body-fixed coordinate frame by $\varepsilon_1$ along the $x$-axis.
+\end{rmk}
 
 \begin{asm}
     \label{asm:buoyancy}
@@ -271,3 +259,218 @@ Now, let us present a modified Assumption~\ref{asm:symmetric} and Proposition~\r
     \label{eq:gravity}
 \end{align}
 where $z_{gb}$ is the distance between the centers of gravity and buoyancy.
+
+\subsection{The component form}
+In this section, we express the matrix-vector model \eqref{eq:background_nu_dot_relative} in a \emph{component form} by writing out the equations of motion for the individual state variables.
+The purpose of this model is to gain a better understanding of \gls{auv} dynamics, which allows us to design low-level controllers and analyze their closed-loop behavior.
+
+Consider an \gls{auv} model that satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:buoyancy}.
+Then, the component form is given by
+\begin{subequations}
+    \begin{align}
+        \dot{u}_r &= F_u(\bs{\nu}_r) + f_u, \\
+        \dot{v}_r &= X_v(u_r)r + Y_v(u_r)v_r + Z_v(p)w_r, \\
+        \dot{w}_r &= X_w(u_r)q + Y_w(u_r)w_r + Z_w(p)v_r + G(\mat{R}), \\
+        \dot{p} &= F_p(\bs{\nu}_r) + t_p, \\
+        \dot{q} &= F_q(\bs{\nu}_r) + t_q, \\
+        \dot{r} &= F_r(\bs{\nu}_r) + t_r.
+    \end{align}
+    \label{eq:background_component_form}
+\end{subequations}
+The equations for $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
+Note that $\dot{u}_r$, $\dot{p}$, $\dot{q}$, and $\dot{r}$ depend on the control inputs.
+Consequently, it is possible to stabilize these states using output feedback linearization.
+The states $v$ and $w$ represent the \emph{underactuated} dynamics of the vehicle, as they cannot be controlled directly.
+The terms $Y_v$ and $Y_w$ represent hydrodynamic damping.
+Because the hydrodynamic damping is dissipative, $Y_v$ and $Y_w$ are negative.
+The term $G$ represents the effects of gravity and buoyancy on the heave velocity.
+The remaining terms represent the Coriolis and centripetal forces.
+
+In the remainder of this section, we derive a component form for absolute velocities.
+From \eqref{eq:background_component_form}, we have
+\begin{subequations}
+    \begin{align}
+        \dot{u} &= F_u(\bs{\nu} - \bs{\nu}_c) + \dot{u}_c + f_u, \\
+        \dot{v} &= X_v(u - u_c)r + Y_v(u - u_c)(v - v_c) + Z_v(p)(w - w_c) + \dot{v}_c, \\
+        \dot{w} &= X_w(u - u_c)q + Y_w(u - u_c)(w - w_c) + Z_w(p)(v - v_c) + G(\mat{R}) + \dot{w}_c, \\
+        \dot{p} &= F_p(\bs{\nu} - \bs{\nu}_c) + t_p, \\
+        \dot{q} &= F_q(\bs{\nu} - \bs{\nu}_c) + t_q, \\
+        \dot{r} &= F_r(\bs{\nu} - \bs{\nu}_c) + t_r.
+    \end{align}
+    \label{eq:background_component_form_absolute_1}
+\end{subequations}%
+
+From the equations in Appendix~\ref{app:component_form}, we conclude that all terms in \eqref{eq:background_component_form} that contain the relative velocities are either linear or quadratic.
+Since the relative velocities are affine in the ocean current ($\mat{v}_r = \mat{v} - \mat{R}\T\mat{V}_c$), we can conclude that all terms in \eqref{eq:background_component_form_absolute_1} that contain the ocean current are also linear or quadratic. 
+Consequently, if we denote the components of the ocean current velocity as $\mat{V}_c = \inlinevector{V_x, V_y, V_z}$, the model \eqref{eq:background_component_form_absolute_1} can be written as
+\begin{subequations}
+    \begin{align}
+        \dot{u} &= F_u(\bs{\nu}) + f_u + \Phi_u(\bs{\nu}, \mat{R})\T\mathbb{V}_c, \\
+        \dot{v} &= X_v(u)r + Y_v(u)v + Z_v(p)w + \Phi_v(\bs{\nu}, \mat{R})\T\mathbb{V}_c, \\
+        \dot{w} &= X_w(u)q + Y_w(u)w + Z_w(p)v + G(\mat{R}) + \Phi_w(\bs{\nu}, \mat{R})\T\mathbb{V}_c, \\
+        \dot{p} &= F_p(\bs{\nu}, \mat{R}) + t_p + \Phi_p(\bs{\nu}, \mat{R})\T\mathbb{V}_c, \\
+        \dot{q} &= F_q(\bs{\nu}, \mat{R}) + t_q + \Phi_q(\bs{\nu}, \mat{R})\T\mathbb{V}_c, \\
+        \dot{r} &= F_r(\bs{\nu}) + t_r + \Phi_r(\bs{\nu}, \mat{R})\T\mathbb{V}_c,
+    \end{align}
+    \label{eq:background_component_form_absolute_2}
+\end{subequations}
+where $\mathbb{V}_c = \inlinevector{V_x, V_y, V_z, V_x^2, V_y^2, V_z^2, V_xV_y, V_xV_z, V_yV_z}$.
+The expressions for $\Phi_u$, $\Phi_v$, $\Phi_w$, $\Phi_p$, $\Phi_q$, and $\Phi_r$ are omitted in this thesis.
+Instead, let us present a method for finding them.
+
+Let $\mat{r}_1$, $\mat{r}_2$, and $\mat{r}_3$ denote the columns of the rotation matrix $\mat{R}$.
+The ocean current velocities in the body-fixed frame are given by
+\begin{equation}
+    \mat{v}_c = \mat{R}\T \mat{V}_c \quad \implies \quad
+    u_c = \mat{r}_1\T \mat{V}_c, \,\,
+    v_c = \mat{r}_2\T \mat{V}_c, \,\,
+    w_c = \mat{r}_3\T \mat{V}_c.
+\end{equation}
+Suppose then that the right-hand side of \eqref{eq:background_component_form} contains a linear term, \emph{e.g.} $k u_r$, where $k \in \mathbb{R}$.
+This term can be expressed as
+\begin{equation}
+    k u_r = k (u - u_c) = k u - k \mat{r}_1\T \mat{V}_c
+    = k u + k \varphi_u\T \mathbb{V}_c,
+\end{equation}
+where $\varphi_u\T = \left[-\mat{r}_1\T, \mat{0}_6\T\right]$.
+We can derive similar equations for linear terms containing $v_r$ and $w_r$.
+
+Next, consider a quadratic term, \emph{e.g.,} $k u_r v_r$, where $k \in \mathbb{R}$.
+This term can be expressed as
+\begin{equation}
+    k u_r v_r = k (uv - uv_c - u_cv + u_cv_c) = k u v + k \varphi_{uv}(u,v)\T \mathbb{V}_c,
+\end{equation}
+where
+\begin{align}
+    \varphi_{uv}(u,v)\T = \big[-u\mat{r}_2\T-v\mat{r}_1\T, r_{11}r_{21}, &\,r_{12}r_{22}, r_{13}r_{23}, r_{11}r_{22}+r_{12}r_{21}, \\
+    &r_{11}r_{23}+r_{13}r_{21}, r_{12}r_{23}+r_{13}r_{22}\big], \nonumber
+\end{align}
+where
+\begin{align}
+    \mat{r}_1 &= \inlinevector{r_{11}, r_{12}, r_{13}}, &
+    \mat{r}_2 &= \inlinevector{r_{21}, r_{22}, r_{23}}.
+\end{align}
+We can derive similar equations for all other quadratic terms.
+
+Finally, let us investigate the derivatives of the ocean current velocities.
+The derivative of $\mat{v}_c$ is
+\begin{equation}
+    \dot{\mat{v}}_c = \left(\mat{R}\mat{S}(\bs{\omega})\right)\T \mat{V}_c \triangleq \inlinevector{\dot{\mat{r}}_1, \dot{\mat{r}}_2, \dot{\mat{r}}_3} \mat{V}_c,
+\end{equation}
+where $\dot{\mat{r}}_1$, $\dot{\mat{r}}_2$, and $\dot{\mat{r}}_3$ denote the columns of $\mat{R}\mat{S}(\bs{\omega})$.
+The components of $\dot{\mat{v}}_c$ are thus given by
+\begin{align}
+    \dot{u}_c &= \dot{\mat{r}}_1\T \mat{V}_c, &
+    \dot{v}_c &= \dot{\mat{r}}_2\T \mat{V}_c, &
+    \dot{w}_c &= \dot{\mat{r}}_3\T \mat{V}_c.
+\end{align}
+
+We have thus shown that the \gls{auv} dynamics can be split into an ocean current-independent and an ocean current-dependent part.
+%This fact can be used when designing a low-level controller.
+%If the orientation and the absolute velocities of the \gls{auv} can be measured, but the ocean current is unknown, then we can design a series of observers, using $\Phi_u$, $\Phi_p$, $\Phi_q$, and $\Phi_r$ as regressors.
+
+In the remainder of this section, we derive a component form for 5\gls{dof} and 3\gls{dof} models.
+
+\subsubsection{5\gls{dof} component form}
+In the 5\gls{dof} model, the roll dynamics are disregarded.
+Consequently, the inertia, damping, and Coriolis matrices of the 5\gls{dof} model are obtained by removing the fourth row and fourth column from the inertia, damping, and Coriolis matrices of the 6\gls{dof} model from Section~\ref{sec:model_control_oriented}.
+
+The assumptions for deriving the 5\gls{dof} control-oriented model are analogous to the assumptions in Section~\ref{sec:model_control_oriented}, with one exception.
+Due to fewer degrees of freedom, Assumption~\ref{asm:actuators} must be modified.
+
+\begin{customasm}{3 (5DOF)}
+    \label{asm:actuators_5DOF}
+    The vehicle is equipped with a propeller and fins.
+    Consequently, the vehicle is capable of generating force in the surge direction and torque in pitch and yaw.
+\end{customasm}
+Under this assumption, the external forces acting on the vehicle are
+\begin{align}
+    \bs{\tau} &= \mat{B}\mat{f}, &
+    \mat{B} &= 
+    \begin{bmatrix}
+        b_{11} & 0 & 0 \\ 0 & 0 & b_{23} \\ 0 & b_{32} & 0 \\ 0 & b_{42} & 0 \\ 0 & 0 & b_{53}
+    \end{bmatrix},
+\end{align}
+where $\mat{f} = \inlinevector{T_u, T_q, T_r}$ is the control input.
+
+Similarly to Section~\ref{sec:model_control_oriented}, we can perform a change of coordinates so that the actuators produce no sway or heave acceleration.
+In other words, for all inputs $\mat{f}$, there exist $f_u, t_q, t_r \in \mathbb{R}$ such that
+\begin{equation}
+    \mat{M}^{-1}\mat{B}\mat{f} = \inlinevector{f_u, 0, 0, t_q, t_r}.
+\end{equation}
+
+The component form of the 5\gls{dof} model is then simply obtained by substituting $p = 0$ into \eqref{eq:background_component_form_absolute_2}
+\begin{subequations}
+    \begin{align}
+        \dot{u} &= F_u(\bs{\nu}) + f_u + \Phi_u(\bs{\nu}, \theta, \psi)\T\mathbb{V}_c, \\
+        \dot{v} &= X_v(u)r + Y_v(u)v + \Phi_v(\bs{\nu}, \theta, \psi)\T\mathbb{V}_c, \\
+        \dot{w} &= X_w(u)q + Y_w(u)w + G(\theta) + \Phi_w(\bs{\nu}, \theta, \psi)\T\mathbb{V}_c, \\
+        \dot{q} &= F_q(\bs{\nu}) + t_q + \Phi_q(\bs{\nu}, \theta, \psi)\T\mathbb{V}_c, \\
+        \dot{r} &= F_r(\bs{\nu}) + t_r + \Phi_r(\bs{\nu}, \theta, \psi)\T\mathbb{V}_c.
+    \end{align}
+    \label{eq:background_component_form_5DOF}
+\end{subequations}
+
+\subsubsection{3\gls{dof} component form}
+First, let us discuss the 3\gls{dof} control-oriented model.
+Similarly to the previous section, the model is derived using assumptions that are analogous to the ones in Section~\ref{sec:model_control_oriented}, with some modifications.
+Namely, due to fewer degrees of freedom, Assumption~\ref{asm:actuators} needs to be modified.
+
+\begin{customasm}{3 (3DOF)}
+    \label{asm:actuators_3DOF}
+    The vehicle is equipped with a propeller and a rudder.
+    Consequently, the vehicle is capable of generating force in the surge direction and torque in yaw.
+\end{customasm}
+
+Under this assumption, the external forces acting on the vehicle are
+\begin{align}
+    \bs{\tau} &= \mat{B}\mat{f}, &
+    \mat{B} &= 
+    \begin{bmatrix}
+        b_{11} & 0 \\ 0 & b_{22} \\ 0 & b_{32}
+    \end{bmatrix},
+\end{align}
+where $\mat{f} = \inlinevector{T_u, T_r}$ is the control input.
+
+The inertia, damping, and Coriolis matrices of the 3\gls{dof} model are \cite{fredriksen_global_2006}
+\begin{align}
+    \mat{M} &= 
+    \begin{bmatrix}
+        m_{11} & 0 & 0 \\ 0 & m_{22} & m_{23} \\ 0 & m_{23} & m_{33}
+    \end{bmatrix}, \quad
+    \mat{D} =
+    \begin{bmatrix}
+        d_{11} & 0 & 0 \\ 0 & d_{22} & d_{23} \\ 0 & d_{32} & d_{33}
+    \end{bmatrix}, \\
+    \mat{C}(\bs{\nu}_r) &=
+    \begin{bmatrix}
+        0 & 0 & -m_{22}v_r - m_{23}r \\ 0 & 0 & m_{11}u_r \\ m_{22}v_r + m_{23}r & -m_{11}u_r & 0
+    \end{bmatrix}.
+\end{align}
+
+In \cite{fredriksen_global_2006}, it is shown that the origin of the body-fixed coordinate frame can be chosen such that the actuators produce no sway acceleration.
+In other words, for all inputs $\mat{f}$, there exist $f_u, t_r \in \mathbb{R}$ such that
+\begin{equation}
+    \mat{M}^{-1}\mat{B}\mat{f} = \inlinevector{f_u, 0, t_r}.
+\end{equation}
+The change of coordinates is done by translating the origin of the body-fixed frame by $\varepsilon$ along the $x$-axis.
+The transformed velocities are given by
+\begin{align}
+    \bs{\nu}_r^{\prime} &= \mat{H}\bs{\nu}_r, &
+    \mat{H} &= 
+    \begin{bmatrix}
+        1 & 0 & 0 \\ 0 & 1 & \varepsilon \\ 0 & 0 & 1
+    \end{bmatrix}.
+\end{align}
+Similarly to Section~\ref{sec:model_control_oriented}, we define the transformed inertia matrix $\mat{M}^{\prime} = \mat{H}\T\mat{M}\mat{H}$.
+If we choose
+\begin{equation}
+    \varepsilon = -\frac{b_{22}\,m_{33}-b_{32}\,m_{23}}{b_{22}\,m_{23}-b_{32}\,m_{22}},
+\end{equation}
+then the effect of actuators in the new coordinate frame is given by
+\begin{equation}
+    {\mat{M}^{\prime}}^{-1}\mat{H}\T\mat{B}\mat{f}
+    =
+    \begin{bmatrix} \frac{b_{11}}{m_{11}} T_{u} \\ 0 \\ \frac{b_{32}\,m_{22}-b_{22}\,m_{23}}{m_{22}\,m_{33}-{m_{23}}^2} T_{r} \end{bmatrix}.
+\end{equation}
+

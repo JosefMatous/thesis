@@ -20,6 +20,7 @@
 
 \newtheorem{asm}{Assumption}
 \newtheorem{prop}{Proposition}
+\newtheorem*{rmk}{Remark}
 \newtheorem{innercustomasm}{Assumption} % assumption with custom number
 \newenvironment{customasm}[1]
   {\renewcommand\theinnercustomasm{#1}\innercustomasm}
@@ -74,5 +75,8 @@
 
 \chapter*{\bibname}
 \printbibliography[heading=none]
+
+\appendix
+\input{appendices/1-equations.tex}
 
 \end{document}
