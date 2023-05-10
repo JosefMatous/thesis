@@ -202,7 +202,7 @@ This transformation can also be written as
     \bs{\nu}_r &= \mat{H}\bs{\nu}_r^{\prime}, &
     \mat{H} &=
     \begin{bmatrix}
-        { \mat{I}_3} & {\small \begin{array}{ccc} 0 & 0 & 0 \\ 0 & 0 & -\varepsilon_1 \\ 0 & -\varepsilon_2 & 0 \end{array}} \\
+        { \mat{I}_3} & {\begin{array}{ccc} 0 & 0 & 0 \\ 0 & 0 & -\varepsilon_1 \\ 0 & -\varepsilon_2 & 0 \end{array}} \\
         { \mat{O}_{3 \times 3}} & {\mat{I}_3}
     \end{bmatrix}.
     \label{eq:background_transformation}
@@ -261,6 +261,7 @@ Consequently, we can treat $t_u, t_p, t_q, t_r$ as the new inputs to the system.
 where $z_{gb}$ is the distance between the centers of gravity and buoyancy.
 
 \subsection{The component form}
+\label{sec:model_component}
 In this section, we express the matrix-vector model \eqref{eq:background_nu_dot_relative} in a \emph{component form} by writing out the equations of motion for the individual state variables.
 The purpose of this model is to gain a better understanding of \gls{auv} dynamics, which allows us to design low-level controllers and analyze their closed-loop behavior.
 
@@ -473,4 +474,19 @@ then the effect of actuators in the new coordinate frame is given by
     =
     \begin{bmatrix} \frac{b_{11}}{m_{11}} T_{u} \\ 0 \\ \frac{b_{32}\,m_{22}-b_{22}\,m_{23}}{m_{22}\,m_{33}-{m_{23}}^2} T_{r} \end{bmatrix}.
 \end{equation}
+We can then perform a change of inputs
+\begin{align}
+    f_u &= \frac{b_{11}}{m_{11}} T_{u}, &
+    t_r &= \frac{b_{32}\,m_{22}-b_{22}\,m_{23}}{m_{22}\,m_{33}-{m_{23}}^2} T_{r},
+\end{align}
+and express the 3\gls{dof} model in the following component form
+\begin{subequations}
+    \begin{align}
+        \dot{u}_r &= F_u(\bs{\nu}_r) + f_u, \\
+        \dot{v}_r &= X_v(u_r)r + Y_v(u_r)v_r, \\
+        \dot{r} &= F_r(\bs{\nu}_r) + t_r.
+    \end{align}
+    \label{eq:background_component_form_3DOF}
+\end{subequations}
+The equations for $F_u$, $X_v$, $Y_v$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
 

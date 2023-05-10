@@ -1,0 +1,34 @@
+\section{Formation Path Following}
+
+This section formally defines the formation path following problem.
+Throughout the section, we consider a fleet of $N$ vehicles.
+Let $\mat{p}_1, \ldots \mat{p}_N$ denote the positions of the vehicles.
+
+\subsection{The path-following problem}
+To formulate the path-following problem, we first need to define the \emph{barycenter} of the fleet.
+The barycenter, $\mat{p}_b$, is given by the mean position of the vehicles, \emph{i.e.,}
+\begin{equation}
+    \mat{p}_b = \frac{1}{N} \sum_{i=1}^N \mat{p}_i.
+\end{equation}
+
+To solve the path-following problem, we need to control the vehicles such that the barycenter coincides with the desired path.
+Let $\mat{p}_p(s)$ be the parametrization of the desired path.
+Then, the goal of path-following is to control the vehicles such that
+\begin{equation}
+    \mat{p}_b \rightarrow \mat{p}_p(s).
+\end{equation}
+
+Let $\mat{p}_b^p$ denote the position of the barycenter in the path-tangential coordinate frame (see Section~\ref{sec:background_path_tangential}).
+It is given by
+\begin{equation}
+    \mat{p}_b^p = \mat{R}_p\T \left(\mat{p}_b - \mat{p}_p(s)\right).
+\end{equation}
+Note that $\mat{p}_b^p$ can be interpreted as the path-following error.
+Indeed, $\mat{p}_b$ is equal to $\mat{p}_p(s)$ if and only if $\mat{p}_b^p$ is zero.
+
+Let $x_b^p$, $y_b^p$, and $z_b^p$ denote the components of $\mat{p}_b^p$.
+The component $x_b^p$ is commonly referred to as the \emph{along-track error}, since the value of $x_b^p$ indicates whether the barycenter is ``in front of'' or ``behind'' the desired path.
+The components $y_b^p$ and $z_b^p$ are referred to as the \emph{cross-track errors}, since they indicate the lateral deviation from the desired path.
+
+\subsubsection{Path-following versus trajectory-tracking}
+

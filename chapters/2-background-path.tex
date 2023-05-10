@@ -5,7 +5,7 @@ This section presents the definitions of paths in the context of guidance.
 The theory presented in this section applies to two- and three-dimensional Euclidean spaces.
 Let $n_d \in \{2,3\}$ denote the number of dimensions.
 
-\subsubsection*{Paths and their parametrizations}
+\subsection{Paths and their parametrizations}
 A \emph{path} is a curve in $n_d$-dimensional space.
 A path can be expressed as a set $P \subset \mathbb{R}^{n_d}$.
 A \emph{parametrization} of a path is a function $\mat{p}_p : \mathbb{R} \mapsto \mathbb{R}^{n_d}$ whose image space represents the given path, \emph{i.e.,} $\{\mat{p}_p(s) | s \in \mathbb{R}\} = P$.
@@ -21,7 +21,7 @@ Furthermore, if we multiply these parametrizations by a positive scalar, we also
 In general, if $\mat{p}_p(s)$ is a path parametrization that is defined for all $s \in \mathbb{R}$, and $\gamma(s)$ is a monotonically increasing function that is also defined for all $s \in \mathbb{R}$, then $\mat{p}_p(s)$ and $\mat{p}_p(\gamma(s))$ parametrize the same path.
 We will refer to $\mat{p}_p(\gamma(s))$ as a \emph{reparametrization} of $\mat{p}_p(s)$.
 
-\subsubsection*{Continuity and regularity}
+\subsection{Continuity and regularity}
 \emph{Continuity}, also referred to as smoothness, is an important property, as some vehicles are not able to follow a path that has discontinuities or sharp turns.
 There are two types of continuity --- \emph{parametric} and \emph{geometric}.
 Parametric continuity is related to a specific parametrization of a path, while geometric continuity is related to the curve itself.
@@ -38,7 +38,8 @@ A regular parametrization means that there are no ``stops'' along the path.
 Recalling the two examples in \eqref{eq:background_path_example}, both $\mat{p}_{p, 1}$ and $\mat{p}_{p, 2}$ are $C_{\infty}$, but only $\mat{p}_{p, 1}$ is regular since the derivative of $\mat{p}_{p, 2}(s)$ at $s = 0$ is zero.
 Regularity is an important property when defining the path-tangential vector and the path-tangential coordinate frame, as we discuss next.
 
-\subsubsection*{Path-tangential vector and coordinate frame}
+\subsection{Path-tangential vector and coordinate frame}
+\label{sec:background_path_tangential}
 If a parametrization is $\mathcal{C}_1$ and regular, then the \emph{path-tangential vector} is simply the first partial derivative of $\mat{p}_p(s)$ with respect to $s$.
 
 A \emph{path-tangential coordinate frame} has its origin at $\mat{p}_p(s)$, and is oriented such that the path-tangential vector is aligned with the $x$-axis.
@@ -77,11 +78,21 @@ where
     \theta_{p}(s) &= - \arcsin\left(\frac{\partial z_p(s) / \partial s}{\norm{\partial \mat{p}_p(s) / \partial s}}\right), &
     \psi_{p}(s) = \mathrm{arctan}_{2}\left(\frac{\partial  y_{p}(s)}{\partial s}, \frac{\partial  x_{p}(s)}{\partial s}\right).
 \end{align}
+An illustration is shown in \figref{fig:background_path}.
 Note that the yaw angle $\psi_{p}(s)$ is not defined if the path-tangential vector is aligned with the $z$-axis (\emph{i.e.,} if both $\partial x_p(s) / \partial s$ and $\partial y_p(s) / \partial s$ are zero).
 However, we also note that most commercial \glspl{auv} can only reach a limited range of pitch angles, making them unable to move vertically.
-Consequently, we should avoid designing vertical paths, where the limitations of the Euler angles become an issue.
+Consequently, we should avoid designing vertical paths, where the singularities of Euler angles become an issue.
 
-\subsubsection*{Curvature}
+\begin{figure}[t]
+    \centering
+    \def\svgwidth{0.6\textwidth}
+    \import{figures/background}{path.pdf_tex}
+    \vspace*{-1em}
+    \caption{Illustration of the path-tangential coordinate frame. $\mat{O}$ denotes the origin of the inertial coordinate frame, $\mat{O}^p$ denotes the origin of the path-tangential coordinate frame. The grey line represents the projection of the path-tangential vector onto the $xy$ plane of the inertial coordinate frame.}
+    \label{fig:background_path}
+\end{figure}
+
+\subsection{Curvature}
 As previously mentioned, some vehicles are unable to follow paths with ``sharp turns''.
 For the purposes of this thesis, we define \emph{curvature} as a measure of change of the path-tangential coordinate frame.
 
@@ -104,7 +115,7 @@ The vector $\bs{\omega}_p(s)$ is then given by
     \bs{\omega}_p(s) = \inlinevector{-\iota(s)\sin\left(\theta_{p}(s)\right), \kappa(s), \iota(s)\cos\left(\theta_{p}(s)\right)}.
 \end{equation}
 
-\subsection*{Parametrization by arc length}
+\subsection{Parametrization by arc length}
 A path parametrization $\mat{p}_p(s)$ is said to be a \emph{parametrization by arc length} if for all $s_1, s_2 \in \mathbb{R}, s_2 > s_1$, we have
 \begin{equation}
     \int_{s_1}^{s_2} \norm{\frac{\partial \mat{p}_p(s)}{\partial s}} {\rm d}s = s_2 - s_1.

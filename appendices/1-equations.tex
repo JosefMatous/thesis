@@ -4,7 +4,8 @@ This appendix lists the equations that are too extensive to be included in the m
 
 \section{The Component Form}
 \label{app:component_form}
-The functions $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ in \eqref{eq:background_component_form} in Section~\ref{sec:model} are given by
+\subsection{6\gls{dof} Model}
+The functions $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ in \eqref{eq:background_component_form} in Section~\ref{sec:model_component} are given by
 \begin{subequations}
     \begin{align}
         F_u(\cdot) &= -\frac{m_{35}q^2+m_{33}w_rq-m_{26}r^2-m_{22}v_rr+d_{11}u_r}{m_{11}}, \\
@@ -15,13 +16,12 @@ The functions $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$
         Y_w(\cdot) &= - \frac{d_{33}m_{55} - d_{53}m_{35} - u_r\left(m_{11}m_{35} - m_{33}m_{35}\right)}{m_{33}m_{55} - m_{35}^2}, \\
         Z_w(\cdot) &= - \frac{p\left(m_{26}m_{35} + m_{22}m_{55}\right)}{m_{33}m_{55} - m_{35}^2}, \\
         G(\cdot) &= -\frac{m_{35}}{m_{33}m_{55} - m_{35}^2} W z_{gb} \left[0, 1, 0\right] \left(\mat{e}_3 \times \mat{R}\T \mat{e}_3\right) \\
-        &= \frac{m_{35}}{m_{33}m_{55} - m_{35}^2} W z_{gb} \sin(\theta) \nonumber, \\
         F_p(\cdot) &= -\frac{d_{44}p-m_{55}qr+m_{66}qr+m_{26}qv_r+m_{35}qv_r-m_{26}rw_r}{m_{44}} \\
         &\quad + \frac{m_{35}rw_r+m_{22}v_rw_r-m_{33}v_rw_r + W z_{gb} \left[1, 0, 0\right] \left(\mat{e}_3 \times \mat{R}\T \mat{e}_3\right)}{m_{44}}, \nonumber \\
         F_q(\cdot) &= \frac{m_{33}^2u_rw_r+d_{35}m_{35}q-d_{55}m_{33}q+d_{33}m_{35}w_r-d_{53}m_{33}w_r}{m_{33}m_{55}-{m_{35}}^2} \\
         &\quad + \frac{m_{26}m_{35}pr-m_{33}m_{44}pr+m_{33}m_{66}pr-m_{11}m_{35}qu_r}{m_{33}m_{55}-{m_{35}}^2} \nonumber \\
         &\quad + \frac{m_{22}m_{35}pv_r+m_{26}m_{33}pv_r+m_{33}m_{35}qu_r}{m_{33}m_{55}-{m_{35}}^2} \nonumber \\
-        &\quad + \frac{m_{11}m_{33}u_rw_r-m_{33} W z_{gb} \sin(\theta)}{m_{33}m_{55}-{m_{35}}^2}, \nonumber \\
+        &\quad + \frac{m_{11}m_{33}u_rw_r+m_{33} W z_{gb} \left[0, 1, 0\right] \left(\mat{e}_3 \times \mat{R}\T \mat{e}_3\right)}{m_{33}m_{55}-{m_{35}}^2}, \nonumber \\
         F_r(\cdot) &= -\frac{m_{22}^2u_rv_r-d_{26}m_{26}r+d_{66}m_{22}r-d_{22}m_{26}v_r}{m_{22}m_{66}-{m_{26}}^2} \\
         &\quad - \frac{d_{62}m_{22}v_r+m_{26}m_{35}pq-m_{22}m_{44}pq+m_{22}m_{55}pq}{m_{22}m_{66}-{m_{26}}^2} \nonumber \\
         &\quad - \frac{m_{22}m_{26}ru_r-m_{11}m_{26}ru_r+m_{22}m_{35}pw_r}{m_{22}m_{66}-{m_{26}}^2} \nonumber \\
@@ -29,3 +29,14 @@ The functions $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$
     \end{align}
 \end{subequations}
 
+\subsection{3\gls{dof} Model}
+The functions $F_u$, $X_v$, $Y_v$, and $F_r$ in \eqref{eq:background_component_form_3DOF} are given by
+\begin{subequations}
+    \begin{align}
+        F_u(\cdot) &= \frac{m_{23}r^2+m_{22}v_{r}r-d_{11}u_{r}}{m_{11}}, \\
+        X_v(\cdot) &= \frac{(m_{23}^2 + m_{11}m_{33})u_{r}+d_{33}m_{23}-d_{23}m_{33}}{m_{22}m_{33}-m_{23}^2}, \\
+        Y_v(\cdot) &= \frac{d_{22}m_{33}-d_{32}m_{23}+(m_{11}m_{23}-m_{22}m_{23})u_{r}}{m_{22}m_{33}-m_{23}^2}, \\
+        F_r(\cdot) &= -\frac{m_{22}^2u_{r}v_{r}-d_{23}m_{23}r+d_{33}m_{22}r-d_{22}m_{23}v_{r}+d_{32}m_{22}v_{r}}{m_{22}m_{33}-m_{23}^2} \\
+        &\quad - \frac{m_{22}m_{23}ru_{r}-m_{11}m_{23}ru_{r}-m_{11}m_{22}u_{r}v_{r}}{m_{22}m_{33}-m_{23}^2}. \nonumber
+    \end{align}
+\end{subequations}
