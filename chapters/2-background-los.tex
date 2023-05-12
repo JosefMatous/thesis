@@ -11,14 +11,62 @@ This section describes the \gls{los} guidance algorithm.
         \def\svgwidth{0.9\textwidth}
         \import{figures/background}{los_2d.pdf_tex}
         \caption{Two-dimensional line-of-sight guidance.}
+        \label{fig:background_los_2d}
     \end{subfigure}
     \begin{subfigure}{0.48\textwidth}
         \def\svgwidth{\textwidth}
         \import{figures/background}{los_3d.pdf_tex}
         \caption{Three-dimensional coupled line-of-sight guidance.}
+        \label{fig:background_los_3d}
     \end{subfigure}
     \caption{Illustrations of line-of-sight guidance methods.}
 \end{figure}
 
 First, let us discuss \gls{los} guidance for vehicles moving in the horizontal plane.
+Let $\mat{p}_b^p = \inlinevector{x_b^p, y_b^p}$ denote the path-following error of the barycenter.
+Let $\mat{V}_{\rm LOS}$ denote the desired (inertial) line-of-sight velocity that steers the barycenter towards the desired path.
+$\mat{V}_{\rm LOS}$ is given by
+\begin{align}
+    \mat{V}_{\rm LOS} &= U_{\rm LOS} \inlinevector{\cos(\chi_{\rm LOS}), \sin(\chi_{\rm LOS})}\!\!, &
+    \chi_{\rm LOS} &= \psi_{p\!} - \arctan\left(\frac{y_b^p}{\Delta}\right)\!,
+    \label{eq:background_los_2d}
+\end{align}
+where $U_{\rm LOS} > 0$ is the desired path-following speed, $\psi_p$ is the path-tangential angle, as defined in \eqref{eq:background_path_tangential_2D}, and $\Delta > 0$ is the so-called \emph{lookahead} distance.
+An illustration of \gls{los} guidance in the horizontal plane is shown in \figref{fig:background_los_2d}.
 
+For vehicles moving in three dimensions, there exist two types of \gls{los} guidance algorithms: \emph{decoupled} and \emph{coupled}.
+A decoupled \gls{los} algorithm consists of two separate guidance schemes that steer the vehicle in the horizontal and vertical plane.
+Let $\mat{p}_b^p = \inlinevector{x_b^p, y_b^p, z_b^p}$ denote the path-following error of the barycenter.
+Let us assume that the path-tangential coordinate frame is chosen according to \eqref{eq:background_R_p_zero_roll}, so that the rotation matrix $\mat{R}_p(s)$ has a zero roll angle.
+The desired line-of-sight velocity, $\mat{V}_{\rm LOS}$, is then given by
+\begin{align}
+    \mat{V}_{\rm LOS} &= U_{\rm LOS} \!
+    \begin{bmatrix}
+        \cos(\gamma_{\rm LOS}) \cos(\chi_{\rm LOS}) \\
+        \cos(\gamma_{\rm LOS}) \sin(\chi_{\rm LOS}) \\
+        -\sin(\gamma_{\rm LOS})
+    \end{bmatrix}\!, &
+    \begin{split}
+        \gamma_{\rm LOS} &= \theta_{p\!} + \arctan\left(\frac{z_b^p}{\Delta_z}\right)\!, \\
+        \chi_{\rm LOS} &= \psi_{p\!} - \arctan\left(\frac{y_b^p}{\Delta_y}\right)\!, \\
+    \end{split}
+    \label{eq:background_los_decoupled}
+\end{align}
+where $U_{\rm LOS} > 0$ is the desired path-following speed, $\theta_p$ and $\psi_p$ are the path-tangential angles, as defined in \eqref{eq:background_path_tangential_3D}, and $\Delta_y, \Delta_z > 0$ are the lookahead distances of the horizontal and vertical guidance scheme.
+Comparing the decoupled guidance scheme in \eqref{eq:background_los_decoupled} to the two-dimensional \gls{los} algorithm in \eqref{eq:background_los_2d}, we can see that the decoupled guidance scheme effectively consists of two two-dimensional \gls{los} guidance algorithms.
+
+In a \emph{coupled} \gls{los} guidance scheme, the desired velocity is given by
+\begin{equation}
+    \mat{V}_{\rm LOS} = \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2 + {z_b^p}^2}} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
+\end{equation}
+where $U_{\rm LOS} > 0$ is the desired path-following speed, $\mat{R}_p$ is the rotation matrix between the path-tangential and the inertial coordinate frame, and $\Delta > 0$ is the lookahead distance.
+An illustration of this scheme is shown in \figref{fig:background_los_3d}.
+The coupled scheme can be seen as an extension of the horizontal \gls{los} guidance scheme to three dimensions.
+Indeed, the scheme in \eqref{eq:background_los_2d} can also be written as
+\begin{equation}
+    \mat{V}_{\rm LOS} = 
+    \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2}} \begin{bmatrix} \Delta\cos(\psi_p) + y_b^p\sin(\psi_p) \\ \Delta\sin(\psi_p) - y_b^p\cos(\psi_p) \end{bmatrix} = 
+    \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2}} \mat{R}_p \begin{bmatrix} \Delta \\ -y_b^p \end{bmatrix}. 
+    \label{eq:background_los_2d_R}
+\end{equation}
+Comparing \eqref{eq:background_los_2d_R} to \eqref{eq:background_los_coupled}, we can see that both equations have a similar form.

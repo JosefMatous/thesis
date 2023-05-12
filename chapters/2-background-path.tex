@@ -52,6 +52,7 @@ This matrix is given by
         \cos\left(\psi_{p}(s)\right) & -\sin\left(\psi_{p}(s)\right) \\ \sin\left(\psi_{p}(s)\right) & \cos\left(\psi_{p}(s)\right)
     \end{bmatrix}, \,
     \psi_{p}(s) = \mathrm{arctan}_{2}\left(\frac{\partial  y_{p}(s)}{\partial s}, \frac{\partial  x_{p}(s)}{\partial s}\right),
+    \label{eq:background_path_tangential_2D}
 \end{equation}
 where $x_p(s)$ and $y_p(s)$ are the components of $\mat{p}_p(s)$, and $\mathrm{arctan}_2$ is the four quadrant inverse tan.
 
@@ -77,6 +78,7 @@ where
 \begin{align}
     \theta_{p}(s) &= - \arcsin\left(\frac{\partial z_p(s) / \partial s}{\norm{\partial \mat{p}_p(s) / \partial s}}\right), &
     \psi_{p}(s) = \mathrm{arctan}_{2}\left(\frac{\partial  y_{p}(s)}{\partial s}, \frac{\partial  x_{p}(s)}{\partial s}\right).
+    \label{eq:background_path_tangential_3D}
 \end{align}
 An illustration is shown in \figref{fig:background_path}.
 Note that the yaw angle $\psi_{p}(s)$ is not defined if the path-tangential vector is aligned with the $z$-axis (\emph{i.e.,} if both $\partial x_p(s) / \partial s$ and $\partial y_p(s) / \partial s$ are zero).
