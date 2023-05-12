@@ -1,6 +1,6 @@
 %% Creator: Inkscape 1.1.2 (0a00cf5339, 2022-02-04), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'los_coupled.pdf' (pdf, eps, ps)
+%% Accompanies image file 'los_2d.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{244.65077798bp}%
+    \setlength{\unitlength}{284.48162842bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,18 +50,16 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.63244242)%
+  \begin{picture}(1,0.5369631)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{los_coupled.pdf}}%
-    \put(0.01559004,0.3915927){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_p(s)$\end{tabular}}}}%
-    \put(0.32583303,0.13257177){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_b$\end{tabular}}}}%
-    \put(0.45124278,0.56757106){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x^p$\end{tabular}}}}%
-    \put(0.47757786,0.44247193){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{V}_{\rm LOS}$\end{tabular}}}}%
-    \put(0.25654989,0.02761219){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y^p$\end{tabular}}}}%
-    \put(0.03019131,0.0728029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$z^p$\end{tabular}}}}%
-    \put(0.55985232,0.24443192){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\Delta$\end{tabular}}}}%
-    \put(0.22104662,0.29646173){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_b^p$\end{tabular}}}}%
-    \put(0.30694018,0.30818732){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$z_b^p$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{los_2d.pdf}}%
+    \put(0.51575493,0.01476526){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\Delta$\end{tabular}}}}%
+    \put(0.63589942,0.25679899){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}{\color{navy}$\mat{V}_{\rm LOS}$}\end{tabular}}}}%
+    \put(0.18327056,0.29734288){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_b^p$\end{tabular}}}}%
+    \put(0.00480524,0.1895479){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle y^p$\end{tabular}}}}%
+    \put(0.01329282,0.4962553){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle \mat{O}^p$\end{tabular}}}}%
+    \put(0.50053431,0.49897009){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle x^p$\end{tabular}}}}%
+    \put(0.10372154,0.02513134){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_b$\end{tabular}}}}%
   \end{picture}%
 \endgroup%
