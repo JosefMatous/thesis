@@ -146,7 +146,7 @@
 \RequirePackage[scaled=.82]{DejaVuSansMono} % monospace font (for code)
 \RequirePackage{listings}                   % code listings
 \RequirePackage{etoolbox}                   % fixing list of listings spacing
-\RequirePackage{babel}                      % language specifics
+\RequirePackage[american]{babel}                      % language specifics
 \RequirePackage{geometry}                   % page layout
 \RequirePackage{enumitem}                   % customising list appearance
 \RequirePackage{graphicx}                   % including figures

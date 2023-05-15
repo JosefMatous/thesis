@@ -1,7 +1,22 @@
 \section{Mathematical Models of Marine Vehicles}
 \label{sec:model}
 
+Mathematical models are vital to the design, analysis, and verification of control algorithms.
+For complex systems, such as marine vehicles, there typically exist different types of models.
+These models often represent a trade-off between simplicity and fidelity.
+On one end of the spectrum, there are high-fidelity models.
+These models are an accurate representation of the system.
+Consequently, high-fidelity models are used in ship-handling simulators, as well as in some simulation environments, \emph{e.g.,} the \gls{dune} \cite{dune}, to train the operators and to verify the effectiveness of control algorithms.
+However, due to their complexity, these models are not suitable for designing or analyzing control algorithms.
+
+On the other end of the spectrum, there are control-oriented models.
+Compared to high-fidelity models, the structure of control-oriented models is simpler.
+This simplicity means that we can use these models to design control algorithms and analyze their closed-loop properties.
+The inaccuracies of control-oriented models can be compensated by designing robust controllers.
+
 This section presents control-oriented models of \glspl{asv} and \glspl{auv}.
+The presented models are similar to those in \cite{borhaug_straight_2007} and \cite{fredriksen_global_2006}.
+The models are based on the matrix-vector models of marine vehicles \cite{fossen_handbook_2011} and some simplifying assumtpions.
 
 \subsection{State variables and degrees of freedom}
 Marine vehicles are typically modeled as rigid bodies.
@@ -14,8 +29,8 @@ In general, we will denote the position of the vehicles as $\mat{p} = \inlinevec
 The orientation of a vehicle can be expressed using \emph{Euler angles}, $\bs{\Theta} = \inlinevector{\phi, \theta, \psi}$, where $\phi$ is the roll angle, $\theta$ is the pitch angle, and $\psi$ is the yaw angle.
 The complete position and orientation vector of the vehicle is then given by $\bs{\eta}\T = \left[\mat{p}\T, \bs{\Theta}\T\right]$.
 
-Euler angles can represent any orientation.
-However, in some cases, this representation is not unique.
+Although Euler angles can represent any orientation,
+in some cases, this representation is not unique.
 For example, the following two sets of Euler angles represent the same attitude
 \begin{align}
     \bs{\Theta}_1 &= \inlinevector{\frac{\pi}{2}, \frac{\pi}{2}, 0}, &
@@ -123,7 +138,7 @@ There exist multiple expressions for the Coriolis matrix, \emph{e.g.,}
     \mat{C}(\bs{\nu}_r)\! =\!
     \begin{bmatrix}
         \mat{O}_{3 \times 3} & \!\!-\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) \\
-        \mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) & \!\!-\mat{S}(\mat{M}_{21}\mat{v}_r + \mat{M}_{22}\bs{\omega})
+        -\mat{S}(\mat{M}_{11}\mat{v}_r + \mat{M}_{12}\bs{\omega}) & \!\!-\mat{S}(\mat{M}_{21}\mat{v}_r + \mat{M}_{22}\bs{\omega})
     \end{bmatrix}, \,
     \begin{bmatrix}
         \mat{M}_{11} & \!\!\!\mat{M}_{12} \\ \mat{M}_{21} & \!\!\!\mat{M}_{22}
@@ -142,9 +157,7 @@ where $W \in \mathbb{R}_{> 0}$ is the gravitational force, $B \in \mathbb{R}_{> 
 
 \subsection{Control-oriented model of underactuated \glspl{auv}}
 \label{sec:model_control_oriented}
-The goal of this section is to present a control-oriented model, a simplified mathematical model that is then used to design a controller and analyze its closed-loop properties.
-The model in this section is similar to the one presented in \cite{borhaug_straight_2007}.
-We begin by presenting the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
+Before deriving the control-oriented model, we need to present the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
 
 \begin{asm}
     \label{asm:symmetric}

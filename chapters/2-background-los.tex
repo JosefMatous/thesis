@@ -4,7 +4,7 @@
 This section describes the \gls{los} guidance algorithm.
 \gls{los} is an intuitive method for steering vehicles towards the desired path.
 
-\begin{figure}[t]
+\begin{figure}[b]
     \centering
     \begin{subfigure}{0.48\textwidth}
         \centering
@@ -58,11 +58,12 @@ Comparing the decoupled guidance scheme in \eqref{eq:background_los_decoupled} t
 In a \emph{coupled} \gls{los} guidance scheme, the desired velocity is given by
 \begin{equation}
     \mat{V}_{\rm LOS} = \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2 + {z_b^p}^2}} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
+    \label{eq:background_los_coupled}
 \end{equation}
 where $U_{\rm LOS} > 0$ is the desired path-following speed, $\mat{R}_p$ is the rotation matrix between the path-tangential and the inertial coordinate frame, and $\Delta > 0$ is the lookahead distance.
 An illustration of this scheme is shown in \figref{fig:background_los_3d}.
 The coupled scheme can be seen as an extension of the horizontal \gls{los} guidance scheme to three dimensions.
-Indeed, the scheme in \eqref{eq:background_los_2d} can also be written as
+Indeed, the two-dimensional guidance scheme \eqref{eq:background_los_2d} can also be written as
 \begin{equation}
     \mat{V}_{\rm LOS} = 
     \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2}} \begin{bmatrix} \Delta\cos(\psi_p) + y_b^p\sin(\psi_p) \\ \Delta\sin(\psi_p) - y_b^p\cos(\psi_p) \end{bmatrix} = 
