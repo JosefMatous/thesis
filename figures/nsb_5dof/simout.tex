@@ -1,0 +1,195 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+%
+\begin{tikzpicture}
+
+\pgfplotsset{every tick label/.append style={font=\small}}
+
+\begin{axis}[%
+width=0.375\textwidth,
+height=25.399mm,
+at={(0mm,39mm)},
+scale only axis,
+xmin=0,
+xmax=150,
+xtick={0,50,100,150},
+ymin=-5.5,
+ymax=6.9,
+ylabel style={font=\color{white!15!black},yshift=-3.5mm},
+ylabel={Error [m]},
+xlabel style={font=\color{white!15!black},yshift=2mm},
+xlabel={$t$ [s]},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids,
+title style={font=\bfseries,yshift=-0.5mm},
+title={Path following error},
+legend columns=3
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{simout-1.tsv};
+  \addlegendentry{$x_b^p$}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{simout-2.tsv};
+  \addlegendentry{$y_b^p$}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{simout-3.tsv};
+  \addlegendentry{$z_b^p$}  
+\end{axis}
+
+\begin{axis}[%
+  width=0.375\textwidth,
+  height=25.699mm,
+  at={(0mm,0mm)},
+  scale only axis,
+  xmin=0,
+  xmax=150,
+  xlabel style={font=\color{white!15!black}, yshift=2mm},
+  xlabel={$t$ [s]},
+  ymin=0,
+  ymax=20.62,
+  ylabel style={font=\color{white!15!black}, yshift=-1.5mm},
+  ylabel={Distance [m]},
+  axis background/.style={fill=white},
+  title style={font=\bfseries, yshift=-1.5mm},
+  title={Inter-vehicle distance},
+  axis x line*=bottom,
+  axis y line*=left,
+  xmajorgrids,
+  ymajorgrids,
+  legend style={at={(0.97,0.03)}, anchor=south east, legend cell align=left, align=left, draw=white!15!black},
+  legend columns=2
+  ]
+  \addplot [color=mycolor1, line width=1.0pt]
+    table[]{simout-16.tsv};
+  \addlegendentry{$d_{1,2}$~}
+  
+  \addplot [color=mycolor2, line width=1.0pt]
+    table[]{simout-17.tsv};
+  \addlegendentry{$d_{1,3}$}
+  
+  \addplot [color=mycolor3, line width=1.0pt]
+    table[]{simout-18.tsv};
+  \addlegendentry{$d_{2,3}$~}
+  
+  \addplot [color=black, dashed, line width=1.0pt]
+    table[]{simout-19.tsv};
+  \addlegendentry{$d_{\rm COLAV}$}
+  
+\end{axis}
+
+\begin{axis}[%
+width=0.375\textwidth,
+height=19.539mm,
+at={(0.5\textwidth,45.439mm)},
+scale only axis,
+xmin=0,
+xmax=150,
+xtick={0,50,100,150},
+xticklabels={\empty},
+ymin=-5.32018044501408,
+ymax=2.72629468835089,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={$\tilde{\sigma}_x$ [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries,yshift=-0.5mm},
+title={Formation keeping error},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids,
+]
+\addplot[area legend, dashed, draw=black, fill=gray, fill opacity=0.5, forget plot]
+table[] {simout-7.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=1.0pt, forget plot]
+  table[]{simout-4.tsv};
+
+\addplot [color=mycolor2, line width=1.0pt, forget plot]
+  table[]{simout-5.tsv};
+
+\addplot [color=mycolor3, line width=1.0pt, forget plot]
+  table[]{simout-6.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=0.375\textwidth,
+height=19.539mm,
+at={(0.5\textwidth,22.72mm)},
+scale only axis,
+xmin=0,
+xmax=150,
+xtick={0,50,100,150},
+xticklabels={\empty},
+ymin=-20,
+ymax=20,
+ylabel style={font=\color{white!15!black}, xshift=2mm, yshift=-3mm},
+ylabel={$\tilde{\sigma}_y$ [m]},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids,
+legend style={at={(0.97,1.35)}, anchor=north east, legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot[area legend, dashed, draw=black, fill=gray, fill opacity=0.5, forget plot]
+table[] {simout-11.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{simout-8.tsv};
+  \addlegendentry{Vehicle 1}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{simout-9.tsv};
+  \addlegendentry{Vehicle 2}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{simout-10.tsv};
+  \addlegendentry{Vehicle 3}
+
+\end{axis}
+
+\begin{axis}[%
+width=0.375\textwidth,
+height=19.539mm,
+at={(0.5\textwidth,0mm)},
+scale only axis,
+xmin=0,
+xmax=150,
+xlabel style={font=\color{white!15!black},yshift=2mm},
+xlabel={$t$ [s]},
+ymin=-10,
+ymax=20,
+ylabel style={font=\color{white!15!black}, yshift=-3mm},
+ylabel={$\tilde{\sigma}_z$ [m]},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids,
+]
+\addplot[area legend, dashed, draw=black, fill=gray, fill opacity=0.5, forget plot]
+table[] {simout-15.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=1.0pt, forget plot]
+  table[]{simout-12.tsv};
+\addplot [color=mycolor2, line width=1.0pt, forget plot]
+  table[]{simout-13.tsv};
+\addplot [color=mycolor3, line width=1.0pt, forget plot]
+  table[]{simout-14.tsv};
+
+\end{axis}
+
+
+\end{tikzpicture}%

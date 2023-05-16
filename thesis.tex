@@ -26,6 +26,8 @@
 \newtheorem{asm}{Assumption}
 \newtheorem{prop}{Proposition}
 \newtheorem*{rmk}{Remark}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
 \newtheorem{innercustomasm}{Assumption} % assumption with custom number
 \newenvironment{customasm}[1]
   {\renewcommand\theinnercustomasm{#1}\innercustomasm}
@@ -40,6 +42,19 @@
 \newcommand{\inlinevector}[1]{\left[#1\right]\T}
 \newcommand{\norm}[1]{\left\|#1\right\|}
 \newcommand{\abs}[1]{\left|#1\right|}
+
+\newcommand{\pose}{\bs{\eta}}
+\newcommand{\vel}{\bs{\nu}}
+\newcommand{\ocean}{\mat{V}_c}
+\newcommand{\oceanhat}{\hat{\mat{V}}_c}
+\newcommand{\oceantilde}{\tilde{\mat{V}}_c}
+\newcommand{\mass}{\mat{M}}
+\newcommand{\cor}{\mat{C}\left(\bs{\nu}_r\right)}
+\newcommand{\drag}{\mat{D}\left(\bs{\nu}_r\right)}
+\newcommand{\grav}{\mat{g}\left(\pose\right)}
+\newcommand{\rot}{\mat{R}\left(\theta, \psi\right)}
+\newcommand{\trans}{\mat{T}\left(\theta\right)}
+\newcommand{\transform}{\mat{J}\left(\pose\right)}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\diag}{diag}
@@ -56,6 +71,7 @@
 \serialnumber{}
 
 \addbibresource{references-ccta.bib}
+\addbibresource{references-5dof_nsb.bib}
 \addbibresource{references-background.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
@@ -85,5 +101,6 @@
 
 \appendix
 \input{appendices/1-equations.tex}
+\input{appendices/2-5dof_nsb.tex}
 
 \end{document}

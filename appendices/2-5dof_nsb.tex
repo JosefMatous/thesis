@@ -1,0 +1,497 @@
+\chapter{Proofs of Lemmas from Chapter \ref{chap:5dof_nsb}}
+
+\section{Derivation of Closed-Loop Barycenter Kinematics}
+\label{app:5dof_nsb_barycenter}
+We begin by taking $\dot{y}_b^p$ from \eqref{eq:nsb_5dof_y_pb}.
+\begin{align}
+    \dot{y}_b^p &= \frac{1}{n}\sum_{i=1}^n U_i\,\cos\left(\gamma_i\right)\,\sin\left(\chi_i - \psi_p\right) - \dot{\xi}\,\iota\,x_b^p. \label{eq:nsb_5dof_y_pb_0}
+\end{align}
+Now, consider the term $\sin\left(\chi_i - \psi_p\right)$.
+The course of the vessel is given by
+\begin{align}
+    \chi_i &= \psi_i + \beta_i, &
+    \beta_i &= \arcsin\left(\frac{v_i}{U_i}\right).
+\end{align}
+After substituting and applying some trigonometric identities, we get
+\begin{subequations}
+    \begin{align}
+        \sin\left(\chi_i - \psi_p\right) &= \sin\left(\psi_i + \beta_i - \psi_p\right) \\
+        &= \cos\left(\psi_i - \psi_p\right)\,\sin\left(\beta_i\right) + \sin\left(\psi_i - \psi_p\right)\,\cos\left(\beta_i\right) \\
+        &= \cos\left(\psi_i - \psi_p\right)\frac{v_i}{U_i} + \sin\left(\psi_i - \psi_p\right)\frac{\sqrt{u_i^2 + w_i^2}}{U_i}.
+    \end{align}
+\end{subequations}
+Consequently, the term $U_i\,\cos\left(\gamma_i\right)\,\sin\left(\chi_i - \psi_p\right)$ is equivalent to
+\begin{equation}
+    \begin{split}
+        U_i\,\cos\left(\gamma_i\right)\,\sin\left(\chi_i - \psi_p\right) = \cos\left(\gamma_i\right) \bigg(&\cos\left(\psi_i - \psi_p\right)v_i \\
+        & \quad + \sin\left(\psi_i - \psi_p\right)\sqrt{u_i^2 + w_i^2}\bigg). 
+    \end{split}
+    \label{eq:nsb_5dof_y_pb_1}
+\end{equation}
+
+\noindent Now, consider a term $\sin\left(\psi_i + \beta_{d,i} - \psi_p\right)$.
+Using a similar procedure, we get
+\begin{equation}
+    \sin\left(\psi_i + \beta_{d,i} - \psi_p\right) = \cos\left(\psi_i - \psi_p\right)\frac{v_i}{U_{d,i}} + \sin\left(\psi_i - \psi_p\right)\frac{\sqrt{u_{d,i}^2 + w_i^2}}{U_{d,i}}. \label{eq:nsb_5dof_y_pb_2}
+\end{equation}
+Combining \eqref{eq:nsb_5dof_y_pb_1} and \eqref{eq:nsb_5dof_y_pb_2}, we get
+\begin{equation}
+    \begin{split}
+    U_i\,\cos\left(\gamma_i\right)\,\sin\left(\chi_i - \psi_p\right) &= U_{d,i}\,\cos\left(\gamma_i\right)\,\sin\left(\psi_i + \beta_{d,i} - \psi_p\right) \\
+    &\, +\! \cos\left(\gamma_i\right)\sin\left(\psi_{i\!} - \psi_p\right) \! \left(\!\sqrt{u_i^2\! + \!w_i^2} -\! \sqrt{u_{d,i}^2\! + w_i^2}\right). 
+    \end{split}
+    \label{eq:nsb_5dof_y_pb_3}
+\end{equation}
+Note that the following holds for the angles
+\begin{equation}
+    \begin{split}
+        \psi_i + \beta_{d,i} - \psi_p &= \psi_{d,i} + \tilde{\psi}_i + \beta_{d,i} - \left(\psi_{d,i} + \beta_{d,i} + \beta_{\rm LOS}\right) = \tilde{\psi}_i - \beta_{\rm LOS}, \\
+        \beta_{\rm LOS} &= \scale[1]{\arctan\left(\frac{y_b^p}{\Delta\left(\mat{p}_b^p\right)}\right)}.
+    \end{split}
+\end{equation}
+Therefore, their sine is given by
+\begin{equation}
+    \sin\left(\psi_i + \beta_{d,i} - \psi_p\right) = \sin\left(\tilde{\psi}_i\right)\,\scale[1]{\frac{\Delta\left(\mat{p}_b^p\right)}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} - \cos\left(\tilde{\psi}_i\right)\scale[1]{\frac{y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}}.
+    \label{eq:nsb_5dof_sin_psi_beta}
+\end{equation}
+Furthermore, note that the following holds for the flight-path angle
+\begin{equation}
+    \gamma_i = \theta_i - \alpha_i = \tilde{\theta}_i + \theta_{d,i} - \alpha_i = \tilde{\theta}_i + \gamma_{\rm LOS} + \alpha_{d,i} - \alpha_i.
+\end{equation}
+Consequently, the cosine of the flight-path angle is equal to
+\begin{equation}
+    \begin{split}
+    \cos\left(\gamma_i\right) &= \cos\left(\gamma_{\rm LOS}\right)\cos\left(\tilde{\theta}_i\right)\cos\left(\alpha_{d,i} - \alpha_i\right) \\
+        &\quad - \cos\left(\gamma_{\rm LOS}\right)\sin\left(\tilde{\theta}_i\right)\sin\left(\alpha_{d,i} - \alpha_i\right) \\
+        & \quad - \sin\left(\gamma_{\rm LOS}\right)\cos\left(\tilde{\theta}_i\right)\sin\left(\alpha_{d,i} - \alpha_i\right) \\
+        & \quad - \sin\left(\gamma_{\rm LOS}\right)\sin\left(\tilde{\theta}_i\right)\cos\left(\alpha_{d,i} - \alpha_i\right)
+    \end{split}
+    \label{eq:nsb_5dof_cos_gamma_i}
+\end{equation}
+Using the equalities \eqref{eq:nsb_5dof_sin_psi_beta}, \eqref{eq:nsb_5dof_cos_gamma_i}, we can rewrite \eqref{eq:nsb_5dof_y_pb_3} as
+\begin{equation}
+    \begin{split}
+        U_i\,\cos\left(\gamma_i\right)\,\sin\left(\chi_i - \psi_p\right) &= - U_{d,i}\cos\left(\gamma_{\rm LOS}\right)\scale[1]{\frac{y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} \\
+        & \quad + G_{y,i}\left(\tilde{u}_i, \tilde{\psi}_i, \gamma_i, u_{d,i}, v_i, w_i, \mat{p}_b^p, \psi_p\right),
+    \end{split}
+    \label{eq:nsb_5dof_y_pb_4}
+\end{equation}
+where
+\begin{equation}
+    \begin{split}
+        G_{y,i}(\cdot) &= \cos\left(\gamma_i\right)\,\sin\left(\psi_i - \psi_p\right)\left(\sqrt{u_i^2 + w_i^2} - \sqrt{u_{d,i}^2 + w_i^2}\right) \\
+        &\quad - U_{d,i}\cos\left(\gamma_i\right)\,\sin\left(\tilde{\psi}_i\right)\scale[1]{\frac{\Delta\left(\mat{p}_b^p\right)}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} \\
+        &\quad + U_{d,i}\bigg[\sin\!\left(\gamma_{\rm LOS}\right)\!\left(\cos\!\left(\tilde{\theta}_i\right)\!\sin\!\left(\alpha_{d,i} - \alpha_i\right) + \sin\!\left(\tilde{\theta}_i\right)\!\cos\!\left(\alpha_{d,i} - \alpha_i\right)\right) \\
+        & \qquad \qquad -\cos\left(\gamma_{\rm LOS}\right)\left(\cos\left(\tilde{\theta}_i\right)\cos\left(\alpha_{d,i} - \alpha_i\right) - 1\right)\bigg]\scale[1]{\frac{y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} 
+    \end{split} \label{eq:nsb_5dof_G_y}
+\end{equation}
+
+\noindent Substituting \eqref{eq:nsb_5dof_y_pb_4} into \eqref{eq:nsb_5dof_y_pb_0}, we get the following
+\begin{equation}
+    \begin{split}
+        \dot{y}_b^p &= - \frac{1}{n}\sum_{i=1}^n U_{d,i}\cos\left(\gamma_{\rm LOS}\right)\scale[1]{\frac{y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} - \dot{\xi}\,\iota\,x_b^p \\
+        &\quad + G_y\bigg(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\psi}_1, \ldots, \tilde{\psi}_n, \gamma_1, \ldots, \gamma_n, u_{d,1}, \ldots, u_{d,n}, \\
+        & \qquad \qquad \quad v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p\bigg),
+    \end{split}
+\end{equation}
+where
+\begin{equation}
+    G_y(\cdot) = \frac{1}{n} \sum_{i=1}^n G_{y,i}\left(\tilde{u}_i, \tilde{\psi}_i, \gamma_i, u_{d,i}, v_i, w_i, \mat{p}_b^p, \psi_p\right).
+\end{equation}
+
+Now, we demonstrate a similar procedure for $\dot{z}_b^p$.
+From \eqref{eq:nsb_5dof_y_pb}, we get
+\begin{equation}
+    \begin{split}
+        \dot{z}_b^p &= \frac{1}{n} \sum_{i=1}^n U_i \left(-\cos\left(\theta_p\right)\sin\left(\gamma_i\right) + \cos\left(\gamma_i\right)\sin(\theta_p)\cos\left(\psi_p-\chi_i\right)\right) + \dot{\xi}\,\kappa\,x_b^p \\
+        &= \frac{1}{n} \sum_{i=1}^n U_i \left(-\sin\left(\gamma_i - \theta_p\right) - \left(1 - \cos\left(\chi_i - \psi_p\right)\right)\cos\left(\gamma_i\right)\sin(\theta_p)\right) + \dot{\xi}\,\kappa\,x_b^p. 
+    \end{split} \label{eq:nsb_5dof_z_pb_1}
+\end{equation}
+Once again, we consider the terms
+\begin{equation}
+    \sin\left(\gamma_i - \theta_p\right) = \sin\left(\theta_i - \alpha_i - \theta_p\right) = \sin\left(\theta_i - \theta_p\right)\frac{u_i}{U_i} - \cos\left(\theta_i - \theta_p\right)\frac{w_i}{U_i},
+\end{equation}
+and
+\begin{equation}
+    \sin\left(\theta_i - \alpha_{d,i} - \theta_p\right) = \sin\left(\theta_i - \theta_p\right)\frac{u_{d,i}}{U_{d,i}} - \cos\left(\theta_i - \theta_p\right)\frac{w_i}{U_{d,i}},
+\end{equation}
+which give us the following equality
+\begin{equation}
+    U_i\,\sin\left(\gamma_i - \theta_p\right) = U_{d,i}\,\sin\left(\theta_i - \alpha_{d,i} - \theta_p\right) + \tilde{u}_i\,\sin\left(\theta_i - \theta_p\right).
+\end{equation}
+Using a similar trick, we can write the sine as
+\begin{equation}
+    \sin\left(\theta_i - \alpha_{d,i} - \theta_p\right) = \sin\!\left(\tilde{\theta}_i\right)\!\frac{\Delta\!\left(\mat{p}_b^p\right)}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2\! +\! \left(z_b^p\right)^2}} -\, \cos\!\left(\tilde{\theta}_i\right)\!\frac{\left(z_b^p\right)}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2 \!+\! \left(z_b^p\right)^2}}
+\end{equation}
+Consequently, we can rewrite \eqref{eq:nsb_5dof_z_pb_1} as
+\begin{equation}
+    \begin{split}
+        \dot{z}_b^p &= - \frac{1}{n} \sum_{i=1}^n U_{d,i}\frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}} + \dot{\xi}\,\kappa\,x_b^p \\
+        & \quad + G_z\bigg(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n, \gamma_1, \ldots, \gamma_n, \chi_1, \ldots, \chi_n, \\
+        & \qquad \qquad \quad u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \theta_p, \psi_p\bigg),
+    \end{split}
+\end{equation}
+where
+\begin{align}
+    G_z(\cdot) &= \frac{1}{n} \sum_{i=1}^n G_{z,i}\left(\tilde{u}_i, \tilde{\theta}_i, \gamma_i, \chi_i, u_{d,i}, v_i, w_i, \mat{p}_b^p, \theta_p, \psi_p\right), \\
+    \begin{split}
+        G_{z,i}(\cdot) &= -U_i\left(\left(1 - \cos\left(\chi_i - \psi_p\right)\right)\cos\left(\gamma_i\right)\sin(\theta_p)\right) - \tilde{u}_i\,\sin\left(\theta_i - \theta_p\right) \\
+        & \quad -\! \left(1 - \cos\!\left(\tilde{\theta}_{i\!}\right)\right)\!\frac{\left(z_b^p\right)}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2\! +\! \left(z_b^p\right)^2}} - U_{d,i}\sin\!\left(\tilde{\theta}_i\right)\!\frac{\Delta\!\left(\mat{p}_b^p\right)}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2\! +\! \left(z_b^p\right)^2}}.
+    \end{split} \label{eq:nsb_5dof_G_z}
+\end{align}
+
+\section{Desired Pitch and Yaw Rate}
+For further calculations, we need to evaluate the desired pitch ($q_{d,i}$) and yaw ($r_{d,i}$) rates of the vessels.
+From \eqref{eq:nsb_5dof_theta_dot}, we get the following relation between the yaw rate and the derivative of the yaw angle
+\begin{equation}
+    q_{d,i} = \dot{\theta}_{d,i}.
+\end{equation}
+Now, we consider the desired pitch angle from \eqref{eq:nsb_5dof_theta_d}.
+Since we are investigating the path following task, we substitute $\gamma_{\rm LOS}$ from \eqref{eq:nsb_5dof_gamma_LOS} for $\gamma_{{\rm NSB}, i}$.
+Differentiating \eqref{eq:nsb_5dof_theta_d} with respect to time yields
+\begin{equation}
+    q_{d,i} = \dot{\theta}_p(\xi) + \frac{\Delta\left(\mat{p}_b^p\right)\,\dot{z}_b^p - z_b^p\,\dot{\Delta}\left(\mat{p}_b^p\right)}{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2} + \frac{u_{d,i}\,\dot{w}}{u_{d,i}^2 + w_i^2},
+\end{equation}
+which can be expanded to
+\begin{equation}
+    \begin{split}
+        q_{d,i} &= \dot{\xi}\,\kappa(\xi) + \frac{\Delta\left(\mat{p}_b^p\right)\left(\frac{1}{n} \sum\limits_{j=1}^n U_{d,j}\frac{\left(z_b^p\right)}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}} + \dot{\xi}\,\kappa\,x_b^p + G_z(\cdot)\right)}{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2} \\
+        &\quad + \frac{z_b^p\!\left(\!-k_{\xi}\frac{\left(x_b^p\right)^2}{\sqrt{1+\left(x_b^p\right)^2}} - \frac{1}{n}\!\sum\limits_{j=1}^n \!U_{d,j}\!\left(\!\scale[1]{\frac{\cos\left(\gamma_{{\rm LOS},j}\right)^2\left(y_b^p\right)^2}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}}\! + \!\frac{\left(z_b^p\right)^2}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}\!\right)\right)}{\Delta\left(\mat{p}_b^p\right)\left(\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2\right)} \\
+        &\quad + \frac{z_b^p\!\left(y_b^p\,G_y(\cdot) \!+\! z_b^p\,G_z(\cdot)\right)}{\Delta\!\left(\mat{p}_b^p\right)\!\left(\Delta\!\left(\mat{p}_b^p\right)^2 \!+\! \left(z_b^p\right)^2\right)} \\
+        & \quad + u_{d,i}\frac{X_w\!\left(u_{d,i}+\tilde{u}_i, u_c\right)\!q + Y_w\!\left(u_{d,i}+\tilde{u}_i, u_c\right)\!\left(w_i - w_c\right)}{u_{d,i}^2 + w_i^2}.
+    \end{split}
+    \label{eq:nsb_5dof_q_d}
+\end{equation}
+
+From \eqref{eq:nsb_5dof_psi_dot}, we get the following relation between the yaw rate and the derivative of the yaw angle
+\begin{equation}
+    r_{d,i} = \dot{\psi}_{d,i}\,\cos\left(\theta_{d,i}\right).
+\end{equation}
+Substituting the time-derivative of \eqref{eq:nsb_5dof_psi_d}, we get
+\begin{subequations}
+    \begin{align}
+        r_{d,i} &= \left(\dot{\psi}_p(\xi) - \frac{\Delta\!\left(\mat{p}_b^p\right)\,\dot{y}_b^p - y_b^p\,\dot{\Delta}\left(\mat{p}_b^p\right)}{\Delta\!\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2} - \frac{\dot{v}}{\sqrt{U_{d,i}^2 - v_i^2}}\right)\,\cos\left(\theta_{d,i}\right) \\
+        \begin{split}
+            &= \left[\dot{\xi}\,\iota(\xi) - \frac{\Delta\!\left(\mat{p}_b^p\right)\left(\frac{1}{n} \sum\limits_{j=1}^n U_{d,i}\frac{\cos\left(\gamma_{\rm LOS}\right)\left(y_b^p\right)}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}} - \dot{\xi}\,\iota\,x_b^p + G_y(\cdot)\right)}{\Delta\!\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2} \right. \\
+            &\qquad + \frac{y_b^p\!\left(\!-k_{\xi}\frac{\left(x_b^p\right)^2}{\sqrt{1+\left(x_b^p\right)^2}} - \frac{1}{n}\!\sum\limits_{j=1}^n\! U_{d,i}\!\!\left(\!\scale[1]{\frac{\cos\left(\gamma_{\rm LOS}\right)^2\left(y_b^p\right)^2}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} +\! \frac{\left(z_b^p\right)^2}{\sqrt{\Delta\!\left(\mat{p}_b^p\right)^2\! + \left(z_b^p\right)^2}}\right)\!\right)}{\Delta\!\left(\mat{p}_b^p\right)\left(\Delta\!\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2\right)} \\
+            &\qquad + \frac{y_b^p \left(y_b^p\,G_y(\cdot) + z_b^p\,G_z(\cdot)\right)}{\Delta\!\left(\mat{p}_b^p\right)\left(\Delta\!\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2\right)} \\
+            &\qquad \left. -\frac{X\left(u_{d,i}+\tilde{u}_i, u_c\right)\,r + Y\left(u_{d,i}+\tilde{u}_i, u_c\right)\left(v_i - v_c\right)}{\sqrt{u_{d,i}^2 + w_i^2}} \right]\, \cos\left(\theta_{d,i}\right).
+        \end{split}
+    \end{align} \label{eq:nsb_5dof_r_d}
+\end{subequations}
+
+\section{Proof of Lemma \ref{lemma_1}}
+\label{app:5dof_nsb_lemma_1}
+In \cite{moe_LOS_2016}, it is shown that the error states \eqref{eq:nsb_5dof_u_tilde}--\eqref{eq:nsb_5dof_psi_tilde} are UGES and the ocean current estimate errors \eqref{eq:nsb_5dof_V_c_tilde}--\eqref{eq:nsb_5dof_theta_r_tilde} are bounded, which implies that \eqref{eq:nsb_5dof_u_tilde}--\eqref{eq:nsb_5dof_theta_r_tilde} are forward complete.
+Therefore, we only need to prove that the underactuated sway and heave dynamics \eqref{eq:nsb_5dof_v_dot}, \eqref{eq:nsb_5dof_w_dot} and the barycenter dynamics \eqref{eq:nsb_5dof_x_pb_CL}--\eqref{eq:nsb_5dof_z_pb_CL} are forward complete.
+
+First, let us consider the underactuated sway dynamics.
+From \eqref{eq:nsb_5dof_v_dot}, we get
+\begin{equation}
+    \dot{v}_i = X_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\,\left(\tilde{r}_i + r_{d,i}\right) + Y_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\,\left(v_i - v_c\right),
+\end{equation}
+where $\tilde{r}_i = r_i - r_{d,i}$.
+Now, let us consider a Lyapunov function candidate
+\begin{equation}
+    V_v(v_i) = \frac{1}{2} v_i^2. \label{eq:nsb_5dof_V_v}
+\end{equation}
+Its derivative along the trajectories of $v_i$ is
+\begin{equation}
+    \dot{V}_v(v_i) = X_v\!\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{r}_i + r_{d,i}\right)v_i + Y_v\!\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(v_i - v_c\right)v_i. \label{eq:nsb_5dof_V_v_dot}
+\end{equation}
+From the boudedness of $\tilde{\mat{X}}_{2,i}$, $\kappa(\xi)$, $\iota(\xi)$, $u_{d,i}$, $u_c$ and $v_c$, we can conclude that there exists some scalar $\beta_{v,0} > 0$ such that
+\begin{equation}
+    \left\| \left[ \tilde{\mat{X}}_{2,i}\T, \kappa(\xi), \iota(\xi), u_{d,i}, u_c, v_c \right]\T \right\| \leq \beta_0.
+\end{equation}
+Moreover, from \eqref{eq:nsb_5dof_r_d}, we can conclude that there exist some positive functions $a_r(\beta_{v,0})$ and $b_r(\beta_{v,0})$ such that
+\begin{equation}
+    \abs{r_{d,i}} \leq a_r(\beta_{v,0})\,\abs{v_i} + b_r(\beta_{v,0}).
+\end{equation}
+Consequently, we can upper bound $\dot{V}_v(v_i)$ using the following expression
+\begin{equation}
+    \begin{split}
+        \dot{V}_v(v_i) &\leq X_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{r}_i\,v_i + a_r(\cdot)v_i^2 + b_r(\cdot)v_i\right) \\
+        &\quad + Y_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(v_i^2 - v_c\,v_i\right).
+    \end{split}
+\end{equation}
+Using Young's inequality, we get
+\begin{subequations}
+    \begin{align}
+        \begin{split}
+            \dot{V}_v(v_i) &\leq \left(X_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(2 + a_r(\cdot)\right) + 2\,Y_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\right)\,v_i^2 \\
+             & \quad + X_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{r}_i^2 + b_r(\cdot)^2\right) + Y_v\left(\tilde{u}_i + u_{d,i}, u_c\right)\,v_c^2
+        \end{split} \\
+        & \leq \alpha_v\,V_v(v_i) + \beta_v.
+    \end{align}
+\end{subequations}
+Using the comparison lemma, we get
+\begin{equation}
+    V_v\left(v_i(t)\right) \leq \left(V_v\left(v_i(t_0)\right) + \frac{\beta_v}{\alpha_v}\right)\,{\rm exp}\left(\alpha_v(t - t_0)\right) - \frac{\beta_v}{\alpha_v}.
+\end{equation}
+As $V_v(v_i)$ is defined for all $t > t_0$, it follows that $v_i$ is also defined for all $t > t_0$.
+The solutions of \eqref{eq:nsb_5dof_v_dot} thus fulfill the definition of forward completeness, as defined in \cite{angeli_forward_1999}.
+
+Now, let us consider the underactuated heave dynamics.
+From \eqref{eq:nsb_5dof_w_dot}, we get
+\begin{equation}
+    \dot{w}_i = X_w\!\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{q}_i + q_{d,i}\right) + Y_w\!\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(w_i - w_c\right) + G(\theta_i),
+\end{equation}
+where $\tilde{q}_i = q_i - q_{d,i}$.
+Similar to the previous paragraph, we consider a Lyapunov function candidate
+\begin{equation}
+    V_w(w_i) = \frac{1}{2} w_i^2, \label{eq:nsb_5dof_V_w}
+\end{equation}
+whose derivative is
+\begin{equation}
+    \begin{split}
+        \dot{V}_w(w_i) &= X_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\,\left(\tilde{q}_i + q_{d,i}\right)\,w_i \\
+        &\quad + Y_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\,\left(w_i - w_c\right)\,w_i + G(\theta)\,w_i.
+    \end{split}
+\end{equation}
+From the boudedness of $\tilde{\mat{X}}_{2,i}$, $\kappa(\xi)$, $\iota(\xi)$, $u_{d,i}$, $u_c$ and $w_c$, we can conclude that there exists some scalar $\beta_0 > 0$ such that 
+\begin{equation}
+    \left\| \left[ \tilde{\mat{X}}_{2,i}\T, \kappa(\xi), \iota(\xi), u_{d,i}, u_c, w_c \right]\T \right\| \leq \beta_{w,0}.
+\end{equation}
+Moreover, from \eqref{eq:nsb_5dof_q_d}, we can conclude that there exist some positive functions $a_q(\beta_{w,0})$ and $b_q(\beta_{w,0})$ such that
+\begin{equation}
+    \abs{q_{d,i}} \leq a_q(\beta_{w,0})\,\abs{w_i} + b_q(\beta_{w,0}).
+\end{equation}
+Consequently, we can upper bound $\dot{V}_w(w_i)$ using the following expression
+\begin{equation}
+    \begin{split}
+        \dot{V}_w(w_i) &\leq X_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{q}_i\,w_i + a_q(\cdot)w_i^2 + b_q(\cdot)w_i\right) \\
+        &\quad + Y_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(w_i^2 - w_c\,w_i\right) + G(\theta_i)\,w_i.
+    \end{split}
+\end{equation}
+Using Young's inequality, we get
+\begin{equation}
+    \begin{split}
+        \dot{V}_w(w_i) &\leq \left(X_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(2 + a_q(\cdot)\right) + 2\,Y_w\left(\tilde{u}_i + u_{d,i}, u_c\right) + 1\right)\,w_i^2 \\
+        & \quad + X_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\left(\tilde{q}_i^2 + b_q(\cdot)^2\right) + Y_w\left(\tilde{u}_i + u_{d,i}, u_c\right)\,w_c^2 + G(\theta)^2 \\
+        & \leq \alpha_w\,V_w(w_i) + \beta_w.
+    \end{split}
+\end{equation}
+Using the comparison lemma, we get
+\begin{equation}
+    V_w\left(w_i(t)\right) \leq \left(V_w\left(w_i(t_0)\right) + \frac{\beta_w}{\alpha_w}\right)\,{\rm exp}\left(\alpha_w(t - t_0)\right) - \frac{\beta_w}{\alpha_w}.
+\end{equation}
+Using the same arguments as in the previous paragraph, we conclude that the solutions of \eqref{eq:nsb_5dof_w_dot} are forward complete.
+
+Finally, let us consider the barycenter dynamics.
+We use a Lyapunov function candidate
+\begin{equation}
+    V_b(\mat{p}_b^p) = \frac{1}{2} \left(\left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2\right),
+\end{equation}
+whose derivative along the solutions of \eqref{eq:nsb_5dof_x_pb_CL}--\eqref{eq:nsb_5dof_z_pb_CL} is
+\begin{equation}
+    \begin{split}
+        \dot{V}_b\left(\mat{p}_b^p\right) &= -k_{\xi}\frac{\left(x_b^p\right)^2}{\sqrt{1 + \left(x_b^p\right)^2}} + G_y(\cdot)\,y_b^p + G_z(\cdot)\,z_b^p \\
+        &\quad - \frac{1}{n}\sum_{i=1}^n U_{d,i} \left(
+            \frac{\cos\left(\gamma_{\rm LOS}\right)^2\left(y_b^p\right)^2}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}} +
+            \frac{\left(z_b^p\right)^2}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}
+        \right) \\
+        &\leq G_y(\cdot)\,y_b^p + G_z(\cdot)\,z_b^p + \frac{1}{2} \left(x_b^p\right)^2.
+    \end{split}
+\end{equation}
+Using Young's inequality, we get
+\begin{equation}
+    \begin{split}
+        \dot{V}_b\left(\mat{p}_b^p\right) &\leq \frac{1}{2} \left(\left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2\right) + \frac{1}{2}\left(G_y(\cdot)^2 + G_z(\cdot)^2\right) \\
+        &\leq V_b\left(\mat{p}_b^p\right) + \frac{1}{2}\left(G_y(\cdot)^2 + G_z(\cdot)^2\right).
+    \end{split}
+\end{equation}
+Note that from \eqref{eq:nsb_5dof_G_y} and \eqref{eq:nsb_5dof_G_z}, we can conclude that there exist some positive function $\zeta_y(U_{d,1}, \ldots, U_{d,n})$ and $\zeta_z(U_{d,1}, \ldots, U_{d,n})$ such that
+\begin{align}
+    \abs{G_y(\cdot)} \leq \zeta_y(\cdot) \left\| \left[\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\psi}_1, \ldots, \tilde{\psi}_n\right]\T \right\|, \\
+    \abs{G_z(\cdot)} \leq \zeta_z(\cdot) \left\| \left[\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n\right]\T \right\|.
+\end{align}
+Consequently, there exists a class-$\mathcal{K}_{\infty}$ function $\zeta_p(\cdot)$ such that
+\begin{equation}
+    \begin{split}
+        \dot{V}_p\left(\mat{p}_b^p\right) \leq V_p\left(\mat{p}_b^p\right) + \zeta_p\bigg(&v_1, \ldots, v_n, w_1, \ldots, w_n, \tilde{u}_1, \ldots, \tilde{u}_n, \\
+        &\quad \tilde{\psi}_1, \ldots, \tilde{\psi}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n\bigg).
+    \end{split}
+\end{equation}
+Since all the arguments of $\zeta_p(\cdot)$ are forward complete, Corollary 2.11 of \cite{angeli_forward_1999} is satisfied and the barycenter dynamics is forward complete, thus concluding the proof of Lemma~\ref{lemma_1}.
+
+\section{Proof of Lemma \ref{lemma_2}}
+\label{app:5dof_nsb_lemma_2}
+First, we consider the sway dynamics.
+We take the Lyapunov function candidate $V_v$ from \eqref{eq:nsb_5dof_V_v} and simplify its derivative by setting $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$.
+\begin{equation}
+    \dot{V}_v(v_i) = X_v\left(u_{d,i}, u_c\right)\,r_{d,i}\,v_i + Y_v\left(u_{d,i}, u_c\right)\,\left(v_i - v_c\right)\,v_i. \label{eq:nsb_5dof_V_v_dot_2}
+\end{equation}
+Next, we find an upper bound on $r_{d,i}\,v_i$.
+We substitute from \eqref{eq:nsb_5dof_r_d}, set $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ and collect all terms that grow linearly with $v_i$ to obtain the following expression
+\begin{align}
+    \scale[0.95]{r_{d,i}\,v_i}\, &\scale[0.95]{= \!\left(\! v_i\!\left(\!1 \!+\! \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\!\right)\! \iota(s) \frac{1}{n}\!\! \sum\limits_{j=1}^n \!U_j\Omega_x(\gamma_j, \theta_p, \chi_j, \psi_p) \!+\! \frac{Y_v(u_{d,i}, u_c)}{\sqrt{u_{d,i}^2 + w_i^2}}v_i^{2\!}\! \right)\! \cos(\theta_{d,i})} \nonumber \\
+    &\quad \scale[0.95]{+ F_v(u_{d,i}, u_c, v_c, v_i, w_i, r_i, \theta_{d, i}),}
+\end{align}
+where
+\begin{equation}
+    \scale[1]{F_v(\cdot) = \frac{X_v(u_{d,i}, u_c)\,r_i - Y_v(u_{d,i}, u_c)\,v_c}{\sqrt{u_{d,i}^2 + w_i^2}} v_i \, \cos(\theta_{d,i}).}
+\end{equation}
+We can bound this expression as
+\begin{align}
+    \abs{r_{d,i}\,v_i} &\leq \frac{2}{n}\abs{v_i}\,\abs{\iota(\xi)}\sum_{j=1}^n\left(\abs{u_j} + \abs{v_j} + \abs{w_j}\right) + \abs{F_v(\cdot)} \nonumber \\
+    &\leq \frac{2}{n}\abs{\iota(\xi)}\,v_i^2 + \frac{2}{n}\abs{v_i}\,\abs{\iota(\xi)}\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right) \nonumber \\
+    &\quad + \abs{F_v(u_{d,i}, u_c, v_c, v_i, w_i, r_i, \theta_{d, i})},
+\end{align}
+which we can substitute to \eqref{eq:nsb_5dof_V_v_dot_2} to obtain
+\begin{equation}
+    \begin{split}
+        \dot{V}_v(v_i) &\leq \left(X_v\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\iota(\xi)} + Y_v\left(u_{d,i}, u_c\right)\right)v_i^2 \\
+        &\quad + \left(\frac{2}{n}\abs{v_i}\,\abs{\iota(\xi)}\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right) \\
+        & \quad + \left(\abs{F_v(\cdot)} - Y_v\left(u_{d,i}, u_c\right)\abs{v_c}\right) \abs{v_i}.
+    \end{split}
+\end{equation}
+For a sufficiently large $v_i$, the quadratic term will dominate the linear term.
+Therefore, we can conclude that $v_i$ is bounded if 
+\begin{equation}
+    X_v\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\iota(\xi)} + Y_v\left(u_{d,i}, u_c\right) < 0.
+\end{equation}
+Since $Y_v$ is assumed to be always negative, the inequality is satisfied if
+\begin{equation}
+    \abs{\iota(\xi)} < \frac{n}{2}\abs{\frac{Y_v\left(u_{d,i}, u_c\right)}{X_v\left(u_{d,i}, u_c\right)}}.
+\end{equation}
+
+Now, we perform a similar procedure for the heave dynamics.
+We take the Lyapunov function candidate $V_w$ from \eqref{eq:nsb_5dof_V_w} and simplify its derivative by setting $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$.
+\begin{equation}
+    \dot{V}_w(w_i) = X_w\left(u_{d,i}, u_c\right)\,q_{d,i}\,w_i + Y_w\left(u_{d,i}, u_c\right)\,\left(w_i - w_c\right)\,w_i + G(\theta_i)\,w_i. \label{eq:nsb_5dof_V_w_dot}
+\end{equation}
+Next, we find an upper bound on $q_{d,i}\,w_i$.
+We substitute from \eqref{eq:nsb_5dof_q_d}, set $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ and collect all terms that grow linearly with $w_i$ to obtain the following expression
+\begin{align}
+    \scale[1]{q_{d,i}\,w_i}\, &\scale[1]{= w_i\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right) \kappa(\xi) \frac{1}{n} \sum\limits_{j=1}^n U_j\,\Omega_x(\gamma_j, \theta_p, \chi_j, \psi_p)} \\
+    & \quad \scale[1]{+ u_{d,i}\frac{Y_w(u_{d,i}, u_c)}{u_{d,i}^2 + w_i^2}w_i^2 + F_w(u_{d,i}, u_c, w_c, w_i, q_i),}
+\end{align}
+where
+\begin{equation}
+    \scale[1]{F_w(\cdot) =  u_{d,i}\frac{X_w(u_{d,i}, u_c)\,r_i - Y_w(u_{d,i}, u_c)\,w_c}{\sqrt{u_{d,i}^2 + w_i^2}} w_i.}
+\end{equation}
+We can bound this expression as
+\begin{equation}
+    \begin{split}
+        \abs{q_{d,i}\,w_i} &\leq \frac{2}{n}\abs{\kappa(\xi)}\,w_i^2 + \frac{2}{n}\abs{w_i}\,\abs{\kappa(\xi)}\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{v_i}\right) \\
+        &\quad + \abs{F_w(u_{d,i}, u_c, w_c, w_i, q_i)},
+    \end{split}
+\end{equation}
+which we can substitute to \eqref{eq:nsb_5dof_V_w_dot} to obtain
+\begin{equation}
+    \begin{split}
+        \dot{V}_w(w_i) &\leq \left(X_w\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\kappa(\xi)} + Y_w\left(u_{d,i}, u_c\right)\right)w_i^2 \\
+        & \quad + \left(\frac{2}{n}\abs{w_i}\,\abs{\kappa(\xi)}\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right) \\
+        & \quad + \left(\abs{F(\cdot)} - Y_w\left(u_{d,i}, u_c\right)\abs{v_c} + \abs{G(\theta_i)}\right) \abs{w_i} + G(\theta_i)\,w_i.
+    \end{split}
+\end{equation}
+For a sufficiently large $w_i$, the quadratic term will dominate the linear term.
+Therefore, we can conclude that $w_i$ is bounded if 
+\begin{equation}
+    X_w\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\kappa(\xi)} + Y_w\left(u_{d,i}, u_c\right) < 0.
+\end{equation}
+Since $Y_w$ is assumed to be always negative, the inequality is satisfied if
+\begin{equation}
+    \abs{\kappa(\xi)} < \frac{n}{2}\abs{\frac{Y_w\left(u_{d,i}, u_c\right)}{X_w\left(u_{d,i}, u_c\right)}},
+\end{equation}
+which concludes the proof of Lemma \ref{lemma_2}.
+
+\section{Proof of Lemma \ref{lemma_3}}
+\label{app:5dof_nsb_lemma_3}
+First, we consider the sway dynamics.
+We take the Lyapunov function candidate $V_v$ from \eqref{eq:nsb_5dof_V_v} and simplify its derivative by setting $\tilde{\mat{X}}_2 = \mat{0}$.
+\begin{equation}
+    \dot{V}_v(v_i) = X_v\left(u_{d,i}, u_c\right)\,r_{d,i}\,v_i + Y_v\left(u_{d,i}, u_c\right)\,\left(v_i - v_c\right)\,v_i. \label{eq:nsb_5dof_V_v_dot_3}
+\end{equation}
+Next, we find an upper bound on $r_{d,i}\,v_i$.
+We substitute from \eqref{eq:nsb_5dof_r_d}, set $\tilde{\mat{X}}_2 = \mat{0}$ and collect all terms that grow linearly with $v_i$ to obtain the following expression
+\begin{equation}
+    \begin{split}
+        {r_{d,i}\,v_i} &= \scale[1]{\left( v_i\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right) \iota(\xi) \frac{1}{n} \sum\limits_{j=1}^n U_j\,\Omega_x(\gamma_j, \theta_p, \chi_j, \psi_p) \right.} \\
+        &\qquad \scale[1]{
+        - \frac{y_b^p\,v_i\,\sum\limits_{j=1}^n\left(\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}} + \frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}\right)}{n\,\Delta(\mat{p}_b^p)\left(\Delta(\mat{p}_b^p)^2 + \left(y_b^p\right)^2\right)} } \\
+        &\qquad \left. + \frac{v_i\,\Delta(\mat{p}_b^p)\sum\limits_{j=1}^n\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}}{n\,\left(\Delta(\mat{p}_b^p)^2 + (y_b^p)^2\right)} + \frac{Y_v(u_{d,i}, u_c)}{\sqrt{u_{d,i}^2 + w_i^2}}v_i^2 \right) \cos(\theta_{d,i}) \\
+        &\quad + H_v(u_{d,i}, \theta_{d,i}, u_c, v_c, v_i, w_i, r_i, \mat{p}_b^p, \xi),
+    \end{split}
+\end{equation}
+\begin{equation}
+    \begin{split}
+        H_v(\cdot) & = \left(\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right)k_{\xi}\,\iota(\xi)\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}} \right. \\
+        &\qquad + \frac{X_v(u_{d,i}, u_c)\,r_i - Y_v(u_{d,i}, u_c)\,v_c}{\sqrt{u_{d,i}^2 + w_i^2}}  \\
+        &\qquad \left. - \frac{y_b^p\,k_{\xi}\,x_b^p}{\sqrt{1+\left(x_b^p\right)^2}\Delta(\mat{p}_b^p)\left(\Delta(\mat{p}_b^p)^2 + \left(y_b^p\right)^2\right)}  \right) v_i \, \cos(\theta_{d,i}).
+    \end{split}
+\end{equation}
+We can bound this expression as
+\begin{equation}
+    \begin{split}
+        \abs{r_{d,i}\,v_i} &\leq \left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\abs{v_i}\,\sum_{j=1}^n\left(\abs{u_j} + \abs{v_j} + \abs{w_j}\right) + \abs{H_v(\cdot)} \\
+        &\leq \left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\,v_i^2 + \abs{H_v(\cdot)} \\
+        &\quad + \left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right),
+    \end{split}
+\end{equation}
+which we can substitute to \eqref{eq:nsb_5dof_V_v_dot_3} to obtain
+\begin{equation}
+    \begin{split}
+        \dot{V}_v(v_i) &\leq \left(X_v\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_v\left(u_{d,i}, u_c\right)\right)v_i^2 \\
+        & \quad + \left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right) \\
+        & \quad + \left(\abs{H_v(\cdot)} - Y_v\left(u_{d,i}, u_c\right)\abs{v_c}\right) \abs{v_i}.
+    \end{split}
+\end{equation}
+For a sufficiently large $v_i$, the quadratic term will dominate the linear term.
+Therefore, we can conclude that $v_i$ is bounded if 
+\begin{equation}
+    X_v\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_v\left(u_{d,i}, u_c\right) < 0.
+\end{equation}
+From the definition of the lookahead distance \eqref{eq:nsb_5dof_delta}, this condition is satisfied if
+\begin{equation}
+    \Delta_0 > \frac{3}{n\abs{\frac{Y_v\left(u_{d,i}, u_c\right)}{X_v\left(u_{d,i}, u_c\right)}} - 2\abs{\iota(\xi)}}.
+\end{equation}
+
+Now, we perform a similar procedure for the heave dynamics.
+We take the Lyapunov function candidate $V_w$ from \eqref{eq:nsb_5dof_V_w} and simplify its derivative by setting $\tilde{\mat{X}}_2 = \mat{0}$.
+\begin{equation}
+    \dot{V}_w(w_i) = X_w\left(u_{d,i}, u_c\right)\,q_{d,i}\,w_i + Y_w\left(u_{d,i}, u_c\right)\,\left(w_i - w_c\right)\,w_i + G(\theta_i)\,w_i. \label{eq:nsb_5dof_V_w_dot_2}
+\end{equation}
+Next, we find an upper bound on $q_{d,i}\,w_i$.
+We substitute from \eqref{eq:nsb_5dof_q_d}, set $\tilde{\mat{X}}_2 = \mat{0}$ and collect all terms that grow linearly with $w_i$ to obtain the following expression
+\begin{equation}
+    \begin{split}
+        {q_{d,i}\,w_i} &= \scale[1]{ w_i\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right) \kappa(\xi) \frac{1}{n} \sum_{j=1}^n U_j\,\Omega_x(\gamma_j, \theta_p, \chi_j, \psi_p)} \\
+        &\quad \scale[1]{- \frac{z_b^p\,w_i\,\sum_{j=1}^n\left(\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}} + \frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}\right)}{n\,\Delta(\mat{p}_b^p)\left(\Delta(\mat{p}_b^p)^2 + \left(z_b^p\right)^2\right)} } \\
+        &\quad  + \frac{w_i\,\Delta(\mat{p}_b^p)\sum_{j=1}^n\frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}}{n\,\left(\Delta(\mat{p}_b^p)^2 + (z_b^p)^2\right)} + u_{d,i}\frac{Y_w(u_{d,i}, u_c)}{{u_{d,i}^2 + w_i^2}}w_i^2 \\
+        &\quad + H_w(u_{d,i}, u_c, v_c, w_i, v_i, q_i, \mat{p}_b^p, \xi),
+    \end{split}
+\end{equation}
+where
+\begin{equation}
+    \begin{split}
+        H_w(\cdot) & = \left(\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right)k_{\xi}\,\kappa(\xi)\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}} \right. \\
+        & \qquad - \frac{y_b^p\,k_{\xi}\,x_b^p}{\sqrt{1+\left(x_b^p\right)^2}\Delta(\mat{p}_b^p)\left(\Delta(\mat{p}_b^p)^2 + \left(y_b^p\right)^2\right)} \\
+        &\qquad \left. + u_{d,i}\frac{X_w(u_{d,i}, u_c)\,r_i - Y_w(u_{d,i}, u_c)\,v_c}{{u_{d,i}^2 + w_i^2}} \right) w_i.
+    \end{split}
+\end{equation}
+We can bound this expression as
+\begin{equation}
+    \begin{split}
+        \abs{q_{d,i}\,w_i} &\leq \left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\abs{w_i}\,\sum_{j=1}^n\left(\abs{u_j} + \abs{v_j} + \abs{w_j}\right) + \abs{H_w(\cdot)} \\
+        &\leq \left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\,w_i^2 + \abs{H_w(\cdot)} \\
+        &\quad + \left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right),
+    \end{split}
+\end{equation}
+which we can substitute to \eqref{eq:nsb_5dof_V_w_dot_2} to obtain
+\begin{equation}
+    \begin{split}
+        \dot{V}_w(w_i) &\leq \left(X_w\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_w\left(u_{d,i}, u_c\right)\right)w_i^2 \\
+        & \quad + \left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right)\left(\sum_{j \neq i}\bigl(\abs{u_j} + \abs{v_j} + \abs{w_j}\bigr) + \abs{u_i} + \abs{w_i}\right) \\
+        & \quad + \left(\abs{H_w(\cdot)} - Y_w\left(u_{d,i}, u_c\right)\abs{v_c}\right) \abs{w_i}.
+    \end{split}
+\end{equation}
+For a sufficiently large $w_i$, the quadratic term will dominate the linear term.
+Therefore, we can conclude that $w_i$ is bounded if 
+\begin{equation}
+    X_w\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_w\left(u_{d,i}, u_c\right) < 0.
+\end{equation}
+From the definition of the lookahead distance \eqref{eq:nsb_5dof_delta}, this condition is satisfied if
+\begin{equation}
+    \Delta_0 > \frac{3}{n\abs{\frac{Y_w\left(u_{d,i}, u_c\right)}{X_w\left(u_{d,i}, u_c\right)}} - 2\abs{\kappa(\xi)}}.
+\end{equation}
