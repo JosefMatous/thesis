@@ -1,0 +1,134 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=18mm,
+at={(0,27mm)},
+scale only axis,
+xmin=0,
+xmax=450,
+%xlabel style={font=\color{white!15!black},yshift=1.5mm},
+%xlabel={Time [s]},
+ymin=-30.2222476170977,
+ymax=10,
+ylabel style={font=\color{white!15!black},yshift=-1.5mm},
+ylabel={$x$ [m]},
+xmajorgrids,
+ymajorgrids,
+axis background/.style={fill=white},
+title style={font=\bfseries,yshift=-2.5mm,xshift=-8mm},
+title={Formation path-following errors},
+legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small},
+legend columns=3
+]
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {experiment_obstacle_errors-area-1.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{experiment_obstacle_errors-1.tsv};
+%\addlegendentry{$\tilde{\sigma}_1$}
+
+\addplot [color=mycolor2, line width=0.8pt]
+  table[]{experiment_obstacle_errors-2.tsv};
+%\addlegendentry{$\tilde{\sigma}_2$}
+
+\addplot [color=black, line width=0.8pt]
+  table[]{experiment_obstacle_errors-3.tsv};
+%\addlegendentry{$\mat{p}_b^p$}
+
+\end{axis}
+
+\begin{axis}[%
+width=0.45\textwidth,
+height=8mm,
+scale only axis,
+at={(0.32\textwidth, 30mm)},
+xmin=250,
+xmax=450,
+ymin=-2,
+ymax=2,
+axis background/.style={fill=white},
+tick label style={font=\scriptsize},
+xticklabel style={yshift=0.5mm},
+yticklabel style={xshift=0.5mm},
+xmajorgrids,
+ymajorgrids,
+]
+\addplot [color=mycolor1, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-4.tsv};
+\addplot [color=mycolor2, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-5.tsv};
+\addplot [color=black, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-6.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=19mm,
+scale only axis,
+at={(0,0)},
+xmin=0,
+xmax=450,
+xlabel style={font=\color{white!15!black},yshift=1.5mm},
+xlabel={Time [s]},
+ymin=-15,
+ymax=31,
+ytick={-10,0,10,20,30},
+ylabel style={font=\color{white!15!black},yshift=-2mm},
+ylabel={$y$ [m]},
+xmajorgrids,
+ymajorgrids,
+axis background/.style={fill=white},
+legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small, at={(0.98,-0.05)}, anchor=south east},
+legend columns=3
+]
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {experiment_obstacle_errors-area-2.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{experiment_obstacle_errors-7.tsv};
+\addlegendentry{$\tilde{\bs{\sigma}}_1$}
+
+\addplot [color=mycolor2, line width=0.8pt]
+  table[]{experiment_obstacle_errors-8.tsv};
+\addlegendentry{$\tilde{\bs{\sigma}}_2$}
+
+\addplot [color=black, line width=0.8pt]
+  table[]{experiment_obstacle_errors-9.tsv};
+\addlegendentry{$\mat{p}_b^p$}
+
+\end{axis}
+
+\begin{axis}[%
+width=0.45\textwidth,
+height=8mm,
+scale only axis,
+at={(0.32\textwidth, 10mm)},
+xmin=250,
+xmax=450,
+ymin=-1.5,
+ymax=1.2,
+axis background/.style={fill=white},
+tick label style={font=\scriptsize},
+xticklabel style={yshift=1mm},
+yticklabel style={xshift=0.5mm},
+xmajorgrids,
+ymajorgrids,
+]
+\addplot [color=mycolor1, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-10.tsv};
+\addplot [color=mycolor2, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-11.tsv};
+\addplot [color=black, forget plot, line width=0.8pt]
+  table[]{experiment_obstacle_errors-12.tsv};
+\end{axis}
+\end{tikzpicture}%

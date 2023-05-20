@@ -18,6 +18,11 @@
 \usepackage{bm}
 \usepackage{multirow,multicol}
 
+\usepackage{siunitx}
+\usepackage{xfrac}
+
+\captionsetup[sub]{font=footnotesize}
+
 \usepackage{xcolor}
 \definecolor{emerald}{RGB}{0,128,0}
 \definecolor{navy}{RGB}{0,0,128}
@@ -70,8 +75,11 @@
 \isbnelectronic{}
 \serialnumber{}
 
+\addbibresource{references-introduction.bib}
 \addbibresource{references-ccta.bib}
 \addbibresource{references-5dof_nsb.bib}
+\addbibresource{references-nsb_R.bib}
+\addbibresource{references-distr_NSB.bib}
 \addbibresource{references-background.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
@@ -100,7 +108,8 @@
 \printbibliography[heading=none]
 
 \appendix
-\input{appendices/1-equations.tex}
+\input{appendices/1-model.tex}
 \input{appendices/2-5dof_nsb.tex}
+\input{appendices/3-nsb_R.tex}
 
 \end{document}

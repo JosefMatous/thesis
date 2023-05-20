@@ -1,0 +1,55 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{RGB}{27,158,119}%
+\definecolor{mycolor2}{RGB}{233,95,2}%
+\definecolor{mycolor3}{RGB}{117,111,179}%
+\definecolor{mycolor4}{rgb}{0.50000,1.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=25mm,
+at={(0mm, 0mm)},
+scale only axis,
+xmin=0,
+xmax=250,
+xlabel style={font=\color{white!15!black}, yshift=1mm},
+xtick={0,50,100,150,200,250},
+xlabel={Time [s]},
+ymin=-20.4602266733107,
+ymax=24.5,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={Error [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.5mm},
+title={Path following error},
+legend style={at={(0.95,1.)}, anchor=north east, legend cell align=left, align=left, draw=white!15!black, font=\small}
+]
+\addplot [color=mycolor1, line width=1pt]
+    table[]{simout-8.tsv};
+\addlegendentry{$x$-error}
+
+\addplot [color=mycolor2, line width=1pt]
+    table[]{simout-9.tsv};
+\addlegendentry{$y$-error}
+
+\addplot [color=mycolor3, line width=1pt]
+    table[]{simout-10.tsv};
+\addlegendentry{$z$-error}
+
+
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {simout-11.tsv}--cycle;
+
+\addplot[area legend, dashed, draw=black, fill=orange, fill opacity=0.15, forget plot]
+table[] {simout-12.tsv}--cycle;
+
+\addplot[area legend, dashed, draw=black, fill=orange, fill opacity=0.15, forget plot]
+table[] {simout-13.tsv}--cycle;
+\end{axis}
+\end{tikzpicture}

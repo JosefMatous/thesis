@@ -1,0 +1,46 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{RGB}{27,158,119}%
+\definecolor{mycolor2}{RGB}{233,95,2}%
+\definecolor{mycolor3}{RGB}{117,111,179}%
+\definecolor{mycolor4}{rgb}{0.50000,1.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=30mm,
+at={(0mm, 0mm)},
+scale only axis,
+xmin=0,
+xmax=250,
+xlabel style={font=\color{white!15!black}, yshift=1mm},
+xlabel={Time [s]},
+xtick={0,50,100,150,200,250},
+ymin=0,
+ymax=25,
+ylabel style={font=\color{white!15!black}},
+ylabel={Distance [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.5mm},
+title={Smallest distances},
+legend style={at={(1.02,0.02)}, anchor=south east, legend cell align=left, align=left, draw=white!15!black, legend columns=2, font=\small}
+]
+\addplot [color=mycolor1, line width=1pt]
+  table[]{simout-1.tsv};
+\addlegendentry{Inter-vehicle}
+
+\addplot [color=mycolor2, line width=1pt]
+  table[]{simout-2.tsv};
+\addlegendentry{Obstacle}
+
+\addplot [color=black, dashed, line width=1.2pt]
+  table[]{simout-3.tsv};
+\addlegendentry{$d_{\rm COLAV} = r_o$}
+
+\end{axis}
+\end{tikzpicture}%

@@ -1,0 +1,868 @@
+\chapter{A Distributed NSB Algorithm for Formation Path Following}
+\label{chap:distr_NSB}
+
+This chapter presents a distributed null-space-based behavioral algorithm for the formation path-following problem of vehicles moving in three dimensions.
+The algorithm is applied to fleets of underactuated autonomous underwater vehicles.
+The algorithm combines null-space-based control with consensus methods.
+First, we present a continuous-time version of the algorithm and prove its stability using Lyapunov analysis.
+Then, we present a discrete-time event-triggered version that, compared to similar formation path-following methods, can achieve the same steady state-error performance with fewer inter-vehicle transmissions.
+The effectiveness of both the continuous-time and the discrete-time algorithm is verified in numerical simulations.
+Furthermore, the discrete-time version is tested in field experiments.  
+
+\section{Introduction}
+
+In Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}, we presented NSB algorithms that solve the formation path following problem.
+However, the presented algorithms are centralized, meaning that to use these methods in a real-life application, there must be a central node that communicates and coordinates with all the vehicles.
+While underwater, the AUVs typically communicate via acoustic modems.
+These modems have low bandwidth and significant delays, making them unsuitable for real-time control.
+
+A distributed NSB algorithm was proposed in \cite{ahmad_multirobot_2014}.
+In this algorithm, the group of vehicles is split into smaller, fully connected subgroups.
+Each subgroup performs the standard, centralized NSB algorithm.
+Consequently, there is still a need for fast and reliable communications.
+Furthermore, the proposed method is limited to static formations.
+A similar scheme was proposed in \cite{tan_coordinated_2022}, where a group of heterogenous surface vehicles is split into homogenous subgroups.
+Each subgroup has one leading vehicle that exchanges information with the leaders of other subgroups.
+This scheme still requires fast and reliable communications, both within the subgroups and between the leaders.
+Furthermore, the proposed scheme is vulnerable to failures of the leading vehicles.
+
+This chapter presents an approach that is fully distributed, so that the fleet does not need to decompose into subgroups nor requires leading vehicles.
+To do so, the proposed algorithm combines the centralized schemes presented in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R} with a consensus algorithm.
+Specifically, we first propose a continuous-time consensus algorithm and prove its stability using Lyapunov analysis.
+Then, we present a modified discrete-time version of the algorithm based on event-triggered control.
+The effectiveness of both the continuous- and discrete-time algorithms is demonstrated in numerical simulation.
+Furthermore, the discrete-time version is also tested in field experiments.% To summarize, we propose and validate an overall fully distributed approach that is suitable for underactuated vehicles and 3D navigation (and thus both for surface and underwater vehicles).
+
+The remainder of the chapter is organized as follows.
+Section~\ref{sec:distr_NSB_problem} defines the formation path following problem.
+Section~\ref{sec:distr_NSB_NSB} presents the centralized NSB algorithm.
+In Section~\ref{sec:distr_NSB_distributed_NSB}, we present the continuous-time distributed NSB algorithm, and in Section~\ref{sec:distr_NSB_closed_loop}, we analyze its closed-loop behavior.
+Section~\ref{sec:distr_NSB_AUV} discusses how to apply the proposed algorithm to underactuated AUVs and proposes the discrete-time modification.
+Sections~\ref{sec:distr_NSB_simulations} and \ref{sec:distr_NSB_experiments} present the results of numerical simulations and experiments, respectively.
+Finally, Section~\ref{sec:distr_NSB_conclusion} contains some concluding remarks.
+
+\section{Problem Definition}
+\label{sec:distr_NSB_problem}
+We begin by considering a group of $N$ vehicles with single-integrator dynamics.
+An extension to more complex vehicle models will be shown in Section~\ref{sec:distr_NSB_AUV}.
+Let $\mat{p}_i \in \mathbb{R}^3$ be the position of vehicle $i$.
+The kinematic equation of vehicle $i$ is
+\begin{equation}
+    \dot{\mat{p}}_i = \mat{v}_i,
+    \label{eq:distr_NSB_kinematics}
+\end{equation}
+where $\mat{v}_i \in \mathbb{R}^3$ is the input velocity.
+
+The vehicles should follow a predefined path in a given formation.
+Let $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^3$ be a parametrization of the desired path.
+We assume that the function is $\mathcal{C}^1$ and regular.
+Consequently, for any point $\mat{p}_p(s)$, there exists a path-tangential coordinate frame and a corresponding rotation matrix $\mat{R}_p(s)$.
+
+The path-following error $\mat{p}_b^p$ is given by the position of the barycenter in the path-tangential coordinate frame 
+\begin{align}
+    \mat{p}_b^p &= \mat{R}_p\T \, \big(\mat{p}_b - \mat{p}_p(s)\big), &
+    \mat{p}_b &= \frac{1}{n} \sum_{i=1}^n \mat{p}_i.
+    \label{eq:distr_NSB_barycenter}
+\end{align}
+The goal of path following is to control the vehicles so that $\mat{p}_b^p \rightarrow \mat{0}_3$.
+
+The vehicles should converge to a dynamic formation that rotates with the desired path (see Section~\ref{sec:background_formation_keeping} for details).
+Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that represent the desired formation.
+The objective is to control the vehicles so that
+\begin{align}
+    \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f + \mat{p}_b, &
+    i &\in \left\{1, \ldots, n \right\}.
+\end{align}
+
+\section{NSB Algorithm for the Formation Path Following Problem}
+\label{sec:distr_NSB_NSB}
+In this section, we present the centralized formation path-following NSB algorithm for vehicles moving in three dimensions.
+
+To solve the formation path-following problem, we define two tasks: path-following and formation-keeping.
+Obstacle avoidance is not implemented as a separate task but rather as an extension of path-following.
+The desired velocity associated with the path-following task is identical for all vehicles.
+In the \emph{nominal} case (\emph{i.e.,} when there is no risk of colliding with the obstacle), we let the velocity be given by the following line-of-sight (LOS) guidance algorithm
+\begin{equation}
+    \mat{v}_{\rm LOS} = \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
+    \label{eq:distr_NSB_v_LOS_centralized}
+\end{equation}
+where $\Delta > 0$ is the lookahead distance, $y_b^p$ and $z_b^p$ are the components of $\mat{p}_b^p$, and $D = \sqrt{\Delta^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2}$.
+
+The method for obstacle avoidance is identical to the one presented in Chapter~\ref{chap:NSB_R}.
+Let $\mat{p}_o \in \mathbb{R}^2$ and $\mat{v}_o \in \mathbb{R}^2$ denote the position and velocity of the obstacle.
+Let us define the horizontal formation radius, $r_f$, as
+\begin{equation}
+    r_f = \max_i \norm{\inlinevector{x_i, y_i} - \inlinevector{x_b, y_b}},
+    \label{eq:distr_NSB_r_f}
+\end{equation}
+where $x_i, y_i$ and $x_b, y_b$ are the $x$- and $y$-coordinates of vehicle $i$ and the barycenter, respectively.
+Furthermore, let $r_o > 0$ denote the minimum safety distance between the vehicles and the obstacle, and let us define the relative position and velocity, $\mat{p}_{\rm rel}$ and $\mat{v}_{\rm rel}$, as
+\begin{align}
+    \mat{p}_{\rm rel} &= \inlinevector{x_b, y_b} - \mat{p}_o, \\
+    \mat{v}_{\rm rel} &= \inlinevector{v_{x,{\rm LOS}}, v_{y,{\rm LOS}}} - \mat{v}_o,
+\end{align}
+where $v_{x,{\rm LOS}}$ and $v_{y,{\rm LOS}}$ are components of the LOS velocity \eqref{eq:distr_NSB_v_LOS_centralized}.
+
+To guarantee obstacle avoidance, the relative velocity must stay outside of the so-called \emph{collision cone} given by
+\begin{align}
+    \abs{\angle\left(\mat{v}_{\rm rel}, -\mat{p}_{\rm rel}\right)} &\leq \alpha, &
+    \alpha &= \arcsin\left(\frac{r_o+r_f}{\norm{\mat{p}_{\rm rel}}}\right),
+    \label{eq:distr_NSB_collision-conflict}
+\end{align}
+where $\angle\left(\mat{a}, \mat{b}\right)$ denotes the angle between two vectors.
+
+The obstacle avoidance task is activated if the LOS velocity lies inside the collision cone and the cone angle satisfies 
+$\alpha \geq \alpha_{\min}$, where $0 < \alpha_{\min} \ll \pi / 2$.
+The reasoning behind the second condition is that the cone angle $\alpha$ is related to the distance between the vehicles and the obstacle.
+Specifically, a low value of $\alpha$ means a large distance (relative to the formation and obstacle radii).
+Consequently, there is no need to perform obstacle avoidance if the cone angle is small.
+
+When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\mat{v}_{\rm OA}$ given by
+\begin{align}
+    \mat{v}_{\rm OA} &= \norm{\mat{v}_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
+    \psi_{\rm OA} &= {\rm arctan}_2 \left(y_o - y_b, x_o - x_b\right) \pm \alpha,
+\end{align}
+where ${\rm arctan}_2$ is the four-quadrant inverse tan.
+Note that $\psi_{\rm OA}$ has two solutions corresponding to avoiding the obstacle in the clockwise and counterclockwise directions.
+Inspired by \cite{haraldsen_reactive_2021}, we propose the following method for choosing a direction:
+When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\mat{v}_{\rm rel}$.
+Afterwards, we maintain the same direction.
+
+Finally, let us discuss formation keeping.
+The desired velocity associated with the formation-keeping task for vehicle $i$ is given by
+\begin{align}
+    \mat{v}_{f, i} &= -k_f \left(\bs{\sigma}_i - \bs{\sigma}_{i,d}\right) + \dot{\bs{\sigma}}_{i,d},
+    \label{eq:distr_NSB_v_f_centralized}
+\end{align}
+where 
+\begin{align}
+    \bs{\sigma}_{i} &= \mat{p}_i - \mat{p}_b, &
+    \bs{\sigma}_{i,d} &= \mat{R}_p \mat{p}_{f, i}^f,
+\end{align}
+and $k_f$ is a positive gain.
+
+It can be shown that these two tasks are \emph{orthogonal} and \emph{independent} (intuitively: the path-following velocity is common to all vehicles, while the formation-keeping velocity is differential).
+Therefore, the two tasks can be executed at the same time, and the total desired NSB velocity for vehicle $i$ is given by
+\begin{equation}
+    \mat{v}_{{\rm NSB}, i} = \mat{v}_{\rm LOS} + \mat{v}_{f, i}.
+\end{equation}
+
+In addition, we choose the following update law for the path parameter
+\begin{equation}
+    \dot{s} = U_d \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \left(\frac{\Delta}{D} + k_s f_s\left(x_b^p\right)\right),
+    \label{eq:distr_NSB_path_parameter}
+\end{equation}
+where
+\begin{equation}
+    f_s(x) = \frac{x}{\sqrt{1 + x}},
+\end{equation}
+and $k_s$ is a positive gain.
+\emph{Remark:} the first term in the parenthesis ensures that $\dot{s}$ converges to $U_d$ as the path-following error converges to zero.
+The second term allows the path parameter to ``speed up'' or ``slow down'' if the vehicles are lagging or leading the desired path.
+
+\section{Distributed NSB Algorithm}
+\label{sec:distr_NSB_distributed_NSB}
+Now, let us discuss how to make the algorithm presented in the previous section distributed.
+To perform the NSB algorithm in a distributed manner, the vehicles should not need to know the exact positions of each other.
+Instead, they should estimate the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
+
+Let $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$ denote vehicle $i$'s estimates of the barycenter, formation radius, and path parameter, respectively.
+Then, vehicle $i$ calculates its LOS velocity as
+\begin{equation}
+    \mat{v}_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p(s_i) \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p},
+\end{equation}
+where
+\begin{align}
+    \inlinevector{x_{b, i}^p, y_{b, i}^p, z_{b, i}^p} &= \mat{R}_p(s_i)\T \left(\mat{p}_{b, i} - \mat{p}_p\left(s_i\right)\right), \\
+    D_i &= \sqrt{\Delta^2 + \left(y_{b, i}^p\right)^2 + \left(z_{b, i}^p\right)^2}.
+\end{align}
+In addition, the vehicle estimates the cone angle as
+\begin{align}
+    \alpha_i &= \arcsin\left(\frac{r_o + r_{f, i}}{\norm{\mat{p}_{{\rm rel}, i}}}\right), &
+    \mat{p}_{{\rm rel}, i} &= \mat{p}_o - \inlinevector{x_{b, i}, y_{b, i}},
+\end{align}
+where $x_{b, i}$ and $y_{b, i}$ are the $x$- and $y$-components of $\mat{p}_{b, i}$.
+The vehicle then determines if there is a need for obstacle avoidance according to the rules described in the previous section, and calculates its obstacle avoidance velocity as
+\begin{align}
+    \mat{v}_{{\rm OA}, i} &= \norm{\mat{v}_{{\rm rel}, i}} \inlinevector{\cos(\psi_{{\rm OA}, i}), \sin(\psi_{{\rm OA}, i})} + \inlinevector{\dot{x}_o, \dot{y}_o}\!\!\!, \\
+    \psi_{{\rm OA}, i} &= {\rm arctan}_2 \left(y_o - y_{b, i}, x_o - x_{b, i}\right) \pm \alpha_i.
+\end{align}
+The formation-keeping velocity is calculated as
+\begin{align}
+    \mat{v}_{f, i} &= -k_f \left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + \dot{\widehat{\bs{\sigma}}}_{d,i},
+    \label{eq:distr_NSB_v_f_distributed}
+\end{align}
+where
+\begin{align}
+    \widehat{\bs{\sigma}}_i &= \mat{p}_i - \mat{p}_{b, i}, &
+    \widehat{\bs{\sigma}}_{d,i} &= \mat{R}_p \mat{p}_{f, i}^f.
+\end{align}
+The path-following and formation-keeping velocities are then combined to obtain the desired NSB velocity
+\begin{equation}
+    \mat{v}_{{\rm NSB}, i} = \mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i}.
+\end{equation}
+
+Finally, let us discuss the update laws for the estimates $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$.
+We assume that the vehicles communicate over a connected undirected graph.
+Each vehicle transmits its own estimates $\mat{p}_{b, i}$, $s_i$, and $r_{f, i}$.
+We propose the following equations to update the barycenter and path parameter estimates
+\begin{align}
+    \dot{\mat{p}}_{b, i} &= \mat{v}_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\mat{p}_{b, j} - \mat{p}_{b, i}\right),  \label{eq:distr_NSB_consensus_barycenter} \\
+    \dot{s}_i &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_i)}{\partial s_i}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_i} + k_s f_{s\!}\!\left(\!x_{b, i\!}^p\right)\!\right) + c_s \!\! \sum_{j \in \mathcal{N}_i}\!\! \left(s_{j\!} - s_{i\!}\right), \label{eq:distr_NSB_consensus_parameter}
+\end{align}
+where $k_b$, $c_p$, and $c_s$ are positive gains, and $\mathcal{N}_i$ is the set of neighbors of vehicle $i$.
+Let us briefly discuss the reasoning behind these equations.
+The first term in \eqref{eq:distr_NSB_consensus_barycenter} assumes that the barycenter moves according to the LOS guidance algorithm.
+One can verify that if the barycenter estimates are correct and the path parameters are equal for all vehicles, then the true barycenter will, in fact, follow the LOS guidance.
+The second term provides feedback from the vehicle's position. In the next section, we will show that this term steers the barycenter estimates towards the true barycenter.
+The first term in \eqref{eq:distr_NSB_consensus_parameter} is analogous to the path parameter update law \eqref{eq:distr_NSB_path_parameter}.
+The last terms in \eqref{eq:distr_NSB_consensus_barycenter} and \eqref{eq:distr_NSB_consensus_parameter} represent the consensus algorithm. This algorithm allows the barycenter estimates and path parameters to converge to a common value.
+
+The formation radius estimate is updated according to the following hybrid scheme
+\begin{subequations}
+    \begin{align}
+        \dot{r}_{f, i} &= k_r \left(\widehat{r}_{f, i} - r_{f, i}\right),& &  \label{eq:distr_NSB_r_f_dot} \\
+        r_{f, i}^{+} &= \widehat{r}_{f, i}, & &\text{if }\, \widehat{r}_{f, i} > r_{f, i}, \label{eq:distr_NSB_r_f+1} \\
+        r_{f, i}^{+} &= \max_{j \in \mathcal{N}_i} r_{f, j}, & &\text{if } \max_{j \in \mathcal{N}_i} r_{f, j} > r_{f, i}, \label{eq:distr_NSB_r_f+2}
+    \end{align}
+\end{subequations}
+where $k_r$ is a positive constant and $\widehat{r}_{f, i} = \norm{\mat{p}_{b, i} - \mat{p}_i}$.
+From \eqref{eq:distr_NSB_r_f}, we note that if the barycenter estimates are accurate, the formation radius is given by $r_f = \max_i \widehat{r}_{f, i}$.
+Equations \eqref{eq:distr_NSB_r_f+1} and \eqref{eq:distr_NSB_r_f+2} represent a max-consensus scheme, ensuring that the values of $r_{f, i}$ are always greater than or equal to $\max_i \widehat{r}_{f, i}$.
+The continuous-time update law \eqref{eq:distr_NSB_r_f_dot} allows the values of $r_{f, i}$ to converge to $\max_i \widehat{r}_{f, i}$.
+
+\section{Closed-loop Analysis}
+\label{sec:distr_NSB_closed_loop}
+In this section, we define the error variables and investigate their closed-loop behavior.
+In the subsequent proofs, we consider the \emph{nominal} case without obstacle avoidance.
+Furthermore, we assume that the desired path is a straight line. %\textcolor{dkorange}{(although it may be possible to extend these proofs to curved pathds as well)}.
+Consequently, the rotation matrix $\mat{R}_p$ is constant, and the path function is given by
+\begin{equation}
+    \mat{p}_p(s) = \mat{p}_0 + \mat{R}_p \inlinevector{s, 0, 0},
+    \label{eq:distr_NSB_straight_line}
+\end{equation}
+where $\mat{p}_0 \in \mathbb{R}^3$ is the origin of the path.
+
+Now, let us define the error variables.
+The path-following error is given by $\mat{p}_b^p$.
+For formation-keeping, we define $\widetilde{\bs{\sigma}}_1, \ldots, \widetilde{\bs{\sigma}}_N$ as
+\begin{equation}
+    \widetilde{\bs{\sigma}}_i = \mat{p}_i - \mat{p}_b - \mat{R}_p \mat{p}_{f, i}^f.
+    \label{eq:distr_NSB_formation_errors}
+\end{equation}    
+The ``true value'' of the path parameter, $s$, is given by the mean of $s_i$, \emph{i.e.,} $s = \frac{1}{N} \sum_{i=1}^N s_i$.
+Consequently, the barycenter and path parameter estimate errors, $\widetilde{\mat{p}}_{b, i}$ and $\Tilde{s}_{i}$, are given by
+\begin{align}
+    \widetilde{\mat{p}}_{b, i} &= \mat{p}_{b, i} - \mat{p}_b, &
+    \Tilde{s}_{i} &= s_i - s. \label{eq:distr_NSB_consensus_errors}
+\end{align}
+
+\subsection{Closed-loop Dynamics}
+In this section, we derive closed-loop equations for the error variables.
+
+First, let us investigate the closed-loop properties of the path-following error.
+The barycenter kinematics are given by
+\begin{equation}
+    \begin{split}
+        \dot{\mat{p}}_b^p &= \mat{R}_p\T \left(\frac{1}{N}\sum_{i=1}^N \mat{v}_{{\rm NSB}, i} - \dot{\mat{p}}_p(s)\right)\\
+        & = \frac{1}{N}\sum_{i=1}^N\mat{R}_p\T \left(\mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i}\right) - \inlinevector{\dot{s}, 0, 0}.
+    \end{split}\label{eq:distr_NSB_p_b_CL_1}
+\end{equation}
+Let us define the ``true'' LOS velocity, $\mat{v}_{\rm LOS}$, according to \eqref{eq:distr_NSB_v_LOS_centralized}.
+Then, the LOS velocity calculated by vehicle $i$ can be expressed as
+\begin{equation}
+    \mat{v}_{{\rm LOS}, i} = \mat{v}_{\rm LOS} + \widetilde{\mat{v}}_{{\rm LOS}, i}, \label{eq:distr_NSB_v_LOS_CL}
+\end{equation}
+where
+\begin{equation}
+    \widetilde{\mat{v}}_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p} - \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_{b}^p, -z_{b}^p}
+\end{equation}
+It is straightforward to show that $\widetilde{\mat{v}}_{{\rm LOS}, i} = \mat{0}$ if $\widetilde{\mat{p}}_{b, i} = \mat{0}$.
+Moreover, it can be shown that the norm of the LOS velocity error satisfies the following inequality
+\begin{equation}
+    \norm{\widetilde{\mat{v}}_{{\rm LOS}, i}} \leq \frac{U_d}{\Delta} \norm{\widetilde{\mat{p}}_{b, i}}.
+    \label{eq:distr_NSB_v_LOS_tilde}
+\end{equation}
+% We can illustrate this property on the following two-dimensional example.
+% Consider a situation where $y_b^p$ and $y_{b,i}^p$ have the same magnitude but opposite signs.
+% Consequently, the norm of the LOS error is given by
+% \begin{equation}
+%     \begin{split}
+%         \norm{\widetilde{\mat{v}}_{{\rm LOS}, i}} &= \norm{\frac{U_d}{\sqrt{\Delta^2 - (y_b^p)^2}}\left(\begin{bmatrix} \Delta \\ -y_{b,i}^p \end{bmatrix} - \begin{bmatrix} \Delta \\ -y_b^p \end{bmatrix}\right)} \\
+%         &= \frac{2 U_d y_b^p}{\sqrt{\Delta^2 - (y_b^p)^2}}.
+%     \end{split}
+% \end{equation}
+
+To further investigate the barycenter kinematics in \eqref{eq:distr_NSB_p_b_CL_1}, we need to derive a closed-loop expression for $\dot{s}$.
+From \eqref{eq:distr_NSB_consensus_parameter}, $\dot{s}$ is given by
+\begin{equation}
+    \dot{s} = \frac{1}{N} \sum_{i=1}^N \dot{s}_i = \frac{1}{N} \sum_{i=1}^N U_{d\!} \left(\!\frac{\Delta}{D_i} + k_s f_{s}\!\left(\!x_{b, i\!}^p\right)\!\right).
+    \label{eq:distr_NSB_s_dot_CL_1}
+\end{equation}
+Note that since the vehicles communicate over an undirected graph, the consensus terms cancel out, and from the definition of a straight-line path in \eqref{eq:distr_NSB_straight_line}, it follows that $\norm{\frac{\partial \mat{p}_p(s)}{\partial s}} = 1$.
+
+Now, let us define path parameter update errors, $g_1, \ldots, g_N$, as
+\begin{equation}
+    g_i = U_{d\!} \left(\!\frac{\Delta}{D_i} - \frac{\Delta}{D} + k_s \! \left(f_{s\!\!}\left(x_{b, i\!}^p\right) - f_{s\!}\left(x_{b\!}^p\right)\right)\!\right).
+    \label{eq:distr_NSB_g_i}
+\end{equation}
+Note that if $\widetilde{\mat{p}}_{b, i}$ is zero, then $g_i$ is zero as well.
+Moreover, it can be shown that $g_i$ satisfies the following inequality
+\begin{equation}
+    \abs{g_i} \leq U_d \left(\frac{1}{\Delta} + k_s\right) \norm{\widetilde{\mat{p}}_{b, i}} + U_d k_s \abs{\Tilde{s}_i}.
+    \label{eq:distr_NSB_g_i_bound}
+\end{equation}
+Substituting \eqref{eq:distr_NSB_g_i} into \eqref{eq:distr_NSB_s_dot_CL_1}, we get
+\begin{equation}
+    \dot{s} = U_{d\!} \left(\!\frac{\Delta}{D} + k_s f_{s\!}\left(x_{b\!}^p\right)\right) + \frac{1}{N} \sum_{i=1}^N g_i.
+    \label{eq:distr_NSB_s_dot_CL}
+\end{equation}
+
+Finally, let us investigate the sum of formation-keeping velocities.
+From \eqref{eq:distr_NSB_v_f_distributed}, we get
+\begin{equation}
+    \begin{split}
+    \frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \mat{v}_{f, i\!} &= -\frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T k_f \!\! \left(\mat{p}_i - \mat{p}_{b,i} - \mat{R}_p\mat{p}_{f, i}^f\right) \\
+    &= -\frac{1}{N} \!\! \sum_{i=1}^N \! \mat{R}_p\T k_{\!f\!} \! \left(\! \mat{p}_{i\!} -\! \mat{p}_{b\!} -\! \widetilde{\mat{p}}_{b, i\!} -\! \mat{R}_p\mat{p}_{f, i\!}^f\right) \\
+    &= \frac{k_f}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \widetilde{\mat{p}}_{b, i}.
+    \end{split}
+    \label{eq:distr_NSB_v_f_sum}
+\end{equation}
+
+Substituting \eqref{eq:distr_NSB_v_LOS_CL}, \eqref{eq:distr_NSB_s_dot_CL}, and \eqref{eq:distr_NSB_v_f_sum} into \eqref{eq:distr_NSB_p_b_CL_1}, we get
+\begin{equation}
+    \begin{split}
+        \dot{\mat{p}}_b^p &= - U_d \inlinevector{k_s f_s\left(x_b^p\right), \frac{1}{D} y_b^p, \frac{1}{D} z_b^p} \\
+        & \quad + \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\mat{v}}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
+    \end{split}
+    \label{eq:distr_NSB_p_b_CL}
+\end{equation}
+
+Next, we find a closed-loop equation for the formation-keeping errors.
+Differentiating \eqref{eq:distr_NSB_formation_errors} with respect to time yields
+\begin{equation}
+    \dot{\widetilde{\bs{\sigma}}}_i = \dot{\mat{p}}_i - \dot{\mat{p}}_b = \mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i} - \frac{1}{N}\sum_{j=1}^N \left(\mat{v}_{{\rm LOS}, j} + \mat{v}_{f, j}\right)
+    \label{eq:distr_NSB_sigma_CL_1}
+\end{equation}
+Substituting \eqref{eq:distr_NSB_v_LOS_CL} and \eqref{eq:distr_NSB_v_f_distributed} into \eqref{eq:distr_NSB_sigma_CL_1} yields
+\begin{equation}
+    \dot{\widetilde{\bs{\sigma}}}_i = -k_f \widetilde{\bs{\sigma}}_i + \widetilde{\mat{v}}_{{\rm LOS}, i} - k_f \widetilde{\mat{p}}_{b, i} + \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\mat{v}}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
+    \label{eq:distr_NSB_sigma_CL_2}
+\end{equation}
+This equation can be rewritten in a more compact form.
+To do so, let us define the following concatenated error vectors
+\begin{subequations}
+    \begin{align}
+        \widetilde{\mat{V}}_{\rm LOS\!}\T &= \left[\widetilde{\mat{v}}_{{\rm LOS}, 1}, \ldots, \widetilde{\mat{v}}_{{\rm LOS}, N}\right], &
+        \widetilde{\bs{\Sigma}}\T\!\!\! &= \left[\widetilde{\bs{\sigma}}_1, \ldots, \widetilde{\bs{\sigma}}_N\right]\mathrlap{,} \\
+        \widetilde{\mat{P}}_{b\!}\T &= \left[\widetilde{\mat{p}}_{b, 1}, \ldots, \widetilde{\mat{p}}_{b, N}\right], &
+        \Tilde{\mat{S}}\T\! &= \left[\Tilde{s}_1, \ldots, \Tilde{s}_N\right].
+    \end{align}
+\end{subequations}
+Furthermore, let $\mat{L}_{F}$ denote the Laplacian matrix of a fully connected graph with $N$ nodes.
+Note that $\mat{L}_{F}$ is given by
+\begin{equation}
+    \mat{L}_{F} = N \mat{I}_N - \mat{1}_N,
+\end{equation}
+where $\mat{I}_n$ is an $n \times n$ identity matrix, and $\mat{1}_n$ is an $n \times n$ matrix of ones.
+Then, \eqref{eq:distr_NSB_sigma_CL_2} can be written in the following form
+\begin{equation}
+    \dot{\widetilde{\bs{\Sigma}}} = - k_f \widetilde{\bs{\Sigma}} + \left(\frac{1}{N}\mat{L}_{F} \otimes \mat{I}_3\right) \left(\widetilde{\mat{V}}_{\rm LOS\!} - k_f \widetilde{\mat{P}}_{b\!} \right),
+    \label{eq:distr_NSB_sigma_CL}
+\end{equation}
+where $\otimes$ is the Kronecker product.
+
+Finally, we find a closed-loop equation for the estimation errors.
+From \eqref{eq:distr_NSB_consensus_errors}, the time-derivative of $\widetilde{\mat{p}}_{b, i}$ is given by
+\begin{equation}
+    \begin{split}
+        \dot{\widetilde{\mat{p}}}_{b, i} &= \dot{\mat{p}}_{b, i} - \dot{\mat{p}}_b \\
+        &= \widetilde{\mat{v}}_{{\rm LOS}, i} + k_b\left(\widetilde{\bs{\sigma}}_i - \widetilde{\mat{p}}_{b, i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\widetilde{\mat{p}}_{b, j} - \widetilde{\mat{p}}_{b, i}\right) \\
+        &\quad - \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\mat{v}}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
+    \end{split}
+\end{equation}
+This equation can be written in the following compact form
+\begin{equation}
+    \begin{split}
+        \dot{\widetilde{\mat{P}}}_{b} &= - \left(\left(k_b \mat{I}_N + \frac{k_f}{N}\mat{1}_N + c_p \mat{L}\right) \otimes \mat{I}_3\right) \widetilde{\mat{P}}_{b} + k_b \widetilde{\bs{\Sigma}} \\
+        &\quad + \left(\frac{1}{N}\mat{L}_{F} \otimes \mat{I}_3\right) \widetilde{\mat{V}}_{\rm LOS},
+    \end{split}
+    \label{eq:distr_NSB_P_tilde_CL}
+\end{equation}
+where $\mat{L}$ is the Laplacian matrix of the communications graph.
+
+The time-derivative of $\Tilde{s}_{i}$ is given by
+\begin{equation}
+    \begin{split}
+        \dot{\Tilde{s}}_{i} &= \dot{s}_i - \dot{s} = c_s \!\! \sum_{j \in \mathcal{N}_i}\!\! \left(\Tilde{s}_{j\!} - \Tilde{s}_{i\!}\right) + g_i - \frac{1}{N}\sum_{j=1}^N g_j.
+    \end{split}
+\end{equation}
+This equation can be written in the following compact form
+\begin{equation}
+    \dot{\Tilde{\mat{S}}} = -c_s \mat{L} \Tilde{\mat{S}} + \frac{1}{N} \mat{L}_{F} \inlinevector{g_1, \ldots, g_N}.
+    \label{eq:distr_NSB_S_tilde_CL}
+\end{equation}
+
+\subsection{Stability Analysis}
+In this section, we analyze the stability of the closed-loop system derived in the previous section.
+To perform this analysis, we split the system into several connected subsystems and analyze them as a cascade.
+
+We begin by analyzing the subsystem given by \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}.
+\begin{lemma}
+    \label{lemma1}
+    The origin, $\left[\widetilde{\mat{P}}_b\T, \widetilde{\bs{\Sigma}}\T\right] = \mat{0}\T$, is a globally exponentially stable (GES) equilibrium of the subsystem \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_sigma_CL} if the control gains $k_b$ and $k_f$ are chosen such that $k_b, k_f > \frac{3U_d}{\Delta}$.
+\end{lemma}
+\begin{proof}        
+    From \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}, this subsystem can be written in the following form
+    \begin{equation}
+        \begin{bmatrix}
+            \dot{\widetilde{\mat{P}}}_{b} \\ \dot{\widetilde{\bs{\Sigma}}}
+        \end{bmatrix}
+        =
+        \left( \mat{F} \otimes \mat{I}_3 \right)
+        \begin{bmatrix}
+            {\widetilde{\mat{P}}}_{b} \\ {\widetilde{\bs{\Sigma}}}
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+            \frac{1}{N} \mat{L}_{F} \otimes \mat{I}_3 \\ \frac{1}{N} \mat{L}_{F} \otimes \mat{I}_3
+        \end{bmatrix}
+        \widetilde{\mat{V}}_{\rm LOS},
+        \label{eq:distr_NSB_P_Sigma_subsystem}
+    \end{equation}
+    where
+    \begin{equation}
+        \mat{F} 
+        =             
+        \begin{bmatrix}
+            -\left(k_b\mat{I}_N + \frac{k_f}{N}\mat{1}_N + c_p\mat{L}\right) & k_b\mat{I}_N \\
+            -\frac{k_f}{N} \mat{L}_{F} & -k_f \mat{I}_N
+        \end{bmatrix}.
+    \end{equation}
+    Due to its structure, $\mat{F}$ is a negative definite matrix.
+    Let $\lambda_{\min}$ denote the real part of the smallest eigenvalue of $-\mat{F}$.
+    Note that $\lambda_{\min} \geq \min\{k_b, k_f\}$.
+
+    Consider the following Lyapunov function candidate
+    \begin{equation}
+        V_p = \frac{1}{2} \left(\norm{\widetilde{\mat{P}}_{b}}^2 + \norm{\widetilde{\bs{\Sigma}}}^2\right).
+    \end{equation}
+    The derivative of $V_p$ along the trajectories of \eqref{eq:distr_NSB_P_Sigma_subsystem} is given by
+    \begin{equation}
+        \dot{V}_{p\!} = \!
+        \begin{bmatrix}
+            {\widetilde{\mat{P}}}_{b}\T\!\!\!\! & \widetilde{\bs{\Sigma}}\T
+        \end{bmatrix} \!
+        \left(\mat{F} \otimes \mat{I}_3\right) \!
+        \begin{bmatrix}
+            {\widetilde{\mat{P}}}_{b\!} \\ {\widetilde{\bs{\Sigma}}}
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+            {\widetilde{\mat{P}}}_{b}\T\!\!\!\! & \widetilde{\bs{\Sigma}}\T
+        \end{bmatrix} \!
+        \begin{bmatrix}
+            \frac{1}{N} \mat{L}_{F\!} \otimes \mat{I}_3 \\ \frac{1}{N} \mat{L}_{F\!} \otimes \mat{I}_3
+        \end{bmatrix} \!
+        \widetilde{\mat{V}}_{\rm LOS}
+    \end{equation}
+    By applying the inequality \eqref{eq:distr_NSB_v_LOS_tilde}, we get
+    \begin{align}
+        \dot{V}_{p}\! &\leq \!
+        - \lambda_{\min\!\!} \left(\norm{\widetilde{\mat{P}}_{b}}^{2} \!\!+ \!\norm{\widetilde{\bs{\Sigma}}}^{2\,}\!\right) \!
+        + \frac{2U_d}{\Delta} \norm{\widetilde{\mat{P}}_{b}} \left(\norm{\widetilde{\mat{P}}_{b}} + \norm{\widetilde{\bs{\Sigma}}}\right) \nonumber \\
+        &\leq \! - \lambda_{\min\!\!} \left(\norm{\widetilde{\mat{P}}_{b}}^{2\!} \!\!+ \!\norm{\widetilde{\bs{\Sigma}}}^{2\,}\!\right) \!
+        + \! \frac{2U_d}{\Delta} \! \bigg(\!\frac{3}{2}\!\norm{\widetilde{\mat{P}}_{b}}^{2\!} \!\!+ \!\frac{1}{2}\!\norm{\widetilde{\bs{\Sigma}}}^{2\,}\!\!\mathrlap{\bigg)} \label{eq:distr_NSB_lyapunov_analysis1}
+    \end{align}
+    From \eqref{eq:distr_NSB_lyapunov_analysis1}, we can conclude that $\dot{V}_p$ is negative definite, and the subsystem is thus GES, if $\lambda_{\min} \geq \min\{k_b, k_f\} > \frac{3U_d}{\Delta}$.        
+\end{proof}
+
+In the remainder of this section, we use the results from the cascaded systems theory.
+Specifically, we use Proposition 9 from \cite{pettersen_lyapunov_2017}, which, for the sake of convenience, is re-stated in Appendix~\ref{appendix}.
+Now, let us analyze the subsystem \eqref{eq:distr_NSB_S_tilde_CL}.
+\begin{lemma}
+    \label{lemma2}
+    The origin, $\Tilde{\mat{S}} = \mat{0}$, is a USGES equilibrium of the subsystem \eqref{eq:distr_NSB_S_tilde_CL} if $k_b, k_f > \frac{3U_d}{\Delta}$, and the consensus gain $c_s$ is chosen such that $c_s \lambda_2 > 2 U_d k_s$, where $\lambda_2$ is the Fiedler eigenvalue of $\mat{L}$.
+\end{lemma}
+\begin{proof}
+    Recall the equation for $\dot{\Tilde{\mat{S}}}$ from \eqref{eq:distr_NSB_S_tilde_CL}
+    \begin{align}
+        \dot{\Tilde{\mat{S}}} &= -c_s \mat{L} \Tilde{\mat{S}} + \frac{1}{N} \mat{L}_{F} \mat{G}, &
+        \mat{G} = \inlinevector{g_1, \ldots, g_N}.
+    \end{align}
+    We intend to analyze this subsystem as a cascade where ${\widetilde{\mat{P}}}_{b}$ perturbs the dynamics of $\Tilde{\mat{S}}$ through $\mat{G}$.
+    The following equation describes the \emph{nominal} dynamics of $\Tilde{\mat{S}}$
+    \begin{equation}
+        \dot{\Tilde{\mat{S}}} = -c_s \mat{L} \Tilde{\mat{S}} + \frac{1}{N} \mat{L}_{F} \mat{G}_s,
+        \label{eq:distr_NSB_S_tilde_nominal}
+    \end{equation}
+    where $\mat{G}_s$ is obtained by substituting ${\widetilde{\mat{P}}}_{b} = 0$ into $\mat{G}$.
+    From \eqref{eq:distr_NSB_g_i_bound} the following inequality holds true for $\mat{G}_s$
+    \begin{equation}
+        \norm{\mat{G}_s} \leq U_d k_s \norm{\Tilde{\mat{S}}}.
+    \end{equation}
+    Consider then the following Lyapunov function candidate for the nominal system
+    \begin{equation}
+        V_s = \frac{1}{2} \norm{\Tilde{\mat{S}}}^2.
+    \end{equation}
+    The derivative of $V_s$ along the trajectories of \eqref{eq:distr_NSB_S_tilde_nominal} is
+    \begin{equation}
+        \dot{V}_{s\!} = \! - c_s \Tilde{\mat{S}}\T \mat{L} \Tilde{\mat{S}} + \frac{1}{N} \Tilde{\mat{S}}\T \mat{L}_{F} \mat{G}_s
+        \leq \! \left( -c_s \lambda_{2\!\!} + 2 U_d k_s \right) \! \norm{\Tilde{\mat{S}}}^2\!\!\mathrlap{.}
+        \label{eq:distr_NSB_lyapunov_analysis2}
+    \end{equation}
+    From \eqref{eq:distr_NSB_lyapunov_analysis2}, we can conclude that $\dot{V}_s$ is negative definite, and the nominal system is thus GES, if $c_s \lambda_2 > 2 U_d k_s$.
+    
+    Note that both the nominal and perturbing systems are GES.
+    GES implies both UGAS and USGES.
+    Consider the Lyapunov function candidate $V_s$.
+    The first assumption in \cite[Proposition 9]{pettersen_lyapunov_2017} is satisfied with $c_1 = \frac{1}{2}$, an arbitrary $\eta > 0$, and $c_2 = \eta$.
+    The second assumption in \cite[Proposition 9]{pettersen_lyapunov_2017} is satisfied with $\alpha_1 = U_d \left(\frac{1}{\Delta} + k_s\right)$, and $\alpha_2 = 0$.
+    Consequently, all assumptions of \cite[Proposition 9]{pettersen_lyapunov_2017} are satisfied, and the cascaded system is USGES.
+\end{proof}
+
+Finally, let us analyze the subsystem \eqref{eq:distr_NSB_p_b_CL}
+\begin{lemma}
+    \label{lemma3}
+    The origin, $\mat{p}_b^p = \mat{0}$, is a USGES equilibrium of the subsystem \eqref{eq:distr_NSB_p_b_CL} if $k_b, k_f > \frac{3U_d}{\Delta}$ and $c_s \lambda_2 > 2 U_d k_s$.
+\end{lemma}
+\begin{proof}
+    Similarly to the proof of the previous lemma, this subsystem can be analyzed as a cascade where ${\Tilde{\mat{S}}}$ and ${\widetilde{\mat{P}}}_{b}$ perturb the dynamics of $\mat{p}_b^p$ through $\widetilde{\mat{V}}_{\rm LOS}$, ${\widetilde{\mat{P}}}_{b}$, and $\mat{G}$.
+    Consider the following nominal system
+    \begin{equation}
+        \dot{\mat{p}}_b^p = - U_d \inlinevector{k_s f_s\left(x_b^p\right), \frac{1}{D} y_b^p, \frac{1}{D} z_b^p}.
+        \label{eq:distr_NSB_p_b_nominal}
+    \end{equation}
+    This type of system has been proven USGES in \cite{matous_singularity_2023}.
+    We also remark that due to the inherent saturation present in LOS guidance schemes, exponential stability can be at most achieved semiglobally \cite{fossen_LOS_2014}.
+
+    Consider then the following Lyapunov function candidate
+    \begin{equation}
+        V_b = \frac{1}{2} \norm{\mat{p}_b^p}^2.
+    \end{equation}
+    % The derivative of $V_b$ along the trajectories of \eqref{eq:distr_NSB_p_b_nominal} is
+    % \begin{equation}
+    %     \dot{V}_b = -U_d \inlinevector{k_s \frac{(x_b^p)^2}{\sqrt{1 + (x_b^p)^2}}, \frac{(y_b^p)^2}{D}, \frac{(z_b^p)^2}{D}}.
+    % \end{equation}
+    Similarly to the previous lemma, the first assumption in \cite[Proposition 9]{pettersen_lyapunov_2017} is satisfied with $c_1 = \frac{1}{2}$, an arbitrary $\eta > 0$, and $c_2 = \eta$.
+    
+    Let $\mat{h}$ denote the perturbing term in \eqref{eq:distr_NSB_p_b_CL}. This term is given by
+    \begin{equation}
+        \mat{h} = \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\mat{v}}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
+    \end{equation}
+    From \eqref{eq:distr_NSB_v_LOS_tilde} and \eqref{eq:distr_NSB_g_i_bound}, we arrive at the following upper bound on the norm of $\mat{h}$
+    \begin{align}
+        \norm{\mat{h}} &\leq \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right) \norm{\widetilde{\mat{P}}_b} + U_d k_s \norm{\Tilde{\mat{S}}} \nonumber \\
+        &\leq \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right) \norm{\left[\widetilde{\mat{P}}_b\T, \Tilde{\mat{S}}\T\right]}.
+    \end{align}
+    Consequently, the second assumption in \cite[Proposition 9]{pettersen_lyapunov_2017} is satisfied with $\alpha_1 = \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right)$, $\alpha_2 = 0$, and the subsystem is thus USGES.
+\end{proof}
+
+The results of the three lemmas can be summarized in the following theorem.
+\begin{theorem}
+    \label{thm}
+    The origin, $\left[(\mat{p}_b^p)\T, \widetilde{\bs{\Sigma}}\T, \widetilde{\mat{P}}_b\T, \Tilde{\mat{S}}\T\right] = \mat{0}\T$, is a uniformly semiglobally exponentially stable (USGES) equilibrium of the closed-loop system \eqref{eq:distr_NSB_p_b_CL}, \eqref{eq:distr_NSB_sigma_CL}, \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_S_tilde_CL} if $k_b, k_f > \frac{3U_d}{\Delta}$ and $c_s \lambda_2 > 2 U_d k_s$.
+\end{theorem}
+\begin{proof}
+    The stability of the complete system can be proven by applying the results from Lemmas~\ref{lemma1}---\ref{lemma3}.
+\end{proof}
+
+\section{Application to Underactuated AUVs}
+\label{sec:distr_NSB_AUV}
+To apply the proposed distributed NSB algorithm to underactuated AUVs, we need to resolve two issues.
+Firstly, unlike vehicles with single-integrator dynamics \eqref{eq:distr_NSB_kinematics}, the position of AUVs cannot be controlled directly.
+Specifically, due to underactuation, there is no input to directly control the sway and heave dynamics, so these states must be controlled indirectly through the surge, pitch, and yaw dynamics.
+Secondly, in real-life situations, the continuous-time consensus algorithm \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter} cannot be implemented, as the vehicles communicate at discrete time instances.
+In fact, the limited bandwidth of underwater communication methods causes a significant delay and long periods between transmissions.
+In this section, we introduce the model of underactuated AUVs and propose solutions to the two aforementioned problems.
+
+\subsection{AUV Model}
+Let $\mat{p}_i \in \mathbb{R}^3$ denote the position of vehicle $i$.
+Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation, let $\bs{\nu}_i = \inlinevector{u_i, v_i, w_i}$ be the linear surge, sway, and heave velocities, and let $\bs{\omega}_i = \inlinevector{p_i, q_i, r_i}$ be the angular roll, pitch, and yaw rates.
+
+The kinematics of the vehicle are \cite{fossen_handbook_2011}
+\begin{align}
+    \dot{\mat{p}}_i &= \mat{R}_i \bs{\nu}_i, &
+    \dot{\mat{R}}_i &= \mat{R}_i \mat{S}(\bs{\omega}_i),
+    \label{eq:distr_NSB_AUV_kinematic}
+\end{align}
+where $\mat{S} : \mathbb{R}^3 \mapsto \mathfrak{so}(3)$ is the skew-symmetric matrix operator.
+
+For the dynamics, we assume that the AUVs are equipped with a low-level controller that can track a desired surge velocity and orientation, \emph{i.e.}, the fully actuated degrees of freedom (for more information, the reader is referred to \cite{fossen_handbook_2011}).
+The reason for making this assumption is that we want to develop a control scheme that holds for a broad class of onboard low-level controllers for commercial AUVs.
+The vehicle dynamics can then be expressed as
+\begin{equation}
+    \begin{bmatrix}
+        \dot{\bs{\nu}}_i \\ \dot{\bs{\omega}}_i
+    \end{bmatrix}
+    = f\left(\mat{R}_i, \mat{R}_{d,i}, \bs{\nu}_i, u_{d, i}, \bs{\omega}_i\right),
+\end{equation}
+where $f$ is a function representing the closed-loop dynamics, and $\mat{R}_{d,i}$ and $u_{d, i}$ are the desired orientation and surge velocity, respectively.
+
+\subsection{Handling the Underactuated Dynamics}
+In this section, we propose a method for choosing the desired surge velocity and orientation in order to handle the underactuated dynamics.
+
+First, let us discuss the method for choosing the desired surge velocity.
+Ideally, $u_{d, i}$ should be chosen such that $\norm{\left[u_{d, i}, v_i, w_i\right]} = \norm{\mat{v}_{{\rm NSB}, i}}$.
+However, since the AUV is underactuated, and thus there are no control inputs to directly control the sway velocity, $v_i$, and the heave velocity, $w_i$, this equation cannot always be satisfied.
+In addition, AUVs typically need to maintain a positive surge velocity to be able to maneuver.
+Consequently, we propose the following method for choosing the desired surge velocity
+\begin{equation}
+    u_{d, i} = 
+    \begin{cases}
+        \sqrt{U_{{\rm NSB}, i}}, & \text{if } U_{{\rm NSB}, i} \geq u_{\min}^2, \\
+        u_{\min}, & \text{otherwise},
+    \end{cases}
+    \label{eq:distr_NSB_u_d_i}
+\end{equation}
+where $U_{{\rm NSB}, i} = \norm{\mat{v}_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2$, and $u_{\min} > 0$ is the minimum required surge velocity.
+
+Now, let us discuss the method for choosing the desired orientation.
+The proposed method consists of two steps.
+In the first step, we find the desired course, $\chi_{d, i}$, and flight-path angle, $\gamma_{d, i}$, as
+\begin{align}
+    \chi_{d, i} &= {\rm arctan}_2\left({y}_{{\rm NSB}, i}, {x}_{{\rm NSB}, i}\right), \\
+    \gamma_{d, i} &= - \arcsin\left(\frac{{z}_{{\rm NSB}, i}}{\norm{\mat{v}_{{\rm NSB}, i}}}\right).
+\end{align}
+In the second step, we calculate the desired pitch ($\theta_{d, i}$) and yaw ($\psi_{d, i}$) angles as
+\begin{align}
+    \theta_{d, i} &= {\rm sat}_{\theta_{\max}}\left(\gamma_{d, i} - k_{\gamma} \int_0^t \widetilde{\gamma}_i(\tau) {\rm d}\tau\right), \label{eq:distr_NSB_theta_ref} \\
+    \psi_{d, i} &= \chi_{d, i} - k_{\chi} \int_0^t \widetilde{\chi}_i(\tau) {\rm d}\tau, \label{eq:distr_NSB_psi_ref}
+\end{align}
+where $k_{\gamma}$ and $k_{\chi}$ are positive gains, ${\rm sat}(\cdot)$ is a saturation function
+\begin{equation}
+    {\rm sat}_{x_{\max}}(x) = 
+    \begin{cases}
+        -x_{\max}, & \text{if } x < -x_{\max}, \\
+        x, & \text{if } -x_{\max} \leq x \leq x_{\max}, \\
+        x_{\max}, & \text{if } x > x_{\max},
+    \end{cases}
+\end{equation}
+and $\widetilde{\gamma}_i(\tau)$ and $\widetilde{\chi}_i(\tau)$ are the flight-path angle and course errors
+\begin{align}
+    \widetilde{\gamma}_i &= \gamma_i - \gamma_{d, i} = \theta_i - \arctan\left(\frac{w_i}{u_i}\right) - \gamma_{d, i}, \\
+    \widetilde{\chi}_i &= \chi_i - \chi_{d, i} = \psi_i + \arctan\left(\frac{v_i}{u_i}\right) - \chi_{d, i}.
+\end{align}
+The purpose of the saturation function is to avoid singularities introduced by the Euler angles.
+Consequently, the saturation limit must satisfy $\theta_{\max} < \frac{\pi}{2}$.
+
+The desired orientation can then be calculated as
+\begin{equation}
+    \mat{R}_{d, i\!} = \!\!\begin{bmatrix}
+        \cos\psi_{d, i}\,\cos\theta_{d, i} & \!\!-\sin\psi_{d, i}\!\! & \cos\psi_{d, i}\,\sin\theta_{d, i}\\ \cos\theta_{d, i}\,\sin\psi_{d, i} & \!\!\cos\psi_{d, i}\!\! & \sin\psi_{d, i}\,\sin\theta_{d, i}\\ -\sin\theta_{d, i} & 0 & \cos\theta_{d, i}
+    \end{bmatrix}\!\!\mathrlap{.}
+\end{equation}
+
+%Note that some methods in the literature find the desired orientation by compensating for the angle of attack and crab angle \cite{eek_formation_2021,matouvs_formation_2022}.
+%The use of integral action in the flight-path angle and course controllers \eqref{eq:distr_NSB_theta_ref}, \eqref{eq:distr_NSB_psi_ref} adds robustness.
+
+\subsection{Handling Discrete-Time Communications}
+\label{sec:distr_NSB_event_triggered}
+In this section, we discuss the issue of discrete-time delayed communications.
+We assume that the AUVs can broadcast data via an acoustic modem.
+However, due to the relatively low bitrate and propagation speed of underwater acoustics, there is a significant delay between transmission and reception.
+To address these issues, we need to discretize the consensus scheme \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter}, compensate for the delays, and reduce the number of transmissions.
+
+To discretize the consensus scheme, we propose the following method.
+Each vehicle continuously updates its variables using the following equations
+\begin{align}
+    \dot{\mat{p}}_{b, i} &= \mat{v}_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right), \label{eq:distr_NSB_consensus_update_p} \\
+    \dot{s}_i &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_i)}{\partial s_i}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_i} + k_s f_{s\!}\!\left(\!x_{b, i\!}^p\right)\!\right), \label{eq:distr_NSB_consensus_update_s} \\
+    \dot{r}_{f, i} &= k_r \left(\widehat{r}_{f, i} - r_{f, i}\right), \qquad
+    r_{f, i}^{+} = \widehat{r}_{f, i}, \text{if } \widehat{r}_{f, i} > r_{f, i}.
+\end{align}
+To perform the consensus algorithm, each AUV transmits the following packet: $\left(t_i, s_i, \mat{p}_{b, i}, r_{f, i}, \breve{\bs{\sigma}}_i \right)$, where $t_i$ is the time of transmission, and $\breve{\bs{\sigma}}_i = \widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}$.
+When vehicle $i$ receives a consensus packet from vehicle $j$, it first compensates for the delay by solving the following set of differential equations
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{p}}_{b, j} &= \mat{v}_{{\rm LOS}, j} + k_b \breve{\bs{\sigma}}_j, \label{eq:distr_NSB_consensus_delay_p} \\
+        \dot{\breve{\bs{\sigma}}}_j &= - k_f \breve{\bs{\sigma}}_j, \label{eq:distr_NSB_consensus_delay_sigma} \\
+        \dot{s}_j &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_j)}{\partial s_j}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_j} + k_s f_{s\!}\!\left(\!x_{b, j\!}^p\right)\!\right). \label{eq:distr_NSB_consensus_delay_s}
+    \end{align}
+\end{subequations}
+Note that \eqref{eq:distr_NSB_consensus_delay_p} and \eqref{eq:distr_NSB_consensus_delay_s} are analogous to \eqref{eq:distr_NSB_consensus_update_p} and \eqref{eq:distr_NSB_consensus_update_s}.
+The equation for $\dot{\breve{\bs{\sigma}}}_j$ is motivated by the fact that $\breve{\bs{\sigma}}_j$ is used as the formation-keeping error (\emph{c.f.,} \eqref{eq:distr_NSB_v_f_distributed}).
+Under ideal conditions (\emph{i.e.,} if the consensus errors are zero), $\breve{\bs{\sigma}}_j$ evolves according to \eqref{eq:distr_NSB_consensus_delay_sigma}.
+The value of $r_{f, j}$ is kept constant.
+
+After compensating for the delay, the vehicle updates its consensus variables using the following scheme
+\begin{align}
+    \mat{p}_{b, i}^{+} &= a_p \mat{p}_{b, j} + \left(1 - a_p\right) \mat{p}_{b, i}, \\
+    s_i^{+} &= a_s s_j + \left(1 - a_s\right) s_i, \\
+    r_{f, i}^{+} &= \max\left\{r_{f, i}, r_{f, j}\right\},
+\end{align}
+where $a_p, a_s \in (0, 1)$ are the mixing gains.
+
+Finally, let us discuss the method for determining when the AUVs should transmit the consensus packets.
+To minimize the number of transmissions, we propose an event-triggered scheme.
+When vehicle $i$ receives a consensus packet from vehicle $j$, it also calculates the following quantity:
+\begin{equation}
+    T_{j,i} = T_{\min} + \frac{1}{\sqrt{b_p\norm{\mat{p}_{b, i} - \mat{p}_{b, j}}^2 + b_s\left(s_i - s_j\right)^2}},
+\end{equation}
+where $T_{\min}$, $b_p$, and $b_s$ are positive constants.
+Let us assume that the last transmission of vehicle $i$ was at a time $t_i$.
+The next transmission time is then calculated as $t_i + \max_j T_{j, i}$.
+This event triggering scheme, inspired by the techniques discussed in~\cite{ding2017overview}, was chosen because it is easy to implement and has a strictly defined minimum delay in-between transmission, making it suitable in applications with limited bandwidth and communication delays. We demonstrate that the proposed scheme works both in simulations and field trials. However, proving the effectiveness of the scheme is not the main focus of this work.%, and we thus consider analyzing the sensitivity of our final results on the structure of this scheme as a potential future work.
+
+\section{Simulations}
+\label{sec:distr_NSB_simulations}
+
+In this section, we present the results of a numerical simulation study.
+The simulations were carried out in MATLAB using a model of the light autonomous underwater vehicle (LAUV) \cite{sousa_LAUV_2012}.
+We conducted two types of simulations. 
+We tested the continuous-time NSB algorithm proposed in Section~\ref{sec:distr_NSB_distributed_NSB}.
+Furthermore, the performance of the event-triggered NSB algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered} is compared to the performance of a cooperative path following algorithm proposed in \cite{praveen_cooperative_2018}.
+
+First, let us present the parameters that are common to both simulations.
+We simulate four AUVs.
+The barycenter should follow an elliptic path given by
+\begin{equation}
+    \mat{p}_p(s) = \inlinevector{a \cos(s), b \sin(s), c \sin(s)^2},
+\end{equation}
+where $a = \SI{60}{\meter}$, $b = \SI{40}{\meter}$, $c = \SI{10}{\meter}$.
+The desired path-following speed is $U_d = \SI{1.3}{\meter\per\second}$.
+The lookahead distance is chosen as $\Delta = \SI{5}{\meter}$.
+The shape of the desired formation is
+\begin{equation}
+    \left[\mat{p}_{f, 1}^f, \mat{p}_{f, 2}^f, \mat{p}_{f, 3}^f, \mat{p}_{f, 4}^f\right]
+    =
+    \begin{bmatrix}
+        10 & -10 & 0 & 0\\ 0 & 0 & 10 & -10\\ 0 & -4 & 4 & 0
+    \end{bmatrix}.
+\end{equation}
+To satisfy the assumptions in Lemma~\ref{lemma1}, $k_b$ and $k_f$ must be greater than $\frac{3U_d}{\Delta} = 0.78$.
+We choose $k_b = k_f = 1$.
+The gain of the path parameter update law is $k_s = 0.5$.
+Finally, the adjacency matrix of the communication graph is
+\begin{equation}
+    \mat{A}
+    =
+    \begin{bmatrix}
+        0 & 0 & 1 & 1\\ 0 & 0 & 1 & 1\\ 1 & 1 & 0 & 0\\ 1 & 1 & 0 & 0
+    \end{bmatrix}.
+\end{equation}
+
+\subsection{Continuous-time Consensus}
+\pgfplotsset{table/search path={figures/distr_NSB/data}}
+\input{figures/distr_NSB/figure_simulation.tex}
+
+The purpose of this simulation is to demonstrate that the path-following, formation-keeping, and consensus errors of the continuous-time scheme converge to zero.
+To satisfy the assumptions of Lemma~\ref{lemma2}, the consensus gain $c_s$ must be greater than $\frac{2 U_d k_s}{\lambda_2} = 0.65$. We choose $c_s = c_p = 1$.
+To test the obstacle avoidance scheme, we place a static obstacle at $\mat{p}_o = \inlinevector{0, 40}$ with radius $r_o = \SI{5}{\meter}$.
+The minimum cone $\alpha_{\min}$ is set to $2$ degrees, and the formation radius update gain is $k_r = 0.1$.
+
+The results are shown in \figref{fig:distr_NSB_simulation}.
+\figref{fig:distr_NSB_sim_trajectory} shows the 3D trajectory of the AUVs. We can see that the AUVs converge to their desired formation while avoiding the obstacle represented by the green cylinder.
+\figref{fig:distr_NSB_sim_errors} shows the path-following and formation-keeping errors. Initially, these errors exponentially converge to zero. When the obstacle avoidance scheme is activated, the path-following errors start diverging, as the LOS velocity enters the collision cone. After the vehicles successfully avoid the obstacle, the errors again converge exponentially to zero.
+\figref{fig:distr_NSB_sim_distance} shows the distance between the AUVs and the obstacle. We can see that the distance is always greater than $r_o$.
+Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and \ref{fig:distr_NSB_sim_radius} show the errors of the consensus variables. These plots are in a logarithmic scale to demonstrate the exponential rate of convergence. Initially, the logarithmic error is clearly bounded by a decreasing straight line, demonstrating the exponential convergence. The norm of the error decreases by a factor of 10 approximately every 25 seconds. When obstacle avoidance is active, the errors start diverging but remain bounded. After avoiding the obstacle, the errors continue to decrease exponentially, but eventually, the convergence stagnates. We cannot expect that the errors continue to fall indefinitely due to numerical innacuracies, that come mostly from two sources: the inaccuracies in floating-point arithmetics and the tolerances of the ODE solver.
+
+Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
+
+\subsection{Event-triggered Consensus}
+\input{figures/distr_NSB/figure_comparison.tex}
+
+In this section, we test the event-triggered scheme proposed in Section~\ref{sec:distr_NSB_event_triggered}.
+We choose the mixing gains $a_p = a_s = 0.4$, and the penalty gains: $b_p = 10^{-4}, b_s = 4$.
+
+We compare our algorithm with an event-triggered cooperative path following algorithm proposed in \cite{praveen_cooperative_2018}.
+In this algorithm, each vehicle follows its own desired path given by $\mat{p}_{d,i}(s) = \mat{p}_p(s) + \mat{R}_p(s) \mat{p}_{f, i}^f$.
+Coordination is then achieved by running a consensus scheme on the path parameter.
+
+The comparison was done using a Monte Carlo simulation.
+We performed ten thousand simulations with randomly selected initial conditions and communication delays.
+The initial positions of the AUVs ranged from $\inlinevector{60,-40,0}$ to $\inlinevector{140,40,15}$.
+The initial orientations were specified in Euler angles, with a zero roll angle, a pitch angle from $-\frac{\pi}{8}$ to $\frac{\pi}{8}$, and a yaw angle from $0$ to $\pi$.
+The initial linear velocities ranged from $\inlinevector{0.5, -0.2, -0.1}$ to $\inlinevector{1.5, 0.2, 0.1}$, and the initial angular velocities were zero.
+The communication delays ranged from $0$ to $5$ seconds.
+
+\figref{fig:distr_NSB_comparison} shows the resulting errors.
+Specifically, \figref{fig:distr_NSB_comparison_parameter} shows the absolute value of the path parameter error, and \figref{fig:distr_NSB_comparison_barycenter} shows the norm of the path-following error.
+Both errors are plotted in a logarithmic scale.
+In terms of path parameter errors, both algorithms perform similarly.
+In terms of path-following errors, the distributed NSB algorithm is marginally better.
+
+The communication requirements of the two algorithms are summarized in Table~\ref{tab:comparison}.
+This table shows the minimum, maximum, and median of the period in-between transmissions ($\tau_t$), and the total number of transmissions in one simulation ($N_t$).
+Here, we can see that distributed NSB performs considerably better in comparison to the cooperative path following method, with longer periods in-between transmissions and a lower number of transmissions.
+
+However, it is worth mentioning that the packets transmitted by the cooperative path following method are smaller than the NSB packets.
+Indeed, in the scheme proposed in \cite{praveen_cooperative_2018}, the AUVs only need to transmit the path parameter and its derivative.
+In contrast, the NSB packet consists of the estimates of path parameter, barycenter, radius of formation, and formation-keeping error.
+In this context, the two algorithms present a trade-off between packet size and communication periods.
+
+\input{figures/distr_NSB/table_comparison.tex}
+
+\section{Experiments}
+\label{sec:distr_NSB_experiments}
+In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed NSB algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
+The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two LAUVs as in \figref{fig:distr_NSB_LAUV}.
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width = 0.6\columnwidth]{figures/distr_NSB/LAUV-Roald}
+    \caption{Photo of one of the two LAUVs used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}
+    \label{fig:distr_NSB_LAUV}
+\end{figure}
+
+To guarantee stable communications and accurate navigation, the vehicles were operating at the surface and communicating over WiFi.
+The algorithm was implemented in C++, using the Unified Navigation Environment (DUNE) \cite{dune}.
+
+The algorithm was tested in two scenarios: a \emph{nominal} scenario, \emph{i.e.,} formation path following without any obstacles, and a scenario with a static obstacle.
+In both scenarios, the barycenter of the AUVs should follow the elliptic path
+\begin{equation}
+    \mat{p}_p(s) = \inlinevector{a \cos(s), b \sin(s), 0}, \quad a = \SI{100}{\meter}, b = \SI{80}{\meter},
+\end{equation}
+in the formation defined by
+\begin{align}
+    \mat{p}_{f, 1}^f &= \inlinevector{0, -25, 0}, &
+    \mat{p}_{f, 2}^f &= \inlinevector{0, 25, 0}. &
+\end{align}
+The reason for choosing a larger path and formation, compared to the simulations in Section~\ref{sec:distr_NSB_simulations}, was to reduce the risk of the AUVs colliding.
+The obstacle was placed at $\mat{p}_o = \inlinevector{0, 80}$.
+The remaining parameters were identical to the simulations.
+
+\subsection{Nominal Scenario}
+\input{figures/distr_NSB/figure_experiment_nominal.tex}
+
+The results are shown in \figref{fig:distr_NSB_experiment_nominal}.
+\figref{fig:distr_NSB_experiment_nominal_trajectory} shows the trajectories of the AUVs, as estimated by their onboard navigation system.
+The disturbances in the trajectories are caused by two factors: the sea loads (waves, currents, and wind), and the errors of the navigation system.
+However, the exponential stability of the NSB algorithm given by Theorem~\ref{thm} provides some robustness towards these disturbances, \emph{c.f.,} \cite[Lemma 9.2]{khalil_nonlinear_2002}.
+\figref{fig:distr_NSB_experiment_nominal_parameter} shows the path parameter errors and the event-triggered communications.
+Initially, the vehicles need to communicate frequently, approximately every five seconds, because the barycenter estimates differ (as seen in \figref{fig:distr_NSB_experiment_nominal_barycenter}).
+During this transient period, the path parameter estimates initially diverge before finally converging.
+After convergence, the communication period increases to over 100 seconds.
+Note that the barycenter estimate errors in \figref{fig:distr_NSB_experiment_nominal_barycenter} converge to a common value but not to zero.
+This behavior is caused by the aforementioned disturbances acting on the vehicles.
+\figref{fig:distr_NSB_experiment_nominal_errors} shows the formation-keeping and path-following errors.
+Due to the disturbances and event-triggered communications, these errors do not converge to zero but rather to a small area near zero.
+
+\subsection{Scenario with a Static Obstacle}
+\input{figures/distr_NSB/figure_experiment_obstacle.tex}
+
+The results are shown in \figref{fig:distr_NSB_experiment_obstacle}.
+In general, the results are similar to the nominal scenario, so we will only highlight the differences.
+The path-following errors in \figref{fig:distr_NSB_experiment_obstacle_errors} diverge when obstacle avoidance is active.
+As previously mentioned, this behavior is caused by the fact that the vehicles cannot stay on the desired path while avoiding the obstacle.
+The estimate errors in Figs.~\ref{fig:distr_NSB_experiment_obstacle_parameter} and \ref{fig:distr_NSB_experiment_obstacle_barycenter} behave similarly to the nominal case.
+As shown in \figref{fig:distr_NSB_experiment_obstacle_distance}, the distance between the AUVs and the obstacle is always greater than $r_o$.
+\figref{fig:distr_NSB_experiment_obstacle_radius} shows the errors between the estimated and true formation radius.
+Note that the formation radius errors are connected to the barycenter estimates.
+A wrong barycenter estimate may lead to both overestimation and underestimation of the formation radius.
+Despite these uncertainties, the AUVs still manage to perform all control goals safely.
+
+\section{Conclusions and Future Work}
+\label{sec:distr_NSB_conclusion}
+%    In this paper, we proposed a distributed formation path-following method for fleets of underactuated underwater vehicles.
+%    To achieve the control goals, the method combines null space-based behavioral control with consensus.
+In this paper, we discussed how it is possible to combine null space-based behavioral control with consensus, and in this way enable fleets of underactuated underwater vehicles to perform formation path-following in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways, using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for field implementations).
+Using Lyapunov analysis, we have shown that in the special case of straight-line paths, the continuous-time version achieves uniform semiglobal exponential stability.
+The discrete-time version is based on event-triggered paradigms, so to account for practical limitations in the way agents exchange information.
+Both versions are then verified in numerical simulations.
+Comparing the discrete-time version to a similar cooperative path following algorithm presented in \cite{praveen_cooperative_2018}, we found 
+that the proposed algorithm requires fewer transmissions between the vehicles, while having similar steady-state error.
+Finally, we demonstrated the real-life effectiveness of the the discrete-time algorithm in field experiments with a fleet of light autonomous underwater vehicles.
+
+Future work includes extending the stability proofs to the more general case of curved paths and more complex vehicle dynamics, as well as investigating the effects of the event-triggered scheme on the performance of the algorithm.
+In addition, we plan to perform additional experiments with more vehicles and underwater communications.

@@ -1,0 +1,55 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{RGB}{27,158,119}%
+\definecolor{mycolor2}{RGB}{233,95,2}%
+\definecolor{mycolor3}{RGB}{117,111,179}%
+\definecolor{mycolor4}{rgb}{0.50000,1.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=25mm,
+at={(0mm, 0mm)},
+scale only axis,
+xmin=0,
+xmax=250,
+xlabel style={font=\color{white!15!black}, yshift=1mm},
+xlabel={Time [s]},
+xtick={0,50,100,150,200,250},
+ymin=-0.1,
+ymax=0.2,
+ylabel style={font=\color{white!15!black}, yshift=-4mm},
+ylabel={Velocity [m/s]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.5mm},
+title={Underactuated dynamics},
+legend style={at={(0.97,0.05)}, anchor=south east, legend cell align=left, align=left, draw=white!15!black, legend columns=3, font=\small}
+]
+\addplot [color=mycolor1, line width=1pt]
+  table[]{states-4.tsv};
+  \addlegendentry{$v$}
+\addplot [color=mycolor1, dashed, forget plot, line width=1.1pt]
+  table[]{states-5.tsv};  
+\addplot [color=mycolor1, dotted, forget plot, line width=1.3pt]
+  table[]{states-6.tsv}; 
+
+\addplot [color=mycolor2, line width=1pt]
+  table[]{states-7.tsv};
+  \addlegendentry{$w$}
+\addplot [color=mycolor2, dashed, forget plot, line width=1.1pt]
+  table[]{states-8.tsv};  
+\addplot [color=mycolor2, dotted, forget plot, line width=1.3pt]
+  table[]{states-9.tsv}; 
+
+\addplot[area legend, dotted, draw=black, fill=gray, fill opacity=0.15, forget plot]
+  table[] {states-22.tsv}--cycle;  
+\addplot[area legend, dotted, draw=black, fill=gray, fill opacity=0.15, forget plot]
+  table[] {states-23.tsv}--cycle;
+\end{axis}
+
+\end{tikzpicture}

@@ -1,0 +1,49 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{RGB}{27,158,119}%
+\definecolor{mycolor2}{RGB}{233,95,2}%
+\definecolor{mycolor3}{RGB}{117,111,179}%
+\definecolor{mycolor4}{rgb}{0.50000,1.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=30mm,
+at={(0mm, 0mm)},
+scale only axis,
+xmin=0,
+xmax=250,
+xlabel style={font=\color{white!15!black}, yshift=1mm},
+xlabel={Time [s]},
+xtick={0,50,100,150,200,250},
+y dir=reverse,
+ymin=0,
+ymax=60,
+ylabel style={font=\color{white!15!black}, yshift=-1mm},
+ylabel={$z$-coordinate [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.5mm},
+title={Depth},
+legend style={at={(0.03,0.95)}, anchor=north west, legend cell align=left, align=left, draw=white!15!black, font=\small}
+]
+\addplot [color=mycolor1, line width=1pt]
+    table[]{simout-4.tsv};
+\addlegendentry{Smallest depth}
+
+\addplot [color=mycolor2, line width=1pt]
+    table[]{simout-5.tsv};
+\addlegendentry{Largest depth}
+
+\addplot [color=black, dashed, line width=1.2pt]
+    table[]{simout-6.tsv};
+\addlegendentry{Depth limits}
+
+\addplot [color=black, dashed, forget plot, line width=1.2pt]
+    table[]{simout-7.tsv};
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,47 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.7\textwidth,
+height=20mm,
+scale only axis,
+xmin=0,
+xmax=400,
+xlabel style={font=\color{white!15!black}, yshift=1.7mm},
+xlabel={Time [s]},
+ymin=1e-7,
+ymax=1,
+ymode=log,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={$|\tilde{s}_i|$ [m]},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids,
+title style={font=\bfseries, yshift=-2mm},
+title={Path parameter error},
+]
+
+\addplot[area legend, dashed, draw=mycolor1, fill=mycolor1, fill opacity=0.15, forget plot]
+table[] {comparison_parameter-1.tsv}--cycle;
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{comparison_parameter-2.tsv};
+%\addlegendentry{NSB}
+
+\addplot[area legend, dashed, draw=mycolor2, fill=mycolor2, fill opacity=0.15, forget plot]
+table[] {comparison_parameter-3.tsv}--cycle;
+\addplot [color=mycolor2, line width=0.8pt]
+  table[]{comparison_parameter-4.tsv};
+%\addlegendentry{CPF}
+\end{axis}
+
+\end{tikzpicture}%

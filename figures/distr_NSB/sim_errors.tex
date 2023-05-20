@@ -1,0 +1,132 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+%
+\begin{tikzpicture}
+
+\def\figurewidth{0.8\textwidth}
+\def\figureheight{17mm}
+\def\figurespacing{22.5mm}
+\def\doublespacing{45mm}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0,\doublespacing)},
+scale only axis,
+xmin=0,
+xmax=150,
+%xlabel style={font=\color{white!15!black}, yshift=1.7mm},
+%xlabel={Time [s]},
+ymin=-10,
+ymax=10.4404956717458,
+xmajorgrids,
+ymajorgrids,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={$x$ [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.2mm},
+title={Formation path-following errors}
+]
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {sim_errors-6.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{sim_errors-2.tsv};
+
+\addplot [color=mycolor2, line width=0.8pt]
+  table[]{sim_errors-3.tsv};
+
+\addplot [color=mycolor3, line width=0.8pt]
+  table[]{sim_errors-4.tsv};
+
+\addplot [color=mycolor4, line width=0.8pt]
+  table[]{sim_errors-5.tsv};
+
+\addplot [color=black, line width=0.8pt]
+  table[]{sim_errors-1.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0,\figurespacing)},
+scale only axis,
+xmin=0,
+xmax=150,
+%xlabel style={font=\color{white!15!black}, yshift=1.7mm},
+%xlabel={Time [s]},
+ymin=-20,
+ymax=20,
+xmajorgrids,
+ymajorgrids,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={$y$ [m]},
+axis background/.style={fill=white}
+]
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {sim_errors-12.tsv}--cycle;
+
+\addplot [color=mycolor1, forget plot, line width=0.8pt]
+  table[]{sim_errors-8.tsv};
+\addplot [color=mycolor2, forget plot, line width=0.8pt]
+  table[]{sim_errors-9.tsv};
+\addplot [color=mycolor3, forget plot, line width=0.8pt]
+  table[]{sim_errors-10.tsv};
+\addplot [color=mycolor4, forget plot, line width=0.8pt]
+  table[]{sim_errors-11.tsv};
+\addplot [color=black, forget plot, line width=0.8pt]
+  table[]{sim_errors-7.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0,0)},
+scale only axis,
+xmin=0,
+xmax=150,
+xlabel style={font=\color{white!15!black}, yshift=1.7mm},
+xlabel={Time [s]},
+ymin=-10,
+ymax=10.2686962545494,
+xmajorgrids,
+ymajorgrids,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={$z$ [m]},
+axis background/.style={fill=white},
+legend style={/tikz/column 2/.style={column sep=5pt,}, font=\small, at={(0.98,1.5)}, anchor=north east},
+legend columns=2
+]
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {sim_errors-18.tsv}--cycle;
+
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{sim_errors-14.tsv};
+\addlegendentry{$\widetilde{\bs{\sigma}}_1$}
+
+\addplot [color=mycolor2, line width=0.8pt]
+  table[]{sim_errors-15.tsv};
+\addlegendentry{$\widetilde{\bs{\sigma}}_2$}
+
+\addplot [color=mycolor3, line width=0.8pt]
+  table[]{sim_errors-16.tsv};
+\addlegendentry{$\widetilde{\bs{\sigma}}_3$}
+
+\addplot [color=mycolor4, line width=0.8pt]
+  table[]{sim_errors-17.tsv};
+\addlegendentry{$\widetilde{\bs{\sigma}}_4$}
+
+\addplot [color=black, line width=0.8pt]
+  table[]{sim_errors-13.tsv};
+\addlegendentry{$\mat{p}_b^p$}
+\end{axis}
+
+\end{tikzpicture}%

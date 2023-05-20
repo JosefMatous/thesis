@@ -1,0 +1,53 @@
+\begin{figure}[t]
+    \begin{minipage}{0.48\textwidth}
+        \begin{subfigure}{\textwidth}
+            \input{figures/distr_NSB/sim_errors.tex}
+            \vspace{-7mm}
+            \caption{The path-following and formation-keeping errors. The green area represents the time when obstacle avoidance is active.}
+            \label{fig:distr_NSB_sim_errors}
+        \end{subfigure}
+
+        \begin{subfigure}{\textwidth}
+            \input{figures/distr_NSB/sim_distance.tex}
+            \vspace{-7mm}
+            \caption{The horizontal distance between the AUVs and the obstacle.}
+            \label{fig:distr_NSB_sim_distance}
+        \end{subfigure}
+        \vspace{-7mm}
+    \end{minipage}
+    \hspace{\fill}
+    \begin{minipage}{0.48\textwidth}
+        \begin{subfigure}{\textwidth}
+            \input{figures/distr_NSB/sim_barycenter.tex}
+            \vspace{-7mm}
+            \caption{The norm of barycenter estimate errors, plotted in a logarithmic scale.}
+            \label{fig:distr_NSB_sim_barycenter}
+        \end{subfigure}
+    
+        \begin{subfigure}{\textwidth}
+            \input{figures/distr_NSB/sim_parameter.tex}
+            \vspace{-7mm}
+            \caption{The absolute value of path parameter errors, plotted in a logarithmic scale}
+            \label{fig:distr_NSB_sim_parameter}
+        \end{subfigure}
+
+        \begin{subfigure}{\textwidth}
+            \input{figures/distr_NSB/sim_radius.tex}
+            \vspace{-7mm}
+            \caption{The difference between the estimated and true formation radius, plotted in a logarithmic scale.}
+            \label{fig:distr_NSB_sim_radius}
+        \end{subfigure}
+        \vspace{-7mm}
+    \end{minipage}
+
+    \caption{Results of numerical simulations.}
+    \label{fig:distr_NSB_simulation}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/distr_NSB/sim_trajectory.pdf}
+    \vspace{-4mm}
+    \caption{The 3D trajectory of the AUVs. The markers represent the AUVs at times $t = 0, 40, \ldots, 240$ seconds. The dotted lines represent the communications graph.}
+    \label{fig:distr_NSB_sim_trajectory}
+\end{figure}

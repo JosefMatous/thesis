@@ -1,0 +1,71 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=15mm,
+scale only axis,
+at={(0,20mm)},
+xmin=0,
+xmax=450,
+%xlabel style={font=\color{white!15!black},yshift=1.5mm},
+%xlabel={Time [s]},
+ymin=-1,
+ymax=2,
+ylabel style={font=\color{white!15!black},yshift=-1.5mm},
+ylabel={$x$ [m]},
+xmajorgrids,
+ymajorgrids,
+axis background/.style={fill=white},
+title style={font=\bfseries,yshift=-2.5mm},
+title={Barycenter estimate errors},
+legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small, at={(0.98,0.01)}, anchor=south east},
+]
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{experiment_obstacle_barycenter-1.tsv};
+%\addlegendentry{AUV 1}
+
+\addplot [color=mycolor2, line width=1pt, dashed]
+  table[]{experiment_obstacle_barycenter-2.tsv};
+%\addlegendentry{AUV 2}
+
+\end{axis}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=15mm,
+scale only axis,
+at={(0,0)},
+xmin=0,
+xmax=450,
+xlabel style={font=\color{white!15!black},yshift=1.5mm},
+xlabel={Time [s]},
+ymin=-4,
+ymax=1,
+ylabel style={font=\color{white!15!black},yshift=-1.5mm},
+ylabel={$y$ [m]},
+xmajorgrids,
+ymajorgrids,
+axis background/.style={fill=white},
+legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small, at={(0.98,0.02)}, anchor=south east},
+legend columns=2
+]
+\addplot [color=mycolor1, line width=0.8pt]
+  table[]{experiment_obstacle_barycenter-3.tsv};
+\addlegendentry{AUV 1}
+
+\addplot [color=mycolor2, line width=1pt, dashed]
+  table[]{experiment_obstacle_barycenter-4.tsv};
+\addlegendentry{AUV 2}
+
+\end{axis}
+
+\end{tikzpicture}%
