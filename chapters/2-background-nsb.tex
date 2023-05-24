@@ -1,0 +1,69 @@
+\section{Null Space Behavioral Control}
+\label{sec:background_NSB}
+
+This section describes the \gls{nsb} algorithm.
+The \gls{nsb} algorithm is a method that allows us to combine several tasks in a hierarchic manner.
+The algorithm was originally developed for first-order systems
+\begin{equation}
+    \dot{\mat{p}} = \mat{v},
+\end{equation}
+where $\mat{p} \in \mathbb{R}^N$ are the generalized coordinates, and $\mat{v} \in \mathbb{R}^N$ are the control inputs.
+
+In \gls{nsb} algorithms, the desired behavior of the system is divided into several tasks.
+Let there be $m$ tasks, arranged by priority in a descending order (\emph{i.e.,} task 1 has the highest priority, task $m$ has the lowest priority).
+Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_m$ denote the so-called \emph{task variables}.
+Each variable is a function of the system coordinates, \emph{i.e.,}
+\begin{align}
+    \bs{\sigma}_i &= f_i(\mat{p}), &
+    f_i &: \mathbb{R}^N \mapsto \mathbb{R}^{n_i},
+\end{align}
+where $n_i \leq N$ is the dimensionality of task $i$.
+Applying the chain rule, the time-derivative of $\bs{\sigma}_i$ is
+\begin{equation}
+    \dot{\bs{\sigma}}_i = \frac{\partial f_i(\mat{p})}{\partial \mat{p}} \mat{v} \triangleq \mat{J}_i(\mat{p}) \mat{v}.
+\end{equation}
+Let $\dot{\bs{\sigma}}_i^{*}$ be the desired closed-loop behavior of the task variable\footnote{
+In many applications, the task variable should track some pre-defined desired value, $\bs{\sigma}_{d, i}$.
+In such cases, we typically choose the following desired closed-loop behavior
+$
+    \dot{\bs{\sigma}}_i^{*} = \dot{\bs{\sigma}}_{d, i} - \bs{\Lambda}_i \left(\bs{\sigma}_i - \bs{\sigma}_{d,i}\right),    
+$
+where $\bs{\Lambda}_i$ is a positive definite gain matrix.
+}.
+Then, the smallest input (in terms of Euclidean norm) that guarantees the desired behavior is
+\begin{equation}
+    \mat{v}_i = \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*},
+\end{equation}
+where $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
+
+If the task is \emph{redundant}, \emph{i.e.}, if $n_i < N$, then there exists a subspace of control inputs that do not interfere with the task.
+Let $\mat{v}_{\rm add}$ be an additional input.
+Then, the following control input
+\begin{equation}
+    \mat{v} = \mat{v}_i + \mat{N}_i \mat{v}_{\rm add},
+\end{equation}
+where $\mat{N}_i = \mat{I} - \mat{J}_i^{\dagger}\mat{J}_i$ is the null space projector of $\mat{J}_i$, guarantees the desired behavior of the task.
+The additional control input is satisfied only if it does not interfere with the task.
+
+In the \gls{nsb} algorithm, the control inputs from the individual tasks are composed by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
+In the literature, there exist two variants of the algorithm.
+The first variant calculates the control input $\mat{v}$ using the following recursion
+\begin{align}
+    \mat{v} &= \mat{v}_{1}, &
+    \mat{v}_{i} &= \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*} + \mat{N}_i \mat{v}_{i+1}, \, \forall i < N, &
+    \mat{v}_{N} &= \mat{J}_N^{\dagger} \dot{\bs{\sigma}}_N^{*}.
+\end{align}
+The second variant uses the so-called \emph{augmented} Jacobians
+\begin{align}
+    \Bar{\mat{J}}_i &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_i\T}.
+\end{align}
+Let $\Bar{\mat{N}}_i$ denote the null space projector of $\Bar{\mat{J}}_i$.
+Then, the control input $\mat{v}$ is given by
+\begin{equation}
+    \mat{v} = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \sum_{i=2}^N \Bar{\mat{N}}_{i-1} \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*}.
+\end{equation}
+The advantages and disadvantages of both approaches are discussed in \cite{antonelli_stability_2008}.
+In the thesis, we will mostly use the first variant.
+
+\subsection{\gls{nsb} algorithm for the formation path followin problem}
+
