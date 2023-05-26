@@ -16,7 +16,7 @@
 \usepackage{amsthm}
 \usepackage{mathtools}
 \usepackage{bm}
-\usepackage{multirow,multicol}
+\usepackage{multirow,multicol,tabularx}
 
 \usepackage{siunitx}
 \usepackage{xfrac}
@@ -64,6 +64,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\diag}{diag}
 \DeclareMathOperator*{\blkdiag}{blkdiag}
+\DeclareMathOperator*{\rank}{rank}
 
 \title{Cooperative Control of Formations of Underwater Vehicles}
 \shorttitle{Cooperative Control of Formations of Underwater Vehicles}
@@ -96,6 +97,8 @@
 
 \printglossary[type=\acronymtype] % Print acronyms
 %\printglossary                    % Print glossary
+%\printunsrtglossary[type=symbols,style=long]
+\input{symbols.tex}
 
 \input{chapters/1-introduction}
 \input{chapters/2-background.tex}

@@ -1,4 +1,4 @@
-\section{Null Space Behavioral Control}
+\section{Null Space Behavioral Algorithm}
 \label{sec:background_NSB}
 
 This section describes the \gls{nsb} algorithm.
@@ -33,6 +33,7 @@ where $\bs{\Lambda}_i$ is a positive definite gain matrix.
 Then, the smallest input (in terms of Euclidean norm) that guarantees the desired behavior is
 \begin{equation}
     \mat{v}_i = \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*},
+    \label{eq:background_NSB_velocity_i}
 \end{equation}
 where $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
 
@@ -42,17 +43,17 @@ Then, the following control input
 \begin{equation}
     \mat{v} = \mat{v}_i + \mat{N}_i \mat{v}_{\rm add},
 \end{equation}
-where $\mat{N}_i = \mat{I} - \mat{J}_i^{\dagger}\mat{J}_i$ is the null space projector of $\mat{J}_i$, guarantees the desired behavior of the task.
+where $\mat{N}_i = \mat{I}_{N} - \mat{J}_i^{\dagger}\mat{J}_i$ is the null space projector of $\mat{J}_i$, guarantees the desired behavior of the task.
 The additional control input is satisfied only if it does not interfere with the task.
 
 In the \gls{nsb} algorithm, the control inputs from the individual tasks are composed by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
 In the literature, there exist two variants of the algorithm.
-The first variant calculates the control input $\mat{v}$ using the following recursion
+The first variant calculates the control input $\mat{v}$ using the following equation
 \begin{align}
-    \mat{v} &= \mat{v}_{1}, &
-    \mat{v}_{i} &= \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*} + \mat{N}_i \mat{v}_{i+1}, \, \forall i < N, &
-    \mat{v}_{N} &= \mat{J}_N^{\dagger} \dot{\bs{\sigma}}_N^{*}.
+    \mat{v} &= \mat{v}_{1} + \mat{N}_1 \biggl(\mat{v}_{2} + \mat{N}_2\Bigl(\mat{v}_3 \cdots + \mat{N}_{m-2}\bigl(\mat{v}_{m-1} + \mat{N}_{m-1}\mat{v}_m\bigr)\Bigr)\biggr),
 \end{align}
+with $\mat{v}_i$ given by \eqref{eq:background_NSB_velocity_i}.
+
 The second variant uses the so-called \emph{augmented} Jacobians
 \begin{align}
     \Bar{\mat{J}}_i &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_i\T}.
@@ -60,10 +61,95 @@ The second variant uses the so-called \emph{augmented} Jacobians
 Let $\Bar{\mat{N}}_i$ denote the null space projector of $\Bar{\mat{J}}_i$.
 Then, the control input $\mat{v}$ is given by
 \begin{equation}
-    \mat{v} = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \sum_{i=2}^N \Bar{\mat{N}}_{i-1} \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*}.
+    \mat{v} = \mat{v}_1 + \sum_{i=2}^m \Bar{\mat{N}}_{i-1} \mat{v}_i.
 \end{equation}
 The advantages and disadvantages of both approaches are discussed in \cite{antonelli_stability_2008}.
 In the thesis, we will mostly use the first variant.
 
-\subsection{\gls{nsb} algorithm for the formation path followin problem}
+\subsection{Independence and orthogonality}
+The concepts of independence and orthogonality are important when analyzing the interactions between the tasks.
+Specifically, these concepts determine whether the tasks can be executed simultaneously, and how the null space projector affects the lower-priority tasks.
+
+Two tasks are \emph{independent} if the pseudoinverses of their Jacobians are linearly independent.
+Let $\mat{J}_i$ and $\mat{J}_j$ denote the Jacobians of task $i$ and $j$, respectively.
+These tasks are independent if
+\begin{equation}
+    {\rank} \left(\mat{J}_i^{\dagger}\right) + {\rank} \left(\mat{J}_j^{\dagger}\right) = {\rm rank} \left(\left[ \mat{J}_i^{\dagger},\, \mat{J}_j^{\dagger} \right]\right),
+    \label{eq:background_independence_pseudo}
+\end{equation}
+Antonelli \emph{et al.} \cite{antonelli_stability_2008} remark that the pseudoinverse and the transpose of the task Jacobian share the same span.
+Consequently, the condition in \eqref{eq:background_independence_pseudo} is equivalent to
+\begin{equation}
+    {\rank} \left(\mat{J}_i\T\right) + {\rank} \left(\mat{J}_j\T\right) = {\rm rank} \left(\left[ \mat{J}_i\T,\, \mat{J}_j\T \right]\right).
+    \label{eq:background_independence}
+\end{equation}
+
+Two tasks are \emph{orthogonal} if the subspaces spanned by these tasks are orthogonal, \emph{i.e.,} if
+\begin{equation}
+    \mat{J}_i \, \mat{J}_j^{\dagger} = \mat{O}_{n_i \times n_j},
+\end{equation}
+where $\mat{O}_{n_i \times n_j}$ is an $n_i$-by-$n_j$ null matrix.
+
+Now, let us consider two consecutive tasks that are independent and orthogonal. 
+Without loss of generality, let us denote these tasks $1$ and $2$.
+The control input produced by combining these two tasks is
+\begin{equation}
+    \mat{v} = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \mat{N}_1 \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}
+    = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right) \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}
+    = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}.
+\end{equation}
+
+We have thus shown that if two consecutive tasks are independent and orthogonal, they can be executed simultaneously.
+Moreover, the null-space projector does not affect the lower-priority task.
+
+\subsection{\gls{nsb} algorithm for the formation path-following problem}
+In the remainder of the section, we demonstrate how the \gls{nsb} algorithm can be used to solve the formation path-following problem.
+
+Let $\mat{p}\T = \left[\mat{p}_1\T, \ldots, \mat{p}_n\T\right]$ be the concatenated position vector of $n$ vehicles.
+To solve the problem, we define two tasks: formation-keeping and path-following.
+The formation-keeping task has the highest priority.
+The task variable, $\bs{\sigma}_1$, is given by
+\begin{align}
+    \bs{\sigma}_1 &= \inlinevector{\bs{\sigma}_{1, 1}\T, \bs{\sigma}_{1, 2}\T, \ldots, \bs{\sigma}_{1, n-1}\T}, &
+    \bs{\sigma}_{1, i} &= \mat{p}_i - \mat{p}_b,
+    \label{eq:background_formation_variable}
+\end{align}
+where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter of the formation (see Section~\ref{sec:background_formation_path_following}).
+
+\begin{rmk}
+    The formation-keeping task contains the relative positions of the first $n-1$ vehicles.
+    The relative position of the last vehicle is omitted, because it can be expressed as a linear combination of the remaining relative positions.
+    Indeed, from \eqref{eq:background_formation_variable}, we get
+    \begin{equation}
+        \bs{\sigma}_{1, n} = \mat{p}_n - \mat{p}_b = - \sum_{i=1}^{n-1} \bs{\sigma}_{1, i}.
+    \end{equation}
+    By omitting the last relative position vector, the task Jacobian is full column rank.
+    Indeed, the Jacobian of the formation-keeping task is
+    \begin{equation}
+        \begin{split}
+            \mat{J}_1 &= 
+            \begin{bmatrix}
+                \frac{N-1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 & \cdots & -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 \\[3pt]
+                -\frac{1}{N} \mat{I}_3 & \frac{N-1}{N} \mat{I}_3 & & -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 \\ 
+                \vdots & & \ddots & & \vdots \\
+                -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 & \cdots & \frac{N-1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3
+            \end{bmatrix} \\[6pt]
+            &= \left[\mat{I}_{3(n-1)},\, \mat{O}_{3(n-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(n-1) \times n} \otimes \mat{I}_3.
+        \end{split}
+    \end{equation}
+    One can verify that the rank of $\mat{J}_1$ is $3(n-1)$, and the Jacobian is thus full column rank.
+\end{rmk}
+
+The desired value of the formation-keeping task variable is
+\begin{align}
+    \bs{\sigma}_{d, 1} &= \inlinevector{\mat{p}_{f, 1}\T, \mat{p}_{f, 2}\T, \ldots, \mat{p}_{f, n-1}\T},
+\end{align}
+where $\mat{p}_{f, i}$ is the desired position of vehicle $i$ within the formation (see Section~\ref{sec:background_formation_path_following}).
+
+The formation-keeping control input $\mat{v}_1$ is then given by
+\begin{equation}
+    \mat{v}_1 = \mat{J}_1^{\dagger} \left(\dot{\bs{\sigma}}_{d, 1} - \bs{\Lambda}_1 (\bs{\sigma}_1 - \bs{\sigma}_{d, 1})\right),
+\end{equation}
+where $\bs{\Lambda}_1$ is a positive definite gain matrix.
+
 

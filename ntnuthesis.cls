@@ -187,6 +187,7 @@
     \RequirePackage[noabbrev]{cleveref}
 \fi
 \RequirePackage[acronym,nonumberlist]{glossaries}        % create a glossary and acronym list
+%\RequirePackage[symbols,acronym,nonumberlist]{glossaries-extra}
 
 %% CUSTOMISATION
 
