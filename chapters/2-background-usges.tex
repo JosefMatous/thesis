@@ -1,0 +1,27 @@
+\section{Uniform Semiglobal Exponential Stability}
+\label{sec:background_USGES}
+
+This section discusses the concept of \gls{usges}.
+In some cases, dynamical systems cannot attain global stability due to high-order nonlinearities, the choice of the control law, or actuator saturations.
+An example of such a system is marine vehicle controlled by \acrlong{los} guidance laws.
+In \cite{fossen_uniform_2014}, it has been shown that the structure of proportional \gls{los} guidance laws prevents the system from having global exponential convergence.
+
+\Acrlong{usges} has been studied, \emph{e.g.,} in \cite{loria_cascaded_2005,pettersen_lyapunov_2017}.
+In these works, \gls{usges} is defined as follows.
+
+\begin{dfn}
+    Consider a nonlinear system given by the following set of \glspl{ode}
+    \begin{align}
+        \dot{\mat{x}} &= f(\mat{x}, t), &
+        \mat{x}(0) &= \mat{x}_0,
+        \label{eq:background_USGES_ODE}
+    \end{align}
+    with the origin $\mat{x} = \mat{0}$ being the equilibrium point of the system.
+
+    Let $\mat{x}(t | \mat{x}_0)$ be a solution to \eqref{eq:background_USGES_ODE} that is defined for all $t \geq 0$.
+    The origin $\mat{x} = \mat{0}$ is a \glspl{usges} equilibrium point of \eqref{eq:background_USGES_ODE} is for all $\Delta > 0$ there exist positive constants $k_{\Delta}$ and $\lambda_{\Delta}$ such that $\forall \mat{x}_0 \in \mathfrak{B}_{\Delta}^n$
+    \begin{align}
+        &\norm{\mat{x}(t | \mat{x}_0)} \leq k_{\Delta} \norm{\mat{x}_0} {\rm e}^{-\lambda_{\Delta}t},&
+        &\forall t \geq 0.
+    \end{align}
+\end{dfn}

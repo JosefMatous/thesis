@@ -123,11 +123,11 @@ where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter o
     \begin{equation}
         \bs{\sigma}_{1, n} = \mat{p}_n - \mat{p}_b = - \sum_{i=1}^{n-1} \bs{\sigma}_{1, i}.
     \end{equation}
-    By omitting the last relative position vector, the task Jacobian is full column rank.
+    By omitting the last relative position vector, the task Jacobian is full row rank.
     Indeed, the Jacobian of the formation-keeping task is
     \begin{equation}
         \begin{split}
-            \mat{J}_1 &= 
+            \mat{J}_1 = \frac{\partial \bs{\sigma}_1}{\partial \mat{p}} &= 
             \begin{bmatrix}
                 \frac{N-1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 & \cdots & -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 \\[3pt]
                 -\frac{1}{N} \mat{I}_3 & \frac{N-1}{N} \mat{I}_3 & & -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 \\ 
@@ -137,7 +137,7 @@ where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter o
             &= \left[\mat{I}_{3(n-1)},\, \mat{O}_{3(n-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(n-1) \times n} \otimes \mat{I}_3.
         \end{split}
     \end{equation}
-    One can verify that the rank of $\mat{J}_1$ is $3(n-1)$, and the Jacobian is thus full column rank.
+    One can verify that the rank of $\mat{J}_1$ is $3(n-1)$, and the Jacobian is thus full row rank.
 \end{rmk}
 
 The desired value of the formation-keeping task variable is
@@ -152,4 +152,83 @@ The formation-keeping control input $\mat{v}_1$ is then given by
 \end{equation}
 where $\bs{\Lambda}_1$ is a positive definite gain matrix.
 
+For the path-following task, the task variable is given by the position of the barycenter \emph{i.e.,}
+\begin{equation}
+    \bs{\sigma}_2 = \mat{p}_b = \frac{1}{N} \sum_{i=1}^{N} \mat{p}_i.
+\end{equation}
 
+\begin{rmk}
+    The formation-keeping and path-following tasks are independent and orthogonal.
+
+    Indeed, the Jacobian of the path-following task is
+    \begin{equation}
+        \mat{J}_2 = \frac{\partial \bs{\sigma}_2}{\partial \mat{p}} = \frac{1}{N} \mat{1}_{1 \times N} \otimes \mat{I}_3.
+    \end{equation}
+    One can then verify that
+    \begin{equation}
+        \rank \left(\left[\mat{J}_1\T,\, \mat{J}_2\T\right]\right) = 3N = \rank \left(\mat{J}_1\T\right) + \rank \left(\mat{J}_2\T\right),
+    \end{equation}
+    and the tasks are thus independent.
+
+    The pseudoinverse of $\mat{J}_2$ is
+    \begin{equation}
+        \mat{J}_2^{\dagger} = \mat{1}_{N \times 1} \otimes \mat{I}_3.
+    \end{equation}
+    One can then verify that
+    \begin{equation}
+        \mat{J}_1 \mat{J}_2^{\dagger} = \mat{O}_{3(N-1) \times 3},
+    \end{equation}
+    and the tasks are thus orthogonal.
+\end{rmk}
+
+The desired value of the path-following task is given by the desired path, \emph{i.e.,}
+\begin{equation}
+    \bs{\sigma}_{d, 2} = \mat{p}_p(s),
+\end{equation}
+where $s$ is the value of the path parameter.
+
+We propose to solve the path-following problem using \acrlong{los} guidance.
+The desired behavior of the path-following task is thus given by
+\begin{equation}
+    \bs{\sigma}_2^{*} = \mat{V}_{\rm LOS},
+\end{equation}
+where $\mat{V}_{\rm LOS}$ is either the coupled \eqref{eq:background_los_coupled} or decoupled \eqref{eq:background_los_decoupled} \gls{los} guidance law.
+The path-following control input $\mat{v}_2$ is then given by
+\begin{equation}
+    \mat{v}_2 = \mat{J}_2^{\dagger} \bs{\sigma}_2^{*} = \mat{1}_{N \times 1} \otimes \mat{V}_{\rm LOS}.
+\end{equation}
+
+Thanks to the independence and orthogonality of the tasks, the combined control input $\mat{v}$ is given by
+\begin{equation}
+    \mat{v} = \mat{v}_1 + \mat{N}_1 \mat{v}_2 = \mat{v}_1 + \mat{v}_2.
+\end{equation}
+
+Finally, let us investigate the closed-loop behavior of the tasks.
+First, we need to define the error variables.
+The formation-keeping error is defined as
+\begin{equation}
+    \widetilde{\bs{\sigma}}_1 = \bs{\sigma}_1 - \bs{\sigma}_{1, d}.
+    \label{eq:background_sigma_1_tilde}
+\end{equation}
+The path-following error is given by the position of the barycenter in the path-tangential coordinate frame, \emph{i.e.,}
+\begin{equation}
+    \widetilde{\bs{\sigma}}_2 = \mat{p}_b^p = \mat{R}_p(s)\T \left(\mat{p}_b - \mat{p}_p(s)\right).
+    \label{eq:background_sigma_2_tilde}
+\end{equation}
+
+Now, let us analyze the closed-loop behavior of the formation-keeping error.
+Differentiating \eqref{eq:background_sigma_1_tilde} with respect to time, we get
+\begin{equation}
+    \dot{\widetilde{\bs{\sigma}}}_1 = \mat{J}_1 \mat{v} - \dot{\bs{\sigma}}_{1, d} = - \Lambda_1 \widetilde{\bs{\sigma}}_1.
+    \label{eq:background_sigma_1_tilde_dot}
+\end{equation}
+Since $\Lambda_1$ is positive definite by design, the closed-loop system \eqref{eq:background_sigma_1_tilde_dot} is \glspl{ges}.
+
+From \eqref{eq:background_sigma_2_tilde}, the dynamics of the path-following error are given by
+\begin{equation}
+    \begin{split}
+        \dot{\mat{p}}_b^p &= \mat{R}_p(s)\T \left(\mat{J}_2 \mat{v} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{R}_p(s)\T\left(\mat{p}_b - \mat{p}_p(s)\right) \\
+        &= \mat{R}_p(s)\T \left(\mat{V}_{\rm LOS} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{p}_b^p.
+    \end{split}
+\end{equation}
+The stability of the path-following task will be discussed in the next section.
