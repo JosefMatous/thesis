@@ -3,7 +3,7 @@
 
 This section discusses the concept of \gls{usges}.
 In some cases, dynamical systems cannot attain global stability due to high-order nonlinearities, the choice of the control law, or actuator saturations.
-An example of such a system is marine vehicle controlled by \acrlong{los} guidance laws.
+An example of such a system is marine vehicles controlled by \acrlong{los} guidance laws.
 In \cite{fossen_uniform_2014}, it has been shown that the structure of proportional \gls{los} guidance laws prevents the system from having global exponential convergence.
 
 \Acrlong{usges} has been studied, \emph{e.g.,} in \cite{loria_cascaded_2005,pettersen_lyapunov_2017}.
@@ -12,16 +12,81 @@ In these works, \gls{usges} is defined as follows.
 \begin{dfn}
     Consider a nonlinear system given by the following set of \glspl{ode}
     \begin{align}
-        \dot{\mat{x}} &= f(\mat{x}, t), &
+        \dot{\mat{x}} &= f(t, \mat{x}), &
         \mat{x}(0) &= \mat{x}_0,
         \label{eq:background_USGES_ODE}
     \end{align}
     with the origin $\mat{x} = \mat{0}$ being the equilibrium point of the system.
 
     Let $\mat{x}(t | \mat{x}_0)$ be a solution to \eqref{eq:background_USGES_ODE} that is defined for all $t \geq 0$.
-    The origin $\mat{x} = \mat{0}$ is a \glspl{usges} equilibrium point of \eqref{eq:background_USGES_ODE} is for all $\Delta > 0$ there exist positive constants $k_{\Delta}$ and $\lambda_{\Delta}$ such that $\forall \mat{x}_0 \in \mathfrak{B}_{\Delta}^n$
+    The origin $\mat{x} = \mat{0}$ is a \glspl{usges} equilibrium point of \eqref{eq:background_USGES_ODE} is for all $\Delta > 0$ there exist positive constants $k_{\Delta}$ and $\lambda_{\Delta}$ such that $\forall \mat{x}_0 \in \ball{\Delta}$
     \begin{align}
         &\norm{\mat{x}(t | \mat{x}_0)} \leq k_{\Delta} \norm{\mat{x}_0} {\rm e}^{-\lambda_{\Delta}t},&
         &\forall t \geq 0.
     \end{align}
 \end{dfn}
+
+\begin{rmk}
+    The work in \cite{pettersen_lyapunov_2017} studies parametric systems, i.e., systems with \glspl{ode} in the following form
+    \begin{equation}
+        \dot{\mat{x}} = f(\mat{x}, t, \theta),
+    \end{equation}
+    where $\theta \in \Theta \subset \mathbb{R}^m$ is a constant parameter.
+    Howver, since this thesis does not consider parametric systems, and since the parameter $\theta$ is assumed constant, we can omit the parametric dependence for the sake of simplicity.
+\end{rmk}
+
+\subsection{Lyapunov sufficient conditions for uniform semiglobal exponential stability}
+In this section, we restate Theorem 5 and Proposition 9 from \cite{pettersen_lyapunov_2017}.
+
+Theorem 5 introduces sufficient conditions for \acrfull{usges} of nonlinear systems.
+\begin{customthm}{5 \cite{pettersen_lyapunov_2017}}
+    \label{thm:background_USGES}
+    Consider the system given in \eqref{eq:background_USGES_ODE}.
+    If for any $\Delta > 0$, there exist a continuously differentiable Lyapunov function $V_{\Delta} : \mathbb{R}_{\geq 0} \times \ball{\Delta} \mapsto \mathbb{R}_{\geq 0}$ and positive constants $k_{1_\Delta}$, $k_{2_\Delta}$, $k_{3_\Delta}$, and $a$, such that $\forall \mat{x} \in \ball{\Delta}$, $\forall t \geq 0$
+    \begin{subequations}
+        \begin{align}
+            k_{1_\Delta} \norm{\mat{x}}^a \leq V_{\Delta}(t, \mat{x}) &\leq k_{2_\Delta} \norm{\mat{x}}^a, \\
+            \frac{\partial V_{\Delta}}{\partial t} + \frac{\partial V_{\Delta}}{\partial \mat{x}} f(t, \mat{x}) &\leq -k_{3_\Delta} \norm{\mat{x}}^a,
+        \end{align}
+    \end{subequations}
+    then the origin of \eqref{eq:background_USGES_ODE} is \glspl{usges}.
+\end{customthm}
+
+Proposition 9 then introduces sufficient conditions for \acrfull{usges} of nonlinear cascaded systems.
+\begin{customprop}{9 \cite{pettersen_lyapunov_2017}}
+    \label{prop:background_cascade}
+    Consider the following cascaded nonlinear time-varying system
+    \begin{subequations}
+        \begin{align}
+            \dot{\mat{x}}_1 &= f_1(t, \mat{x}_1) + g(t, \mat{x}_1)\mat{x}_2, \\
+            \dot{\mat{x}}_2 &= f_2(t, \mat{x}_2),
+        \end{align}
+        \label{eq:background_USGES_cascade}
+    \end{subequations}
+
+    \noindent where $t \in \mathbb{R}_{\geq 0}$, $\mat{x}_1 \in \mathbb{R}^{n_1}$, $\mat{x}_2 \in \mathbb{R}^{n_2}$.
+    The functions $f_1$, $f_2$, and $g$ are continuous in $t$ and locally Lipschitz in $\mat{x}_1$ and $\mat{x}_2$.
+    Furthermore, $f_1$ is assumed $\mathcal{C}^1$ in $t$ and $\mat{x}_1$, and the origin $\left[\mat{x}_1\T, \mat{x}_2\T\right] = \mat{0}\T$ is an equilibrium point of \eqref{eq:background_USGES_cascade}.
+
+    Let each of the systems
+    \begin{align}
+        \dot{\mat{x}}_1 &= f_1(t, \mat{x}_1), \label{eq:background_nominal} \\
+        \dot{\mat{x}}_2 &= f_2(t, \mat{x}_2), 
+    \end{align}
+    be \glspl{ugas} and satisfy the conditions of Theorem~\ref{thm:background_USGES}.
+
+    Then, the origin of the cascaded system \eqref{eq:background_USGES_cascade} is \glspl{usges} and \glspl{ugas} if the following two assumptions hold
+    \begin{enumerate}
+        \item There exist constants $c_1, c_2, \eta > 0$ and a positive definite, radially unbounded Lyapunov function $V : \mathbb{R}_{\geq 0} \times \mathbb{R}^{n_1}$ of \eqref{eq:background_nominal} such that $\dot{V}(t, \mat{x}_1) \leq 0$ and
+        \begin{subequations}
+            \begin{align}
+                \norm{\frac{\partial V}{\partial \mat{x}_1}} \norm{\mat{x}_1} &\leq c_1 V,& \forall&\norm{\mat{x}_1} \geq \eta, \\
+                \norm{\frac{\partial V}{\partial \mat{x}_1}} &\leq c_2,& \forall&\norm{\mat{x}_1} \leq \eta.
+            \end{align}
+        \end{subequations}
+        \item There exist two continuous functions $\alpha_1, \alpha_2: \mathbb{R}_{\geq 0} \mapsto \mathbb{R}_{\geq 0}$ such that
+        \begin{equation}
+            \norm{g(t, \mat{x}_1, \mat{x}_2)} \leq \alpha_1 \left(\norm{\mat{x}_2}\right) + \alpha_2 \left(\norm{\mat{x}_2}\right) \norm{\mat{x}_1}.
+        \end{equation}
+    \end{enumerate}
+\end{customprop}

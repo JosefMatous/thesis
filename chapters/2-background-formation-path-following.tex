@@ -3,7 +3,7 @@
 
 This section formally defines the formation path following problem.
 Throughout the section, we consider a fleet of $N$ vehicles.
-Let $\mat{p}_1, \ldots \mat{p}_N$ denote the positions of the vehicles.
+Let $\mat{p}_1, \ldots, \mat{p}_N$ denote the positions of the vehicles.
 
 \subsection{The path-following problem}
 To formulate the path-following problem, we first need to define the \emph{barycenter} of the fleet.
@@ -35,10 +35,10 @@ The components $y_b^p$ and $z_b^p$ are referred to as the \emph{cross-track erro
 \subsubsection{Path-following versus trajectory-tracking}
 In the remainder of this section, we discuss the difference between the trajectory-tracking and the path-following problem.
 
-The goal of trajectory-tracking is to control the vehicles such that the barycenter follows a given trajectory $\mat{p}_d(t)$.
+The goal of trajectory tracking is to control the vehicles such that the barycenter follows a given trajectory $\mat{p}_d(t)$.
 Note that the desired trajectory is a function of time.
-Consequently, in trajectory-tracking, the desired position of the barycenter for a given time $t$ is fixed.
-In path-following, the desired position of the barycenter depends on the path parameter $s$.
+Consequently, in trajectory tracking, the desired position of the barycenter for a given time $t$ is fixed.
+In path following, the desired position of the barycenter depends on the path parameter $s$.
 The path parameter can be treated as an additional degree of freedom when designing the path-following controller.
 
 \subsection{The formation-keeping problem}

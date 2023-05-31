@@ -41,5 +41,6 @@
             "env": {}
         }
     ],
-    "latex-workshop.latex.recipe.default": "thesis"
+    "latex-workshop.latex.recipe.default": "thesis",
+    "latex-workshop.latex.autoBuild.run": "onSave"
 }

@@ -54,7 +54,6 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{path.pdf}}%
-    \put(0.55709105,0.10506653){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y^p$\end{tabular}}}}%
     \put(0.05156164,0.35080372){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$\end{tabular}}}}%
     \put(0.65406158,0.44443485){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x^p$\end{tabular}}}}%
     \put(0.20532016,0.18220528){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y$\end{tabular}}}}%
@@ -64,5 +63,6 @@
     \put(0.64013468,0.35028437){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\theta_p(s)$\end{tabular}}}}%
     \put(0.47263327,0.36976785){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\psi_p(s)$\end{tabular}}}}%
     \put(0.17100639,0.28607592){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_p(s) \equiv \mat{O}^p$\end{tabular}}}}%
+    \put(0.55709106,0.10506653){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y^p$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

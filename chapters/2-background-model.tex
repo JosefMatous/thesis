@@ -12,10 +12,11 @@ However, due to their complexity, these models are not suitable for designing or
 On the other end of the spectrum, there are control-oriented models.
 Compared to high-fidelity models, the structure of control-oriented models is simpler.
 This simplicity means that we can use these models to design control algorithms and analyze their closed-loop properties.
+The control-oriented models are thus designed to capture the system properties that are the most significant and relevant for the design of the control system.
 The inaccuracies of control-oriented models can be compensated by designing robust controllers.
 
-This section presents control-oriented models of \glspl{asv} and \glspl{auv}.
-The presented models are similar to those in \cite{borhaug_straight_2007} and \cite{fredriksen_global_2006}.
+This section presents control-oriented models of \acrfullpl{asv} and \acrfullpl{auv}.
+The presented models are similar to those used in \cite{borhaug_straight_2007} and \cite{fredriksen_global_2006}.
 The models are based on the matrix-vector models of marine vehicles \cite{fossen_handbook_2011} and some simplifying assumtpions.
 
 \subsection{State variables and degrees of freedom}
@@ -60,9 +61,9 @@ The \emph{angular velocities} of the vehicle $\bs{\omega} = \inlinevector{p, q, 
 The full velocity vector is then given by $\bs{\nu}\T = \left[\mat{v}\T, \bs{\omega}\T\right]$.
 
 Finally, let us discuss simplified 3\gls{dof} and 5\gls{dof} models.
-In the case of \glspl{asv} or \glspl{auv} moving in the horizontal plane, we often assume that the roll and pitch angles are zero, and the depth is constant.
+In the case of \glspl{asv} or \glspl{auv} moving in the horizontal plane, we often assume that the roll and pitch angles are zero, and that the depth is constant.
 Consequently, we can disregard the roll, pitch, and heave motion of the vehicle, and derive a simplified 3\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, \psi}$ and $\bs{\nu} = \inlinevector{u, v, r}$.
-In the case slender, torpedo shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
+In the case of slender, torpedo shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
 Consequently, we can disregard the roll motion and derive a simplified 5\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, z, \theta, \psi}$ and $\bs{\nu} = \inlinevector{u, v, w, q, r}$.
 
 \subsection{Kinematics}
@@ -72,7 +73,7 @@ The time-derivative of the position is
     \dot{\mat{p}} = \mat{R} \mat{v}.
     \label{eq:background_p_dot_6DOF}
 \end{equation}
-The time-derivative of Euler angles is given by \cite{fossen_handbook_2011}
+The time-derivative of the Euler angles is given by \cite{fossen_handbook_2011}
 \begin{align}
     \dot{\bs{\Theta}} &= \mat{T}(\bs{\Theta}) \bs{\omega}, &
     \mat{T}(\bs{\Theta}) &= 
@@ -92,7 +93,7 @@ The time-derivative of a rotation matrix is given by
     \end{bmatrix}.
 \end{align}
 
-To derive the kinematics of the 5\gls{dof} model, we simply substitute $\phi = 0$ and $p = 0$ into \eqref{eq:background_p_dot_6DOF} and \eqref{eq:background_theta_dot_6DOF}
+To derive the kinematics of the 5\gls{dof} model, we simply substitute $\phi = 0$ and $p = 0$ into \eqref{eq:background_p_dot_6DOF} and \eqref{eq:background_theta_dot_6DOF}, and get
 \begin{subequations}
     \begin{align}
         \dot{\mat{p}} &= \mat{R}(0, \theta, \psi) \mat{v}, \\
@@ -115,7 +116,7 @@ Similarly, we can derive the kinematics of the 3\gls{dof} model by substituting 
 \subsection{Dynamics}
 When modeling the dynamics of marine vehicles, we often need to consider the effect of \emph{sea loads} such as waves, wind, and ocean currents.
 Let $\mat{V}_c \in \mathbb{R}^3$ be a vector that represents the velocity of the ocean current in the inertial coordinate frame.
-Since the dynamics of ocean currents are typically much slower than the dynamics of the vehicle, the ocean current can be considered constant.
+Since the dynamics of ocean currents are typically much slower than the dynamics of the vehicle, the ocean current can be considered constant and irrotational.
 Let $\mat{v}_c = \mat{R}\T \mat{V}_c$ denote the velocity of the ocean current expressed in the vehicle's body-fixed frame.
 Furthermore, let $\mat{v}_r = \mat{v} - \mat{v}_c \triangleq \inlinevector{u_r, v_r, w_r}$ denote the relative surge, sway, and heave velocity of the vehicle, and let $\bs{\nu}_r\T = \left[\mat{v}_r\T, \bs{\omega}\T\right]$ denote the full relative velocity vector.
 The dynamics of the vehicle can then be expressed using the following matrix-vector model \cite{fossen_handbook_2011}
@@ -131,7 +132,7 @@ The model in \eqref{eq:background_nu_dot_relative} can also be expressed in term
 \end{equation}
 where $\bs{\nu}_c\T = \left[\mat{v}_c\T, \mat{0}\T\right]$.
 
-The inertia matrix $\mat{M}$ is symmetric positive definite, the damping matrix $\mat{D}$ is positive definite, and the Coriolis matrix $\mat{C}$ is skew-symmetric.
+The inertia matrix $\mat{M}$ is symmetric positive definite, the damping matrix $\mat{D}$ is positive definite, and the Coriolis matrix $\mat{C}$ parametrized so that it is skew-symmetric.
 There exist multiple expressions for the Coriolis matrix, \emph{e.g.,}
 \begin{equation}
     \label{eq:background_coriolis}
@@ -175,18 +176,18 @@ Under Assumption~\ref{asm:symmetric}, the inertia and damping matrices have the 
 \begin{align}
     \mat{M}\! &= \!\!
     \begin{bmatrix}
-        m_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!m_{22}\! & 0 & 0 & 0 & m_{26}\\ 0 & 0 & \!m_{33}\! & 0 & \!m_{35}\! & 0\\ 0 & 0 & 0 & \!m_{44}\! & 0 & 0\\ 0 & 0 & \!m_{35}\! & 0 & \!m_{55}\! & 0\\ 0 & \!m_{26}\! & 0 & 0 & 0 & m_{66}
+        m_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!m_{22}\!\! & 0 & 0 & 0 & m_{26}\\ 0 & 0 & \!m_{33}\!\! & 0 & \!m_{35}\!\! & 0\\ 0 & 0 & 0 & \!m_{44}\!\! & 0 & 0\\ 0 & 0 & \!m_{35}\!\! & 0 & \!m_{55}\!\! & 0\\ 0 & \!m_{26}\!\! & 0 & 0 & 0 & m_{66}
     \end{bmatrix}\!, &
     \mat{D}\! &= \!\!
     \begin{bmatrix}
-        d_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!d_{22}\! & 0 & 0 & 0 & d_{26}\\ 0 & 0 & \!d_{33}\! & 0 & \!d_{35}\! & 0\\ 0 & 0 & 0 & \!d_{44}\! & 0 & 0\\ 0 & 0 & \!d_{53}\! & 0 & \!d_{55}\! & 0\\ 0 & \!d_{62}\! & 0 & 0 & 0 & d_{66}
+        d_{11}\!\! & 0 & 0 & 0 & 0 & 0\\ 0 & \!d_{22}\!\! & 0 & 0 & 0 & d_{26}\\ 0 & 0 & \!d_{33}\!\! & 0 & \!d_{35}\!\! & 0\\ 0 & 0 & 0 & \!d_{44}\!\! & 0 & 0\\ 0 & 0 & \!d_{53}\!\! & 0 & \!d_{55}\!\! & 0\\ 0 & \!d_{62}\!\! & 0 & 0 & 0 & d_{66}
     \end{bmatrix}\!.
 \end{align}
 
 \begin{asm}
     \label{asm:actuators}
     The vehicle is equipped with a propeller and fins.
-    Consequently, the vehicle is capable of generating force in the surge direction and torque around all three axes.
+    Consequently, the vehicle is capable of generating a force in the surge direction and torques around all three axes.
 \end{asm}
 Under this assumption, the external forces acting on the vehicle are given by
 \begin{align}
@@ -196,15 +197,15 @@ Under this assumption, the external forces acting on the vehicle are given by
         b_{11} & 0 & 0 & 0 \\ 0 & 0 & 0 & b_{24} \\ 0 & 0 & b_{33} & 0 \\ 0 & b_{42} & 0 & 0 \\ 0 & 0 & b_{53} & 0 \\ 0 & 0 & 0 & b_{64}
     \end{bmatrix},
 \end{align}
-where $\mat{f} = \inlinevector{T_u, T_p, T_q, T_r}$ is the control input consisting of surge thrust and the forces produced by the fins.
+where $\mat{f} = \inlinevector{T_u, T_p, T_q, T_r}$ is the control input consisting of the surge thrust and the forces produced by the fins.
 
-If the vehicle model \eqref{eq:background_nu_dot_relative} satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then it can be transformed such that the actuators produce no sway or heave acceleration.
+If the vehicle model \eqref{eq:background_nu_dot_relative} satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:actuators}, then we can perform a change of coordinates such that the actuators produce no sway or heave acceleration.
 In other words, for all inputs $\mat{f}$, there exist $f_u, t_p, t_q, t_r \in \mathbb{R}$ such that
 \begin{equation}
     \mat{M}^{-1}\mat{B}\mat{f} = \inlinevector{f_u, 0, 0, t_p, t_q, t_r}.
     \label{eq:neutral_point_force}
 \end{equation}
-The transformation was demonstrated for 5\gls{dof} vehicles in \cite{borhaug_straight_2007}, and can be trivially extended to 6\glspl{dof}.
+This change of coordinates was demonstrated for 5\gls{dof} vehicles in \cite{borhaug_straight_2007}, and can be trivially extended to 6\glspl{dof}.
 The transformed body-fixed velocities, $\bs{\nu}_r^{\prime}$, are
 \begin{equation}
     \bs{\nu}_r^{\prime} = \inlinevector{u_r, v_r + \varepsilon_1 r, w_r + \varepsilon_2 q, p, q, r},
@@ -231,7 +232,7 @@ If we choose
     \varepsilon_1 &= \frac{b_{24}\,m_{66}-b_{64}\,m_{26}}{b_{24}\,m_{26}-b_{64}\,m_{22}}, &
     \varepsilon_2 &= \frac{b_{33}\,m_{55}-b_{53}\,m_{35}}{b_{33}\,m_{35}-b_{53}\,m_{33}},
 \end{align}
-the effect of actuators on $\bs{\nu}^{\prime}$ is given by
+the effect of the actuators on the dynamics of $\bs{\nu}^{\prime}$ is given by
 \begin{equation}
     {\mat{M}^{\prime}}^{-1}\mat{H}\T\mat{B}\mat{u} =
     \begin{bmatrix}
@@ -253,11 +254,12 @@ We have thus shown that \eqref{eq:neutral_point_force} is satisfied with
     \end{align} 
     \label{eq:tau_upqr}
 \end{subequations}
-Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $t_u, t_p, t_q, t_r$, there exists an input $\mat{f}$ such that \eqref{eq:neutral_point_force} holds.
+
+\noindent Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $t_u, t_p, t_q, t_r$, there exists an input $\mat{f}$ such that \eqref{eq:neutral_point_force} holds.
 Consequently, we can treat $t_u, t_p, t_q, t_r$ as the new inputs to the system.
 
 \begin{rmk}
-    If the vehicle has rotational symmetry around the $x$-axis (\emph{i.e.,} if $m_{22} = m_{33}$, $m_{35} = -m_{26}$, $m_{55} = m_{66}$, $b_{33} = -b_{24}$, and $b_{53} = b_{64}$), then we have $\varepsilon_1 = -\varepsilon_2$, and the transformation \eqref{eq:background_transformation} corresponds to moving the body-fixed coordinate frame by $\varepsilon_1$ along the $x$-axis.
+    If the vehicle has rotational symmetry around the $x$-axis (\emph{i.e.,} if $m_{22} = m_{33}$, $m_{35} = -m_{26}$, $m_{55} = m_{66}$, $b_{33} = -b_{24}$, and $b_{53} = b_{64}$), then we have $\varepsilon_1 = -\varepsilon_2$, and the transformation \eqref{eq:background_transformation} corresponds to moving the body-fixed coordinate frame a distance $\varepsilon_1$ along the body-fixed $x$-axis.
 \end{rmk}
 
 \begin{asm}
@@ -276,10 +278,10 @@ where $z_{gb}$ is the distance between the centers of gravity and buoyancy.
 \subsection{The component form}
 \label{sec:model_component}
 In this section, we express the matrix-vector model \eqref{eq:background_nu_dot_relative} in a \emph{component form} by writing out the equations of motion for the individual state variables.
-The purpose of this model is to gain a better understanding of \gls{auv} dynamics, which allows us to design low-level controllers and analyze their closed-loop behavior.
+The purpose of this model is to gain a better understanding of the \gls{auv} dynamics, which allows us to design low-level controllers and analyze their closed-loop behavior.
 
 Consider an \gls{auv} model that satisfies Assumptions~\ref{asm:symmetric}--\ref{asm:buoyancy}.
-Then, the component form is given by
+Then, the model in the component form is given by
 \begin{subequations}
     \begin{align}
         \dot{u}_r &= F_u(\bs{\nu}_r) + f_u, \\
@@ -291,7 +293,7 @@ Then, the component form is given by
     \end{align}
     \label{eq:background_component_form}
 \end{subequations}
-The equations for $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
+The expressions for $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
 Note that $\dot{u}_r$, $\dot{p}$, $\dot{q}$, and $\dot{r}$ depend on the control inputs.
 Consequently, it is possible to stabilize these states using output feedback linearization.
 The states $v$ and $w$ represent the \emph{underactuated} dynamics of the vehicle, as they cannot be controlled directly.
@@ -314,7 +316,7 @@ From \eqref{eq:background_component_form}, we have
     \label{eq:background_component_form_absolute_1}
 \end{subequations}%
 
-From the equations in Appendix~\ref{app:component_form}, we conclude that all terms in \eqref{eq:background_component_form} that contain the relative velocities are either linear or quadratic.
+From the expressions in Appendix~\ref{app:component_form}, we conclude that all terms in \eqref{eq:background_component_form} that contain the relative velocities are either linear or quadratic.
 Since the relative velocities are affine in the ocean current ($\mat{v}_r = \mat{v} - \mat{R}\T\mat{V}_c$), we can conclude that all terms in \eqref{eq:background_component_form_absolute_1} that contain the ocean current are also linear or quadratic. 
 Consequently, if we denote the components of the ocean current velocity as $\mat{V}_c = \inlinevector{V_x, V_y, V_z}$, the model \eqref{eq:background_component_form_absolute_1} can be written as
 \begin{subequations}
@@ -364,7 +366,7 @@ where
     \mat{r}_1 &= \inlinevector{r_{11}, r_{12}, r_{13}}, &
     \mat{r}_2 &= \inlinevector{r_{21}, r_{22}, r_{23}}.
 \end{align}
-We can derive similar equations for all other quadratic terms.
+We can derive similar equations for all the other quadratic terms.
 
 Finally, let us investigate the derivatives of the ocean current velocities.
 The derivative of $\mat{v}_c$ is
@@ -383,7 +385,7 @@ We have thus shown that the \gls{auv} dynamics can be split into an ocean curren
 %This fact can be used when designing a low-level controller.
 %If the orientation and the absolute velocities of the \gls{auv} can be measured, but the ocean current is unknown, then we can design a series of observers, using $\Phi_u$, $\Phi_p$, $\Phi_q$, and $\Phi_r$ as regressors.
 
-In the remainder of this section, we derive a component form for 5\gls{dof} and 3\gls{dof} models.
+In the remainder of this section, we derive a component form for the 5\gls{dof} and 3\gls{dof} models.
 
 \subsubsection{5\gls{dof} component form}
 In the 5\gls{dof} model, the roll dynamics are disregarded.
@@ -395,7 +397,7 @@ Due to fewer degrees of freedom, Assumption~\ref{asm:actuators} must be modified
 \begin{customasm}{3 (5DOF)}
     \label{asm:actuators_5DOF}
     The vehicle is equipped with a propeller and fins.
-    Consequently, the vehicle is capable of generating force in the surge direction and torque in pitch and yaw.
+    Consequently, the vehicle is capable of generating a force in the surge direction and torques in pitch and yaw.
 \end{customasm}
 Under this assumption, the external forces acting on the vehicle are
 \begin{align}
@@ -433,7 +435,7 @@ Namely, due to fewer degrees of freedom, Assumption~\ref{asm:actuators} needs to
 \begin{customasm}{3 (3DOF)}
     \label{asm:actuators_3DOF}
     The vehicle is equipped with a propeller and a rudder.
-    Consequently, the vehicle is capable of generating force in the surge direction and torque in yaw.
+    Consequently, the vehicle is capable of generating a force in the surge direction and a torque in yaw.
 \end{customasm}
 
 Under this assumption, the external forces acting on the vehicle are
@@ -476,7 +478,7 @@ The transformed velocities are given by
         1 & 0 & 0 \\ 0 & 1 & \varepsilon \\ 0 & 0 & 1
     \end{bmatrix}.
 \end{align}
-Similarly to Section~\ref{sec:model_control_oriented}, we define the transformed inertia matrix $\mat{M}^{\prime} = \mat{H}\T\mat{M}\mat{H}$.
+Similarly to the procedure in Section~\ref{sec:model_control_oriented}, we define the transformed inertia matrix $\mat{M}^{\prime} = \mat{H}\T\mat{M}\mat{H}$.
 If we choose
 \begin{equation}
     \varepsilon = -\frac{b_{22}\,m_{33}-b_{32}\,m_{23}}{b_{22}\,m_{23}-b_{32}\,m_{22}},
@@ -501,5 +503,5 @@ and express the 3\gls{dof} model in the following component form
     \end{align}
     \label{eq:background_component_form_3DOF}
 \end{subequations}
-The equations for $F_u$, $X_v$, $Y_v$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
+The expressions for $F_u$, $X_v$, $Y_v$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
 

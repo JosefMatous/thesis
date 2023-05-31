@@ -1,7 +1,7 @@
 \section{Null Space Behavioral Algorithm}
 \label{sec:background_NSB}
 
-This section describes the \gls{nsb} algorithm.
+This section describes the \acrlong{nsb} algorithm.
 The \gls{nsb} algorithm is a method that allows us to combine several tasks in a hierarchic manner.
 The algorithm was originally developed for first-order systems
 \begin{equation}
@@ -160,28 +160,28 @@ For the path-following task, the task variable is given by the position of the b
 \begin{rmk}
     The formation-keeping and path-following tasks are independent and orthogonal.
 
-    Indeed, the Jacobian of the path-following task is
+    \noindent The Jacobian of the path-following task is given by
     \begin{equation}
         \mat{J}_2 = \frac{\partial \bs{\sigma}_2}{\partial \mat{p}} = \frac{1}{N} \mat{1}_{1 \times N} \otimes \mat{I}_3.
     \end{equation}
-    One can then verify that
+    The matrices $\mat{J}_1$ and $\mat{J}_2$ satisfy
     \begin{equation}
         \rank \left(\left[\mat{J}_1\T,\, \mat{J}_2\T\right]\right) = 3N = \rank \left(\mat{J}_1\T\right) + \rank \left(\mat{J}_2\T\right),
     \end{equation}
     and the tasks are thus independent.
 
-    The pseudoinverse of $\mat{J}_2$ is
+    Moreover, the pseudoinverse of $\mat{J}_2$ is given by
     \begin{equation}
         \mat{J}_2^{\dagger} = \mat{1}_{N \times 1} \otimes \mat{I}_3.
     \end{equation}
-    One can then verify that
+    One can then verify that the Jacobians satisfy
     \begin{equation}
         \mat{J}_1 \mat{J}_2^{\dagger} = \mat{O}_{3(N-1) \times 3},
     \end{equation}
     and the tasks are thus orthogonal.
 \end{rmk}
 
-The desired value of the path-following task is given by the desired path, \emph{i.e.,}
+The desired value of the path-following task is given by
 \begin{equation}
     \bs{\sigma}_{d, 2} = \mat{p}_p(s),
 \end{equation}
@@ -231,4 +231,5 @@ From \eqref{eq:background_sigma_2_tilde}, the dynamics of the path-following err
         &= \mat{R}_p(s)\T \left(\mat{V}_{\rm LOS} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{p}_b^p.
     \end{split}
 \end{equation}
-The stability of the path-following task will be discussed in the next section.
+The stability of the path-following task depends on the choice of the \gls{los} guidance law.
+The stability of controllers that utilize decoupled and coupled \gls{los} guidance will be discussed in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}, respectively.
