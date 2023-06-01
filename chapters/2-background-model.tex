@@ -17,7 +17,7 @@ The inaccuracies of control-oriented models can be compensated by designing robu
 
 This section presents control-oriented models of \acrfullpl{asv} and \acrfullpl{auv}.
 The presented models are similar to those used in \cite{borhaug_straight_2007} and \cite{fredriksen_global_2006}.
-The models are based on the matrix-vector models of marine vehicles \cite{fossen_handbook_2011} and some simplifying assumtpions.
+The models are based on the matrix-vector models of marine vehicles \cite{fossen_handbook_2011} and some simplifying assumptions.
 
 \subsection{State variables and degrees of freedom}
 Marine vehicles are typically modeled as rigid bodies.
@@ -63,7 +63,7 @@ The full velocity vector is then given by $\bs{\nu}\T = \left[\mat{v}\T, \bs{\om
 Finally, let us discuss simplified 3\gls{dof} and 5\gls{dof} models.
 In the case of \glspl{asv} or \glspl{auv} moving in the horizontal plane, we often assume that the roll and pitch angles are zero, and that the depth is constant.
 Consequently, we can disregard the roll, pitch, and heave motion of the vehicle, and derive a simplified 3\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, \psi}$ and $\bs{\nu} = \inlinevector{u, v, r}$.
-In the case of slender, torpedo shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
+In the case of slender, torpedo-shaped \glspl{auv}, the roll motion is assumed to be small and self-stabilizing by the design of the vehicle.
 Consequently, we can disregard the roll motion and derive a simplified 5\gls{dof} model with $\bs{\eta} = \inlinevector{x, y, z, \theta, \psi}$ and $\bs{\nu} = \inlinevector{u, v, w, q, r}$.
 
 \subsection{Kinematics}
@@ -132,7 +132,7 @@ The model in \eqref{eq:background_nu_dot_relative} can also be expressed in term
 \end{equation}
 where $\bs{\nu}_c\T = \left[\mat{v}_c\T, \mat{0}\T\right]$.
 
-The inertia matrix $\mat{M}$ is symmetric positive definite, the damping matrix $\mat{D}$ is positive definite, and the Coriolis matrix $\mat{C}$ parametrized so that it is skew-symmetric.
+The inertia matrix $\mat{M}$ is symmetric positive definite, the damping matrix $\mat{D}$ is positive definite, and the Coriolis matrix $\mat{C}$ is parametrized so that it is skew-symmetric.
 There exist multiple expressions for the Coriolis matrix, \emph{e.g.,}
 \begin{equation}
     \label{eq:background_coriolis}
@@ -162,7 +162,7 @@ Before deriving the control-oriented model, we need to present the assumptions t
 
 \begin{asm}
     \label{asm:symmetric}
-    The vehicle is slender, torpedo-shaped with port-starboard symmetry.
+    The vehicle is slender, torpedo-shaped, with port-starboard symmetry.
 \end{asm}
 
 \begin{asm}

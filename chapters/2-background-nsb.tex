@@ -10,7 +10,7 @@ The algorithm was originally developed for first-order systems
 where $\mat{p} \in \mathbb{R}^N$ are the generalized coordinates, and $\mat{v} \in \mathbb{R}^N$ are the control inputs.
 
 In \gls{nsb} algorithms, the desired behavior of the system is divided into several tasks.
-Let there be $m$ tasks, arranged by priority in a descending order (\emph{i.e.,} task 1 has the highest priority, task $m$ has the lowest priority).
+Let there be $m$ tasks arranged by priority in descending order (\emph{i.e.,} task 1 has the highest priority, task $m$ has the lowest priority).
 Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_m$ denote the so-called \emph{task variables}.
 Each variable is a function of the system coordinates, \emph{i.e.,}
 \begin{align}
@@ -86,9 +86,8 @@ Consequently, the condition in \eqref{eq:background_independence_pseudo} is equi
 
 Two tasks are \emph{orthogonal} if the subspaces spanned by these tasks are orthogonal, \emph{i.e.,} if
 \begin{equation}
-    \mat{J}_i \, \mat{J}_j^{\dagger} = \mat{O}_{n_i \times n_j},
+    \mat{J}_i \, \mat{J}_j^{\dagger} = \mat{O}_{n_i \times n_j}.
 \end{equation}
-where $\mat{O}_{n_i \times n_j}$ is an $n_i$-by-$n_j$ null matrix.
 
 Now, let us consider two consecutive tasks that are independent and orthogonal. 
 Without loss of generality, let us denote these tasks $1$ and $2$.
@@ -118,7 +117,7 @@ where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter o
 
 \begin{rmk}
     The formation-keeping task contains the relative positions of the first $n-1$ vehicles.
-    The relative position of the last vehicle is omitted, because it can be expressed as a linear combination of the remaining relative positions.
+    The relative position of the last vehicle is omitted because it can be expressed as a linear combination of the remaining relative positions.
     Indeed, from \eqref{eq:background_formation_variable}, we get
     \begin{equation}
         \bs{\sigma}_{1, n} = \mat{p}_n - \mat{p}_b = - \sum_{i=1}^{n-1} \bs{\sigma}_{1, i}.

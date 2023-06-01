@@ -15,9 +15,9 @@ We validate the theoretical results through numerical simulations.
 
 \section{Introduction}
 
-The work presented in this chapter extends the results of \cite{eek_formation_2020}, where an NSB algorithm is used to guide two surface vessels moving in the horizontal plane.
+The work presented in this chapter extends the results of \cite{eek_formation_2021}, where an NSB algorithm is used to guide two surface vessels moving in the horizontal plane.
 Specifically, we propose an algorithm that works with an arbitrary number of AUVs with five degrees of freedom (DOFs) moving in 3D.
-Similarly to \cite{eek_formation_2020}, we solve the path-following task using line-of-sight (LOS) guidance.
+Similarly to \cite{eek_formation_2021}, we solve the path-following task using line-of-sight (LOS) guidance.
 Using the cascaded systems theory results of \cite{pettersen_lyapunov_2017}, we prove that the closed-loop system consisting of a 3D LOS guidance law, combined with surge, pitch, and yaw autopilots based on \cite{moe_LOS_2016}, is uniformly semi-globally exponentially stable (USGES) and uniformly globally asymptotically stable (UGAS).
 The theoretical results are verified through numerical simulations.
 
@@ -364,7 +364,7 @@ and the underactuated sway and heave dynamics
 \end{align}
 
 To prove the stability of the closed-loop system, we need the results of the three following lemmas.
-The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_formation_2020}, and are extended to handle an arbitrary number of AUVs moving in 3D.
+The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_formation_2021}, and are extended to handle an arbitrary number of AUVs moving in 3D.
 \begin{lemma}
     \label{lemma_1}
     The trajectories of the closed-loop system \eqref{eq:nsb_5dof_nominal}--\eqref{eq:nsb_5dof_w_dot} are forward complete.
@@ -424,7 +424,7 @@ Indeed, from \eqref{eq:nsb_5dof_gamma_LOS}, the largest possible LOS reference a
 With \eqref{eq:nsb_5dof_theta_max} satisfied, the cosine of $\gamma_{\rm LOS}$ is always positive. We will use this fact in the proof.
 
 \begin{proof}
-The proof follows along the lines of \cite{eek_formation_2020}, but is extended to an arbitrary number of 5DOF vehicles.
+The proof follows along the lines of \cite{eek_formation_2021}, but is extended to an arbitrary number of 5DOF vehicles.
 We will also use the results of \cite{pettersen_lyapunov_2017} to prove that the system is USGES.
 
 In Lemmas~\ref{lemma_1}--\ref{lemma_3}, we have shown that the closed-loop system is forward complete and the underactuated sway and heave dynamics are bounded near the manifold $\tilde{\mat{X}}_2 = \mat{0}$.
