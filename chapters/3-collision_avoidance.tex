@@ -6,61 +6,37 @@ This chapter discusses an optimization-based reactive collision avoidance system
 %We demonstrate the ability of the method to track the reference waypoints while maintaining safe distances through numerical simulations where the method is applied to autonomous surface vehicles.
 We demonstrate the effectiveness of this method through numerical simulations of autonomous surface vehicles. The simulated vehicles track their reference waypoints while maintaining safe distances.
 The proposed method can be readily implemented on vehicles that already use an optimization-based control allocation method.
+The contents of this chapter are based on \cite{matous_unifying_2021}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-Autonomous vehicles are being increasingly used in cluttered and unpredictable environments where considerations to other vehicles and obstacles need to be made. 
-Therefore, the control system of autonomous vehicles should include some form of collision avoidance (COLAV).
-
-Reviews of various COLAV concepts are presented in \cite{statheros_autonomous_2008,tam_review_2009,hoy_algorithms_2015}.
-In general, algorithms for COLAV can be split into two categories: motion planning and reactive algorithms.
-
-Motion planning algorithms include, among others, various types of path planning algorithms \cite{wang_ship_2017,kuwata_safe_2014,lazarowska_ships_2015}, the dynamic window algorithm \cite{fox_dynamic_1997}, and model predictive control (MPC).
-MPC can be used both for a single vehicle \cite{hagen_mpc-based_2018,sun_collision_2018} and for multi-agent systems in a distributed form \cite{kuriki_formation_2015,dai_distributed_2017}.
-%Some motion planing algorithms also include consideration of relevant traffic protocols that apply in the given domain.
-
-Reactive algorithms for COLAV include, among others, virtual potential fields \cite{roussos_3d_2008}, geometric guidance \cite{mujumdar_reactive_2011}, and control barrier functions (CBFs) \cite{squires_constructive_2018,igarashi_collision_2018,romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014}.
-Reactive algorithms are often used together with motion planning algorithms in a hybrid controller.
-In such a controller, the reactive algorithm ensures the safety of the vehicle in unexpected situations.
-Such an algorithm is proposed in \cite{hedjar_automatic_2019}, where a collision-free velocity reference is obtained through numerical optimization.
-The proposed algorithm is designed specifically for autonomous surface vehicles (ASVs).
-
-CBFs offer a COLAV method that is applicable for a wide range of systems \cite{ames_control_2019}.
-In the literature, there are typically two ways in which CBFs are applied for COLAV.
-They are either applied to a simplified model of the vehicle (\emph{e.g.,} a unicycle model \cite{squires_constructive_2018,igarashi_collision_2018}) to provide safe velocity references, or they are used together with control Lyapunov functions (CLFs) \cite{romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014} on the complete model.
-
-Reactive COLAV methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
-Consequently, these methods may output reference signals that the underlying controllers cannot track.
-To mitigate this, reactive COLAV methods should be included into the lowest-possible control level.
-
 %Overactuated vehicles, \emph{i.e.,} vehicles with more actuators than degrees of freedom (DOFs), often use control allocation in their lowest-level controller \cite{johansen_control_2013}.
-In this paper, we consider overactuated vehicles, \emph{i.e.,} vehicles with more actuators than degrees of freedom (DOFs), with a control system consisting of blocks shown in Figure \ref{fig:ccta_diagram}.
+In this chapter, we consider overactuated vehicles, \emph{i.e.,} vehicles with more actuators than \acrfullpl{dof}, with a control system consisting of blocks shown in Figure \ref{fig:ccta_diagram}.
 The control system contains a long-term, deliberate planner, a high-level controller that outputs desired forces and torques ($\bs{\tau}_d$), and a control allocation block.
 The goal of control allocation is to find actuator control inputs ($\mathbf{u}$) that generate the desired forces and torques.
-Most control allocation methods are based on numerical optimization \cite{oppenheimer_control_2006,harkegard_dynamic_2004,johansen_constrained_2004} which makes them ideal for augmenting with CBF constraints.
+Most control allocation methods are based on numerical optimization \cite{oppenheimer_control_2006,harkegard_dynamic_2004,johansen_constrained_2004} which makes them ideal for augmenting with \acrfullpl{cbf}.
 
-\begin{figure}[b]
-    \vspace{-4mm}
+\begin{figure}[t]
     \centering
-    %\input{figures/ccta/diagram.tex}
-    \includegraphics[width=.45\textwidth]{figures/ccta/diagram.pdf}
+    \input{figures/ccta/diagram.tex}
+    %\includegraphics[width=.45\textwidth]{figures/ccta/diagram.pdf}
     \vspace{-1mm}
-    \caption{Control system of overactuated vehicles considered in this paper}
+    \caption{Control system of overactuated vehicles considered in this chapter}
     \label{fig:ccta_diagram}
 \end{figure}
 
-The main contribution of this paper is a reactive COLAV algorithm that is included at the lowest level in the control pipeline, \emph{i.e.} in the control allocation, to ensure the safety of the vehicle regarding collision avoidance.
+The main contribution of this chapter is a reactive \acrfull{colav} algorithm that is included at the lowest level in the control pipeline, \emph{i.e.} in the control allocation, to ensure the safety of the vehicle regarding collision avoidance.
 Since it is included at the lowest-possible control level, it also ensures the ``baseline'' safety of any other higher level (long term/deliberate) planners of the vehicle guidance, navigation and control system.
 The algorithm can easily be implemented on vehicles that apply a numerical optimization-based method to control allocation.
 Moreover, the algorithm does not rely on any communication between the vehicles; the only required information is the position and velocity of other vehicles.
-The paper extends the results in \cite{thyri_reactive_2020}, which only considers ASVs and simple encounters between one ASV and a vessel moving at a constant course and speed, making the method applicable to a wider range of vehicles and scenarios with multiple autonomous vehicles.
+The chapter extends the results in \cite{thyri_reactive_2020}, which only considers \acrfullpl{asv} and simple encounters between one \gls{asv} and a vessel moving at a constant course and speed, making the method applicable to a wider range of vehicles and scenarios with multiple autonomous vehicles.
 
-The remainder of the paper is organized as follows.
+The remainder of the chapter is organized as follows.
 Section \ref{sec:ccta_model} defines the notation and describes the model of the vehicle.
-The proposed control allocation method and CBFs for COLAV are introduced in Sections \ref{sec:ccta_alloc} and \ref{sec:ccta_CBF}.
+The proposed control allocation method and \glspl{cbf} are introduced in Sections \ref{sec:ccta_alloc} and \ref{sec:ccta_CBF}.
 %Section \ref{sec:ccta_alloc} introduces control allocation and Section \ref{sec:ccta_CBF} introduces CBFs.
-Section \ref{sec:ccta_optimization} describes the resulting combined COLAV and control allocation optimization problem.
-Section \ref{sec:ccta_simulations} presents the results of numerical simulations using models of ASVs.
+Section \ref{sec:ccta_optimization} describes the resulting combined \gls{colav} and control allocation optimization problem.
+Section \ref{sec:ccta_simulations} presents the results of numerical simulations using models of \glspl{asv}.
 Finally, Section \ref{sec:ccta_conclusion} contains some concluding remarks.
 
 \section{Vehicle Model}
@@ -69,7 +45,7 @@ Finally, Section \ref{sec:ccta_conclusion} contains some concluding remarks.
 \subsection{Notation}
 \label{sec:ccta_notation}
 
-Let $\mathbf{p}$ denote the position and $\bs{\Theta}$ the orientation (expressed using the Euler angles) of the vehicle in a North-East-Down (NED) reference frame.
+Let $\mathbf{p}$ denote the position and $\bs{\Theta}$ the orientation (expressed using the Euler angles) of the vehicle in a \acrfull{ned} reference frame.
 %The test models presented in Section~\ref{sec:ccta_simulations} have three degrees of freedom (DOFs), with the position and orientation defined as follows
 %\begin{align}
 %    \mathbf{p} &= \left[ x ,\, y \right]^{\rm T}, &
@@ -101,7 +77,7 @@ Let $\bs{\tau}$ be the vector of generalized forces acting on the vehicle.
 %\end{equation}
 %where $X$ and $Y$ are the forces in the surge and sway direction, respectively, and $N$ is the yaw moment.
 Let $K$ be the number of actuator parameters and $\mathbf{u} \in \mathbb{R}^{K}$ the vector of inputs.
-Furthermore, let $b : \mathbb{R}^{K} \rightarrow \mathbb{R}^{n_{\rm DOF}}$ be a nonlinear function that maps the inputs to the generalized forces ($n_{\rm DOF}$ is the number of DOFs).
+Furthermore, let $b : \mathbb{R}^{K} \rightarrow \mathbb{R}^{n_{\rm DOF}}$ be a nonlinear function that maps the inputs to the generalized forces ($n_{\rm DOF}$ is the number of \glspl{dof}).
 
 \subsection{Equations of Motion}
 
@@ -116,7 +92,8 @@ We thus consider vehicles described by the following dynamical equations
     \end{bmatrix},
     \label{eq:ccta_affine_model}
 \end{equation}
-where $\mathbf{J}(\bs{\Theta})$ is the transformation matrix. % from body-fixed to NED frame. 
+
+\noindent where $\mathbf{J}(\bs{\Theta})$ is the transformation matrix. % from body-fixed to NED frame. 
 This equation describes a large class of systems, including the matrix-vector model of marine vessels \cite{fossen_handbook_2011}
 \begin{subequations}
     \begin{align}
@@ -127,8 +104,7 @@ This equation describes a large class of systems, including the matrix-vector mo
     \vspace{-4mm}
 \end{subequations}
 
-\noindent where $\mathbf{M}$, $\mathbf{C}(\bs{\nu})$ and $\mathbf{D}(\bs{\nu})$ is the mass, Coriolis and drag matrix, respectively. %, and $\bs{\tau}_w$ are the disturbing forces such as wind or waves.
-This model can be converted to the form in \eqref{eq:ccta_affine_model} since the matrix $\mathbf{M}$ is invertible.
+\noindent This model can be converted to the form in \eqref{eq:ccta_affine_model} since the matrix $\mathbf{M}$ is invertible.
 
 \section{Control Allocation}
 \label{sec:ccta_alloc}
@@ -136,7 +112,7 @@ This model can be converted to the form in \eqref{eq:ccta_affine_model} since th
 As stated in the Introduction, the goal of the control allocation is to find the inputs that generate the desired forces given by the high-level controller.
 For details on control allocation techniques for both linear and nonlinear systems, the reader is referred to \cite{johansen_control_2013}.
 
-In this paper, we consider systems where the function $b$ can be nonlinear.
+In this chapter, we consider systems where the function $b$ can be nonlinear.
 In the literature, nonlinear control allocation is commonly solved by linearizing the function $b$ \cite{harkegard_dynamic_2004,johansen_constrained_2004}%, \emph{i.e.,}
 \begin{equation}
     b(\mathbf{u}_0 + \Delta\mathbf{u}) \approx b(\mathbf{u}_0) + \mathbf{B}(\mathbf{u}_0)\,\Delta\mathbf{u},
@@ -150,11 +126,10 @@ is the Jacobian of $b$ evaluated at $\mathbf{u}_0$.
 Let $\bs{\tau}_d$ be the desired forces.
 The goal of our control allocation scheme is to find optimal inputs $\mathbf{u}^*$ that satisfy
 \begin{equation}
-    \mathbf{u}^* = \argmin_{\mathbf{u}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}) - \bs{\tau}_d \right\|^2,
+    \mathbf{u}^* = \argmin_{\mathbf{u}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}) - \bs{\tau}_d \right\|^2.
 \end{equation}
-where $\|\cdot\|$ is the Euclidean norm.
 
-Using the approximation \eqref{eq:ccta_forces_approximation}, we can formulate the control allocation problem as a quadratic program (QP) 
+Using the approximation \eqref{eq:ccta_forces_approximation}, we can formulate the control allocation problem as a \acrfull{qp} 
 \begin{align}
     \mathbf{u}^* &= \mathbf{u}_0 + \Delta\mathbf{u}^*, \\
     \Delta\mathbf{u}^* &= \argmin_{\Delta\mathbf{u}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}_{0}) + \mathbf{B}(\mathbf{u}_{0})\,\Delta\mathbf{u} - \bs{\tau}_{d} \right\|^2.
@@ -162,123 +137,129 @@ Using the approximation \eqref{eq:ccta_forces_approximation}, we can formulate t
 
 \section{Control Barrier Functions}
 \label{sec:ccta_CBF}
-In this section, we will briefly present the theory behind control barrier functions (CBFs).
+In this section, we will briefly present the theory behind \acrfullpl{cbf}.
 For more details, the reader is referred to \cite{ames_control_2019}.
-After presenting the notation for multiple vehicles, we define the CBF for COLAV.
+After presenting the notation for multiple vehicles, we define the \gls{cbf} for \gls{colav}.
 
 \subsection{Introduction to CBFs}
 Consider a nonlinear control-affine system
 \begin{equation}
     \dot{\mathbf{x}} = \widetilde{f}(\mathbf{x}) + \widetilde{g}(\mathbf{x})\,\mathbf{u},
+    \label{eq:ccta_control_affine_system}
 \end{equation}
 \noindent where $\mathbf{x} \in \mathbb{R}^n$.
-A barrier function $h : \mathbb{R}^{n} \rightarrow \mathbb{R}$ defines a safe set
+Suppose that the system must satisfy a safety constraint
+$
+    h(\mat{x}) \geq 0,
+$
+where $h : \mathbb{R}^{n} \rightarrow \mathbb{R}$ is the so-called \emph{barrier function}.
+Then, we can define the so-called \emph{safe set}, a set of all states that satisfy the safety constraint, as
 \begin{equation}
     \mathcal{C} = \left\{ \mathbf{x} \,|\, h(\mathbf{x}) \geq 0 \right\}.
 \end{equation}
-Assuming that the initial condition lies in the safe set, the system trajectory will stay within $\mathcal{C}$ if the following inequality holds \cite{ames_control_2019}
+If the initial condition of the system \eqref{eq:ccta_control_affine_system} lies in the safe set, the system trajectory will stay within $\mathcal{C}$ if the following inequality holds \cite{ames_control_2019}
 \begin{equation}
     \frac{{\rm d}}{{\rm d}t}h(\mathbf{x}) = \frac{\partial h(\mathbf{x})}{\partial \mathbf{x}}\,\left(\widetilde{f}(\mathbf{x}) + \widetilde{g}(\mathbf{x})\,\mathbf{u}\right) \geq - \gamma\bigl(h(\mathbf{x})\bigr),
     \label{eq:ccta_cbf_inequality}
 \end{equation}
 where $\gamma$ is an extended class-$\mathcal{K}_{\infty}$ function. 
-If there exists a $\mathbf{u}$ such that \eqref{eq:ccta_cbf_inequality} is satisfied, then $h$ is a valid CBF.% for the system.
+If there exists an input $\mathbf{u}$ such that \eqref{eq:ccta_cbf_inequality} is satisfied, then $h$ is a valid \gls{cbf} for the system \eqref{eq:ccta_control_affine_system}.
 
 \subsection{CBFs for Reactive Collision Avoidance}
 %First, we need to extend the notation from Section~\ref{sec:ccta_notation} to multi-vehicle systems.
-Let there be $m$ vehicles.
-We shall denote the variables that belong to a given vehicle by an upper index (\emph{e.g.,} $\mathbf{x}^{i}$ is the state of the $i^{\rm th}$ vehicle).
+Let there be $N$ vehicles.
+We shall denote the variables that belong to a given vehicle by a lower index (\emph{e.g.,} $\mathbf{x}_{i}$ is the state of the $i^{\rm th}$ vehicle).
 In addition, let us define a relative position of vehicles $i$ and $j$ as
 \begin{equation}
-    \mathbf{p}^{ij} = \mathbf{p}^{i} - \mathbf{p}^{j}.
+    \mathbf{p}_{ij} = \mathbf{p}_{i} - \mathbf{p}_{j}.
     \label{eq:ccta_p_ij}
 \end{equation}
 
-To ensure safety, we need a collection of CBFs that enforce safe distances between each pair of vehicles.
-In the literature, vehicles described by the model \eqref{eq:ccta_affine_model} frequently use CBFs in the following form \cite{basso_safety-critical_2020,thyri_reactive_2020}
+To ensure safety, we need a collection of \glspl{cbf} that enforce safe distances between each pair of vehicles.
+In the literature, vehicles described by the model \eqref{eq:ccta_affine_model} frequently use \glspl{cbf} in the following form \cite{basso_safety-critical_2020,thyri_reactive_2020}
 \begin{equation}
-    %h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j}) = \|\mathbf{p}^{ij}\| - d_{\min} + k_v\,\frac{1}{\|\mathbf{p}^{ij}\|}\,\mathbf{p}^{ij}^{\rm T}\,\dot{\mathbf{p}}^{ij},
-    h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j}) = \|\mathbf{p}^{ij}\| - d_{\min} + k_v\,\frac{\rm d}{{\rm d}t}\|\mathbf{p}^{ij}\|,
+    %h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) = \|\mathbf{p}_{ij}\| - d_{\min} + k_v\,\frac{1}{\|\mathbf{p}_{ij}\|}\,\mathbf{p}_{ij}_{\rm T}\,\dot{\mathbf{p}}_{ij},
+    h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) = \|\mathbf{p}_{ij}\| - d_{\min} + k_v\,\frac{\rm d}{{\rm d}t}\|\mathbf{p}_{ij}\|,
     \label{eq:ccta_CBF}
 \end{equation}
 where $d_{\min}$ is a minimum safe distance, and $k_v$ is a coefficient that penalizes the relative speed of the vehicles.
 
-To use $h^{ij}$ as a control barrier function, we need to calculate its time-derivative.
+To use $h_{ij}$ as a control barrier function, we need to calculate its time-derivative.
 Differentiating \eqref{eq:ccta_CBF} with respect to time yields
 \begin{equation}
-    \frac{\rm d}{{\rm d}t}h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j}) = \frac{\rm d}{{\rm d}t}\|\mathbf{p}^{ij}\| + k_v\,\frac{\rm d^2}{{\rm d}t^2}\|\mathbf{p}^{ij}\|.
+    \frac{\rm d}{{\rm d}t}h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) = \frac{\rm d}{{\rm d}t}\|\mathbf{p}_{ij}\| + k_v\,\frac{\rm d_2}{{\rm d}t_2}\|\mathbf{p}_{ij}\|.
 \end{equation}
 
-%Note that the norm $\|\mathbf{p}^{ij}\|$ can be defined as
+%Note that the norm $\|\mathbf{p}_{ij}\|$ can be defined as
 %\begin{equation}
-%    \|\mathbf{p}^{ij}\| = \sqrt{(\mathbf{p}^{ij})^{\rm T}\,\mathbf{p}^{ij}}.
+%    \|\mathbf{p}_{ij}\| = \sqrt{(\mathbf{p}_{ij})_{\rm T}\,\mathbf{p}_{ij}}.
 %\end{equation}
 
 %By applying the chain rule, we get
 %\begin{align}
-%    \frac{\rm d}{{\rm d}t}\|\mathbf{p}^{ij}\| &= \frac{1}{\|\mathbf{p}^{ij}\|}\,(\mathbf{p}^{ij})^{\rm T}\,\dot{\mathbf{p}}^{ij}, \\
+%    \frac{\rm d}{{\rm d}t}\|\mathbf{p}_{ij}\| &= \frac{1}{\|\mathbf{p}_{ij}\|}\,(\mathbf{p}_{ij})_{\rm T}\,\dot{\mathbf{p}}_{ij}, \\
 %    \begin{split}
-%        \frac{\rm d^2}{{\rm d}t^2}\|\mathbf{p}^{ij}\| &=  - \frac{1}{\|\mathbf{p}^{ij}\|^3}\,\left((\mathbf{p}^{ij})^{\rm T}\,\dot{\mathbf{p}}^{ij}\right)^2 \\
-%        +&\frac{1}{\|\mathbf{p}^{ij}\|}\,\left((\dot{\mathbf{p}}^{ij})^{\rm T}\,\dot{\mathbf{p}}^{ij} + (\mathbf{p}^{ij})^{\rm T}\,\ddot{\mathbf{p}}^{ij}\right).
+%        \frac{\rm d_2}{{\rm d}t_2}\|\mathbf{p}_{ij}\| &=  - \frac{1}{\|\mathbf{p}_{ij}\|_3}\,\left((\mathbf{p}_{ij})_{\rm T}\,\dot{\mathbf{p}}_{ij}\right)_2 \\
+%        +&\frac{1}{\|\mathbf{p}_{ij}\|}\,\left((\dot{\mathbf{p}}_{ij})_{\rm T}\,\dot{\mathbf{p}}_{ij} + (\mathbf{p}_{ij})_{\rm T}\,\ddot{\mathbf{p}}_{ij}\right).
 %    \end{split}        
 %\end{align}
 
 To calculate the first and second time-derivative of the relative distance, we need to find the first and second time-derivatives of the relative position.
-For $\dot{\mathbf{p}}^{ij}$, we split the derivative of $\bs{\eta}$ from \eqref{eq:ccta_affine_model} into the derivatives of position and orientation \vspace{-2mm}
+For $\dot{\mathbf{p}}_{ij}$, we split the derivative of $\bs{\eta}$ from \eqref{eq:ccta_affine_model} into the derivatives of position and orientation \vspace{-2mm}
 \begin{equation}
-    \dot{\bs{\eta}}^{i} = \begin{bmatrix} \dot{\mathbf{p}}^{i} \\ \dot{\bs{\Theta}}^{i} \end{bmatrix} = \begin{bmatrix}
-        \mathbf{J}_{\mathbf{p}}(\bs{\Theta}^{i}) \\ \mathbf{J}_{\bs{\Theta}}(\bs{\Theta}^{i})
-    \end{bmatrix}\,\bs{\nu}^{i}.
+    \dot{\bs{\eta}}_{i} = \begin{bmatrix} \dot{\mathbf{p}}_{i} \\ \dot{\bs{\Theta}}_{i} \end{bmatrix} = \begin{bmatrix}
+        \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \\ \mathbf{J}_{\bs{\Theta}}(\bs{\Theta}_{i})
+    \end{bmatrix}\,\bs{\nu}_{i}.
 \end{equation}
 
 \noindent Substituting this into the time-derivative of \eqref{eq:ccta_p_ij} yields
 \begin{equation}
-    \dot{\mathbf{p}}^{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}^{i}) \, \bs{\nu}^{i} - \mathbf{J}_{\mathbf{p}}(\bs{\Theta}^{j}) \, \bs{\nu}^{j}.
+    \dot{\mathbf{p}}_{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \bs{\nu}_{i} - \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{j}) \, \bs{\nu}_{j}.
     \label{eq:ccta_p_dot}
 \end{equation}
 
-\noindent For $\ddot{\mathbf{p}}^{ij}$, we assume that the target maintains its velocity, \emph{i.e.,}
+\noindent For $\ddot{\mathbf{p}}_{ij}$, we assume that the target maintains its velocity, \emph{i.e.,}
 \begin{equation}
-    \ddot{\mathbf{p}}^{ij} \approx \ddot{\mathbf{p}}^{i},
+    \ddot{\mathbf{p}}_{ij} \approx \ddot{\mathbf{p}}_{i},
 \end{equation}
 when calculating the time-derivative for the $i^{\rm th}$ vehicle.
 As discussed in \cite{thyri_reactive_2020}, this is a ``mild worst-case'' assumption, since maneuvers of the target vehicle tend to aid to resolving the situation.
 Thus, taking the time-derivative of \eqref{eq:ccta_p_dot} yields
 \begin{equation}
-    \ddot{\mathbf{p}}^{i} = \dot{\mathbf{J}}_{\mathbf{p}}(\bs{\Theta}^{i}) \, \bs{\nu}^{i} + \mathbf{J}_{\mathbf{p}}(\bs{\Theta}^{i}) \, \dot{\bs{\nu}}^{i}.
+    \ddot{\mathbf{p}}_{i} = \dot{\mathbf{J}}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \bs{\nu}_{i} + \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \dot{\bs{\nu}}_{i}.
     \label{eq:ccta_p_ddot}
 \end{equation}
 
 Finally, we substitute the approximation of forces from \eqref{eq:ccta_forces_approximation} into the equation for $\dot{\bs{\nu}}$ in \eqref{eq:ccta_affine_model} to get
 \begin{equation}
-    \dot{\bs{\nu}}^{i} = f(\mathbf{x}^{i}) + g(\mathbf{x}^{i})\,\left(b(\mathbf{u}_0^{i}) + \mathbf{B}(\mathbf{u}_0^{i})\,\Delta\mathbf{u}^{i}\right),
+    \dot{\bs{\nu}}_{i} = f(\mathbf{x}_{i}) + g(\mathbf{x}_{i})\,\left(b(\mathbf{u}_{0,i}) + \mathbf{B}(\mathbf{u}_{0,i})\,\Delta\mathbf{u}_{i}\right),
 \end{equation}
-which we can substitute into \eqref{eq:ccta_p_ddot} to calculate $\ddot{\mathbf{p}}^{i}$.
+which we can substitute into \eqref{eq:ccta_p_ddot} to calculate $\ddot{\mathbf{p}}_{i}$.
 
 \section{Formulating the Optimization Problem}
 \label{sec:ccta_optimization}
-Now we can combine the definitions from Sections~\ref{sec:ccta_alloc} and \ref{sec:ccta_CBF} to formulate the proposed optimization problem for control allocation with multi-vehicle COLAV.
+Now we can combine the definitions from Sections~\ref{sec:ccta_alloc} and \ref{sec:ccta_CBF} to formulate the proposed optimization problem for control allocation with multi-vehicle \gls{colav}.
 
 \subsection{The Basic Optimization Problem}
-Let $\mathbf{u}_0^{i}$ be the inputs of vehicle $i$ from the previous control period.
+Let $\mathbf{u}_{0,i}$ be the inputs of vehicle $i$ from the previous control period.
 The new inputs are calculated as
 \begin{equation}
-    \mathbf{u}^{i} = \mathbf{u}_0^{i} + (\Delta\mathbf{u}^{i})^*,
+    \mathbf{u}_{i} = \mathbf{u}_{0,i} + \Delta\mathbf{u}_{i}^*,
 \end{equation}
-where $(\Delta\mathbf{u}^{i})^*$ is obtained by solving the QP
+where $\Delta\mathbf{u}_{i}^*$ is obtained by solving the following \gls{qp}
 \begin{subequations}
     \begin{align}
-        (\Delta\mathbf{u}^{i})^* &= \argmin_{\Delta\mathbf{u}^{i}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}_0^{i}) + \mathbf{B}(\mathbf{u}_0^{i})\,\Delta\mathbf{u}^{i} - \bs{\tau}_d^{i} \right\|^2\,, \label{eq:ccta_combined_avoidance_allocation_criterion} \\
+        \Delta\mathbf{u}_{i}^* &= \argmin_{\Delta\mathbf{u}_{i}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}_{0,i}) + \mathbf{B}(\mathbf{u}_{0,i})\,\Delta\mathbf{u}_{i} - \bs{\tau}_{d,i} \right\|^2\,, \label{eq:ccta_combined_avoidance_allocation_criterion} \\
         \begin{split}
-            \text{s.t. }& \frac{{\rm d}}{{\rm d}t}h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j}) \geq - \gamma\left(h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j})\right), \\
-            & j \in \left\{ 1, \ldots, m \right\} \setminus \left\{ i \right\},
+            \text{s.t. }& \frac{{\rm d}}{{\rm d}t}h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) \geq - \gamma\left(h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j})\right), \\
+            & j \in \left\{ 1, \ldots, N \right\} \setminus \left\{ i \right\},
         \end{split} \label{eq:ccta_combined_avoidance_allocation_constraint} \\
-        & \mathbf{u}^{i}_{\min} \leq \mathbf{u}_0^{i} + \Delta\mathbf{u}^{i} \leq \mathbf{u}^{i}_{\max}, \\
-        & \Delta\mathbf{u}^{i}_{\min} \leq \Delta\mathbf{u}^{i} \leq \Delta\mathbf{u}^{i}_{\max}, \label{eq:ccta_combined_avoidance_allocation_delta_u}
+        & \mathbf{u}_{i,\min} \leq \mathbf{u}_{0,i} + \Delta\mathbf{u}_{i} \leq \mathbf{u}_{i,\max}, \\
+        & \Delta\mathbf{u}_{i,\min} \leq \Delta\mathbf{u}_{i} \leq \Delta\mathbf{u}_{i,\max}, \label{eq:ccta_combined_avoidance_allocation_delta_u}
     \end{align}
     \label{eq:ccta_combined_avoidance_allocation}
 \end{subequations}
-\noindent where $\mathbf{u}^{i}_{\min}$ and $\mathbf{u}^{i}_{\max}$ are the absolute actuator limits, and $\Delta\mathbf{u}^{i}_{\min}$ and $\Delta\mathbf{u}^{i}_{\max}$ are the actuator rate limits.
+\noindent where $\mathbf{u}_{i,\min}$ and $\mathbf{u}_{i,\max}$ are the absolute actuator limits, and $\Delta\mathbf{u}_{i,\min}$ and $\Delta\mathbf{u}_{i,\max}$ are the actuator rate limits.
 The absolute limits are usually given by the physical limitations of the vehicle (\emph{e.g.,} the thrust of a propeller or the deflection of control surfaces) whereas the rate limits are user-defined to reduce the rapid changes that wear out the actuators.
 
 Simulation results using this control allocation algorithm are presented in Section~\ref{sec:ccta_simulations}.
@@ -297,8 +278,8 @@ The modified optimization problem is defined as follows
 \begin{subequations}
     \begin{align}
     \begin{split}
-        (\Delta\mathbf{u}^{i})^* &= \argmin_{\Delta\mathbf{u}^{i}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}^{i}_{0}) + \mathbf{B}(\mathbf{u}^{i}_{0})\,\Delta\mathbf{u}^{i} - \bs{\tau}^{i}_{d} \right\|_{\mathbf{Q}}^2 \\
-        &\quad \quad \quad + \left\| \mathbf{u}^{i}_{0} + \Delta\mathbf{u}^{i} \right\|_{\mathbf{R}_{\rm abs}}^2 + \left\|\Delta\mathbf{u}^{i}\right\|_{\mathbf{R}_{\rm rel}}^2,
+        \Delta\mathbf{u}_{i}^* &= \argmin_{\Delta\mathbf{u}_{i}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}_{i,0}) + \mathbf{B}(\mathbf{u}_{i,0})\,\Delta\mathbf{u}_{i} - \bs{\tau}_{d,i} \right\|_{\mathbf{Q}}^2 \\
+        &\quad \quad \quad + \left\| \mathbf{u}_{0,i} + \Delta\mathbf{u}_{i} \right\|_{\mathbf{R}_{\rm abs}}^2 + \left\|\Delta\mathbf{u}_{i}\right\|_{\mathbf{R}_{\rm rel}}^2,
     \end{split} \\    
 %    \begin{split}
 %        \text{s.t. }& \frac{{\rm d}}{{\rm d}t}h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j}) \geq - \gamma\left(h^{ij}(\mathbf{x}^{i}, \mathbf{x}^{j})\right), \\
@@ -312,18 +293,17 @@ The modified optimization problem is defined as follows
 \end{subequations}
 \noindent where $\mathbf{Q}$ is a positive definite matrix that penalizes the difference between the desired and actual forces, and $\mathbf{R}_{\rm abs}$ and $\mathbf{R}_{\rm rel}$ are positive semidefinite matrices that penalize the absolute and incremental usage of actuators, respectively.
 
-Note that both \eqref{eq:ccta_combined_avoidance_allocation} and \eqref{eq:ccta_combined_avoidance_allocation_modified} use only local information and measurements, and can thus be solved locally.% for each vehicle.}
+Note that both \eqref{eq:ccta_combined_avoidance_allocation} and \eqref{eq:ccta_combined_avoidance_allocation_modified} use only local information and measurements, and can thus be solved locally for each vehicle.
 
-%When choosing the weight matrices, we first note that the vector $\bs{\tau}$ contains both forces and moments.
-%The matrix $\mathbf{Q}$ should penalize them differently.
-%In the simulations in Section~\ref{sec:ccta_simulations}, we choose
-%\begin{equation}
-%    \mathbf{Q} = \diag{(1,1,\frac{1}{L^2})},
-%\end{equation}
-%where $\diag(.)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.
-\vspace{-0mm}
+When choosing the weight matrices, we first note that the vector $\bs{\tau}$ contains both forces and torques.
+The matrix $\mathbf{Q}$ should penalize them differently.
+In the simulations in Section~\ref{sec:ccta_simulations}, we choose
+\begin{equation}
+   \mathbf{Q} = \diag{(1,1,\frac{1}{L^2})},
+\end{equation}
+where $\diag(.)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.
+
 \section{Simulations}
-\vspace{-0mm}
 \label{sec:ccta_simulations}
 In the simulations, we test the ability of the proposed algorithms to resolve a situation when four surface vessels are simultaneously in danger of collision.
 Each vessel starts in the corner of a square and is guided towards a reference located in the diagonally opposite corner.
@@ -358,22 +338,21 @@ For convenience, we express $\bs{\Omega}_n$ in terms of a bandwidth matrix $\bs{
 where $\sqrt{.}$ is an elementwise square root.
 
 The simulation parameters for both vessels are summarized in Table~\ref{tab:params}.
-The matrix $\mathbf{Q}$ is chosen as
-\begin{align}
-    \mathbf{Q} &= \diag{\left( 1,1,\frac{1}{L^2} \right)},&
-    L &= \min_{i} \sqrt{\left(L_x^i\right)^2 + \left(L_y^i\right)^2}.
-\end{align}
+% The matrix $\mathbf{Q}$ is chosen as
+% \begin{align}
+%     \mathbf{Q} &= \diag{\left( 1,1,\frac{1}{L^2} \right)},&
+%     L &= \min_{i} \sqrt{\left(L_x^i\right)^2 + \left(L_y^i\right)^2}.
+% \end{align}
 
 \noindent Since the power consumption of a thruster increases with the absolute value of its thrust force and the increment of its azimuth, the matrices $\mathbf{R}_{\rm abs}$ and $\mathbf{R}_{\rm rel}$ are chosen as
 %\begin{align}
-%    \mathbf{R}_{\rm abs} &= \begin{bmatrix} r_{\rm abs}\,\mathbf{I}_{k \times k} & \\ & \mathbf{0}_{k \times k} \end{bmatrix},
-%    \mathbf{R}_{\rm rel} &= \begin{bmatrix} \mathbf{0}_{k \times k} & \\ & r_{\rm rel}\,\mathbf{I}_{k \times k} \end{bmatrix},
+%    \mathbf{R}_{\rm abs} &= \begin{bmatrix} r_{\rm abs}\,\mathbf{I}_{k} & \\ & \mathbf{0}_{k \times k} \end{bmatrix},
+%    \mathbf{R}_{\rm rel} &= \begin{bmatrix} \mathbf{0}_{k \times k} & \\ & r_{\rm rel}\,\mathbf{I}_{k} \end{bmatrix},
 %\end{align}
 \begin{equation}
-    \scale[0.931]{\mathbf{R}_{\rm abs} = \begin{bmatrix} r_{\rm abs}\,\mathbf{I}_{k \times k} & \\ & \mathbf{0}_{k \times k} \end{bmatrix}, \,
-    \mathbf{R}_{\rm rel} = \begin{bmatrix} \mathbf{0}_{k \times k} & \\ & r_{\rm rel}\,\mathbf{I}_{k \times k} \end{bmatrix},}
+    \scale[0.931]{\mathbf{R}_{\rm abs} = \begin{bmatrix} r_{\rm abs}\,\mathbf{I}_{k} & \mathbf{O}_{k \times k} \\ \mathbf{O}_{k \times k} & \mathbf{O}_{k \times k} \end{bmatrix}, \,
+    \mathbf{R}_{\rm rel} = \begin{bmatrix} \mathbf{O}_{k \times k} & \mathbf{O}_{k \times k} \\ \mathbf{O}_{k \times k} & r_{\rm rel}\,\mathbf{I}_{k} \end{bmatrix},}
 \end{equation}
-where $\mathbf{I}_{n \times n}$ is an $n$-by-$n$ identity matrix, and $\mathbf{0}_{n \times n}$ is an $n$-by-$n$ matrix of zeros.
 The rate constraints are identical for all thrusters and symmetric, \emph{i.e.,}
 \begin{align}
     \Delta\mathbf{u}_{\max} &= \begin{bmatrix} \Delta f_{\max}\,\mathbf{1}_k \\ \Delta \alpha_{\max}\,\mathbf{1}_k \end{bmatrix}, &
@@ -432,7 +411,7 @@ In both scenarios, the vessels reach their reference position while maintaining 
 
 We also tested a scenario where one of the vessels is uncontrolled.
 The results are shown in Figure~\ref{fig:ccta_uncontrolled}.
-In this scenario, the uncontrolled vessel (plotted in black) solves the control allocation problem without the CBF constraints \eqref{eq:ccta_combined_avoidance_allocation_constraint}.
+In this scenario, the uncontrolled vessel (plotted in black) solves the control allocation problem without the \gls{cbf} constraints \eqref{eq:ccta_combined_avoidance_allocation_constraint}.
 Although the time it takes the vessels to converge to their goal positions is greater, the minimum safe distance is still maintained.
 
 In this section, we have provided some insight into how to chose some of the parameters for the simulated models.
@@ -506,7 +485,7 @@ Conversely, increasing the slope of $\gamma$ decreases the size of the region wh
 
 \section{Conclusions}
 \label{sec:ccta_conclusion}
-In this paper, we have proposed a method for integrating a COLAV scheme into control allocation through control barrier functions.
+In this chapter, we have proposed a method for integrating a \gls{colav} scheme into control allocation through control barrier functions.
 We have demonstrated its effectiveness on two models of ASVs, where it significantly improved the safety.
 The proposed method can be readily implemented on vehicles that already use optimization-based control allocation by simply including the constraints given by the control barrier functions in the optimization.
 

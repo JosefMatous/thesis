@@ -8,6 +8,7 @@ First, we present a continuous-time version of the algorithm and prove its stabi
 Then, we present a discrete-time event-triggered version that, compared to similar formation path-following methods, can achieve the same steady state-error performance with fewer inter-vehicle transmissions.
 The effectiveness of both the continuous-time and the discrete-time algorithm is verified in numerical simulations.
 Furthermore, the discrete-time version is tested in field experiments.  
+The contents of this chaper are based on \cite{matous_singularity_2023}.
 
 \section{Introduction}
 
@@ -48,10 +49,10 @@ An extension to more complex vehicle models will be shown in Section~\ref{sec:di
 Let $\mat{p}_i \in \mathbb{R}^3$ be the position of vehicle $i$.
 The kinematic equation of vehicle $i$ is
 \begin{equation}
-    \dot{\mat{p}}_i = \mat{v}_i,
+    \dot{\mat{p}}_i = \ivel_i,
     \label{eq:distr_NSB_kinematics}
 \end{equation}
-where $\mat{v}_i \in \mathbb{R}^3$ is the input velocity.
+where $\ivel_i \in \mathbb{R}^3$ is the input velocity.
 
 The vehicles should follow a predefined path in a given formation.
 Let $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^3$ be a parametrization of the desired path.
@@ -83,29 +84,29 @@ Obstacle avoidance is not implemented as a separate task but rather as an extens
 The desired velocity associated with the path-following task is identical for all vehicles.
 In the \emph{nominal} case (\emph{i.e.,} when there is no risk of colliding with the obstacle), we let the velocity be given by the following line-of-sight (LOS) guidance algorithm
 \begin{equation}
-    \mat{v}_{\rm LOS} = \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
+    \ivel_{\rm LOS} = \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
     \label{eq:distr_NSB_v_LOS_centralized}
 \end{equation}
 where $\Delta > 0$ is the lookahead distance, $y_b^p$ and $z_b^p$ are the components of $\mat{p}_b^p$, and $D = \sqrt{\Delta^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2}$.
 
 The method for obstacle avoidance is identical to the one presented in Chapter~\ref{chap:NSB_R}.
-Let $\mat{p}_o \in \mathbb{R}^2$ and $\mat{v}_o \in \mathbb{R}^2$ denote the position and velocity of the obstacle.
+Let $\mat{p}_o \in \mathbb{R}^2$ and $\ivel_o \in \mathbb{R}^2$ denote the position and velocity of the obstacle.
 Let us define the horizontal formation radius, $r_f$, as
 \begin{equation}
     r_f = \max_i \norm{\inlinevector{x_i, y_i} - \inlinevector{x_b, y_b}},
     \label{eq:distr_NSB_r_f}
 \end{equation}
 where $x_i, y_i$ and $x_b, y_b$ are the $x$- and $y$-coordinates of vehicle $i$ and the barycenter, respectively.
-Furthermore, let $r_o > 0$ denote the minimum safety distance between the vehicles and the obstacle, and let us define the relative position and velocity, $\mat{p}_{\rm rel}$ and $\mat{v}_{\rm rel}$, as
+Furthermore, let $r_o > 0$ denote the minimum safety distance between the vehicles and the obstacle, and let us define the relative position and velocity, $\mat{p}_{\rm rel}$ and $\ivel_{\rm rel}$, as
 \begin{align}
     \mat{p}_{\rm rel} &= \inlinevector{x_b, y_b} - \mat{p}_o, \\
-    \mat{v}_{\rm rel} &= \inlinevector{v_{x,{\rm LOS}}, v_{y,{\rm LOS}}} - \mat{v}_o,
+    \ivel_{\rm rel} &= \inlinevector{v_{x,{\rm LOS}}, v_{y,{\rm LOS}}} - \ivel_o,
 \end{align}
 where $v_{x,{\rm LOS}}$ and $v_{y,{\rm LOS}}$ are components of the LOS velocity \eqref{eq:distr_NSB_v_LOS_centralized}.
 
 To guarantee obstacle avoidance, the relative velocity must stay outside of the so-called \emph{collision cone} given by
 \begin{align}
-    \abs{\angle\left(\mat{v}_{\rm rel}, -\mat{p}_{\rm rel}\right)} &\leq \alpha, &
+    \abs{\angle\left(\ivel_{\rm rel}, -\mat{p}_{\rm rel}\right)} &\leq \alpha, &
     \alpha &= \arcsin\left(\frac{r_o+r_f}{\norm{\mat{p}_{\rm rel}}}\right),
     \label{eq:distr_NSB_collision-conflict}
 \end{align}
@@ -117,21 +118,21 @@ The reasoning behind the second condition is that the cone angle $\alpha$ is rel
 Specifically, a low value of $\alpha$ means a large distance (relative to the formation and obstacle radii).
 Consequently, there is no need to perform obstacle avoidance if the cone angle is small.
 
-When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\mat{v}_{\rm OA}$ given by
+When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\ivel_{\rm OA}$ given by
 \begin{align}
-    \mat{v}_{\rm OA} &= \norm{\mat{v}_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
+    \ivel_{\rm OA} &= \norm{\ivel_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
     \psi_{\rm OA} &= {\rm arctan}_2 \left(y_o - y_b, x_o - x_b\right) \pm \alpha,
 \end{align}
 where ${\rm arctan}_2$ is the four-quadrant inverse tan.
 Note that $\psi_{\rm OA}$ has two solutions corresponding to avoiding the obstacle in the clockwise and counterclockwise directions.
 Inspired by \cite{haraldsen_reactive_2021}, we propose the following method for choosing a direction:
-When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\mat{v}_{\rm rel}$.
+When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\ivel_{\rm rel}$.
 Afterwards, we maintain the same direction.
 
 Finally, let us discuss formation keeping.
 The desired velocity associated with the formation-keeping task for vehicle $i$ is given by
 \begin{align}
-    \mat{v}_{f, i} &= -k_f \left(\bs{\sigma}_i - \bs{\sigma}_{i,d}\right) + \dot{\bs{\sigma}}_{i,d},
+    \ivel_{f, i} &= -k_f \left(\bs{\sigma}_i - \bs{\sigma}_{i,d}\right) + \dot{\bs{\sigma}}_{i,d},
     \label{eq:distr_NSB_v_f_centralized}
 \end{align}
 where 
@@ -144,7 +145,7 @@ and $k_f$ is a positive gain.
 It can be shown that these two tasks are \emph{orthogonal} and \emph{independent} (intuitively: the path-following velocity is common to all vehicles, while the formation-keeping velocity is differential).
 Therefore, the two tasks can be executed at the same time, and the total desired NSB velocity for vehicle $i$ is given by
 \begin{equation}
-    \mat{v}_{{\rm NSB}, i} = \mat{v}_{\rm LOS} + \mat{v}_{f, i}.
+    \ivel_{{\rm NSB}, i} = \ivel_{\rm LOS} + \ivel_{f, i}.
 \end{equation}
 
 In addition, we choose the following update law for the path parameter
@@ -169,7 +170,7 @@ Instead, they should estimate the position of the barycenter and the radius of t
 Let $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$ denote vehicle $i$'s estimates of the barycenter, formation radius, and path parameter, respectively.
 Then, vehicle $i$ calculates its LOS velocity as
 \begin{equation}
-    \mat{v}_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p(s_i) \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p},
+    \ivel_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p(s_i) \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p},
 \end{equation}
 where
 \begin{align}
@@ -184,12 +185,12 @@ In addition, the vehicle estimates the cone angle as
 where $x_{b, i}$ and $y_{b, i}$ are the $x$- and $y$-components of $\mat{p}_{b, i}$.
 The vehicle then determines if there is a need for obstacle avoidance according to the rules described in the previous section, and calculates its obstacle avoidance velocity as
 \begin{align}
-    \mat{v}_{{\rm OA}, i} &= \norm{\mat{v}_{{\rm rel}, i}} \inlinevector{\cos(\psi_{{\rm OA}, i}), \sin(\psi_{{\rm OA}, i})} + \inlinevector{\dot{x}_o, \dot{y}_o}\!\!\!, \\
+    \ivel_{{\rm OA}, i} &= \norm{\ivel_{{\rm rel}, i}} \inlinevector{\cos(\psi_{{\rm OA}, i}), \sin(\psi_{{\rm OA}, i})} + \inlinevector{\dot{x}_o, \dot{y}_o}\!\!\!, \\
     \psi_{{\rm OA}, i} &= {\rm arctan}_2 \left(y_o - y_{b, i}, x_o - x_{b, i}\right) \pm \alpha_i.
 \end{align}
 The formation-keeping velocity is calculated as
 \begin{align}
-    \mat{v}_{f, i} &= -k_f \left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + \dot{\widehat{\bs{\sigma}}}_{d,i},
+    \ivel_{f, i} &= -k_f \left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + \dot{\widehat{\bs{\sigma}}}_{d,i},
     \label{eq:distr_NSB_v_f_distributed}
 \end{align}
 where
@@ -199,7 +200,7 @@ where
 \end{align}
 The path-following and formation-keeping velocities are then combined to obtain the desired NSB velocity
 \begin{equation}
-    \mat{v}_{{\rm NSB}, i} = \mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i}.
+    \ivel_{{\rm NSB}, i} = \ivel_{{\rm LOS}, i} + \ivel_{f, i}.
 \end{equation}
 
 Finally, let us discuss the update laws for the estimates $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$.
@@ -207,7 +208,7 @@ We assume that the vehicles communicate over a connected undirected graph.
 Each vehicle transmits its own estimates $\mat{p}_{b, i}$, $s_i$, and $r_{f, i}$.
 We propose the following equations to update the barycenter and path parameter estimates
 \begin{align}
-    \dot{\mat{p}}_{b, i} &= \mat{v}_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\mat{p}_{b, j} - \mat{p}_{b, i}\right),  \label{eq:distr_NSB_consensus_barycenter} \\
+    \dot{\mat{p}}_{b, i} &= \ivel_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\mat{p}_{b, j} - \mat{p}_{b, i}\right),  \label{eq:distr_NSB_consensus_barycenter} \\
     \dot{s}_i &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_i)}{\partial s_i}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_i} + k_s f_{s\!}\!\left(\!x_{b, i\!}^p\right)\!\right) + c_s \!\! \sum_{j \in \mathcal{N}_i}\!\! \left(s_{j\!} - s_{i\!}\right), \label{eq:distr_NSB_consensus_parameter}
 \end{align}
 where $k_b$, $c_p$, and $c_s$ are positive gains, and $\mathcal{N}_i$ is the set of neighbors of vehicle $i$.
@@ -264,23 +265,23 @@ First, let us investigate the closed-loop properties of the path-following error
 The barycenter kinematics are given by
 \begin{equation}
     \begin{split}
-        \dot{\mat{p}}_b^p &= \mat{R}_p\T \left(\frac{1}{N}\sum_{i=1}^N \mat{v}_{{\rm NSB}, i} - \dot{\mat{p}}_p(s)\right)\\
-        & = \frac{1}{N}\sum_{i=1}^N\mat{R}_p\T \left(\mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i}\right) - \inlinevector{\dot{s}, 0, 0}.
+        \dot{\mat{p}}_b^p &= \mat{R}_p\T \left(\frac{1}{N}\sum_{i=1}^N \ivel_{{\rm NSB}, i} - \dot{\mat{p}}_p(s)\right)\\
+        & = \frac{1}{N}\sum_{i=1}^N\mat{R}_p\T \left(\ivel_{{\rm LOS}, i} + \ivel_{f, i}\right) - \inlinevector{\dot{s}, 0, 0}.
     \end{split}\label{eq:distr_NSB_p_b_CL_1}
 \end{equation}
-Let us define the ``true'' LOS velocity, $\mat{v}_{\rm LOS}$, according to \eqref{eq:distr_NSB_v_LOS_centralized}.
+Let us define the ``true'' LOS velocity, $\ivel_{\rm LOS}$, according to \eqref{eq:distr_NSB_v_LOS_centralized}.
 Then, the LOS velocity calculated by vehicle $i$ can be expressed as
 \begin{equation}
-    \mat{v}_{{\rm LOS}, i} = \mat{v}_{\rm LOS} + \widetilde{\mat{v}}_{{\rm LOS}, i}, \label{eq:distr_NSB_v_LOS_CL}
+    \ivel_{{\rm LOS}, i} = \ivel_{\rm LOS} + \widetilde{\ivel}_{{\rm LOS}, i}, \label{eq:distr_NSB_v_LOS_CL}
 \end{equation}
 where
 \begin{equation}
-    \widetilde{\mat{v}}_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p} - \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_{b}^p, -z_{b}^p}
+    \widetilde{\ivel}_{{\rm LOS}, i} = \frac{U_d}{D_i} \mat{R}_p \inlinevector{\Delta, -y_{b, i}^p, -z_{b, i}^p} - \frac{U_d}{D} \mat{R}_p \inlinevector{\Delta, -y_{b}^p, -z_{b}^p}
 \end{equation}
-It is straightforward to show that $\widetilde{\mat{v}}_{{\rm LOS}, i} = \mat{0}$ if $\widetilde{\mat{p}}_{b, i} = \mat{0}$.
+It is straightforward to show that $\widetilde{\ivel}_{{\rm LOS}, i} = \mat{0}$ if $\widetilde{\mat{p}}_{b, i} = \mat{0}$.
 Moreover, it can be shown that the norm of the LOS velocity error satisfies the following inequality
 \begin{equation}
-    \norm{\widetilde{\mat{v}}_{{\rm LOS}, i}} \leq \frac{U_d}{\Delta} \norm{\widetilde{\mat{p}}_{b, i}}.
+    \norm{\widetilde{\ivel}_{{\rm LOS}, i}} \leq \frac{U_d}{\Delta} \norm{\widetilde{\mat{p}}_{b, i}}.
     \label{eq:distr_NSB_v_LOS_tilde}
 \end{equation}
 % We can illustrate this property on the following two-dimensional example.
@@ -288,7 +289,7 @@ Moreover, it can be shown that the norm of the LOS velocity error satisfies the 
 % Consequently, the norm of the LOS error is given by
 % \begin{equation}
 %     \begin{split}
-%         \norm{\widetilde{\mat{v}}_{{\rm LOS}, i}} &= \norm{\frac{U_d}{\sqrt{\Delta^2 - (y_b^p)^2}}\left(\begin{bmatrix} \Delta \\ -y_{b,i}^p \end{bmatrix} - \begin{bmatrix} \Delta \\ -y_b^p \end{bmatrix}\right)} \\
+%         \norm{\widetilde{\ivel}_{{\rm LOS}, i}} &= \norm{\frac{U_d}{\sqrt{\Delta^2 - (y_b^p)^2}}\left(\begin{bmatrix} \Delta \\ -y_{b,i}^p \end{bmatrix} - \begin{bmatrix} \Delta \\ -y_b^p \end{bmatrix}\right)} \\
 %         &= \frac{2 U_d y_b^p}{\sqrt{\Delta^2 - (y_b^p)^2}}.
 %     \end{split}
 % \end{equation}
@@ -322,7 +323,7 @@ Finally, let us investigate the sum of formation-keeping velocities.
 From \eqref{eq:distr_NSB_v_f_distributed}, we get
 \begin{equation}
     \begin{split}
-    \frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \mat{v}_{f, i\!} &= -\frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T k_f \!\! \left(\mat{p}_i - \mat{p}_{b,i} - \mat{R}_p\mat{p}_{f, i}^f\right) \\
+    \frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \ivel_{f, i\!} &= -\frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T k_f \!\! \left(\mat{p}_i - \mat{p}_{b,i} - \mat{R}_p\mat{p}_{f, i}^f\right) \\
     &= -\frac{1}{N} \!\! \sum_{i=1}^N \! \mat{R}_p\T k_{\!f\!} \! \left(\! \mat{p}_{i\!} -\! \mat{p}_{b\!} -\! \widetilde{\mat{p}}_{b, i\!} -\! \mat{R}_p\mat{p}_{f, i\!}^f\right) \\
     &= \frac{k_f}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \widetilde{\mat{p}}_{b, i}.
     \end{split}
@@ -333,7 +334,7 @@ Substituting \eqref{eq:distr_NSB_v_LOS_CL}, \eqref{eq:distr_NSB_s_dot_CL}, and \
 \begin{equation}
     \begin{split}
         \dot{\mat{p}}_b^p &= - U_d \inlinevector{k_s f_s\left(x_b^p\right), \frac{1}{D} y_b^p, \frac{1}{D} z_b^p} \\
-        & \quad + \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\mat{v}}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
+        & \quad + \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\ivel}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
     \end{split}
     \label{eq:distr_NSB_p_b_CL}
 \end{equation}
@@ -341,19 +342,19 @@ Substituting \eqref{eq:distr_NSB_v_LOS_CL}, \eqref{eq:distr_NSB_s_dot_CL}, and \
 Next, we find a closed-loop equation for the formation-keeping errors.
 Differentiating \eqref{eq:distr_NSB_formation_errors} with respect to time yields
 \begin{equation}
-    \dot{\widetilde{\bs{\sigma}}}_i = \dot{\mat{p}}_i - \dot{\mat{p}}_b = \mat{v}_{{\rm LOS}, i} + \mat{v}_{f, i} - \frac{1}{N}\sum_{j=1}^N \left(\mat{v}_{{\rm LOS}, j} + \mat{v}_{f, j}\right)
+    \dot{\widetilde{\bs{\sigma}}}_i = \dot{\mat{p}}_i - \dot{\mat{p}}_b = \ivel_{{\rm LOS}, i} + \ivel_{f, i} - \frac{1}{N}\sum_{j=1}^N \left(\ivel_{{\rm LOS}, j} + \ivel_{f, j}\right)
     \label{eq:distr_NSB_sigma_CL_1}
 \end{equation}
 Substituting \eqref{eq:distr_NSB_v_LOS_CL} and \eqref{eq:distr_NSB_v_f_distributed} into \eqref{eq:distr_NSB_sigma_CL_1} yields
 \begin{equation}
-    \dot{\widetilde{\bs{\sigma}}}_i = -k_f \widetilde{\bs{\sigma}}_i + \widetilde{\mat{v}}_{{\rm LOS}, i} - k_f \widetilde{\mat{p}}_{b, i} + \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\mat{v}}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
+    \dot{\widetilde{\bs{\sigma}}}_i = -k_f \widetilde{\bs{\sigma}}_i + \widetilde{\ivel}_{{\rm LOS}, i} - k_f \widetilde{\mat{p}}_{b, i} + \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\ivel}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
     \label{eq:distr_NSB_sigma_CL_2}
 \end{equation}
 This equation can be rewritten in a more compact form.
 To do so, let us define the following concatenated error vectors
 \begin{subequations}
     \begin{align}
-        \widetilde{\mat{V}}_{\rm LOS\!}\T &= \left[\widetilde{\mat{v}}_{{\rm LOS}, 1}, \ldots, \widetilde{\mat{v}}_{{\rm LOS}, N}\right], &
+        \widetilde{\mat{V}}_{\rm LOS\!}\T &= \left[\widetilde{\ivel}_{{\rm LOS}, 1}, \ldots, \widetilde{\ivel}_{{\rm LOS}, N}\right], &
         \widetilde{\bs{\Sigma}}\T\!\!\! &= \left[\widetilde{\bs{\sigma}}_1, \ldots, \widetilde{\bs{\sigma}}_N\right]\mathrlap{,} \\
         \widetilde{\mat{P}}_{b\!}\T &= \left[\widetilde{\mat{p}}_{b, 1}, \ldots, \widetilde{\mat{p}}_{b, N}\right], &
         \Tilde{\mat{S}}\T\! &= \left[\Tilde{s}_1, \ldots, \Tilde{s}_N\right].
@@ -377,8 +378,8 @@ From \eqref{eq:distr_NSB_consensus_errors}, the time-derivative of $\widetilde{\
 \begin{equation}
     \begin{split}
         \dot{\widetilde{\mat{p}}}_{b, i} &= \dot{\mat{p}}_{b, i} - \dot{\mat{p}}_b \\
-        &= \widetilde{\mat{v}}_{{\rm LOS}, i} + k_b\left(\widetilde{\bs{\sigma}}_i - \widetilde{\mat{p}}_{b, i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\widetilde{\mat{p}}_{b, j} - \widetilde{\mat{p}}_{b, i}\right) \\
-        &\quad - \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\mat{v}}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
+        &= \widetilde{\ivel}_{{\rm LOS}, i} + k_b\left(\widetilde{\bs{\sigma}}_i - \widetilde{\mat{p}}_{b, i}\right) + c_p \!\! \sum_{j \in \mathcal{N}_i} \! \left(\widetilde{\mat{p}}_{b, j} - \widetilde{\mat{p}}_{b, i}\right) \\
+        &\quad - \frac{1}{N}\sum_{j=1}^N \left(\widetilde{\ivel}_{{\rm LOS}, j} - k_f \widetilde{\mat{p}}_{b, j}\right).
     \end{split}
 \end{equation}
 This equation can be written in the following compact form
@@ -548,7 +549,7 @@ Finally, let us analyze the subsystem \eqref{eq:distr_NSB_p_b_CL}
     
     Let $\mat{h}$ denote the perturbing term in \eqref{eq:distr_NSB_p_b_CL}. This term is given by
     \begin{equation}
-        \mat{h} = \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\mat{v}}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
+        \mat{h} = \frac{1}{N} \sum_{i=1}^N \left(\mat{R}_p\T \left(\widetilde{\ivel}_{{\rm LOS}, i} + k_f \widetilde{\mat{p}}_{b, i}\right) - g_i \right).
     \end{equation}
     From \eqref{eq:distr_NSB_v_LOS_tilde} and \eqref{eq:distr_NSB_g_i_bound}, we arrive at the following upper bound on the norm of $\mat{h}$
     \begin{align}
@@ -578,11 +579,11 @@ In this section, we introduce the model of underactuated AUVs and propose soluti
 
 \subsection{AUV Model}
 Let $\mat{p}_i \in \mathbb{R}^3$ denote the position of vehicle $i$.
-Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation, let $\bs{\nu}_i = \inlinevector{u_i, v_i, w_i}$ be the linear surge, sway, and heave velocities, and let $\bs{\omega}_i = \inlinevector{p_i, q_i, r_i}$ be the angular roll, pitch, and yaw rates.
+Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation, let $\mat{v}_i = \inlinevector{u_i, v_i, w_i}$ be the linear surge, sway, and heave velocities, and let $\bs{\omega}_i = \inlinevector{p_i, q_i, r_i}$ be the angular roll, pitch, and yaw rates.
 
 The kinematics of the vehicle are \cite{fossen_handbook_2011}
 \begin{align}
-    \dot{\mat{p}}_i &= \mat{R}_i \bs{\nu}_i, &
+    \dot{\mat{p}}_i &= \mat{R}_i \mat{v}_i, &
     \dot{\mat{R}}_i &= \mat{R}_i \mat{S}(\bs{\omega}_i),
     \label{eq:distr_NSB_AUV_kinematic}
 \end{align}
@@ -593,9 +594,9 @@ The reason for making this assumption is that we want to develop a control schem
 The vehicle dynamics can then be expressed as
 \begin{equation}
     \begin{bmatrix}
-        \dot{\bs{\nu}}_i \\ \dot{\bs{\omega}}_i
+        \dot{\mat{v}}_i \\ \dot{\bs{\omega}}_i
     \end{bmatrix}
-    = f\left(\mat{R}_i, \mat{R}_{d,i}, \bs{\nu}_i, u_{d, i}, \bs{\omega}_i\right),
+    = f\left(\mat{R}_i, \mat{R}_{d,i}, \mat{v}_i, u_{d, i}, \bs{\omega}_i\right),
 \end{equation}
 where $f$ is a function representing the closed-loop dynamics, and $\mat{R}_{d,i}$ and $u_{d, i}$ are the desired orientation and surge velocity, respectively.
 
@@ -603,7 +604,7 @@ where $f$ is a function representing the closed-loop dynamics, and $\mat{R}_{d,i
 In this section, we propose a method for choosing the desired surge velocity and orientation in order to handle the underactuated dynamics.
 
 First, let us discuss the method for choosing the desired surge velocity.
-Ideally, $u_{d, i}$ should be chosen such that $\norm{\left[u_{d, i}, v_i, w_i\right]} = \norm{\mat{v}_{{\rm NSB}, i}}$.
+Ideally, $u_{d, i}$ should be chosen such that $\norm{\left[u_{d, i}, v_i, w_i\right]} = \norm{\ivel_{{\rm NSB}, i}}$.
 However, since the AUV is underactuated, and thus there are no control inputs to directly control the sway velocity, $v_i$, and the heave velocity, $w_i$, this equation cannot always be satisfied.
 In addition, AUVs typically need to maintain a positive surge velocity to be able to maneuver.
 Consequently, we propose the following method for choosing the desired surge velocity
@@ -615,14 +616,14 @@ Consequently, we propose the following method for choosing the desired surge vel
     \end{cases}
     \label{eq:distr_NSB_u_d_i}
 \end{equation}
-where $U_{{\rm NSB}, i} = \norm{\mat{v}_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2$, and $u_{\min} > 0$ is the minimum required surge velocity.
+where $U_{{\rm NSB}, i} = \norm{\ivel_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2$, and $u_{\min} > 0$ is the minimum required surge velocity.
 
 Now, let us discuss the method for choosing the desired orientation.
 The proposed method consists of two steps.
 In the first step, we find the desired course, $\chi_{d, i}$, and flight-path angle, $\gamma_{d, i}$, as
 \begin{align}
     \chi_{d, i} &= {\rm arctan}_2\left({y}_{{\rm NSB}, i}, {x}_{{\rm NSB}, i}\right), \\
-    \gamma_{d, i} &= - \arcsin\left(\frac{{z}_{{\rm NSB}, i}}{\norm{\mat{v}_{{\rm NSB}, i}}}\right).
+    \gamma_{d, i} &= - \arcsin\left(\frac{{z}_{{\rm NSB}, i}}{\norm{\ivel_{{\rm NSB}, i}}}\right).
 \end{align}
 In the second step, we calculate the desired pitch ($\theta_{d, i}$) and yaw ($\psi_{d, i}$) angles as
 \begin{align}
@@ -666,7 +667,7 @@ To address these issues, we need to discretize the consensus scheme \eqref{eq:di
 To discretize the consensus scheme, we propose the following method.
 Each vehicle continuously updates its variables using the following equations
 \begin{align}
-    \dot{\mat{p}}_{b, i} &= \mat{v}_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right), \label{eq:distr_NSB_consensus_update_p} \\
+    \dot{\mat{p}}_{b, i} &= \ivel_{{\rm LOS}, i} + k_b\left(\widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}\right), \label{eq:distr_NSB_consensus_update_p} \\
     \dot{s}_i &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_i)}{\partial s_i}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_i} + k_s f_{s\!}\!\left(\!x_{b, i\!}^p\right)\!\right), \label{eq:distr_NSB_consensus_update_s} \\
     \dot{r}_{f, i} &= k_r \left(\widehat{r}_{f, i} - r_{f, i}\right), \qquad
     r_{f, i}^{+} = \widehat{r}_{f, i}, \text{if } \widehat{r}_{f, i} > r_{f, i}.
@@ -675,7 +676,7 @@ To perform the consensus algorithm, each AUV transmits the following packet: $\l
 When vehicle $i$ receives a consensus packet from vehicle $j$, it first compensates for the delay by solving the following set of differential equations
 \begin{subequations}
     \begin{align}
-        \dot{\mat{p}}_{b, j} &= \mat{v}_{{\rm LOS}, j} + k_b \breve{\bs{\sigma}}_j, \label{eq:distr_NSB_consensus_delay_p} \\
+        \dot{\mat{p}}_{b, j} &= \ivel_{{\rm LOS}, j} + k_b \breve{\bs{\sigma}}_j, \label{eq:distr_NSB_consensus_delay_p} \\
         \dot{\breve{\bs{\sigma}}}_j &= - k_f \breve{\bs{\sigma}}_j, \label{eq:distr_NSB_consensus_delay_sigma} \\
         \dot{s}_j &= U_{d\!} \norm{\!\frac{\partial \mat{p}_p(s_j)}{\partial s_j}\!}^{-1} \!\!\! \left(\!\frac{\Delta}{D_j} + k_s f_{s\!}\!\left(\!x_{b, j\!}^p\right)\!\right). \label{eq:distr_NSB_consensus_delay_s}
     \end{align}

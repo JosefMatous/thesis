@@ -25,10 +25,10 @@ A review of \gls{los} guidance methods for marine vehicles is presented in \cite
 
 First, let us discuss \gls{los} guidance for vehicles moving in the horizontal plane.
 Let $\mat{p}_b^p = \inlinevector{x_b^p, y_b^p}$ denote the path-following error of the barycenter.
-Let $\mat{V}_{\rm LOS}$ denote the desired (inertial) line-of-sight velocity that steers the barycenter towards the desired path.
-$\mat{V}_{\rm LOS}$ is given by \cite{fossen_handbook_2011,pettersen_waypoint_2001}
+Let $\ivel_{\rm LOS}$ denote the desired (inertial) line-of-sight velocity that steers the barycenter towards the desired path.
+This velocity is given by \cite{fossen_handbook_2011,pettersen_waypoint_2001}
 \begin{align}
-    \mat{V}_{\rm LOS} &= U_{\rm LOS} \inlinevector{\cos(\chi_{\rm LOS}), \sin(\chi_{\rm LOS})}\!\!, &
+    \ivel_{\rm LOS} &= U_{\rm LOS} \inlinevector{\cos(\chi_{\rm LOS}), \sin(\chi_{\rm LOS})}\!\!, &
     \chi_{\rm LOS} &= \psi_{p\!} - \arctan\left(\frac{y_b^p}{\Delta}\right)\!,
     \label{eq:background_los_2d}
 \end{align}
@@ -39,9 +39,9 @@ For vehicles moving in three dimensions, there exist two types of \gls{los} guid
 A decoupled \gls{los} algorithm consists of two separate guidance schemes that steer the vehicle in the horizontal and vertical plane.
 Let $\mat{p}_b^p = \inlinevector{x_b^p, y_b^p, z_b^p}$ denote the path-following error of the barycenter.
 Let us assume that the path-tangential coordinate frame is chosen according to \eqref{eq:background_R_p_zero_roll}, so that the rotation matrix $\mat{R}_p(s)$ has a zero roll angle.
-The desired line-of-sight velocity, $\mat{V}_{\rm LOS}$, is then given by
+The desired line-of-sight velocity, $\ivel_{\rm LOS}$, is then given by
 \begin{align}
-    \mat{V}_{\rm LOS} &= U_{\rm LOS} \!
+    \ivel_{\rm LOS} &= U_{\rm LOS} \!
     \begin{bmatrix}
         \cos(\gamma_{\rm LOS}) \cos(\chi_{\rm LOS}) \\
         \cos(\gamma_{\rm LOS}) \sin(\chi_{\rm LOS}) \\
@@ -58,7 +58,7 @@ Comparing the decoupled guidance scheme in \eqref{eq:background_los_decoupled} t
 
 In a \emph{coupled} \gls{los} guidance scheme, the desired velocity is given by
 \begin{equation}
-    \mat{V}_{\rm LOS} = \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2 + {z_b^p}^2}} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
+    \ivel_{\rm LOS} = \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2 + {z_b^p}^2}} \mat{R}_p \inlinevector{\Delta, -y_b^p, -z_b^p},
     \label{eq:background_los_coupled}
 \end{equation}
 where $U_{\rm LOS} > 0$ is the desired path-following speed, $\mat{R}_p$ is the rotation matrix between the path-tangential and the inertial coordinate frame, and $\Delta > 0$ is the lookahead distance.
@@ -66,7 +66,7 @@ An illustration of this scheme is shown in \figref{fig:background_los_3d}.
 The coupled scheme can be seen as an extension of the horizontal \gls{los} guidance scheme to three dimensions.
 Indeed, the two-dimensional guidance scheme \eqref{eq:background_los_2d} can also be written as
 \begin{equation}
-    \mat{V}_{\rm LOS} = 
+    \ivel_{\rm LOS} = 
     \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2}} \begin{bmatrix} \Delta\cos(\psi_p) + y_b^p\sin(\psi_p) \\ \Delta\sin(\psi_p) - y_b^p\cos(\psi_p) \end{bmatrix} = 
     \frac{U_{\rm LOS}}{\sqrt{\Delta^2 + {y_b^p}^2}} \mat{R}_p \begin{bmatrix} \Delta \\ -y_b^p \end{bmatrix}. 
     \label{eq:background_los_2d_R}

@@ -60,9 +60,14 @@
 
 \newcommand{\pose}{\bs{\eta}}
 \newcommand{\vel}{\bs{\nu}}
-\newcommand{\ocean}{\mat{V}_c}
-\newcommand{\oceanhat}{\hat{\mat{V}}_c}
-\newcommand{\oceantilde}{\tilde{\mat{V}}_c}
+\newcommand{\ivel}{\bs{\upsilon}} % inertial velocity
+\newcommand{\ivels}{\upsilon} % inertial velocity component
+\newcommand{\ocean}{\ivel_c}
+\newcommand{\oceanx}{\ivels_x}
+\newcommand{\oceany}{\ivels_y}
+\newcommand{\oceanz}{\ivels_z}
+\newcommand{\oceanhat}{\hat{\ivel}_c}
+\newcommand{\oceantilde}{\tilde{\ivel}_c}
 \newcommand{\mass}{\mat{M}}
 \newcommand{\cor}{\mat{C}\left(\bs{\nu}_r\right)}
 \newcommand{\drag}{\mat{D}\left(\bs{\nu}_r\right)}
@@ -105,7 +110,7 @@
 %\listoftables
 %\lstlistoflistings
 
-\printglossary[type=\acronymtype] % Print acronyms
+\printglossary[type=\acronymtype,style=tree] % Print acronyms
 %\printglossary                    % Print glossary
 %\printunsrtglossary[type=symbols,style=long]
 \input{symbols.tex}

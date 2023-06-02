@@ -5,10 +5,10 @@
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
 
 \begin{tikzpicture}[auto, node distance=3.75cm,>=latex']
-    \node [block, align=center] (planner) {Planner};
-    \node [block, right of=planner, text width=2.5cm, align=center, node distance=3cm] (highlevel) {High-level \\ controller};
-    \node [block, right of=highlevel, text width=2.5cm, align=center] (alloc) {Control \\ allocation};
-    \node [block, right of=alloc, align=center, node distance=3.25cm] (actuators) {Actuators};
+    \node [block, align=center, rounded corners] (planner) {Planner};
+    \node [block, right of=planner, text width=2.5cm, align=center, node distance=3cm, rounded corners] (highlevel) {High-level \\ controller};
+    \node [block, right of=highlevel, text width=2.5cm, align=center, rounded corners] (alloc) {Control \\ allocation};
+    \node [block, right of=alloc, align=center, node distance=3.25cm, rounded corners] (actuators) {Actuators};
     \draw [->] (planner) -- (highlevel);
     \draw [->] (highlevel) -- node [align=center] {$\boldsymbol{\tau}_d$} (alloc);
     \draw [->] (alloc) -- node [align=center] {$\mathbf{u}$} (actuators);

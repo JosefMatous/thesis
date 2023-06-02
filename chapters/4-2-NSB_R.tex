@@ -7,6 +7,7 @@ Compared to the existing literature, the algorithm includes both inter-vehicle a
 The algorithm is applied to a six degree-of-freedom model, using rotation matrices to describe the attitude to avoid singularities.
 Using the results of cascaded systems theory, we prove that the closed-loop system is uniformly semiglobally exponentially stable.
 We use numerical simulations to validate the results.
+The contents of this chapter are based on \cite{matous_singularity_2023}.
 
 \section{Introduction}
 
@@ -36,7 +37,7 @@ We consider a fleet of $n$ underactuated AUVs.
 The dynamics of the AUVs are described using the 6DOF control-oriented model described in Section~\ref{sec:model_control_oriented}.
 Let $\mat{p} = \inlinevector{x, y, z}$ be the position, and let $\mat{v} = \inlinevector{u, v, w}$ and $\bs{\omega} = \inlinevector{p, q, r}$ be the linear and angular velocities, respectively.
 To avoid the singularities caused by the use of Euler angles, the orientation of the AUV is given by a rotation matrix $\mat{R} \in SO(3)$.
-Furthermore, let $\mat{V}_c = \inlinevector{V_x, V_y, V_z}$ be the velocities of an unknown, constant and irrotational ocean current.
+Furthermore, let $\ocean \in \mathbb{R}^3$ be the velocities of an unknown, constant and irrotational ocean current.
 
 Recalling \eqref{eq:background_nu_dot_relative}, the dynamics of the AUVs are
 \begin{subequations}
@@ -65,7 +66,7 @@ However, there are some assumptions about the low-level controller.
     Note that by Assumption~\ref{asm:actuators}, $\widetilde{\mat{X}}$ is controllable through the input $\mat{f}$.
     Consider the closed-loop system 
     \begin{equation}
-        \dot{\widetilde{\mat{X}}} = F \left( \widetilde{\mat{X}}, v, w, \mat{V}_c \right), \label{eq:NSB_R_low_level_closed_loop}
+        \dot{\widetilde{\mat{X}}} = F \left( \widetilde{\mat{X}}, v, w, \ocean \right), \label{eq:NSB_R_low_level_closed_loop}
     \end{equation}
     consisting of \eqref{eq:NSB_R_R_dot}, \eqref{eq:NSB_R_nu_dot}, and the low-level controller.
     We assume that $\widetilde{\mat{X}} = \mat{0}$ is a globally exponentially stable (GES) equilibrium of \eqref{eq:NSB_R_low_level_closed_loop}.
@@ -135,11 +136,11 @@ As we will explain in Section \ref{sec:NSB_R_OA}, obstacle avoidance and depth l
 Let us denote the variables associated with the COLAV, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
 Define the so-called \emph{task variables} as $\bs{\sigma}_i = \bs{f}_i\left(\mat{p}_1, \ldots, \mat{p}_n\right), i \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,i}, i \in \left\{1,2,3\right\}$.
 
-Furthermore, let $\bs{\upsilon}_i, i \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
-In the standard NSB algorithm, $\bs{\upsilon}_i$ is obtained using the closed-loop inverse kinematics (CLIK) equation \cite{antonelli_2006_kinematic} 
+Furthermore, let $\ivel_i, i \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
+In the standard NSB algorithm, $\ivel_i$ is obtained using the closed-loop inverse kinematics (CLIK) equation \cite{antonelli_2006_kinematic} 
 \begin{equation}
     \label{eq:NSB_R_CLIK}
-    \bs{\upsilon}_i = \mat{J}_i^{\dagger}\,\bigl(\dot{\bs{\sigma}}_{d,i} - \bs{\Lambda}_i\,\widetilde{\bs{\sigma}}_i\bigr),
+    \ivel_i = \mat{J}_i^{\dagger}\,\bigl(\dot{\bs{\sigma}}_{d,i} - \bs{\Lambda}_i\,\widetilde{\bs{\sigma}}_i\bigr),
 \end{equation}
 where $\bs{\Lambda}_i$ is a positive definite gain matrix, $\widetilde{\bs{\sigma}}_i = \bs{\sigma}_i - \bs{\sigma}_{d, i}$, and $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian 
 \begin{equation}
@@ -148,9 +149,9 @@ where $\bs{\Lambda}_i$ is a positive definite gain matrix, $\widetilde{\bs{\sigm
 However, in our case, we need to modify this equation for each task to make it applicable to underactuated AUVs.
 These modifications will be explained in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}.
 
-The combined desired velocity, $\bs{\upsilon}_{\rm NSB}$, is then given by \cite{antonelli_2006_kinematic}
+The combined desired velocity, $\ivel_{\rm NSB}$, is then given by \cite{antonelli_2006_kinematic}
 \begin{equation} 
-    \scale[0.95]{\bs{\upsilon}_{\rm NSB} = \bs{\upsilon}_1 + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right)\left(\bs{\upsilon}_2 + \left(\mat{I} - \mat{J}_2^{\dagger}\mat{J}_2\right)\bs{\upsilon}_3\right),} \label{eq:NSB_R_NSB_with_COLAV}
+    \scale[0.95]{\ivel_{\rm NSB} = \ivel_1 + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right)\left(\ivel_2 + \left(\mat{I} - \mat{J}_2^{\dagger}\mat{J}_2\right)\ivel_3\right),} \label{eq:NSB_R_NSB_with_COLAV}
 \end{equation}
 where $\mat{I}$ is an identity matrix.
 
@@ -173,9 +174,9 @@ The desired values of the task are
 where $\mat{1}$ is a vector of ones.
 To ensure a faster response to a potential collision than in \cite{matouvs_formation_2022}, we propose the following sliding-mode-like COLAV velocity 
 \begin{equation}
-    \bs{\upsilon}_1 = U_{\rm COLAV} \frac{\bs{\upsilon}_{1, {\rm CLIK}}}{\norm{\bs{\upsilon}_{1, {\rm CLIK}}}},
+    \ivel_1 = U_{\rm COLAV} \frac{\ivel_{1, {\rm CLIK}}}{\norm{\ivel_{1, {\rm CLIK}}}},
 \end{equation}
-where $U_{\rm COLAV}$ is a positive constant, $\norm{\cdot}$ is the Euclidean norm, and $\bs{\upsilon}_{1, {\rm CLIK}}$ is the velocity vector given by~\eqref{eq:NSB_R_CLIK}.
+where $U_{\rm COLAV}$ is a positive constant, $\norm{\cdot}$ is the Euclidean norm, and $\ivel_{1, {\rm CLIK}}$ is the velocity vector given by~\eqref{eq:NSB_R_CLIK}.
 
 Note that this task does not guarantee robust collision avoidance.
 During the transients, the relative distance may become smaller than $d_{\rm COLAV}$.
@@ -202,10 +203,10 @@ Similarly to COLAV, we use the CLIK equation~\eqref{eq:NSB_R_CLIK} to obtain the
 However, as motivated in Section~\ref{sec:NSB_R_references}, this velocity needs to be saturated.
 The desired velocity is thus given by 
 \begin{equation}
-    \bs{\upsilon}_2 = \mat{J}_2^{\dagger}\dot{\bs{\sigma}}_{d,2} - \upsilon_{2, \max}\mat{J}_2^{\dagger}\,{\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right),
+    \ivel_2 = \mat{J}_2^{\dagger}\dot{\bs{\sigma}}_{d,2} - \ivels_{2, \max}\mat{J}_2^{\dagger}\,{\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right),
     \label{eq:NSB_R_v_form}
 \end{equation}
-where $\upsilon_{2, \max}$ is a positive constant, and $\rm sat$ is a saturation function given by 
+where $\ivels_{2, \max}$ is a positive constant, and $\rm sat$ is a saturation function given by 
 \begin{equation}
     {\rm sat}(\mat{x}) = \mat{x} \frac{{\rm tanh}\left(\norm{\mat{x}}\right)}{\norm{\mat{x}}},
 \end{equation}
@@ -225,7 +226,7 @@ Inspired by \cite{belleter_2019_observer}, we choose an error-dependent lookahea
 where $\Delta_0$ is a positive constant.
 The LOS velocity then is 
 \begin{equation}
-    \bs{\upsilon}_{\rm LOS} = \mat{R}_p\,\inlinevector{\Delta\left(\mat{p}_b^p\right), -y_b^p, -z_b^p}\,\frac{U_{\rm LOS}}{D},
+    \ivel_{\rm LOS} = \mat{R}_p\,\inlinevector{\Delta\left(\mat{p}_b^p\right), -y_b^p, -z_b^p}\,\frac{U_{\rm LOS}}{D},
     \label{eq:NSB_R_v_LOS}
 \end{equation}
 where $U_{\rm LOS} > 0$ is the desired path-following speed, and 
@@ -234,7 +235,7 @@ where $U_{\rm LOS} > 0$ is the desired path-following speed, and
 \end{equation}
 The task velocity is then given by 
 \begin{equation}
-    \bs{\upsilon}_3 = \mat{1}_n \otimes \bs{\upsilon}_{\rm LOS}
+    \ivel_3 = \mat{1}_n \otimes \ivel_{\rm LOS}
     \label{eq:NSB_R_v_3}
 \end{equation}
 where $\otimes$ is the Kronecker tensor product.
@@ -297,12 +298,12 @@ To guarantee obstacle avoidance, we utilize the collision cone concept \cite{cha
 Inspired by \cite{wiig_collision_2019}, we employ a constant avoidance angle and define a switching condition.
 More precisely, let 
 \begin{equation}
-    \bs{\upsilon}_{\rm rel} = \inlinevector{\dot{x}_{\rm LOS} - \dot{x}_o, \dot{y}_{\rm LOS} - \dot{y}_o}
+    \ivel_{\rm rel} = \inlinevector{\dot{x}_{\rm LOS} - \dot{x}_o, \dot{y}_{\rm LOS} - \dot{y}_o}
 \end{equation}
-denote the relative line-of-sight velocity ($\dot{x}_{\rm LOS}$ and $\dot{y}_{\rm LOS}$ are the components of $\bs{\upsilon}_{\rm LOS}$).
+denote the relative line-of-sight velocity ($\dot{x}_{\rm LOS}$ and $\dot{y}_{\rm LOS}$ are the components of $\ivel_{\rm LOS}$).
 As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the AUVs and obstacle arises if 
 \begin{align}
-    \abs{\angle\left(\mat{p}_{\rm rel}, \bs{\upsilon}_{\rm rel}\right)} &\leq \alpha, &
+    \abs{\angle\left(\mat{p}_{\rm rel}, \ivel_{\rm rel}\right)} &\leq \alpha, &
     \alpha &= \sin^{-1}\left(\frac{r_o+r_f}{\norm{\mat{p}_{\rm rel}}}\right),
     \label{eq:NSB_R_collision-conflict}
 \end{align}
@@ -317,15 +318,15 @@ Since our definition of a safe distance \eqref{eq:NSB_R_obstacle_avoidance_condi
 
 
 
-When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\bs{\upsilon}_{\rm OA}$ given by 
+When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\ivel_{\rm OA}$ given by 
 \begin{align}
-    \bs{\upsilon}_{\rm OA} &= \norm{\bs{\upsilon}_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
+    \ivel_{\rm OA} &= \norm{\ivel_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
     \psi_{\rm OA} &= {\rm atan}_2 \left(y_o - y_b, x_o - x_b\right) \pm \alpha,
 \end{align}
 where ${\rm atan}_2$ is the four-quadrant inverse tan.
 Note that $\psi_{\rm OA}$ has two solutions corresponding to the clockwise and counterclockwise directions.
 Inspired by \cite{haraldsen_reactive_2021}, we propose the following method for choosing a direction:
-When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\bs{\upsilon}_{\rm rel}$.
+When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\ivel_{\rm rel}$.
 Afterwards, we maintain the same direction.
 
 
@@ -336,12 +337,12 @@ We assume the limits to be wide enough to accommodate the formation.
 We then propose to replace the $z$-component of the LOS velocity with a depth-limiting velocity $\dot{z}_{\rm lim}$ given by 
 \begin{equation}
     \dot{z}_{\rm lim} = \begin{cases}
-        \upsilon_z, & \text{if } \min_{i \in \{1, \ldots, n\}} z_i \leq z_{\min}, \\
-        -\upsilon_z, & \text{if } \max_{i \in \{1, \ldots, n\}} z_i \geq z_{\max}, \\
+        \ivels_z, & \text{if } \min_{i \in \{1, \ldots, n\}} z_i \leq z_{\min}, \\
+        -\ivels_z, & \text{if } \max_{i \in \{1, \ldots, n\}} z_i \geq z_{\max}, \\
         \dot{z}_{\rm LOS}, & \text{otherwise},
     \end{cases}
 \end{equation}
-where $\upsilon_z$ is a positive constant.
+where $\ivels_z$ is a positive constant.
 
 
 \subsection{Surge and orientation references}
@@ -356,26 +357,26 @@ The proposed strategy allows us to prove the closed-loop stability of both the p
 First, let us consider the case when neither the avoidance nor depth-limiting tasks are active.
 Note that due to the properties of the task velocities and Jacobians, \eqref{eq:NSB_R_NSB_with_COLAV} can be simplified to 
 \begin{equation}
-    \bs{\upsilon}_{\rm NSB} = \bs{\upsilon}_2 + \bs{\upsilon}_3.
+    \ivel_{\rm NSB} = \ivel_2 + \ivel_3.
     \label{eq:NSB_R_NSB_nominal_simplified}
 \end{equation}
 
 
-\noindent Let $\bs{\upsilon}_{{\rm NSB}, i}$ denote the desired velocity of vehicle $i$.    
+\noindent Let $\ivel_{{\rm NSB}, i}$ denote the desired velocity of vehicle $i$.    
 To achieve the desired behavior, the surge reference $u_{d, i}$ must satisfy 
 \begin{equation}
-    u_{d, i} = \sqrt{\norm{\bs{\upsilon}_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2},
+    u_{d, i} = \sqrt{\norm{\ivel_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2},
     \label{eq:NSB_R_surge_reference}
 \end{equation}
 
 
 \noindent However, \eqref{eq:NSB_R_surge_reference} can only be satisfied if 
 \begin{equation}
-    \norm{\bs{\upsilon}_{{\rm NSB}, i}}^2 \geq v_i^2 + w_i^2.
+    \norm{\ivel_{{\rm NSB}, i}}^2 \geq v_i^2 + w_i^2.
 \end{equation}
 In addition, AUVs typically need to maintain a minimum surge velocity to be able to maneuver, implying a stricter inequality 
 \begin{equation}
-    \norm{\bs{\upsilon}_{{\rm NSB}, i}}^2 \geq u_{\min}^2 + v_i^2 + w_i^2
+    \norm{\ivel_{{\rm NSB}, i}}^2 \geq u_{\min}^2 + v_i^2 + w_i^2
     \label{eq:NSB_R_NSB_speed_condition}
 \end{equation}
 where $u_{\min} > 0$.
@@ -385,13 +386,13 @@ This inequality can be satisfied by choosing a time-varying path-following speed
 
 Substituting task velocity definitions \eqref{eq:NSB_R_v_form} and \eqref{eq:NSB_R_v_3} into \eqref{eq:NSB_R_NSB_nominal_simplified} and exploiting the structure of the task Jacobian $\mat{J}_2$, we get that the NSB velocity of vehicle $i$ is given by 
 \begin{equation}
-    \bs{\upsilon}_{{\rm NSB}, i} = \bs{\upsilon}_{\rm LOS} + \dot{\mat{R}}_p(s)\mat{p}_{f,i}^f + \bs{\upsilon}_{2,i}, \label{eq:NSB_R_v_NSB_i}
+    \ivel_{{\rm NSB}, i} = \ivel_{\rm LOS} + \dot{\mat{R}}_p(s)\mat{p}_{f,i}^f + \ivel_{2,i}, \label{eq:NSB_R_v_NSB_i}
     \vspace*{-0.55em}
 \end{equation}
 where 
 \begin{equation}
-    \inlinevector{\bs{\upsilon}_{2, 1}, \ldots, \bs{\upsilon}_{2, n}} = 
-    - \upsilon_{2, \max}\,{\rm sat}\left(\mat{J}_2^{\dagger}\bs{\Lambda}_2 \widetilde{\bs{\sigma}}_2\right). \label{eq:NSB_R_v_form_components}
+    \inlinevector{\ivel_{2, 1}, \ldots, \ivel_{2, n}} = 
+    - \ivels_{2, \max}\,{\rm sat}\left(\mat{J}_2^{\dagger}\bs{\Lambda}_2 \widetilde{\bs{\sigma}}_2\right). \label{eq:NSB_R_v_form_components}
 \end{equation}
 Let $\bs{\omega}_p(s)$ be a vector such that 
 \begin{equation}
@@ -403,22 +404,22 @@ Let $\bs{\omega}_p(s)$ be a vector such that
 \end{equation}
 Substituting \eqref{eq:NSB_R_v_form_components}, \eqref{eq:NSB_R_R_p_dot}, and \eqref{eq:NSB_R_path_update_bound} into \eqref{eq:NSB_R_v_NSB_i}, we get the following lower bound on the NSB velocity 
 \begin{align}
-    \norm{\bs{\upsilon}_{{\rm NSB}, i}} &\geq U_{\rm LOS} \left(1
+    \norm{\ivel_{{\rm NSB}, i}} &\geq U_{\rm LOS} \left(1
         - \norm{\bs{\omega}_p}\norm{\scale[1]{\frac{\partial \mat{p}_p}{\partial s}}}^{-1}\norm{\mat{p}_{f, i}^f} \left(1 + k_{s}\right)\right) \nonumber \\
-        &\quad - \upsilon_{2, \max}.
+        &\quad - \ivels_{2, \max}.
 \end{align}
 Now, assuming the existence of an upper bound on the product $$\norm{\bs{\omega}_p(s)}\norm{\partial \mat{p}_p(s) / \partial s}^{-1},$$ there exists a positive constant $k_{\rm NSB}$ such that for every vehicle 
 \begin{equation}
-    \norm{\bs{\upsilon}_{{\rm NSB}, i}} \geq (1 - k_{\rm NSB})U_{\rm LOS} - \upsilon_{2, \max}.
+    \norm{\ivel_{{\rm NSB}, i}} \geq (1 - k_{\rm NSB})U_{\rm LOS} - \ivels_{2, \max}.
 \end{equation}
 Assuming that $k_{\rm NSB} < 1$, we can satisfy \eqref{eq:NSB_R_NSB_speed_condition} by choosing 
 \begin{equation}
-    U_{\rm LOS} = \frac{\upsilon_{2, \max} + \max_i \sqrt{v_i^2 + w_i^2 + u_{\min}^2}}{1 - k_{\rm NSB}}.
+    U_{\rm LOS} = \frac{\ivels_{2, \max} + \max_i \sqrt{v_i^2 + w_i^2 + u_{\min}^2}}{1 - k_{\rm NSB}}.
 \end{equation}
 However, the $\max$ function would introduce switching behavior.
 To avoid this, we approximate the former with 
 \begin{equation}
-    U_{\rm LOS} = \frac{\upsilon_{2, \max} + \sqrt{\sum_{i=1}^n \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}.
+    U_{\rm LOS} = \frac{\ivels_{2, \max} + \sqrt{\sum_{i=1}^n \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}.
     \label{eq:NSB_R_U_LOS}
 \end{equation}
 
@@ -428,45 +429,45 @@ However, since \eqref{eq:NSB_R_NSB_speed_condition} cannot be satisfied with a g
 \begin{equation}
     u_{d, i} = 
     \begin{cases}
-        \sqrt{\norm{\bs{\upsilon}_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2},  &\text{if \eqref{eq:NSB_R_NSB_speed_condition} satisfied,} \\
+        \sqrt{\norm{\ivel_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2},  &\text{if \eqref{eq:NSB_R_NSB_speed_condition} satisfied,} \\
         u_{\rm min}, &\text{otherwise}.
     \end{cases}
 \end{equation}
 
 
 Finally, let us discuss the choice of desired orientation.
-Let $\overline{\bs{\upsilon}}_{{\rm NSB}, i}$ and $\overline{\mat{v}}_{i}$ denote normalized vectors.
+Let $\overline{\ivel}_{{\rm NSB}, i}$ and $\overline{\mat{v}}_{i}$ denote normalized vectors.
 We are seeking $\mat{R}_{d, i} \in SO(3)$ such that 
 \begin{equation}
-    \overline{\bs{\upsilon}}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\overline{\mat{v}}_{i}.
+    \overline{\ivel}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\overline{\mat{v}}_{i}.
     \label{eq:NSB_R_rotation_reference}
 \end{equation}
 Assume that at a given time, there is $\mat{R}_{d, i}$ that satisfies \eqref{eq:NSB_R_rotation_reference}.
 Differentiating \eqref{eq:NSB_R_rotation_reference} with respect to time yields 
 \begin{equation}
-    \dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\mat{S}(\bs{\omega}_{d, i})\,\overline{\mat{v}}_{i} + \mat{R}_{d, i}\,\dot{\overline{\mat{v}}}_{i},
+    \dot{\overline{\ivel}}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\mat{S}(\bs{\omega}_{d, i})\,\overline{\mat{v}}_{i} + \mat{R}_{d, i}\,\dot{\overline{\mat{v}}}_{i},
     \label{eq:NSB_R_rotation_reference_derivative1}
 \end{equation}
 where $\bs{\omega}_{d, i}$ is the desired angular velocity of the vehicle.     
 Let us define
 \begin{align}
-    \bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}} &= \overline{\bs{\upsilon}}_{{\rm NSB}, i} \times \dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}, &
+    \bs{\omega}_{\ivel_{{\rm NSB}, i}} &= \overline{\ivel}_{{\rm NSB}, i} \times \dot{\overline{\ivel}}_{{\rm NSB}, i}, &
     \bs{\omega}_{\mat{v}_{i}} &= \overline{\mat{v}}_{i} \times \dot{\overline{\mat{v}}}_{i}.
     \label{eq:NSB_R_omega_v}
 \end{align}    
 Then, \eqref{eq:NSB_R_rotation_reference_derivative1} can be rewritten as 
 \begin{equation}
-    \bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}} \times \overline{\bs{\upsilon}}_{{\rm NSB}, i} = 
+    \bs{\omega}_{\ivel_{{\rm NSB}, i}} \times \overline{\ivel}_{{\rm NSB}, i} = 
     \mat{R}_{d, i} \left( \bs{\omega}_{d, i} \times \overline{\mat{v}}_{i} + \bs{\omega}_{\mat{v}_{i}} \times \overline{\mat{v}}_{i} \right).
 \end{equation}
 Therefore, the desired angular velocity must satisfy 
 \begin{equation}
     \left( \bs{\omega}_{d, i} + \bs{\omega}_{\mat{v}_{i}} 
-    - \mat{R}_{d, i}\T \bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}} \right) \times \overline{\mat{v}}_{i} = \mat{0}. \label{eq:NSB_R_omega_ref_equation}
+    - \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} \right) \times \overline{\mat{v}}_{i} = \mat{0}. \label{eq:NSB_R_omega_ref_equation}
 \end{equation}
 Thus, instead of finding $\mat{R}_{d, i}$ directly, we propose to choose 
 \begin{equation}
-    \bs{\omega}_{d, i} = \mat{R}_{d, i}\T \bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}} - \bs{\omega}_{\mat{v}_{i}},
+    \bs{\omega}_{d, i} = \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} - \bs{\omega}_{\mat{v}_{i}},
     \label{eq:NSB_R_omega_ref}
 \end{equation}
 and then evolve the desired orientation according to 
@@ -515,25 +516,25 @@ with
 Substituting \eqref{eq:NSB_R_expm}, \eqref{eq:NSB_R_surge_reference}, and \eqref{eq:NSB_R_rotation_reference} into \eqref{eq:NSB_R_p_dot_closed_loop} we get 
 \begin{equation}
     \begin{split}
-    \dot{\mat{p}}_i &= \bs{\upsilon}_{{\rm NSB}, i} 
-                + s(\bs{\delta}_i \times \bs{\upsilon}_{{\rm NSB}, i}) \\
-                & \quad + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \bs{\upsilon}_{{\rm NSB}, i})
+    \dot{\mat{p}}_i &= \ivel_{{\rm NSB}, i} 
+                + s(\bs{\delta}_i \times \ivel_{{\rm NSB}, i}) \\
+                & \quad + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \ivel_{{\rm NSB}, i})
                 + \mat{R}_{i}\inlinevector{\widetilde{u}_i, 0, 0}.
     \end{split} \label{eq:NSB_R_p_dot_closed_loop_2}
 \end{equation}
 Defining a perturbing term $\mat{g}_i$ as 
 \begin{equation}
-    \mat{g}_i = s(\bs{\delta}_i \times \bs{\upsilon}_{{\rm NSB}, i}) 
-                + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \bs{\upsilon}_{{\rm NSB}, i}) 
+    \mat{g}_i = s(\bs{\delta}_i \times \ivel_{{\rm NSB}, i}) 
+                + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \ivel_{{\rm NSB}, i}) 
                 + \mat{R}_{i}\inlinevector{\widetilde{u}_i, 0, 0},
                 \label{eq:NSB_R_g_i}
 \end{equation}
 and substituting \eqref{eq:NSB_R_g_i} and \eqref{eq:NSB_R_p_dot_closed_loop_2} into \eqref{eq:NSB_R_dot_sigma_tilde} yields 
 \begin{subequations}
     \begin{align}
-        \dot{\widetilde{\bs{\sigma}}}_2 &= \mat{J}_2\bs{\upsilon}_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}
+        \dot{\widetilde{\bs{\sigma}}}_2 &= \mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}
                                         +\mat{J}_2\mat{G}, \qquad \mat{G} = \inlinevector{\mat{g}_1, \ldots, \mat{g}_n} \\
-        \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\!\frac{1}{n}\sum_{i=1}^n\left(\bs{\upsilon}_{{\rm NSB}, i} + \mat{g}_i\right) - \dot{\mat{p}}_{\mathrlap{p}}\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p \mathrlap{.}
+        \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\!\frac{1}{n}\sum_{i=1}^n\left(\ivel_{{\rm NSB}, i} + \mat{g}_i\right) - \dot{\mat{p}}_{\mathrlap{p}}\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p \mathrlap{.}
     \end{align} \label{eq:NSB_R_outer_loop}
 \end{subequations}
 Now, to account for the underactuated dynamics, we define a vector of concatenated sway and heave velocities as 
@@ -575,16 +576,16 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     The time-derivative of $V$ is 
     \begin{equation}
         \begin{split}
-            \dot{V} &= \widetilde{\bs{\sigma}}_2\T\left(\mat{J}_2\bs{\upsilon}_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}\right)
+            \dot{V} &= \widetilde{\bs{\sigma}}_2\T\left(\mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}\right)
             - \left(\mat{p}_b^p\right)\T\mat{S}\left(\bs{\omega}_p\dot{s}\right)\mat{p}_b^p \\ 
-            &\quad + \left(\mat{p}_b^p\right)\T\mat{R}_p\T\bigg(\frac{1}{n}\sum_{i=1}^n\bs{\upsilon}_{{\rm NSB}, i} - \dot{p}_p\bigg) .
+            &\quad + \left(\mat{p}_b^p\right)\T\mat{R}_p\T\bigg(\frac{1}{n}\sum_{i=1}^n\ivel_{{\rm NSB}, i} - \dot{p}_p\bigg) .
         \end{split} 
         \label{eq:NSB_R_Lyapunov_analysis_step1}
     \end{equation}
     Due to the properties of the NSB tasks defined in Sections \ref{sec:NSB_R_formation} and \ref{sec:NSB_R_LOS}, the following identities hold: 
     \begin{align}
-        \mat{J}_2\bs{\upsilon}_{\rm NSB} &= \mat{J}_2\bs{\upsilon}_2, &
-        \sum_{i=1}^n \bs{\upsilon}_{{\rm NSB}, i} &= \bs{\upsilon}_{\rm LOS}.
+        \mat{J}_2\ivel_{\rm NSB} &= \mat{J}_2\ivel_2, &
+        \sum_{i=1}^n \ivel_{{\rm NSB}, i} &= \ivel_{\rm LOS}.
     \end{align}
     By definition (see Section \ref{sec:NSB_R_objectives}), $\mat{R}_p$ must satisfy 
     \begin{align}
@@ -594,7 +595,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     Substituting \eqref{eq:NSB_R_v_form} and \eqref{eq:NSB_R_v_LOS} into \eqref{eq:NSB_R_Lyapunov_analysis_step1} leads to 
     \begin{equation}
         \begin{split}
-        \dot{V} &= -\upsilon_{2, \rm max} \widetilde{\bs{\sigma}}_2\T {\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right) \\
+        \dot{V} &= -\ivels_{2, \rm max} \widetilde{\bs{\sigma}}_2\T {\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right) \\
                 &\quad -U_{\rm LOS} \scale[1]{\left(
                     k_{s}\frac{\left(x_b^p\right)^2}{\sqrt{1 + \left(x_b^p\right)^2}} +
                     \frac{\left(y_b^p\right)^2}{D} +
@@ -606,7 +607,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     For any $\widetilde{\bs{\sigma}} \in \left\{\widetilde{\bs{\sigma}} \in \mathbb{R}^{3n}: \norm{\widetilde{\bs{\sigma}}} \leq r\right\}$, the following holds: 
     \begin{equation}
         \begin{split}
-        \dot{V} &\leq  - \upsilon_{2, \max}\lambda_{2, \min}\scale[1]{\frac{{\rm tanh}(r)}{r}}\norm{\widetilde{\bs{\sigma}}_2}^2 \\
+        \dot{V} &\leq  - \ivels_{2, \max}\lambda_{2, \min}\scale[1]{\frac{{\rm tanh}(r)}{r}}\norm{\widetilde{\bs{\sigma}}_2}^2 \\
                 &\quad - U_{\rm LOS}\min\left\{\scale[1]{\frac{k_{s}}{\sqrt{1+r^2}}, \frac{1}{\sqrt{\Delta_0^2+2r^2}}}\right\}\norm{\mat{p}_b^p}^2,
         \end{split}
         \label{eq:NSB_R_Lyapunov_analysis_step3}
@@ -618,7 +619,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{equation}
     where
     \begin{equation}
-        k_r = \min \left\{\upsilon_{2, \max}\lambda_{2, \min}\scale[1]{\frac{{\rm tanh}(r)}{r}}, 
+        k_r = \min \left\{\ivels_{2, \max}\lambda_{2, \min}\scale[1]{\frac{{\rm tanh}(r)}{r}}, 
                           \scale[1]{\frac{U_{\rm LOS}k_{s}}{\sqrt{1+r^2}}}, 
                           \scale[1]{\frac{U_{\rm LOS}}{\sqrt{\Delta_0^2+2r^2}}}\right\}
     \end{equation}
@@ -649,9 +650,9 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     
 
     To validate the second assumption, we first need to investigate the perturbing terms $\mat{g}_i$ from \eqref{eq:NSB_R_g_i}.
-    From \eqref{eq:NSB_R_v_NSB_i} we get the following upper bound on $\bs{\upsilon}_{{\rm NSB}, i}$ 
+    From \eqref{eq:NSB_R_v_NSB_i} we get the following upper bound on $\ivel_{{\rm NSB}, i}$ 
     \begin{align}
-        \norm{\bs{\upsilon}_{{\rm NSB}, i}} &\leq U_{\rm LOS}\left(1 + k_{\rm NSB}\right) + \upsilon_{2, \max}\tanh\left(\norm{\widetilde{\bs{\sigma}}_2}\right),
+        \norm{\ivel_{{\rm NSB}, i}} &\leq U_{\rm LOS}\left(1 + k_{\rm NSB}\right) + \ivels_{2, \max}\tanh\left(\norm{\widetilde{\bs{\sigma}}_2}\right),
     \end{align}
     and from \eqref{eq:NSB_R_expm}, we get the inequalities 
     \begin{align}
@@ -660,12 +661,12 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{align}
     Therefore, $\mat{g}_i$ can be upper-bounded by 
     \begin{equation}
-        \norm{\mat{g}_i} \leq \norm{\bs{\upsilon}_{{\rm NSB}, i}}\left(1 + \sfrac{\sqrt{2}}{2}\right)\norm{\bs{\delta}_i} + \abs{\widetilde{u}_i}.
+        \norm{\mat{g}_i} \leq \norm{\ivel_{{\rm NSB}, i}}\left(1 + \sfrac{\sqrt{2}}{2}\right)\norm{\bs{\delta}_i} + \abs{\widetilde{u}_i}.
     \end{equation}
     Consider then the two functions $\alpha_{1,i}, \alpha_{2,i} : \mathbb{R}_{\geq 0} \mapsto \mathbb{R}_{\geq 0}$ 
     \begin{align}
         \alpha_{1,i}(r) &= \left(U_{\rm LOS}\left(1 + k_{\rm NSB}\right)\left(1 + \sfrac{\sqrt{2}}{2}\right) + 1\right)\,r, \\
-        \alpha_{2,i}(r) &= \upsilon_{2, \max}\left(1 + \sfrac{\sqrt{2}}{2}\right)\,r.
+        \alpha_{2,i}(r) &= \ivels_{2, \max}\left(1 + \sfrac{\sqrt{2}}{2}\right)\,r.
     \end{align}
     Then, the following holds: 
     \begin{equation}
@@ -684,14 +685,14 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     As for the underactuated dynamics, the assumption $\widetilde{\mat{X}} = \mat{0}$ implies $\bs{\omega}_i = \bs{\omega}_{d, i}$ and $u_i = u_{d, i}$.
     Therefore the underactuated dynamics depend on the desired angular velocity.
     Recall the definition of $\bs{\omega}_{d, i}$ in~\eqref{eq:NSB_R_omega_ref}.
-    To find a closed-loop expression for $\bs{\omega}_{d, i}$, we shall analyze $\bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}}$ and $\bs{\omega}_{\mat{v}_{i}}$.
+    To find a closed-loop expression for $\bs{\omega}_{d, i}$, we shall analyze $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$ and $\bs{\omega}_{\mat{v}_{i}}$.
 
     
     
-    First, we consider $\bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}}$.
+    First, we consider $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$.
     In Appendix~\ref{app:v_NSB}, we show that there exist positive constants $a_{\rm NSB}$ and $b_{\rm NSB}$ such that 
     \begin{equation}
-        \norm{\bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}}} \leq a_{\rm NSB}\norm{\mat{v}_u} + b_{\rm NSB}.
+        \norm{\bs{\omega}_{\ivel_{{\rm NSB}, i}}} \leq a_{\rm NSB}\norm{\mat{v}_u} + b_{\rm NSB}.
         \label{eq:NSB_R_omega_NSB_bound}
     \end{equation}
     Now, let us consider $\bs{\omega}_{\mat{v}_i}$.
@@ -715,7 +716,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     where $k_a$ is a positive constant depending on the physical properties of the vehicle, the minimum surge velocity, and the ocean current.
     If $k_a < 1$, then $\left(\mat{I} + \mat{A}_{\bs{\omega}_i}\right)$ is invertible, and the desired angular velocity is 
     \begin{equation}
-        \bs{\omega}_{d, i} = \left(\mat{I} + \mat{A}_{\bs{\omega}_i}\right)^{-1}\left(\mat{R}_{d, i}\T \bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}} - \bs{\omega}_{0, i}\right).
+        \bs{\omega}_{d, i} = \left(\mat{I} + \mat{A}_{\bs{\omega}_i}\right)^{-1}\left(\mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} - \bs{\omega}_{0, i}\right).
     \end{equation}
     In addition, there exist positive constants $a_v$, and $b_v$ such that 
     \begin{equation}
@@ -733,7 +734,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{equation}
     for the underactuated dynamics may then be shown that, leveraging \eqref{eq:NSB_R_underactuated_dynamics_closed_loop}, has its time-derivative bounded by 
     \begin{equation}
-        \dot{V}_u \leq \mat{v}_u\T\mat{Y}\mat{v}_u + aX_{\max}\norm{\mat{v}_u}^2 + H\left(\norm{\mat{v}_u}, \norm{\mat{V}_c}\right),
+        \dot{V}_u \leq \mat{v}_u\T\mat{Y}\mat{v}_u + aX_{\max}\norm{\mat{v}_u}^2 + H\left(\norm{\mat{v}_u}, \norm{\ocean}\right),
     \end{equation}
     where $a = (a_{\rm NSB} + a_v)/(1 - k_a)$, $X_{\max}$ is the largest singular value of $\mat{X}$, and $H$ represents the terms that grow at most linearly with $\mat{v}_u$.
     Since $\mat{Y}$ contains terms associated with hydrodynamic damping, it is negative definite.
@@ -842,7 +843,7 @@ Specifically, the desired positions in the formation-centered frame are
     \mathbf{p}_{f,2}^f &= \begin{bmatrix} 0 \\ -10 \\ 5\end{bmatrix}, &
     \mathbf{p}_{f,3}^f &= \begin{bmatrix} 0 \\ 0 \\ -10\end{bmatrix}.
 \end{align}
-For the simulation parameters, we choose the velocity of the ocean current to be $\mat{V}_c = \inlinevector{0, 0.15, 0.05}$, the formation-keeping gain $\bs{\Lambda}_2 = 0.1\mat{I}$, the maximum formation-keeping velocity $\upsilon_{2, \max} = \SI{0.5}{\meter\per\second}$, and the lookahead distance $\Delta_0 = \SI{5}{\meter}$.
+For the simulation parameters, we choose the velocity of the ocean current to be $\ocean = \inlinevector{0, 0.15, 0.05}$, the formation-keeping gain $\bs{\Lambda}_2 = 0.1\mat{I}$, the maximum formation-keeping velocity $\ivels_{2, \max} = \SI{0.5}{\meter\per\second}$, and the lookahead distance $\Delta_0 = \SI{5}{\meter}$.
 
 
 
@@ -855,7 +856,7 @@ For additional safety during transients, $d_{\rm COLAV}$ is chosen to be $10$ m.
 We then let the vehicles encounter an obstacle of similar size as the LAUV that moves east at a constant speed of $\SI{0.3}{\meter\per\second}$.
 Given its size, we choose $r_o = d_{\rm COLAV}$.
 The minimum cone angle is set to $\alpha_{\min} = \SI{15}{\degree}$.
-The operation limits are chosen as $z_{\min} = \SI{1}{m}$, $z_{\max} = \SI{49}{m}$, and the depth-limiting velocity is $\upsilon_z = \SI{0.3}{\meter\per\second}$.
+The operation limits are chosen as $z_{\min} = \SI{1}{m}$, $z_{\max} = \SI{49}{m}$, and the depth-limiting velocity is $\ivels_z = \SI{0.3}{\meter\per\second}$.
 Note that the limits are deliberately chosen too small for the given path and formation, so that depth limiting is activated.
 
 

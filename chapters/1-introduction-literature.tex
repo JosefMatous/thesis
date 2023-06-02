@@ -1,0 +1,26 @@
+\section{Previous Research}
+
+\subsection{Collision avoidance for autonomous vehicles}
+Autonomous vehicles are being increasingly used in cluttered and unpredictable environments where considerations to other vehicles and obstacles need to be made. 
+Therefore, the control system of autonomous vehicles should include some form of collision avoidance (COLAV).
+
+Reviews of various COLAV concepts are presented in \cite{statheros_autonomous_2008,tam_review_2009,hoy_algorithms_2015}.
+In general, algorithms for COLAV can be split into two categories: motion planning and reactive algorithms.
+
+Motion planning algorithms include, among others, various types of path planning algorithms \cite{wang_ship_2017,kuwata_safe_2014,lazarowska_ships_2015}, the dynamic window algorithm \cite{fox_dynamic_1997}, and model predictive control (MPC).
+MPC can be used both for a single vehicle \cite{hagen_mpc-based_2018,sun_collision_2018} and for multi-agent systems in a distributed form \cite{kuriki_formation_2015,dai_distributed_2017}.
+%Some motion planing algorithms also include consideration of relevant traffic protocols that apply in the given domain.
+
+Reactive algorithms for COLAV include, among others, virtual potential fields \cite{roussos_3d_2008}, geometric guidance \cite{mujumdar_reactive_2011}, and control barrier functions (CBFs) \cite{squires_constructive_2018,igarashi_collision_2018,romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014}.
+Reactive algorithms are often used together with motion planning algorithms in a hybrid controller.
+In such a controller, the reactive algorithm ensures the safety of the vehicle in unexpected situations.
+Such an algorithm is proposed in \cite{hedjar_automatic_2019}, where a collision-free velocity reference is obtained through numerical optimization.
+The proposed algorithm is designed specifically for autonomous surface vehicles (ASVs).
+
+CBFs offer a COLAV method that is applicable for a wide range of systems \cite{ames_control_2019}.
+In the literature, there are typically two ways in which CBFs are applied for COLAV.
+They are either applied to a simplified model of the vehicle (\emph{e.g.,} a unicycle model \cite{squires_constructive_2018,igarashi_collision_2018}) to provide safe velocity references, or they are used together with control Lyapunov functions (CLFs) \cite{romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014} on the complete model.
+
+Reactive COLAV methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
+Consequently, these methods may output reference signals that the underlying controllers cannot track.
+To mitigate this, reactive COLAV methods should be included into the lowest-possible control level.

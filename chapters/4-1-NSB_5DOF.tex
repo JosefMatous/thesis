@@ -9,21 +9,21 @@
 }
 
 This chapter presents a novel method for formation path following of multiple underactuated autonomous underwater vehicles.
-The method combines line-of-sight guidance with null-space-based behavioral control, allowing the vehicles to follow curved paths while maintaining the desired formation.
-We investigate the dynamics of the path-following error using cascaded systems theory, and show that the closed-loop system is uniformly semi-globally exponentially stable.
+The method combines \acrlong{los} guidance with \acrlong{nsb} control, allowing the vehicles to follow curved paths while maintaining the desired formation.
+We investigate the dynamics of the path-following error using cascaded systems theory, and show that the closed-loop system is \acrlongpl{usges}.
 We validate the theoretical results through numerical simulations.
+The contents of this chapter are based on \cite{matouvs_formation_2022}.
 
 \section{Introduction}
 
-The work presented in this chapter extends the results of \cite{eek_formation_2021}, where an NSB algorithm is used to guide two surface vessels moving in the horizontal plane.
-Specifically, we propose an algorithm that works with an arbitrary number of AUVs with five degrees of freedom (DOFs) moving in 3D.
-Similarly to \cite{eek_formation_2021}, we solve the path-following task using line-of-sight (LOS) guidance.
-Using the cascaded systems theory results of \cite{pettersen_lyapunov_2017}, we prove that the closed-loop system consisting of a 3D LOS guidance law, combined with surge, pitch, and yaw autopilots based on \cite{moe_LOS_2016}, is uniformly semi-globally exponentially stable (USGES) and uniformly globally asymptotically stable (UGAS).
+The work presented in this chapter extends the results of \cite{eek_formation_2021}, where a \acrfull{nsb} algorithm is used to guide two surface vessels moving in the horizontal plane.
+Specifically, we propose an algorithm that works with an arbitrary number of \acrfullpl{auv} with five \acrfullpl{dof} moving in 3D.
+Similarly to \cite{eek_formation_2021}, we solve the path-following task using \acrfull{los} guidance.
+Using the cascaded systems theory results of \cite{pettersen_lyapunov_2017}, we prove that the closed-loop system consisting of a decoupled \gls{los} guidance law, combined with surge, pitch, and yaw autopilots based on \cite{moe_LOS_2016}, is \acrfullpl{usges} and \acrfullpl{ugas}.
 The theoretical results are verified through numerical simulations.
 
 The remainder of the chapter is organized as follows.
-Section \ref{sec:nsb_5dof_model} introduces the model of the AUVs.
-In Section \ref{sec:nsb_5dof_objectives}, we define the formation path-following problem.
+Section \ref{sec:nsb_5dof_model} defines the formation path-following problem that is addressed in this chapter.
 In Section \ref{sec:nsb_5dof_control}, we describe the control system.
 The stability of the control system is proven in Section \ref{sec:nsb_5dof_path_stability}.
 Section \ref{sec:nsb_5dof_simulations} contains the results of a numerical simulation.
@@ -31,22 +31,20 @@ Finally, Section \ref{sec:nsb_5dof_conclusion} contains some concluding remarks.
 
 \section{Problem Definition}
 \label{sec:nsb_5dof_model}
-In this section, we briefly present the AUV model and the formation path-following problem.
+In this section, we briefly present the \gls{auv} model and the formation path-following problem.
 
 \subsection{Vehicle Model}
-We consider a fleet of $n$ underactuated AUVs.
-The dynamics of the AUVs are described using the 5DOF control-oriented model described in Section~\ref{sec:model_control_oriented}.
-The pose ($\bs{\eta}_i$) and velocities ($\bs{\nu}_i$) of the $i^{\rm th}$ AUV are defined as
+We consider a fleet of $N$ underactuated \glspl{auv}.
+The dynamics are described using the 5\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
+The pose ($\bs{\eta}_i$) and velocities ($\bs{\nu}_i$) of the $i^{\rm th}$ \gls{auv} are defined as
 \begin{align}
     \bs{\eta}_i &= \left[x_i, y_i, z_i, \theta_i, \psi_i\right]\T, &
-    \bs{\nu}_i &= \left[u_i, v_i, w_i, q_i, r_i\right]\T,
+    \bs{\nu}_i &= \left[u_i, v_i, w_i, q_i, r_i\right]\T.
 \end{align}
-where $x_i,y_i,z_i$ are the coordinates of the vehicle in North-East-Down (NED) coordinate frame, and $\theta_i$ and $\psi_i$ are the pitch and yaw angles, respectively, $u_i,v_i,w_i$ are the linear surge, sway and heave velocities in the body-fixed frame, and $q_i$ and $r_i$ are the pitch and yaw rate, respectively.
 The roll dynamics are disregarded as the roll motion is assumed to be small and self-stabilizing by the vehicle design.
+Let $\ocean \in \mathbb{R}^3$ be the velocity of an unknown, constant and irrotational ocean current.
 
-Let $\mat{V}_c = \left[V_x, V_y, V_z\right]\T$ be the velocity of an unknown, constant and irrotational ocean current, given in the inertial NED frame.
-
-Recalling \eqref{eq:background_component_form_5DOF}, the dynamics of the $i^{\rm th}$ AUV are
+Recalling \eqref{eq:background_component_form_5DOF}, the dynamics of the $i^{\rm th}$ \gls{auv} are
 \begin{subequations}
     \begin{align}
         \scale[0.93]{\dot{x}} &= \scale[0.93]{u\,\cos\left(\psi \right)\,\cos\left(\theta \right)-v\,\sin\left(\psi \right)+w\,\cos\left(\psi \right)\,\sin\left(\theta \right),} \\
@@ -58,13 +56,13 @@ Recalling \eqref{eq:background_component_form_5DOF}, the dynamics of the $i^{\rm
         \scale[0.93]{\dot{v}} &= \scale[0.93]{X_v(u, u_c)\,r + Y_v(u, u_c)\,v_r,} \\
         \scale[0.93]{\dot{w}} &= \scale[0.93]{X_w(u, u_c)\,q + Y_w(u, u_c)\,w_r + G(\theta),} \\
         \scale[0.93]{\dot{q}} &= \scale[0.93]{t_q + F_q(u, w, q, \theta) + \bs{\phi}_q(u, w, q, \theta, \psi)\T\,\mathbb{V}_c,} \label{eq:nsb_5dof_q_dot} \\
-        \scale[0.93]{\dot{r}} &= \scale[0.93]{t_r + F_r(u, v, r) + \bs{\phi}_r(u, v, r, \theta, \psi)\T\,\mathbb{V}_c,} \label{eq:nsb_5dof_r_dot} 
+        \scale[0.93]{\dot{r}} &= \scale[0.93]{t_r + F_r(u, v, r) + \bs{\phi}_r(u, v, r, \theta, \psi)\T\,\mathbb{V}_c.} \label{eq:nsb_5dof_r_dot} 
     \end{align} \label{eq:nsb_5dof_components}
 \end{subequations}
 
 \subsection{Control Objectives}
 \label{sec:nsb_5dof_objectives}
-The goal is to control the AUVs so that they move in a prescribed formation while avoiding collisions, and their barycenter follows a given path.
+The goal is to control the \glspl{auv} so that they move in a prescribed formation while avoiding collisions, and their barycenter follows a given path.
 
 The prescribed path is parametrized by a smooth function $\mat{p}_p: \mathbb{R} \rightarrow \mathbb{R}^3$.
 We assume that the parametrization is $\mathcal{C}^2$ and regular.
@@ -90,18 +88,17 @@ The objective is to control the vehicles so that
 
 \section{Control System}
 \label{sec:nsb_5dof_control}
-To solve the formation path following problem, we propose a method that combines collision avoidance (COLAV), formation keeping, and LOS path following in a hierarchic manner using an NSB algorithm.
-Since the NSB algorithm outputs velocity references, we also need a low-level attitude control system to track these references.
+To solve the formation path following problem, we propose a method that combines \acrfull{colav}, formation keeping, and path following in a hierarchic manner using an \gls{nsb} algorithm.
+Since the \gls{nsb} algorithm outputs inertial velocity references, we also need a low-level attitude control system to track these references.
 
 In this section, we first present the attitude control system.
-Then, in Section~\ref{sec:nsb_5dof_NSB}, we present the NSB algorithm and the associated COLAV and formation keeping tasks.
-In Section~\ref{sec:nsb_5dof_LOS}, we present the LOS guidance law for path following.
-Finally, in Section~\ref{sec:nsb_5dof_path_parameter}, we demonstrate how to use the path variable update law to cancel unwanted terms in the path following error dynamics.
+Then, in Section~\ref{sec:nsb_5dof_NSB}, we present the \gls{nsb} algorithm and the associated tasks.
+Finally, in Section~\ref{sec:nsb_5dof_path_parameter}, we demonstrate how to use the update law of the path variable to cancel unwanted terms in the path-following error dynamics.
 
 \subsection{Attitude Control System}
 \label{sec:nsb_5dof_ACS}
 This system controls the surge velocity, pitch, and yaw via the corresponding accelerations.
-The system is based on the autopilots in \cite{moe_LOS_2016}, but extended to 5DOFs.
+The system is based on the autopilots in \cite{moe_LOS_2016}, but extended to five \glspl{dof}.
 
 Let $u_d$ be the desired surge velocity and $\dot{u}_d$ its derivative.
 Let $\oceanhat$ be the estimate of the ocean current.
@@ -109,7 +106,7 @@ Furthermore, let us define $\tilde{u} = u - u_d$ and $\oceantilde = \oceanhat - 
 The surge controller consists of an output-linearizing sliding-mode P-controller and an ocean current observer \vspace{-1mm}
 \begin{align}
     f_u &= \dot{u}_d - F_u(\cdot) - \bs{\phi}_u(\cdot)\T\,\oceanhat - k_u\,\tilde{u} - k_c\,{\rm sign}\left(\tilde{u}\right), \label{eq:nsb_5dof_t_u} \\
-    \dot{\hat{\mat{V}}}_c &= c_u\,\bs{\phi}_u(\cdot)\,\tilde{u}, \label{eq:nsb_5dof_V_hat_u} \vspace{-2mm}
+    \dot{\hat{\ivel}}_c &= c_u\,\bs{\phi}_u(\cdot)\,\tilde{u}, \label{eq:nsb_5dof_V_hat_u} \vspace{-2mm}
 \end{align}
 where $k_u$, $k_c$ and $c_u$ are positive gains.
 
@@ -153,12 +150,10 @@ where $k_{\psi}$, $k_r$, $k_d$ and $c_r$ are positive gains.
 
 \subsection{NSB Tasks}
 \label{sec:nsb_5dof_NSB}
-Let us denote the variables associated with the COLAV, formation keeping, and path following tasks by lower indices $1$, $2$, and $3$, respectively.
-Each task produces a vector of desired velocities, $\mat{v}_{d,i} \in \mathbb{R}^{3n},\, i\in\{1,2,3\}$.
+Let us denote the variables associated with the \gls{colav}, formation keeping, and path following tasks by lower indices $1$, $2$, and $3$, respectively.
+Each task produces a vector of desired velocities, $\ivel_{d,i} \in \mathbb{R}^{3N},\, i\in\{1,2,3\}$.
 
-For the COLAV and formation keeping tasks, the desired velocities are obtained using task varibles, $\bs{\sigma}_1$ and $\bs{\sigma}_2$, and their desired values, $\bs{\sigma}_{d,1}$ and $\bs{\sigma}_{d,2}$.
-
-First, let us consider the COLAV task.
+First, let us consider the \gls{colav} task.
 Let {$d_{\rm COLAV}$} be the \emph{activation distance}, \emph{i.e.,} the distance at which the vehicles need to start performing the evasive maneuvers.
 The task variable is then given by a vector of relative distances between the vehicles smaller than $d_{\rm COLAV}$, \emph{i.e.,}
 \begin{align}
@@ -168,17 +163,22 @@ The task variable is then given by a vector of relative distances between the ve
             &\norm{\mat{p}_i - \mat{p}_j} < d_{\rm COLAV}.
         \end{split}
 \end{align}
-The desired values of the task are
+The desired value of the task variable is
 \begin{equation}
-    \bs{\sigma}_{1,d} = d_{\rm COLAV} \, \mat{1},
+    \bs{\sigma}_{d,1} = d_{\rm COLAV} \, \mat{1},
 \end{equation}
-where $\mat{1}$ is a vector of ones.
+where $\mat{1}$ is a vector of ones of the corresponding size.
+The velocity associated with the \gls{colav} task is given by
+\begin{equation}
+    \ivel_{d,1} = - \mat{J}_1^{\dagger}\, \bs{\Lambda}_1\,\widetilde{\bs{\sigma}}_1,
+\end{equation}
+where $\bs{\Lambda}_1$ is a positive definite gain matrix, and $\widetilde{\bs{\sigma}}_1 = \bs{\sigma}_1 - \bs{\sigma}_{d,1}$.
 Note that this task does not guarantee robust collision avoidance.
 During the transients, the relative distance may become smaller than $d_{\rm COLAV}$.
 Therefore, to ensure collision avoidance, $d_{\rm COLAV}$ shuld be chosen as $d_{\rm min} + d_{\rm sec}$, where $d_{\rm min}$ is the minimum safe distance between the vehicles, and $d_{\rm sec}$ is an additional security distance.
 
-Now, let us consider the formation keeping task.
-The task variable is defined as
+The formation-keeping and path-following tasks are defined identically as in Section~\ref{sec:background_nsb_formation_path_following}.
+The task variable of the formation-keeping task is
 \begin{align}
     \bs{\sigma}_2 &= \left[\bs{\sigma}_{2,1}\T, \ldots, \bs{\sigma}_{2,n-1}\T\right]\T, \label{eq:nsb_5dof_sigma_2} &
     \bs{\sigma}_{2,i} &= \mat{p}_i - \mat{p}_b,
@@ -191,28 +191,52 @@ and its desired values are
         \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,n-1}^p
     \end{bmatrix}. \label{eq:nsb_5dof_sigma_d_2}
 \end{equation}
-
-The desired velocities of the COLAV and formation keeping tasks are obtained using the closed-loop inverse kinematics (CLIK) equation \cite{arrichiello_formation_2006}
+The desired velocity of the formation keeping task is given by
 \begin{align}
-    \mat{v}_{d,i} &= \mat{J}_i^{\dagger}\,\left(\dot{\bs{\sigma}}_{d,i} - \bs{\Lambda}_i\,\tilde{\bs{\sigma}}_i\right), &
-    i &\in \{1,2\}, \label{eq:nsb_5dof_CLIK}
+    \ivel_{d,2} &= \mat{J}_2^{\dagger}\,\left(\dot{\bs{\sigma}}_{d,2} - \bs{\Lambda}_2\,\tilde{\bs{\sigma}}_2\right), \label{eq:nsb_5dof_CLIK}
 \end{align}
-where $\tilde{\bs{\sigma}}_i = \bs{\sigma}_i - \bs{\sigma}_{d,i}$ is the error, $\mat{J}^{\dagger}$ is the Moore-Penrose pseudoinverse, $\mat{\Lambda}_i$ is a positive definite gain matrix, and $\mat{J}_i$ is the task Jacobian given by
-\begin{align}
-    \mat{J}_i &= \frac{\partial \bs{\sigma}_i}{\partial \mat{p}}, &
-    \mat{p} &= \left[\mat{p}_1\T, \ldots, \mat{p}_n\T\right]\T.
-\end{align}
+where $\widetilde{\bs{\sigma}}_2 = \bs{\sigma}_2 - \bs{\sigma}_{d,2}$ is the error, and $\mat{\Lambda}_2$ is a positive definite gain matrix.
 
-The desired velocity of the path-following task is obtained using LOS guidance that is explained in the next section.
-These velocities are then combined using the NSB algorithm
+The task variable and the desired value of the path-following task is given by $\mat{p}_b$ and $\mat{p}_p(s)$, respectively.
+The desired velocity of the path-following task is obtained using the decoupled \gls{los} guidance algorithm \eqref{eq:background_los_decoupled}.
+We choose the same lookahead distance for the horizontal and vertical guidance schemes, \emph{i.e.,} $\Delta_y = \Delta_z = \Delta$.
+Inspired by \cite{belleter_2019_observer}, we employ a time-varying error-dependent lookahead distance
 \begin{equation}
-    \scale[0.95]{\mat{v}_{\rm NSB} = \mat{v}_{d, 1} + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right)\left(\mat{v}_{d, 2} + \left(\mat{I} - \mat{J}_2^{\dagger}\mat{J}_2\right)\mat{v}_{d, 3}\right),}
+    \Delta\left(\mat{p}_b^p\right) = \sqrt{\Delta_0^2 + \left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2}, \label{eq:nsb_5dof_delta}
 \end{equation}
-if there are active COLAV tasks, and
+where $\Delta_0 > 0$ is a constant.
+The desired velocity of the path-following task is then given by
 \begin{equation}
-    \mat{v}_{\rm NSB} = \mat{v}_{d, 2} + \left(\mat{I} - \mat{J}_2^{\dagger}\mat{J}_2\right)\mat{v}_{d, 3}, \label{eq:nsb_5dof_NSB_nominal}
+    \ivel_{d, 3} = \mat{1}_n \otimes \ivel_{\rm LOS},
 \end{equation}
-if there are none ($\mat{I}$ is an identity matrix).
+where
+\begin{align}
+    \ivel_{\rm LOS} &= U_{\rm LOS} \!
+    \begin{bmatrix}
+        \cos(\gamma_{\rm LOS}) \cos(\chi_{\rm LOS}) \\
+        \cos(\gamma_{\rm LOS}) \sin(\chi_{\rm LOS}) \\
+        -\sin(\gamma_{\rm LOS})
+    \end{bmatrix}\!, &
+    \begin{split}
+        \gamma_{\rm LOS} &= \theta_{p\!} + \arctan\left(\frac{z_b^p}{\Delta(\mat{p}_b^p)}\right)\!, \\
+        \chi_{\rm LOS} &= \psi_{p\!} - \arctan\left(\frac{y_b^p}{\Delta(\mat{p}_b^p)}\right)\!, \\
+    \end{split}
+    \label{eq:nsb_5dof_v_LOS}
+\end{align}
+where $U_{\rm LOS} > 0$ is the desired path-following speed.
+
+The three tasks are then combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
+If the \gls{colav} task is active, the \gls{nsb} velocity is given by
+\begin{equation}
+    \ivel_{\rm NSB} = \ivel_1 + \mat{N}_1 \left(\ivel_2 + \mat{N}_2 \ivel_3\right).
+    \label{eq:nsb_5dof_v_NSB_COLAV}
+\end{equation}
+If the \gls{colav} task is inactive, \eqref{eq:nsb_5dof_v_NSB_COLAV} is simplified to
+\begin{equation}
+    \ivel_{\rm NSB} = \ivel_2 + \ivel_3,
+\end{equation}
+thanks to the independence and orthogonality of the formation-keeping and path-following task.
+
 The NSB velocities must be decomposed into surge, pitch, and yaw references that can be tracked by the attitude control system presented in Section~\ref{sec:nsb_5dof_ACS}.
 Similarly to \cite{arrichiello_formation_2006}, we propose a method with angle of attack and sideslip compensation
 \begin{align}
@@ -225,41 +249,12 @@ Similarly to \cite{arrichiello_formation_2006}, we propose a method with angle o
 where $v_i$ and $w_i$ are the sway and heave velocities, and $\gamma_i$ and $\chi_i$ are the flight-path and course angles of the $i^{\rm th}$ vehicle, respectively, and $U_{{\rm NSB},i}$, $\gamma_{{\rm NSB},i}$ and $\chi_{{\rm NSB},i}$ are given by
 \begin{subequations}
     \begin{align}
-        U_{{\rm NSB}, i} &= \norm{\mat{v}_{{\rm NSB}, i}}, \quad
-        \mat{v}_{{\rm NSB}, i} = \begin{bmatrix} \dot{x}_{{\rm NSB}, i} \\ \dot{y}_{{\rm NSB}, i} \\ \dot{z}_{{\rm NSB}, i}\end{bmatrix}, \\*
+        U_{{\rm NSB}, i} &= \norm{\ivel_{{\rm NSB}, i}}, \quad
+        \ivel_{{\rm NSB}, i} = \begin{bmatrix} \dot{x}_{{\rm NSB}, i} \\ \dot{y}_{{\rm NSB}, i} \\ \dot{z}_{{\rm NSB}, i}\end{bmatrix}, \\*
         \gamma_{{\rm NSB}, i} &= - \arcsin\left(\frac{\dot{y}_{{\rm NSB}, i}}{U_{{\rm NSB}, i}}\right), \\
-        \chi_{{\rm NSB}, i} &= \mathrm{arctan}_2 \left(\dot{y}_{{\rm NSB}, i}, \dot{x}_{{\rm NSB}, i}\right), 
+        \chi_{{\rm NSB}, i} &= \mathrm{arctan}_2 \left(\dot{y}_{{\rm NSB}, i}, \dot{x}_{{\rm NSB}, i}\right).
     \end{align}
 \end{subequations}
-where ${\rm arctan}_2(y, x)$ is the four-quadrant inverse tan.
-
-\subsection{Line-of-Sight Guidance}
-\label{sec:nsb_5dof_LOS}
-The desired flight-path angle and course of the path-following task are given by the following LOS law
-\begin{align}
-    \scale[1]{\gamma_{\rm LOS}} & \scale[1]{= \theta_p(s) + \arctan\left(\frac{z_b^p}{\Delta\left(\mat{p}_b^p\right)}\right),} \label{eq:nsb_5dof_gamma_LOS} \\
-    \scale[1]{\chi_{\rm LOS}} & \scale[1]{= \psi_p(s) - \arctan\left(\frac{y_b^p}{\Delta\left(\mat{p}_b^p\right)}\right),}
-\end{align}
-where $\mat{p}_b^p = \left[x_b^p, y_b^p, z_b^p\right]\T$, and $\Delta\left(\mat{p}_b^p\right)$ is the lookahead distance.
-Inspired by \cite{belleter_2019_observer}, we choose the lookahead distance as
-\begin{equation}
-    \Delta\left(\mat{p}_b^p\right) = \sqrt{\Delta_0^2 + \left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2}, \label{eq:nsb_5dof_delta}
-\end{equation}
-where $\Delta_0 > 0$ is a constant.
-
-The desired velocity of the path-following task is then given by
-\begin{equation}
-    \mat{v}_{d, 3} = \mat{1}_n \otimes \mat{v}_{\rm LOS},
-\end{equation}
-where $\cdot \otimes \cdot$ is the Kronecker tensor product, and
-\begin{equation}
-    \mat{v}_{\rm LOS} = \begin{bmatrix}
-        \cos\left(\chi_{\mathrm{LOS}}\right)\,\cos\left(\gamma_{\mathrm{LOS}}\right)\\ 
-        \cos\left(\gamma_{\mathrm{LOS}}\right)\,\sin\left(\chi_{\mathrm{LOS}}\right)\\ 
-        -\sin\left(\gamma_{\mathrm{LOS}}\right)
-    \end{bmatrix} \, U_{\rm LOS},
-\end{equation}
-where $U_{\rm LOS}$ is the desired path-following speed.
 
 \subsection{Path Parametrization}
 \label{sec:nsb_5dof_path_parameter}
@@ -304,10 +299,8 @@ where
 \end{subequations}
 To stabilize the along-track error dynamics, we choose the following path variable update 
 \begin{equation}
-    \begin{split}
-        \dot{s} &= \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \left( \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right)\right. \\
-        & \qquad \qquad \qquad \qquad \left. + k_{s}\,\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}}\right),
-    \end{split} \label{eq:nsb_5dof_path_update}
+    \dot{s} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \left( \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + k_{s}\,\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}}\right),
+    \label{eq:nsb_5dof_path_update}
 \end{equation}
 where $k_{s} > 0$ is a constant.
 
@@ -342,7 +335,7 @@ Now, we can take the barycenter kinematics from \eqref{eq:nsb_5dof_barycenter_ki
 Substituting the attitude control system \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_5dof_V_hat_r} into vehicle dynamics \eqref{eq:nsb_5dof_components} yields the following closed-loop behavior of $\tilde{\mat{X}}_2$
 \begin{subequations}
     \begin{align}
-        \scale[0.97]{\dot{\tilde{u}}_i} &= \scale[0.97]{- k_u\,\tilde{u}_i - k_c\,{\rm sign}\left(\tilde{u}_i\right) - \bs{\phi}_u(\cdot)\T\tilde{\mat{V}}_{c,i},} \label{eq:nsb_5dof_u_tilde} \\
+        \scale[0.97]{\dot{\tilde{u}}_i} &= \scale[0.97]{- k_u\,\tilde{u}_i - k_c\,{\rm sign}\left(\tilde{u}_i\right) - \bs{\phi}_u(\cdot)\T\tilde{\ivel}_{c,i},} \label{eq:nsb_5dof_u_tilde} \\
         \scale[0.97]{\dot{s}_{q,i}} &= \scale[0.97]{-k_{\theta}\,\tilde{\theta}_i - k_q\,s_{q,i} - k_d\,{\rm sign}(s_{q,i}) - \bs{\phi}_q(\cdot)\T\,\tilde{\mathbb{V}}_{q,i}, }\\
         \scale[0.97]{\dot{\tilde{\theta}}_i} &= \scale[0.97]{s_{q,i} - \lambda_q\,\tilde{\theta}_i,} \\
         \scale[0.97]{\dot{s}_{r,i}} &= \scale[0.97]{-k_{\theta}\,\tilde{\theta}_i - k_r\,s_{r,i} - k_d\,{\rm sign}(s_{r,i}) - \bs{\phi}_r(\cdot)\T\,\tilde{\mathbb{V}}_{r,i},} \\
@@ -352,7 +345,7 @@ Substituting the attitude control system \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_
 the ocean current estimate errors
 \begin{subequations}
     \begin{align}
-        \dot{\tilde{\mat{V}}}_{c,i} & = c_u\,\bs{\phi}_u(\cdot)\,\tilde{u}_i, \label{eq:nsb_5dof_V_c_tilde} \\
+        \dot{\tilde{\ivel}}_{c,i} & = c_u\,\bs{\phi}_u(\cdot)\,\tilde{u}_i, \label{eq:nsb_5dof_V_c_tilde} \\
         \dot{\tilde{\mathbb{V}}}_{q,i} &= c_q\,\bs{\phi}_q(\cdot)\,s_{q,i}, \\
         \dot{\tilde{\mathbb{V}}}_{r,i} &= c_r\,\bs{\phi}_r(\cdot)\,s_{r,i}, \label{eq:nsb_5dof_theta_r_tilde}
     \end{align} \label{eq:nsb_5dof_estimates}
@@ -364,7 +357,7 @@ and the underactuated sway and heave dynamics
 \end{align}
 
 To prove the stability of the closed-loop system, we need the results of the three following lemmas.
-The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_formation_2021}, and are extended to handle an arbitrary number of AUVs moving in 3D.
+The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_formation_2021}, and are extended to handle an arbitrary number of \glspl{auv} moving in 3D.
 \begin{lemma}
     \label{lemma_1}
     The trajectories of the closed-loop system \eqref{eq:nsb_5dof_nominal}--\eqref{eq:nsb_5dof_w_dot} are forward complete.
@@ -381,7 +374,7 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
         \abs{\kappa(s)} &< \frac{n}{2}\abs{\frac{Y_w(u, u_c)}{X_w(u, u_c)}}, &
         \abs{\iota(s)} &< \frac{n}{2}\abs{\frac{Y_v(u, u_c)}{X_v(u, u_c)}}, \label{eq:nsb_5dof_curvature_limit}
     \end{align}
-    for all $u > 0$ and $u_c \in [-\norm{\mat{V}_c}, \norm{\mat{V}_c}]$.
+    for all $u > 0$ and $u_c \in [-\norm{\ocean}, \norm{\ocean}]$.
 \end{lemma}
 
 \begin{proof}
@@ -397,7 +390,7 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
             & \quad \left. \frac{3}{n\abs{\frac{Y_w\left(u, u_c\right)}{X_w\left(u, u_c\right)}} - 2\abs{\kappa(s)}}\right\},
         \end{split} \label{eq:nsb_5dof_lookahead_limit}
     \end{equation}
-    for all $u > 0$ and $u_c \in [-\norm{\mat{V}_c}, \norm{\mat{V}_c}]$.
+    for all $u > 0$ and $u_c \in [-\norm{\ocean}, \norm{\ocean}]$.
 \end{lemma}
 
 \begin{proof}
@@ -414,7 +407,7 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
 \end{theorem}
 
 \emph{Remark:} Condition \eqref{eq:nsb_5dof_theta_max} is needed to ensure that $\abs{\gamma_{\rm LOS}} < \pi/2$.
-Indeed, from \eqref{eq:nsb_5dof_gamma_LOS}, the largest possible LOS reference angle is
+Indeed, from \eqref{eq:nsb_5dof_v_LOS}, the largest possible LOS reference angle is
 \begin{equation}
     \begin{split}
         \gamma_{\rm LOS, max} &= \theta_{p, {\rm max}} + \lim_{z_b^p \rightarrow \infty} \arctan\left(\scale[1]{\frac{z_b^p}{\sqrt{\Delta_0^2 + \left(z_b^p\right)^2}}}\right) \\
@@ -487,7 +480,7 @@ Therefore, all conditions of \cite[Proposition 9]{pettersen_lyapunov_2017} are s
     \vspace{-5mm}
 \end{figure}
 
-In this section, we present the results of a numerical simulation of three LAUV vehicles \cite{sousa_LAUV_2012}.
+In this section, we present the results of a numerical simulation of three \glspl{lauv} \cite{sousa_LAUV_2012}.
 The parameters of the simulation are summarized in Table \ref{tab:nsb_5dof_params}.
 The barycenter should follow a spiral path given by
 \begin{equation}
@@ -498,7 +491,7 @@ The maximum curvature of this path is
     \max_{s \in \mathbb{R}} \abs{\kappa(s)} &= \frac{b\,\omega ^2}{\sqrt{a^2\,\omega ^2+1}}, &
     \max_{s \in \mathbb{R}} \abs{\iota(s)} &= a\,\omega ^2,
 \end{align}
-while the smallest absolute values of $Y_v / X_v$ and $Y_w / X_w$ for the LAUV model are approximately $0.26$.
+while the smallest absolute values of $Y_v / X_v$ and $Y_w / X_w$ for the \gls{lauv} model are approximately $0.26$.
 Consequently, the path is chosen such that the maximum curvature is
 \begin{align}
     \max_{s \in \mathbb{R}} \abs{\kappa(s)} &= 0.013, &
@@ -508,7 +501,7 @@ and \eqref{eq:nsb_5dof_curvature_limit} is satisfied.
 From \eqref{eq:nsb_5dof_lookahead_limit}, the lookahead distance must then satisfy $\Delta_0 > 4.29$.
 We choose $\Delta_0 = 5$, since smaller distances guarantee faster convergence.
 
-The very minimum relative distance to avoid collision is the length of the LAUV, \emph{i.e.} $2.4$ m.
+The very minimum relative distance to avoid collision is the length of the \gls{lauv}, \emph{i.e.} $2.4$ m.
 For additional safety, we design the COLAV task with $d_{\rm min} = 5$ m.
 To add a security zone during transients, $d_{\rm COLAV}$ is chosen to be $10$ m.
 
@@ -520,7 +513,7 @@ Specifically, the desired positions of the three vehicles are
     \mathbf{p}_{f,3}^f &= \begin{bmatrix} 0 \\ 0 \\ -10\end{bmatrix}.
 \end{align}
 
-\begin{table}[b]
+\begin{table}[htb]
     \centering
     \begin{tabular}[t]{r|l}
         {\bf Parameter} & {\bf Value} \\ \hline
@@ -537,7 +530,7 @@ Specifically, the desired positions of the three vehicles are
     \end{tabular}
     \begin{tabular}[t]{r|l}
         {\bf Parameter} & {\bf Value} \\ \hline
-        $\mat{V}_c$ & $\left[0, 0.25, 0.05\right]\T$ \\
+        $\ocean$ & $\left[0, 0.25, 0.05\right]\T$ \\
         $\Delta_0$ & $5$ \\
         $d_{\rm COLAV}$ & $10$ \\
         $U_{\rm LOS}$ & $1$ \\
@@ -564,18 +557,16 @@ After resolving the situation, the formation-keeping error converges to zero exp
 The rate of convergence is given by the formation-keeping gain $\bs{\Lambda}_2$.
 
 The path-following error seems to converge linearly at first, and then exponentially as the error gets smaller.
-This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_gamma_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
-The inverse tan in \eqref{eq:nsb_5dof_gamma_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
+This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
+The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
 The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
 
 \begin{figure}[t]
     \centering
     \def\svgwidth{.8\textwidth}
     \import{figures/nsb_5dof}{trajectory_3d.pdf_tex}
-    \vspace{-6.5mm}
     \caption{3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 25, 50, \ldots, 150$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
     \label{fig:nsb_5dof_trajectory}
-    \vspace*{-8mm}
 \end{figure}
 
 \section{Conclusions and future work}
@@ -583,7 +574,7 @@ The rate of convergence of the along-track error ($x_b^p$) is given by the path 
 
 %\addtolength{\textheight}{-5cm}
 
-In this paper, we proposed a formation path-following method for an arbitrary number of AUVs, proved the stability of the path following part, and verified its effectiveness in simulations.
+In this paper, we proposed a formation path-following method for an arbitrary number of \glspl{auv}, proved the stability of the path following part, and verified its effectiveness in simulations.
 
 Because the proposed algorithm is centralized, our method can only be used in scenarios where all the vehicles can communicate with each other.
 A decentralized version of the algorithm is a topic for future work.

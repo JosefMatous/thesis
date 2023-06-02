@@ -5,22 +5,22 @@ This section describes the \acrlong{nsb} algorithm.
 The \gls{nsb} algorithm is a method that allows us to combine several tasks in a hierarchic manner.
 The algorithm was originally developed for first-order systems
 \begin{equation}
-    \dot{\mat{p}} = \mat{v},
+    \dot{\mat{p}} = \ivel,
 \end{equation}
-where $\mat{p} \in \mathbb{R}^N$ are the generalized coordinates, and $\mat{v} \in \mathbb{R}^N$ are the control inputs.
+where $\mat{p} \in \mathbb{R}^n$ are the generalized coordinates, and $\ivel \in \mathbb{R}^n$ are the input velocities.
 
 In \gls{nsb} algorithms, the desired behavior of the system is divided into several tasks.
-Let there be $m$ tasks arranged by priority in descending order (\emph{i.e.,} task 1 has the highest priority, task $m$ has the lowest priority).
-Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_m$ denote the so-called \emph{task variables}.
+Let there be $M$ tasks arranged by priority in descending order (\emph{i.e.,} task 1 has the highest priority, task $M$ has the lowest priority).
+Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_M$ denote the so-called \emph{task variables}.
 Each variable is a function of the system coordinates, \emph{i.e.,}
 \begin{align}
     \bs{\sigma}_i &= f_i(\mat{p}), &
-    f_i &: \mathbb{R}^N \mapsto \mathbb{R}^{n_i},
+    f_i &: \mathbb{R}^n \mapsto \mathbb{R}^{m_i},
 \end{align}
-where $n_i \leq N$ is the dimensionality of task $i$.
+where $m_i \leq n$ is the dimensionality of task $i$.
 Applying the chain rule, the time-derivative of $\bs{\sigma}_i$ is
 \begin{equation}
-    \dot{\bs{\sigma}}_i = \frac{\partial f_i(\mat{p})}{\partial \mat{p}} \mat{v} \triangleq \mat{J}_i(\mat{p}) \mat{v}.
+    \dot{\bs{\sigma}}_i = \frac{\partial f_i(\mat{p})}{\partial \mat{p}} \ivel \triangleq \mat{J}_i(\mat{p}) \ivel.
 \end{equation}
 Let $\dot{\bs{\sigma}}_i^{*}$ be the desired closed-loop behavior of the task variable\footnote{
 In many applications, the task variable should track some pre-defined desired value, $\bs{\sigma}_{d, i}$.
@@ -32,36 +32,37 @@ where $\bs{\Lambda}_i$ is a positive definite gain matrix.
 }.
 Then, the smallest input (in terms of Euclidean norm) that guarantees the desired behavior is
 \begin{equation}
-    \mat{v}_i = \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*},
+    \ivel_i = \mat{J}_i^{\dagger} \dot{\bs{\sigma}}_i^{*},
     \label{eq:background_NSB_velocity_i}
 \end{equation}
 where $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
 
-If the task is \emph{redundant}, \emph{i.e.}, if $n_i < N$, then there exists a subspace of control inputs that do not interfere with the task.
-Let $\mat{v}_{\rm add}$ be an additional input.
+If the task is \emph{redundant}, \emph{i.e.}, if the inequality $m_i < n$ strictly holds, then there exists a subspace of control inputs that do not interfere with the task.
+Let $\ivel_{\rm add}$ be an additional input.
 Then, the following control input
 \begin{equation}
-    \mat{v} = \mat{v}_i + \mat{N}_i \mat{v}_{\rm add},
+    \ivel = \ivel_i + \mat{N}_i \ivel_{\rm add},
 \end{equation}
 where $\mat{N}_i = \mat{I}_{N} - \mat{J}_i^{\dagger}\mat{J}_i$ is the null space projector of $\mat{J}_i$, guarantees the desired behavior of the task.
 The additional control input is satisfied only if it does not interfere with the task.
 
 In the \gls{nsb} algorithm, the control inputs from the individual tasks are composed by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
 In the literature, there exist two variants of the algorithm.
-The first variant calculates the control input $\mat{v}$ using the following equation
+The first variant calculates the control input $\ivel$ using the following equation
 \begin{align}
-    \mat{v} &= \mat{v}_{1} + \mat{N}_1 \biggl(\mat{v}_{2} + \mat{N}_2\Bigl(\mat{v}_3 \cdots + \mat{N}_{m-2}\bigl(\mat{v}_{m-1} + \mat{N}_{m-1}\mat{v}_m\bigr)\Bigr)\biggr),
+    \ivel &= \ivel_{1} + \mat{N}_1 \biggl(\ivel_{2} + \mat{N}_2\Bigl(\ivel_3 \cdots + \mat{N}_{M-2}\bigl(\mat{v}_{M-1} + \mat{N}_{M-1}\mat{v}_M\bigr)\Bigr)\biggr),
+    \label{eq:background_NSB_recursive}
 \end{align}
-with $\mat{v}_i$ given by \eqref{eq:background_NSB_velocity_i}.
+with $\ivel_{i}$ given by \eqref{eq:background_NSB_velocity_i}.
 
 The second variant uses the so-called \emph{augmented} Jacobians
 \begin{align}
     \Bar{\mat{J}}_i &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_i\T}.
 \end{align}
 Let $\Bar{\mat{N}}_i$ denote the null space projector of $\Bar{\mat{J}}_i$.
-Then, the control input $\mat{v}$ is given by
+Then, the control input $\ivel$ is given by
 \begin{equation}
-    \mat{v} = \mat{v}_1 + \sum_{i=2}^m \Bar{\mat{N}}_{i-1} \mat{v}_i.
+    \ivel = \ivel_1 + \sum_{i=2}^M \Bar{\mat{N}}_{i-1} \ivel_i.
 \end{equation}
 The advantages and disadvantages of both approaches are discussed in \cite{antonelli_stability_2008}.
 In the thesis, we will mostly use the first variant.
@@ -93,7 +94,7 @@ Now, let us consider two consecutive tasks that are independent and orthogonal.
 Without loss of generality, let us denote these tasks $1$ and $2$.
 The control input produced by combining these two tasks is
 \begin{equation}
-    \mat{v} = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \mat{N}_1 \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}
+    \ivel = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \mat{N}_1 \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}
     = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right) \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}
     = \mat{J}_1^{\dagger} \dot{\bs{\sigma}}_1^{*} + \mat{J}_2^{\dagger} \dot{\bs{\sigma}}_2^{*}.
 \end{equation}
@@ -102,25 +103,26 @@ We have thus shown that if two consecutive tasks are independent and orthogonal,
 Moreover, the null-space projector does not affect the lower-priority task.
 
 \subsection{\gls{nsb} algorithm for the formation path-following problem}
+\label{sec:background_nsb_formation_path_following}
 In the remainder of the section, we demonstrate how the \gls{nsb} algorithm can be used to solve the formation path-following problem.
 
-Let $\mat{p}\T = \left[\mat{p}_1\T, \ldots, \mat{p}_n\T\right]$ be the concatenated position vector of $n$ vehicles.
+Let $\mat{p}\T = \left[\mat{p}_1\T, \ldots, \mat{p}_N\T\right]$ be the concatenated position vector of $N$ vehicles.
 To solve the problem, we define two tasks: formation-keeping and path-following.
 The formation-keeping task has the highest priority.
 The task variable, $\bs{\sigma}_1$, is given by
 \begin{align}
-    \bs{\sigma}_1 &= \inlinevector{\bs{\sigma}_{1, 1}\T, \bs{\sigma}_{1, 2}\T, \ldots, \bs{\sigma}_{1, n-1}\T}, &
+    \bs{\sigma}_1 &= \inlinevector{\bs{\sigma}_{1, 1}\T, \bs{\sigma}_{1, 2}\T, \ldots, \bs{\sigma}_{1, N-1}\T}, &
     \bs{\sigma}_{1, i} &= \mat{p}_i - \mat{p}_b,
     \label{eq:background_formation_variable}
 \end{align}
-where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter of the formation (see Section~\ref{sec:background_formation_path_following}).
+where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter of the formation (see Section~\ref{sec:background_formation_path_following}).
 
 \begin{rmk}
-    The formation-keeping task contains the relative positions of the first $n-1$ vehicles.
+    The formation-keeping task contains the relative positions of the first $N-1$ vehicles.
     The relative position of the last vehicle is omitted because it can be expressed as a linear combination of the remaining relative positions.
     Indeed, from \eqref{eq:background_formation_variable}, we get
     \begin{equation}
-        \bs{\sigma}_{1, n} = \mat{p}_n - \mat{p}_b = - \sum_{i=1}^{n-1} \bs{\sigma}_{1, i}.
+        \bs{\sigma}_{1, N} = \mat{p}_N - \mat{p}_b = - \sum_{i=1}^{N-1} \bs{\sigma}_{1, i}.
     \end{equation}
     By omitting the last relative position vector, the task Jacobian is full row rank.
     Indeed, the Jacobian of the formation-keeping task is
@@ -133,21 +135,21 @@ where $\mat{p}_b = \frac{1}{n}\sum\limits_{i=1}^n \mat{p}_i$ is the barycenter o
                 \vdots & & \ddots & & \vdots \\
                 -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 & \cdots & \frac{N-1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3
             \end{bmatrix} \\[6pt]
-            &= \left[\mat{I}_{3(n-1)},\, \mat{O}_{3(n-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(n-1) \times n} \otimes \mat{I}_3.
+            &= \left[\mat{I}_{3(N-1)},\, \mat{O}_{3(N-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(N-1) \times N} \otimes \mat{I}_3.
         \end{split}
     \end{equation}
-    One can verify that the rank of $\mat{J}_1$ is $3(n-1)$, and the Jacobian is thus full row rank.
+    One can verify that the rank of $\mat{J}_1$ is $3(N-1)$, and the Jacobian is thus full row rank.
 \end{rmk}
 
 The desired value of the formation-keeping task variable is
 \begin{align}
-    \bs{\sigma}_{d, 1} &= \inlinevector{\mat{p}_{f, 1}\T, \mat{p}_{f, 2}\T, \ldots, \mat{p}_{f, n-1}\T},
+    \bs{\sigma}_{d, 1} &= \inlinevector{\mat{p}_{f, 1}\T, \mat{p}_{f, 2}\T, \ldots, \mat{p}_{f, N-1}\T},
 \end{align}
 where $\mat{p}_{f, i}$ is the desired position of vehicle $i$ within the formation (see Section~\ref{sec:background_formation_path_following}).
 
-The formation-keeping control input $\mat{v}_1$ is then given by
+The formation-keeping control input $\ivel_1$ is then given by
 \begin{equation}
-    \mat{v}_1 = \mat{J}_1^{\dagger} \left(\dot{\bs{\sigma}}_{d, 1} - \bs{\Lambda}_1 (\bs{\sigma}_1 - \bs{\sigma}_{d, 1})\right),
+    \ivel_1 = \mat{J}_1^{\dagger} \left(\dot{\bs{\sigma}}_{d, 1} - \bs{\Lambda}_1 (\bs{\sigma}_1 - \bs{\sigma}_{d, 1})\right),
 \end{equation}
 where $\bs{\Lambda}_1$ is a positive definite gain matrix.
 
@@ -189,17 +191,17 @@ where $s$ is the value of the path parameter.
 We propose to solve the path-following problem using \acrlong{los} guidance.
 The desired behavior of the path-following task is thus given by
 \begin{equation}
-    \bs{\sigma}_2^{*} = \mat{V}_{\rm LOS},
+    \bs{\sigma}_2^{*} = \ivel_{\rm LOS},
 \end{equation}
-where $\mat{V}_{\rm LOS}$ is either the coupled \eqref{eq:background_los_coupled} or decoupled \eqref{eq:background_los_decoupled} \gls{los} guidance law.
-The path-following control input $\mat{v}_2$ is then given by
+where $\ivel_{\rm LOS}$ is either the coupled \eqref{eq:background_los_coupled} or decoupled \eqref{eq:background_los_decoupled} \gls{los} guidance law.
+The path-following control input $\ivel_2$ is then given by
 \begin{equation}
-    \mat{v}_2 = \mat{J}_2^{\dagger} \bs{\sigma}_2^{*} = \mat{1}_{N \times 1} \otimes \mat{V}_{\rm LOS}.
+    \ivel_2 = \mat{J}_2^{\dagger} \bs{\sigma}_2^{*} = \mat{1}_{N \times 1} \otimes \ivel_{\rm LOS}.
 \end{equation}
 
-Thanks to the independence and orthogonality of the tasks, the combined control input $\mat{v}$ is given by
+Thanks to the independence and orthogonality of the tasks, the combined control input $\ivel$ is given by
 \begin{equation}
-    \mat{v} = \mat{v}_1 + \mat{N}_1 \mat{v}_2 = \mat{v}_1 + \mat{v}_2.
+    \ivel = \ivel_1 + \mat{N}_1 \ivel_2 = \ivel_1 + \ivel_2.
 \end{equation}
 
 Finally, let us investigate the closed-loop behavior of the tasks.
@@ -227,7 +229,7 @@ From \eqref{eq:background_sigma_2_tilde}, the dynamics of the path-following err
 \begin{equation}
     \begin{split}
         \dot{\mat{p}}_b^p &= \mat{R}_p(s)\T \left(\mat{J}_2 \mat{v} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{R}_p(s)\T\left(\mat{p}_b - \mat{p}_p(s)\right) \\
-        &= \mat{R}_p(s)\T \left(\mat{V}_{\rm LOS} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{p}_b^p.
+        &= \mat{R}_p(s)\T \left(\ivel_{\rm LOS} - \dot{\mat{p}}_p(s)\right) - \mat{S}(\bs{\omega}_p(s))\mat{p}_b^p.
     \end{split}
 \end{equation}
 The stability of the path-following task depends on the choice of the \gls{los} guidance law.
