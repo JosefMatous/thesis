@@ -147,7 +147,7 @@ From \eqref{eq:nsb_5dof_theta_dot}, we get the following relation between the ya
     q_{d,i} = \dot{\theta}_{d,i}.
 \end{equation}
 Now, we consider the desired pitch angle from \eqref{eq:nsb_5dof_theta_d}.
-Since we are investigating the path following task, we substitute $\gamma_{\rm LOS}$ from \eqref{eq:nsb_5dof_gamma_LOS} for $\gamma_{{\rm NSB}, i}$.
+Since we are investigating the path following task, we substitute $\gamma_{\rm LOS}$ from \eqref{eq:nsb_5dof_v_LOS} for $\gamma_{{\rm NSB}, i}$.
 Differentiating \eqref{eq:nsb_5dof_theta_d} with respect to time yields
 \begin{equation}
     q_{d,i} = \dot{\theta}_p(\xi) + \frac{\Delta\left(\mat{p}_b^p\right)\,\dot{z}_b^p - z_b^p\,\dot{\Delta}\left(\mat{p}_b^p\right)}{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2} + \frac{u_{d,i}\,\dot{w}}{u_{d,i}^2 + w_i^2},

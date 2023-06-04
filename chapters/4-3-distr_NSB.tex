@@ -579,11 +579,11 @@ In this section, we introduce the model of underactuated AUVs and propose soluti
 
 \subsection{AUV Model}
 Let $\mat{p}_i \in \mathbb{R}^3$ denote the position of vehicle $i$.
-Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation, let $\mat{v}_i = \inlinevector{u_i, v_i, w_i}$ be the linear surge, sway, and heave velocities, and let $\bs{\omega}_i = \inlinevector{p_i, q_i, r_i}$ be the angular roll, pitch, and yaw rates.
+Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation, let $\bvel_i = \inlinevector{u_i, v_i, w_i}$ be the linear surge, sway, and heave velocities, and let $\bs{\omega}_i = \inlinevector{p_i, q_i, r_i}$ be the angular roll, pitch, and yaw rates.
 
 The kinematics of the vehicle are \cite{fossen_handbook_2011}
 \begin{align}
-    \dot{\mat{p}}_i &= \mat{R}_i \mat{v}_i, &
+    \dot{\mat{p}}_i &= \mat{R}_i \bvel_i, &
     \dot{\mat{R}}_i &= \mat{R}_i \mat{S}(\bs{\omega}_i),
     \label{eq:distr_NSB_AUV_kinematic}
 \end{align}
@@ -594,9 +594,9 @@ The reason for making this assumption is that we want to develop a control schem
 The vehicle dynamics can then be expressed as
 \begin{equation}
     \begin{bmatrix}
-        \dot{\mat{v}}_i \\ \dot{\bs{\omega}}_i
+        \dot{\bvel}_i \\ \dot{\bs{\omega}}_i
     \end{bmatrix}
-    = f\left(\mat{R}_i, \mat{R}_{d,i}, \mat{v}_i, u_{d, i}, \bs{\omega}_i\right),
+    = f\left(\mat{R}_i, \mat{R}_{d,i}, \bvel_i, u_{d, i}, \bs{\omega}_i\right),
 \end{equation}
 where $f$ is a function representing the closed-loop dynamics, and $\mat{R}_{d,i}$ and $u_{d, i}$ are the desired orientation and surge velocity, respectively.
 

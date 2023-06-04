@@ -53,21 +53,21 @@ Let $\mathbf{p}$ denote the position and $\bs{\Theta}$ the orientation (expresse
 %\end{align}
 %where $x$ is the North coordinate, $y$ is the East coordinate, and $\psi$ is the yaw angle.
 %
-Let $\bs{\eta}$ be the pose of the vehicle
+Let $\pose$ be the pose of the vehicle
 \begin{equation}
-    \bs{\eta} = \left[ \mathbf{p}^{\rm T} ,\, \bs{\Theta}^{\rm T} \right]^{\rm T}.
+    \pose = \left[ \mathbf{p}^{\rm T} ,\, \bs{\Theta}^{\rm T} \right]^{\rm T}.
 \end{equation}
 
-Let $\bs{\nu}$ be the velocities of the vehicle in the body-centered frame.
+Let $\vel$ be the velocities of the vehicle in the body-fixed frame.
 %For our 3DOF models
 %\begin{equation}
-%    \bs{\nu} = \left[ u ,\, v ,\, r \right]^{\rm T},
+%    \vel = \left[ u ,\, v ,\, r \right]^{\rm T},
 %\end{equation}
 %where $u$ and $v$ are the surge and sway velocities, respectively, and $r$ is the yaw rate.
 %
 The complete state of the vehicle, $\mathbf{x}$, is defined as
 \begin{equation}
-    \mathbf{x} = \left[ \bs{\eta}^{\rm T} \,, \bs{\nu}^{\rm T} \right]^{\rm T}.
+    \mathbf{x} = \left[ \pose^{\rm T} \,, \vel^{\rm T} \right]^{\rm T}.
 \end{equation}
 
 Let $\bs{\tau}$ be the vector of generalized forces acting on the vehicle.
@@ -85,10 +85,10 @@ The time-derivative of the pose can be obtained by transforming the velocities. 
 In addition, we assume that the time-derivatives of the velocities are affine in the generalized forces.
 We thus consider vehicles described by the following dynamical equations
 \begin{equation}
-    \dot{\mathbf{x}} = \begin{bmatrix} \dot{\bs{\eta}} \\ \dot{\bs{\nu}} \end{bmatrix} = \begin{bmatrix}
-        \mathbf{J}(\bs{\Theta})\,\bs{\nu} \\ f(\mathbf{x}) + g(\mathbf{x})\,\bs{\tau}
+    \dot{\mathbf{x}} = \begin{bmatrix} \dot{\pose} \\ \dot{\vel} \end{bmatrix} = \begin{bmatrix}
+        \mathbf{J}(\bs{\Theta})\,\vel \\ f(\mathbf{x}) + g(\mathbf{x})\,\bs{\tau}
     \end{bmatrix} = \begin{bmatrix}
-        \mathbf{J}(\bs{\Theta})\,\bs{\nu} \\ f(\mathbf{x}) + g(\mathbf{x})\,b(\mathbf{u})
+        \mathbf{J}(\bs{\Theta})\,\vel \\ f(\mathbf{x}) + g(\mathbf{x})\,b(\mathbf{u})
     \end{bmatrix},
     \label{eq:ccta_affine_model}
 \end{equation}
@@ -97,8 +97,8 @@ We thus consider vehicles described by the following dynamical equations
 This equation describes a large class of systems, including the matrix-vector model of marine vessels \cite{fossen_handbook_2011}
 \begin{subequations}
     \begin{align}
-        \dot{\bs{\eta}} &= \mathbf{J}(\bs{\Theta})\,\bs{\nu}, \\
-        \mathbf{M}\,\dot{\bs{\nu}} + \left(\mathbf{C}(\bs{\nu}) + \mathbf{D}(\bs{\nu})\right)\,\bs{\nu} + \mathbf{g}(\bs{\eta}) &= b(\mathbf{u}),% + \bs{\tau}_w,
+        \dot{\pose} &= \mathbf{J}(\bs{\Theta})\,\vel, \\
+        \mathbf{M}\,\dot{\vel} + \left(\mathbf{C}(\vel) + \mathbf{D}(\vel)\right)\,\vel + \mathbf{g}(\pose) &= b(\mathbf{u}),% + \bs{\tau}_w,
     \end{align}
     \label{eq:ccta_matrix_model}
     \vspace{-4mm}
@@ -205,16 +205,16 @@ Differentiating \eqref{eq:ccta_CBF} with respect to time yields
 %\end{align}
 
 To calculate the first and second time-derivative of the relative distance, we need to find the first and second time-derivatives of the relative position.
-For $\dot{\mathbf{p}}_{ij}$, we split the derivative of $\bs{\eta}$ from \eqref{eq:ccta_affine_model} into the derivatives of position and orientation \vspace{-2mm}
+For $\dot{\mathbf{p}}_{ij}$, we split the derivative of $\pose$ from \eqref{eq:ccta_affine_model} into the derivatives of position and orientation \vspace{-2mm}
 \begin{equation}
-    \dot{\bs{\eta}}_{i} = \begin{bmatrix} \dot{\mathbf{p}}_{i} \\ \dot{\bs{\Theta}}_{i} \end{bmatrix} = \begin{bmatrix}
+    \dot{\pose}_{i} = \begin{bmatrix} \dot{\mathbf{p}}_{i} \\ \dot{\bs{\Theta}}_{i} \end{bmatrix} = \begin{bmatrix}
         \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \\ \mathbf{J}_{\bs{\Theta}}(\bs{\Theta}_{i})
-    \end{bmatrix}\,\bs{\nu}_{i}.
+    \end{bmatrix}\,\vel_{i}.
 \end{equation}
 
 \noindent Substituting this into the time-derivative of \eqref{eq:ccta_p_ij} yields
 \begin{equation}
-    \dot{\mathbf{p}}_{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \bs{\nu}_{i} - \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{j}) \, \bs{\nu}_{j}.
+    \dot{\mathbf{p}}_{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \vel_{i} - \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{j}) \, \vel_{j}.
     \label{eq:ccta_p_dot}
 \end{equation}
 
@@ -226,13 +226,13 @@ when calculating the time-derivative for the $i^{\rm th}$ vehicle.
 As discussed in \cite{thyri_reactive_2020}, this is a ``mild worst-case'' assumption, since maneuvers of the target vehicle tend to aid to resolving the situation.
 Thus, taking the time-derivative of \eqref{eq:ccta_p_dot} yields
 \begin{equation}
-    \ddot{\mathbf{p}}_{i} = \dot{\mathbf{J}}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \bs{\nu}_{i} + \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \dot{\bs{\nu}}_{i}.
+    \ddot{\mathbf{p}}_{i} = \dot{\mathbf{J}}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \vel_{i} + \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \dot{\vel}_{i}.
     \label{eq:ccta_p_ddot}
 \end{equation}
 
-Finally, we substitute the approximation of forces from \eqref{eq:ccta_forces_approximation} into the equation for $\dot{\bs{\nu}}$ in \eqref{eq:ccta_affine_model} to get
+Finally, we substitute the approximation of forces from \eqref{eq:ccta_forces_approximation} into the equation for $\dot{\vel}$ in \eqref{eq:ccta_affine_model} to get
 \begin{equation}
-    \dot{\bs{\nu}}_{i} = f(\mathbf{x}_{i}) + g(\mathbf{x}_{i})\,\left(b(\mathbf{u}_{0,i}) + \mathbf{B}(\mathbf{u}_{0,i})\,\Delta\mathbf{u}_{i}\right),
+    \dot{\vel}_{i} = f(\mathbf{x}_{i}) + g(\mathbf{x}_{i})\,\left(b(\mathbf{u}_{0,i}) + \mathbf{B}(\mathbf{u}_{0,i})\,\Delta\mathbf{u}_{i}\right),
 \end{equation}
 which we can substitute into \eqref{eq:ccta_p_ddot} to calculate $\ddot{\mathbf{p}}_{i}$.
 
@@ -327,7 +327,7 @@ where $L_x^i$ and $L_y^i$ is the position of the $i^{\rm th}$ thruster, relative
 For the higher-level controller that provides the desired forces, we use a nonlinear PID controller \cite{fossen_handbook_2011}.
 The nonlinear PID is an output-linearizing controller that transforms the nonlinear dynamical equations from \eqref{eq:ccta_matrix_model} to
 \begin{equation}
-    \ddot{\bs{\eta}} + 2\,\bs{\Omega}_n\,\mathbf{Z}\,\dot{\bs{\eta}} + \bs{\Omega}_n^2\,\bs{\eta} = 0,
+    \ddot{\pose} + 2\,\bs{\Omega}_n\,\mathbf{Z}\,\dot{\pose} + \bs{\Omega}_n^2\,\pose = 0,
 \end{equation}
 where $\mathbf{Z}$ is the diagonal relative damping matrix, and $\bs{\Omega}_n$ is the diagonal natural frequency matrix.
 Both matrices are tuning parameters.

@@ -60,17 +60,18 @@
 
 \newcommand{\pose}{\bs{\eta}}
 \newcommand{\vel}{\bs{\nu}}
-\newcommand{\ivel}{\bs{\upsilon}} % inertial velocity
-\newcommand{\ivels}{\upsilon} % inertial velocity component
-\newcommand{\ocean}{\ivel_c}
-\newcommand{\oceanx}{\ivels_x}
-\newcommand{\oceany}{\ivels_y}
-\newcommand{\oceanz}{\ivels_z}
+\newcommand{\bvel}{\bs{\upsilon}}
+\newcommand{\ivel}{\mat{v}} % inertial velocity
+\newcommand{\ivels}{v} % inertial velocity component
+\newcommand{\ocean}{\mat{V}_c}
+\newcommand{\oceanx}{V_x}
+\newcommand{\oceany}{V_y}
+\newcommand{\oceanz}{V_z}
 \newcommand{\oceanhat}{\hat{\ivel}_c}
 \newcommand{\oceantilde}{\tilde{\ivel}_c}
 \newcommand{\mass}{\mat{M}}
-\newcommand{\cor}{\mat{C}\left(\bs{\nu}_r\right)}
-\newcommand{\drag}{\mat{D}\left(\bs{\nu}_r\right)}
+\newcommand{\cor}{\mat{C}\left(\vel_r\right)}
+\newcommand{\drag}{\mat{D}\left(\vel_r\right)}
 \newcommand{\grav}{\mat{g}\left(\pose\right)}
 \newcommand{\rot}{\mat{R}\left(\theta, \psi\right)}
 \newcommand{\trans}{\mat{T}\left(\theta\right)}

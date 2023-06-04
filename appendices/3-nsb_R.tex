@@ -1,22 +1,22 @@
 \chapter{Derivations from Chapter~\ref{chap:NSB_R}}
 \label{app:NSB_R}
 
-%\section{Bounds on $\bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}}$}
+%\section{Bounds on $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$}
 \section{Bounds on the NSB Velocity}
 \label{app:v_NSB}
-Recall the definition of $\bs{\omega}_{\bs{\upsilon}_{{\rm NSB},i}}$ in \eqref{eq:NSB_R_omega_v}.
+Recall the definition of $\bs{\omega}_{\ivel_{{\rm NSB},i}}$ in \eqref{eq:NSB_R_omega_v}.
 Note that by definition, a normalized vector is always orthogonal to its derivative.
 Therefore, the following equality holds:
 \begin{equation}
-    \norm{\bs{\omega}_{\bs{\upsilon}_{{\rm NSB}, i}}} = \norm{\overline{\bs{\upsilon}}_{{\rm NSB}, i}}\norm{\dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}}
-    = \norm{\dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}}.
+    \norm{\bs{\omega}_{\ivel_{{\rm NSB}, i}}} = \norm{\overline{\ivel}_{{\rm NSB}, i}}\norm{\dot{\overline{\ivel}}_{{\rm NSB}, i}}
+    = \norm{\dot{\overline{\ivel}}_{{\rm NSB}, i}}.
 \end{equation}
 Therefore, instead of the pseudo-angular velocity, it is possible to investigate the derivative of the normalized NSB velocity.
 Note that according to the assumptions in Theorem~\ref{thm1}, the analysis should be performed on the manifold $\left[\tilde{\bs{\sigma}}\T, \tilde{\mat{X}}\T\right] = \mat{0}\T$.
 Substituting $\tilde{\bs{\sigma}} = \mat{0}$ to \eqref{eq:NSB_R_v_NSB_i} yields
 \begin{equation}
     \begin{split}
-        \bs{\upsilon}_{{\rm NSB}, i} &= \bs{\upsilon}_{\rm LOS} + \dot{\mat{R}}_p(\xi)\mat{p}_{f,i}^f \\
+        \ivel_{{\rm NSB}, i} &= \ivel_{\rm LOS} + \dot{\mat{R}}_p(\xi)\mat{p}_{f,i}^f \\
         &= U_{\rm LOS}\mat{R}_p(\xi) \left(\mat{e}_1 + \norm{\partial \mat{p}_p(\xi) / \partial \xi}^{-1}\bs{\omega}_p(\xi) \times \mat{p}_{f,i}^f\right).
     \end{split}
     \label{eq:NSB_R_v_NSB_i_nominal}
@@ -28,19 +28,19 @@ For brevity, let us define
 \end{align}
 The normalized NSB velocity is then given by
 \begin{equation}
-    \overline{\bs{\upsilon}}_{{\rm NSB}, i} = \frac{\mat{R}_p(\xi) \mat{e}_p}{\norm{\mat{e}_p}}.
+    \overline{\ivel}_{{\rm NSB}, i} = \frac{\mat{R}_p(\xi) \mat{e}_p}{\norm{\mat{e}_p}}.
     \label{eq:NSB_R_v_NSB_i_normalized}
 \end{equation}
 Differentiating \eqref{eq:NSB_R_v_NSB_i_normalized} with respect to time yields
 \begin{equation}
-    \dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i} = 
+    \dot{\overline{\ivel}}_{{\rm NSB}, i} = 
     \frac{U_{\rm LOS}\mat{R}_p\left(\bs{\kappa}\times\mat{e}_p + \bs{\iota}\times\mat{p}_{f,i}^f\right)}{\norm{\mat{e}_p}}
     - \frac{U_{\rm LOS}\mat{R}_p\mat{e}_p\left(\mat{e}_p\T\left(\bs{\iota}\times\mat{p}_{f,i}^f\right)\right)}{\norm{\mat{e}_p}^2},
     \label{eq:NSB_R_v_NSB_i_dot}
 \end{equation}
 where $\bs{\iota} = \partial \bs{\kappa} / \partial \xi$. From \eqref{eq:NSB_R_v_NSB_i_dot}, it follows that
 \begin{equation}
-    \norm{\dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}} \leq
+    \norm{\dot{\overline{\ivel}}_{{\rm NSB}, i}} \leq
     U_{\rm LOS} \left(\norm{\bs{\kappa}} + \frac{\norm{\bs{\iota}\times\mat{p}_{f,i}^f}\left(1 + \norm{\mat{e}_p}\right)}{\norm{\mat{e}_p}}\right).
     \label{eq:NSB_R_v_NSB_i_dot_bound1}
 \end{equation}
@@ -52,45 +52,45 @@ Let us define
 \end{equation}
 Substituting \eqref{eq:NSB_R_U_LOS} and \eqref{eq:NSB_R_c_NSB} into \eqref{eq:NSB_R_v_NSB_i_dot_bound1} gives us the following upper bound
 \begin{equation}
-    \norm{\dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}} \leq 
-    \frac{\upsilon_{2, \max} + \sqrt{\sum_{i=1}^n \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}\,c_{\rm NSB}.
+    \norm{\dot{\overline{\ivel}}_{{\rm NSB}, i}} \leq 
+    \frac{\ivels_{2, \max} + \sqrt{\sum_{i=1}^n \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}\,c_{\rm NSB}.
     \label{eq:NSB_R_v_NSB_i_dot_bound2}
 \end{equation}
 Note that for any two positive numbers $a$ and $b$, the following inequality holds: $\sqrt{a + b} \leq \sqrt{a} + \sqrt{b}$.
 Therefore, we can further upper-bound \eqref{eq:NSB_R_v_NSB_i_dot_bound2} with
 \begin{equation}
-    \norm{\dot{\overline{\bs{\upsilon}}}_{{\rm NSB}, i}} \leq 
-    \underbrace{\frac{c_{\rm NSB}}{1 - k_{\rm NSB}}}_{a_{\rm NSB}}\norm{\mat{v}_u} +
-    \underbrace{\frac{\upsilon_{2, \max} + u_{\min}}{1 - k_{\rm NSB}}\,c_{\rm NSB}}_{b_{\rm NSB}}.
+    \norm{\dot{\overline{\ivel}}_{{\rm NSB}, i}} \leq 
+    \underbrace{\frac{c_{\rm NSB}}{1 - k_{\rm NSB}}}_{a_{\rm NSB}}\norm{\bvel_u} +
+    \underbrace{\frac{\ivels_{2, \max} + u_{\min}}{1 - k_{\rm NSB}}\,c_{\rm NSB}}_{b_{\rm NSB}}.
 \end{equation}
 We have thus shown that there exist positive constants $a_{\rm NSB}$ and $b_{\rm NSB}$ that satisfy \eqref{eq:NSB_R_omega_NSB_bound}.
 
-%\section{Bounds on $\bs{\omega}_{\mat{v}_i}$}
+%\section{Bounds on $\bs{\omega}_{\bvel_i}$}
 \section{Bounds on the Linear Velocity}
 \label{app:omega_v}
-Note that by the assumptions of Theorem~\ref{thm1}, the surge velocity of the vehicle satisfies $u_i = u_{d, i}$, and the linear velocity vector $\mat{v}_i$ thus  satisfies
+Note that by the assumptions of Theorem~\ref{thm1}, the surge velocity of the vehicle satisfies $u_i = u_{d, i}$, and the linear velocity vector $\bvel_i$ thus  satisfies
 \begin{align}
-    \mat{v}_i &= \inlinevector{u_{d,i}, v_i, w_i} = \inlinevector{\sqrt{\norm{\bs{\upsilon}_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2}, v_i, w_i}, &
-    \norm{\mat{v}_i} &= \norm{\bs{\upsilon}_{{\rm NSB}, i}}.
+    \bvel_i &= \inlinevector{u_{d,i}, v_i, w_i} = \inlinevector{\sqrt{\norm{\ivel_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2}, v_i, w_i}, &
+    \norm{\bvel_i} &= \norm{\ivel_{{\rm NSB}, i}}.
     \label{eq:NSB_R_v_i_nominal}
 \end{align}
 The time-derivative of a normalized vector is given by
 \begin{equation}
-    \dot{\overline{\mat{v}}}_i = \frac{\dot{\mat{v}}_i}{\norm{\mat{v}_i}} - \frac{\mat{v}_i\,\,\frac{\rm d}{{\rm d}t}\!\norm{\mat{v}_i}}{\norm{\mat{v}_i}^2},
+    \dot{\overline{\bvel}}_i = \frac{\dot{\bvel}_i}{\norm{\bvel_i}} - \frac{\bvel_i\,\,\frac{\rm d}{{\rm d}t}\!\norm{\bvel_i}}{\norm{\bvel_i}^2},
 \end{equation}
 and the pseudo-angular velocity is thus given by
 \begin{equation}
-    \bs{\omega}_{\mat{v}_i} = \overline{\mat{v}}_i \times \dot{\overline{\mat{v}}}_i
-    = \frac{\mat{v}_i}{\norm{\mat{v}_i}} \times 
-        \left(\frac{\dot{\mat{v}}_i}{\norm{\mat{v}_i}} - \frac{\mat{v}_i\,\,\frac{\rm d}{{\rm d}t}\!\norm{\mat{v}_i}}{\norm{\mat{v}_i}^2}\right)
-    = \frac{\mat{v}_i \times \dot{\mat{v}}_i}{\norm{\mat{v}_i}^2}.
+    \bs{\omega}_{\bvel_i} = \overline{\bvel}_i \times \dot{\overline{\bvel}}_i
+    = \frac{\bvel_i}{\norm{\bvel_i}} \times 
+        \left(\frac{\dot{\bvel}_i}{\norm{\bvel_i}} - \frac{\bvel_i\,\,\frac{\rm d}{{\rm d}t}\!\norm{\bvel_i}}{\norm{\bvel_i}^2}\right)
+    = \frac{\bvel_i \times \dot{\bvel}_i}{\norm{\bvel_i}^2}.
     \label{eq:NSB_R_omega_v_a1}
 \end{equation}
-Now, let us focus on $\dot{\mat{v}}_i$.
+Now, let us focus on $\dot{\bvel}_i$.
 Differentiating \eqref{eq:NSB_R_v_i_nominal} with respect to time yields
 \begin{equation}
-    \dot{\mat{v}}_i = \begin{bmatrix}
-        \frac{\bs{\upsilon}_{{\rm NSB}, i}\T\dot{\bs{\upsilon}}_{{\rm NSB}, i} - v_i\dot{v}_i - w_i\dot{w}_i}{u_i} \\
+    \dot{\bvel}_i = \begin{bmatrix}
+        \frac{\ivel_{{\rm NSB}, i}\T\dot{\ivel}_{{\rm NSB}, i} - v_i\dot{v}_i - w_i\dot{w}_i}{u_i} \\
         \dot{v}_i \\
         \dot{w}_i
     \end{bmatrix}.
@@ -119,7 +119,7 @@ where
 \end{subequations}
 Substituting \eqref{eq:NSB_R_underactuated_dynamics_expanded} into \eqref{eq:NSB_R_v_i_dot} yields
 \begin{equation}
-    \dot{\mat{v}}_i = \mat{A}_{\bs{\omega}_i} \bs{\omega}_i + \widehat{\bs{\omega}}_{0, i},
+    \dot{\bvel}_i = \mat{A}_{\bs{\omega}_i} \bs{\omega}_i + \widehat{\bs{\omega}}_{0, i},
     \label{eq:NSB_R_v_i_dot_matrix_form}
 \end{equation}
 where
@@ -135,7 +135,7 @@ where
         \end{bmatrix} \\
         \widehat{\bs{\omega}}_{0, i}\! &=\!\!
         \begin{bmatrix}
-            \frac{\bs{\upsilon}_{{\rm NSB}, i}\T\dot{\bs{\upsilon}}_{{\rm NSB}, i} 
+            \frac{\ivel_{{\rm NSB}, i}\T\dot{\ivel}_{{\rm NSB}, i} 
             - v_i\left(\left(Y_{v0} + Y_{v1}u_r\right)v_r + Z_{v0}w_r\right)
             - w_i\left(\left(Y_{w0} + Y_{w1}u_r\right)w_r + Z_{w0}v_r\right)}{u_i} \\
             \left(Y_{v0} + Y_{v1}u_r\right)v_r + Z_{v0}w_r \\
@@ -145,12 +145,12 @@ where
 \end{equation}
 Substituting \eqref{eq:NSB_R_v_i_dot_matrix_form} into \eqref{eq:NSB_R_omega_v_a1} yields
 \begin{equation}
-    \bs{\omega}_{\mat{v}_i} = \frac{\mat{v}_i \times \left(\widehat{\mat{A}}_{\bs{\omega}_i}\bs{\omega}_i + \widehat{\bs{\omega}}_{0, i}\right)}{\norm{\mat{v}_i}^2}
-    = \underbrace{\frac{\mat{S}\left(\mat{v}_i\right)\widehat{\mat{A}}_{\bs{\omega}_i}}{\norm{\mat{v}_i}^2}}_{\mat{A}_{\bs{\omega}_i}}\bs{\omega}_i
-     + \underbrace{\frac{\mat{v}_i \times \widehat{\bs{\omega}}_{0, i}}{\norm{\mat{v}_i}^2}}_{\bs{\omega}_{0, i}}.
+    \bs{\omega}_{\bvel_i} = \frac{\bvel_i \times \left(\widehat{\mat{A}}_{\bs{\omega}_i}\bs{\omega}_i + \widehat{\bs{\omega}}_{0, i}\right)}{\norm{\bvel_i}^2}
+    = \underbrace{\frac{\mat{S}\left(\bvel_i\right)\widehat{\mat{A}}_{\bs{\omega}_i}}{\norm{\bvel_i}^2}}_{\mat{A}_{\bs{\omega}_i}}\bs{\omega}_i
+     + \underbrace{\frac{\bvel_i \times \widehat{\bs{\omega}}_{0, i}}{\norm{\bvel_i}^2}}_{\bs{\omega}_{0, i}}.
      \label{eq:NSB_R_omega_v_affine}
 \end{equation}
-We have thus shown that $\bs{\omega}_{\mat{v}_i}$ is affine in $\bs{\omega}_i$.
+We have thus shown that $\bs{\omega}_{\bvel_i}$ is affine in $\bs{\omega}_i$.
 
 Now we investigate the determinant of $(\mat{I} + \mat{A}_{\bs{\omega}_i})$.
 From the definition of $\mat{A}_{\bs{\omega}_i}$ in \eqref{eq:NSB_R_omega_v_affine}, we get the following expression
@@ -209,9 +209,9 @@ Now, let us focus on $\bs{\omega}_{0, i}$.
 Recall the definition of $\bs{\omega}_{0, i}$ in \eqref{eq:NSB_R_omega_v_affine}.
 To find an upper bound, we will use the following inequality
 \begin{align}
-    \norm{\mat{v}_i \times \widehat{\bs{\omega}}_{0, i}} &\leq \norm{\mat{v}_i}\norm{\widehat{\bs{\omega}}_{0, i}}, &
+    \norm{\bvel_i \times \widehat{\bs{\omega}}_{0, i}} &\leq \norm{\bvel_i}\norm{\widehat{\bs{\omega}}_{0, i}}, &
     & \implies &
-    \norm{\bs{\omega}_{0, i}} &\leq \frac{\norm{\widehat{\bs{\omega}}_{0, i}}}{\norm{\mat{v}_i}}.
+    \norm{\bs{\omega}_{0, i}} &\leq \frac{\norm{\widehat{\bs{\omega}}_{0, i}}}{\norm{\bvel_i}}.
 \end{align}
 Recall the definition of $\widehat{\bs{\omega}}_{0, i}$ in \eqref{eq:NSB_R_v_i_dot_matrix_form}.
 To find an upper bound on this vector, we will utilize the following inequality:
@@ -222,11 +222,11 @@ The following inequality holds for the Euclidean norm of $\mat{x}$
 \end{equation}
 Therefore, we can find an upper bound on $\norm{\widehat{\bs{\omega}}_{0, i}}$ by analyzing its components.
 
-Let us begin by investigating the term $\frac{\bs{\upsilon}_{{\rm NSB}, i}\T\dot{\bs{\upsilon}}_{{\rm NSB}, i}}{u_i}$.
-From \eqref{eq:NSB_R_v_NSB_i_nominal}, $\bs{\upsilon}_{{\rm NSB}, i}$ and its time-derivative are given by
+Let us begin by investigating the term $\frac{\ivel_{{\rm NSB}, i}\T\dot{\ivel}_{{\rm NSB}, i}}{u_i}$.
+From \eqref{eq:NSB_R_v_NSB_i_nominal}, $\ivel_{{\rm NSB}, i}$ and its time-derivative are given by
 \begin{align}
-    \bs{\upsilon}_{{\rm NSB}, i} &= U_{\rm LOS}\mat{R}_p(\xi)\mat{e}_p, &
-    \dot{\bs{\upsilon}}_{{\rm NSB}, i} &= U_{\rm LOS}\mat{R}_p(\xi)\left(\bs{\kappa}\times\mat{e}_p + \bs{\iota}\times\mat{p}_{f,i}^f\right).
+    \ivel_{{\rm NSB}, i} &= U_{\rm LOS}\mat{R}_p(\xi)\mat{e}_p, &
+    \dot{\ivel}_{{\rm NSB}, i} &= U_{\rm LOS}\mat{R}_p(\xi)\left(\bs{\kappa}\times\mat{e}_p + \bs{\iota}\times\mat{p}_{f,i}^f\right).
 \end{align}
 For brevity, let us define
 \begin{equation}
@@ -235,18 +235,18 @@ For brevity, let us define
 Then, the following inequality holds for the investigated term
 \begin{equation}
 \begin{split}
-    \abs{\frac{\bs{\upsilon}_{{\rm NSB}, i}\T\dot{\bs{\upsilon}}_{{\rm NSB}, i}}{u_i}} &\leq
-    \frac{\norm{\bs{\upsilon}_{{\rm NSB}, i}}\norm{\dot{\bs{\upsilon}}_{{\rm NSB}, i}}}{u_i} =
-    \frac{\norm{\mat{v}_i}U_{\rm LOS}\norm{\mat{e}_d}}{u_i} \\
-    &\leq \norm{\mat{v}_i}\frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\bs{\upsilon}_{{\rm NSB}, i}}}{u_i}
-    \leq \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\mat{v}_i}^2}{u_{\rm min}}
+    \abs{\frac{\ivel_{{\rm NSB}, i}\T\dot{\ivel}_{{\rm NSB}, i}}{u_i}} &\leq
+    \frac{\norm{\ivel_{{\rm NSB}, i}}\norm{\dot{\ivel}_{{\rm NSB}, i}}}{u_i} =
+    \frac{\norm{\bvel_i}U_{\rm LOS}\norm{\mat{e}_d}}{u_i} \\
+    &\leq \norm{\bvel_i}\frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\ivel_{{\rm NSB}, i}}}{u_i}
+    \leq \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\bvel_i}^2}{u_{\rm min}}
 \end{split}
 \end{equation}
 We can now expand the remaining terms in $\widehat{\bs{\omega}}_{0, i}$ to arrive at the following upper bound
 \begin{equation}
 \begin{split}
     \norm{\widehat{\bs{\omega}}_{0, i}}\! \leq\, &
-    \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\mat{v}_i}^2}{u_{\rm min}}
+    \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\bvel_i}^2}{u_{\rm min}}
     + \abs{\frac{Y_{v1}\left(u_i-u_c\right) + Y_{v0}}{u_i}}v_i^2
     + \abs{\frac{Y_{w1}\left(u_i-u_c\right) + Y_{w0}}{u_i}}w_i^2 \\
     &+ \abs{\frac{Z_{v0}+Z_{w0}}{u_i}v_iw_i} + \abs{\frac{Y_{v1}u_cv_c - Y_{v0}v_c - Z_{v0}w_c - Y_{v1}u_iv_c}{u_i}v_i} \\
@@ -259,7 +259,7 @@ We can now expand the remaining terms in $\widehat{\bs{\omega}}_{0, i}$ to arriv
 Next, we use a similar strategy as in the previous section to get the following upper bound
 \begin{align}
     \norm{\widehat{\bs{\omega}}_{0, i}} \leq &
-    \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\mat{v}_i}^2}{u_{\rm min}} + \frac{1}{2}\frac{\abs{Z_{v0} + Z_{w0}}}{u_{\min}}\left(v_i^2 + w_i^2\right)
+    \frac{\norm{\mat{e}_d}}{\norm{\mat{e}_p}}\frac{\norm{\bvel_i}^2}{u_{\rm min}} + \frac{1}{2}\frac{\abs{Z_{v0} + Z_{w0}}}{u_{\min}}\left(v_i^2 + w_i^2\right)
     + \abs{Y_{w1}u_cw_c} \nonumber \\
     &+ \max\!\left\{\!\frac{\abs{Y_{v1}}\!\left(u_{\min\!}\!+\!\abs{u_c}\right)\! + \!\abs{Y_{v0}}}{u_{\min}}\!, \frac{\abs{Y_{w1}}\!\left(u_{\min\!}\!+\!\abs{u_c}\right)\! +\! \abs{Y_{w0}}}{u_{\min}}\!\right\}\!\left(v_i^2\! + \!w_i^2\right) \nonumber \\
     &+ \frac{\abs{Y_{v1}u_cv_c} + \abs{Y_{v0}v_c} + \abs{Z_{v0}w_c} + \abs{Y_{v1}u_{\max}v_c}}{u_{\max}}\abs{v_i} \nonumber \\
@@ -268,29 +268,29 @@ Next, we use a similar strategy as in the previous section to get the following 
     & + \left(\abs{Y_{w0}} + \abs{Y_{w1}u_c} + \abs{Z_{v0}}\right)\abs{w_i} + \abs{Y_{w1}u_iw_i} + \abs{Y_{w0}w_c} \nonumber \\
     &+ \left(\abs{Y_{v1}v_c}+\abs{Y_{w1}w_c}\right)\abs{u_i} + \abs{Y_{v1}u_cv_c} + \abs{Z_{v0}w_c} + \abs{Y_{v0}v_c}
 \end{align}
-Note that the norm of $\mat{v}_i$ satisfies
+Note that the norm of $\bvel_i$ satisfies
 \begin{equation}
-    \norm{\mat{v}_i} = \norm{\bs{\upsilon}_{{\rm NSB}, i}} = U_{\rm LOS}\norm{\mat{e}_p}
-    \leq \frac{\norm{\mat{e}_p}}{1 - k_{\rm NSB}}\norm{\mat{v}_u} + \frac{\upsilon_{2, \max} + u_{\min}}{1 - k_{\rm NSB}}\norm{\mat{e}_p},
+    \norm{\bvel_i} = \norm{\ivel_{{\rm NSB}, i}} = U_{\rm LOS}\norm{\mat{e}_p}
+    \leq \frac{\norm{\mat{e}_p}}{1 - k_{\rm NSB}}\norm{\bvel_u} + \frac{\ivels_{2, \max} + u_{\min}}{1 - k_{\rm NSB}}\norm{\mat{e}_p},
 \end{equation}
 and the term $\left(v_i^2+w_i^2\right)$ satisfies the following two inequalities
 \begin{align}
-    v_i^2+w_i^2 &\leq \norm{\mat{v}_i}^2, &
-    v_i^2+w_i^2 &\leq \norm{\mat{v}_u}^2.
+    v_i^2+w_i^2 &\leq \norm{\bvel_i}^2, &
+    v_i^2+w_i^2 &\leq \norm{\bvel_u}^2.
 \end{align}
 We finally arrive at the following upper bound on $\norm{\bs{\omega}_{0, i}}$
 \begin{equation}
 \begin{split}
     \norm{\bs{\omega}_{0, i}} \leq &
     \Bigg(\frac{\norm{\mat{e}_d}}{u_{\min}\left(1 - k_{\rm NSB}\right)}
-    + \frac{1}{2}\frac{\abs{Z_{v0} + Z_{w0}}}{u_{\min}} + \abs{Y_{v1}} + \abs{Y_{w1}}\Bigg) \norm{\mat{v}_u} \\
-    &+ \max\left\{\frac{\abs{Y_{v1}}\!\left(u_{\min}\!+\!\abs{u_c}\right) + \abs{Y_{v0}}}{u_{\min}}, \frac{\abs{Y_{w1}}\!\left(u_{\min}\!+\!\abs{u_c}\right) + \abs{Y_{w0}}}{u_{\min}}\!\right\} \norm{\mat{v}_u} \\
-    &+ \frac{\norm{\mat{e}_d}\!\left(\upsilon_{2, \max}\! + \!u_{\min}\right)}{u_{\min}\left(1 - k_{\rm NSB}\right)}
+    + \frac{1}{2}\frac{\abs{Z_{v0} + Z_{w0}}}{u_{\min}} + \abs{Y_{v1}} + \abs{Y_{w1}}\Bigg) \norm{\bvel_u} \\
+    &+ \max\left\{\frac{\abs{Y_{v1}}\!\left(u_{\min}\!+\!\abs{u_c}\right) + \abs{Y_{v0}}}{u_{\min}}, \frac{\abs{Y_{w1}}\!\left(u_{\min}\!+\!\abs{u_c}\right) + \abs{Y_{w0}}}{u_{\min}}\!\right\} \norm{\bvel_u} \\
+    &+ \frac{\norm{\mat{e}_d}\!\left(\ivels_{2, \max}\! + \!u_{\min}\right)}{u_{\min}\left(1 - k_{\rm NSB}\right)}
     \!+\! \frac{\abs{Y_{v1}u_cv_c} + \abs{Y_{v0}v_c}\! + \!\abs{Z_{v0}w_c}\! + \!\abs{Y_{v1}u_{\max}v_c}}{u_{\max}} \\
     & + \abs{Y_{v1}u_c} + \abs{Z_{w0}} + \frac{\abs{Y_{w1}u_cw_c} + \abs{Y_{w0}w_c} + \abs{Z_{w0}v_c} + \abs{Y_{w1}u_{\max}w_c}}{u_{\max}} \\
     & + \abs{Y_{v0}} + \abs{Y_{w0}} + \abs{Y_{w1}u_c} + \abs{Z_{v0}} + \abs{Y_{v1}v_c} + \abs{Y_{w1}w_c} \\
     & + \frac{\abs{Y_{v1}u_cv_c} + \abs{Z_{v0}w_c} + \abs{Y_{v0}v_c} + \abs{Y_{w1}u_cw_c} + \abs{Z_{w0}v_c} + \abs{Y_{w0}w_c}}{u_{\min}} \\
-    & \triangleq a_v\norm{\mat{v}_u} + b_v
+    & \triangleq a_v\norm{\bvel_u} + b_v
 \end{split}
 \end{equation}
 Similarly to the previous section, we can upper-bound $\abs{u_c}$, $\abs{v_c}$, and $\abs{w_c}$ with $\norm{\mat{V}_c}$.

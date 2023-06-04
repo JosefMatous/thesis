@@ -36,10 +36,10 @@ In this section, we briefly present the \gls{auv} model and the formation path-f
 \subsection{Vehicle Model}
 We consider a fleet of $N$ underactuated \glspl{auv}.
 The dynamics are described using the 5\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
-The pose ($\bs{\eta}_i$) and velocities ($\bs{\nu}_i$) of the $i^{\rm th}$ \gls{auv} are defined as
+The pose ($\pose_i$) and velocities ($\vel_i$) of the $i^{\rm th}$ \gls{auv} are defined as
 \begin{align}
-    \bs{\eta}_i &= \left[x_i, y_i, z_i, \theta_i, \psi_i\right]\T, &
-    \bs{\nu}_i &= \left[u_i, v_i, w_i, q_i, r_i\right]\T.
+    \pose_i &= \left[x_i, y_i, z_i, \theta_i, \psi_i\right]\T, &
+    \vel_i &= \left[u_i, v_i, w_i, q_i, r_i\right]\T.
 \end{align}
 The roll dynamics are disregarded as the roll motion is assumed to be small and self-stabilizing by the vehicle design.
 Let $\ocean \in \mathbb{R}^3$ be the velocity of an unknown, constant and irrotational ocean current.

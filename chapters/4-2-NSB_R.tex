@@ -35,17 +35,17 @@ In this section, we briefly present the AUV model and the formation path-followi
 \subsection{Vehicle Model}
 We consider a fleet of $n$ underactuated AUVs.
 The dynamics of the AUVs are described using the 6DOF control-oriented model described in Section~\ref{sec:model_control_oriented}.
-Let $\mat{p} = \inlinevector{x, y, z}$ be the position, and let $\mat{v} = \inlinevector{u, v, w}$ and $\bs{\omega} = \inlinevector{p, q, r}$ be the linear and angular velocities, respectively.
+Let $\mat{p} = \inlinevector{x, y, z}$ be the position, and let $\bvel = \inlinevector{u, v, w}$ and $\bs{\omega} = \inlinevector{p, q, r}$ be the linear and angular velocities, respectively.
 To avoid the singularities caused by the use of Euler angles, the orientation of the AUV is given by a rotation matrix $\mat{R} \in SO(3)$.
 Furthermore, let $\ocean \in \mathbb{R}^3$ be the velocities of an unknown, constant and irrotational ocean current.
 
 Recalling \eqref{eq:background_nu_dot_relative}, the dynamics of the AUVs are
 \begin{subequations}
 \begin{align}
-    \dot{\mat{p}} &= \mat{R} \mat{v}, \label{eq:NSB_R_p_dot}\\
+    \dot{\mat{p}} &= \mat{R} \bvel, \label{eq:NSB_R_p_dot}\\
     \dot{\mat{R}} &= \mat{R} \mat{S}(\bs{\omega}), \label{eq:NSB_R_R_dot} \\
-    \mat{M} \dot{\bs{\nu}}_r
-        + \bigl(\mat{C}(\bs{\nu}_r) + \mat{D}(\bs{\nu}_r)\bigr) \bs{\nu}_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}. \label{eq:NSB_R_nu_dot}
+    \mat{M} \dot{\vel}_r
+        + \bigl(\mat{C}(\vel_r) + \mat{D}(\vel_r)\bigr) \vel_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}. \label{eq:NSB_R_nu_dot}
 \end{align} \label{eq:NSB_R_matrix_vector_model}
 \end{subequations}
 
@@ -436,38 +436,38 @@ However, since \eqref{eq:NSB_R_NSB_speed_condition} cannot be satisfied with a g
 
 
 Finally, let us discuss the choice of desired orientation.
-Let $\overline{\ivel}_{{\rm NSB}, i}$ and $\overline{\mat{v}}_{i}$ denote normalized vectors.
+Let $\overline{\ivel}_{{\rm NSB}, i}$ and $\overline{\bvel}_{i}$ denote normalized vectors.
 We are seeking $\mat{R}_{d, i} \in SO(3)$ such that 
 \begin{equation}
-    \overline{\ivel}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\overline{\mat{v}}_{i}.
+    \overline{\ivel}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\overline{\bvel}_{i}.
     \label{eq:NSB_R_rotation_reference}
 \end{equation}
 Assume that at a given time, there is $\mat{R}_{d, i}$ that satisfies \eqref{eq:NSB_R_rotation_reference}.
 Differentiating \eqref{eq:NSB_R_rotation_reference} with respect to time yields 
 \begin{equation}
-    \dot{\overline{\ivel}}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\mat{S}(\bs{\omega}_{d, i})\,\overline{\mat{v}}_{i} + \mat{R}_{d, i}\,\dot{\overline{\mat{v}}}_{i},
+    \dot{\overline{\ivel}}_{{\rm NSB}, i} = \mat{R}_{d, i}\,\mat{S}(\bs{\omega}_{d, i})\,\overline{\bvel}_{i} + \mat{R}_{d, i}\,\dot{\overline{\bvel}}_{i},
     \label{eq:NSB_R_rotation_reference_derivative1}
 \end{equation}
 where $\bs{\omega}_{d, i}$ is the desired angular velocity of the vehicle.     
 Let us define
 \begin{align}
     \bs{\omega}_{\ivel_{{\rm NSB}, i}} &= \overline{\ivel}_{{\rm NSB}, i} \times \dot{\overline{\ivel}}_{{\rm NSB}, i}, &
-    \bs{\omega}_{\mat{v}_{i}} &= \overline{\mat{v}}_{i} \times \dot{\overline{\mat{v}}}_{i}.
+    \bs{\omega}_{\bvel_{i}} &= \overline{\bvel}_{i} \times \dot{\overline{\bvel}}_{i}.
     \label{eq:NSB_R_omega_v}
 \end{align}    
 Then, \eqref{eq:NSB_R_rotation_reference_derivative1} can be rewritten as 
 \begin{equation}
     \bs{\omega}_{\ivel_{{\rm NSB}, i}} \times \overline{\ivel}_{{\rm NSB}, i} = 
-    \mat{R}_{d, i} \left( \bs{\omega}_{d, i} \times \overline{\mat{v}}_{i} + \bs{\omega}_{\mat{v}_{i}} \times \overline{\mat{v}}_{i} \right).
+    \mat{R}_{d, i} \left( \bs{\omega}_{d, i} \times \overline{\bvel}_{i} + \bs{\omega}_{\bvel_{i}} \times \overline{\bvel}_{i} \right).
 \end{equation}
 Therefore, the desired angular velocity must satisfy 
 \begin{equation}
-    \left( \bs{\omega}_{d, i} + \bs{\omega}_{\mat{v}_{i}} 
-    - \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} \right) \times \overline{\mat{v}}_{i} = \mat{0}. \label{eq:NSB_R_omega_ref_equation}
+    \left( \bs{\omega}_{d, i} + \bs{\omega}_{\bvel_{i}} 
+    - \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} \right) \times \overline{\bvel}_{i} = \mat{0}. \label{eq:NSB_R_omega_ref_equation}
 \end{equation}
 Thus, instead of finding $\mat{R}_{d, i}$ directly, we propose to choose 
 \begin{equation}
-    \bs{\omega}_{d, i} = \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} - \bs{\omega}_{\mat{v}_{i}},
+    \bs{\omega}_{d, i} = \mat{R}_{d, i}\T \bs{\omega}_{\ivel_{{\rm NSB}, i}} - \bs{\omega}_{\bvel_{i}},
     \label{eq:NSB_R_omega_ref}
 \end{equation}
 and then evolve the desired orientation according to 
@@ -502,7 +502,7 @@ Differentiating \eqref{eq:NSB_R_sigma_2}, \eqref{eq:NSB_R_sigma_d_2}, and \eqref
 \end{subequations}
 From \eqref{eq:NSB_R_p_dot} and \eqref{eq:NSB_R_low_level_error} it follows that $\dot{\mat{p}}_i$ is given by 
 \begin{align}
-    \dot{\mat{p}}_i &= \mat{R}_i\mat{v}_i = {\rm expm}\left(\bs{\delta}_i\right)\mat{R}_{d, i}\inlinevector{u_{d, i} + \widetilde{u}_i, v_i, w_i}, \label{eq:NSB_R_p_dot_closed_loop}
+    \dot{\mat{p}}_i &= \mat{R}_i\bvel_i = {\rm expm}\left(\bs{\delta}_i\right)\mat{R}_{d, i}\inlinevector{u_{d, i} + \widetilde{u}_i, v_i, w_i}, \label{eq:NSB_R_p_dot_closed_loop}
 \end{align}
 with 
 \begin{align}
@@ -539,12 +539,12 @@ and substituting \eqref{eq:NSB_R_g_i} and \eqref{eq:NSB_R_p_dot_closed_loop_2} i
 \end{subequations}
 Now, to account for the underactuated dynamics, we define a vector of concatenated sway and heave velocities as 
 \begin{align}
-    \mat{v}_u &= \inlinevector{v_1, w_1, \ldots, v_n, w_n}, &
-    \mat{v}_{u, c} &= \mat{1}_n \otimes \inlinevector{v_c, w_c}.
+    \bvel_u &= \inlinevector{v_1, w_1, \ldots, v_n, w_n}, &
+    \bvel_{u, c} &= \mat{1}_n \otimes \inlinevector{v_c, w_c}.
 \end{align}
 The underactuated dynamics can then be written as
 \begin{equation}
-    \dot{\mat{v}}_u = \mat{X}\bs{\Omega} + \mat{Y}\left(\mat{v}_u - \mat{v}_{u, c}\right) + \dot{\mat{v}}_{u, c}, \label{eq:NSB_R_underactuated_dynamics_closed_loop}
+    \dot{\bvel}_u = \mat{X}\bs{\Omega} + \mat{Y}\left(\bvel_u - \bvel_{u, c}\right) + \dot{\bvel}_{u, c}, \label{eq:NSB_R_underactuated_dynamics_closed_loop}
 \end{equation}
 where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $\mat{X}$ and $\mat{Y}$ are block diagonal matrices consisting of blocks $\mat{X}_1, \ldots, \mat{X}$ and $\mat{Y}_1, \ldots, \mat{Y}_n$, that are given by 
 \begin{align}
@@ -685,26 +685,26 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     As for the underactuated dynamics, the assumption $\widetilde{\mat{X}} = \mat{0}$ implies $\bs{\omega}_i = \bs{\omega}_{d, i}$ and $u_i = u_{d, i}$.
     Therefore the underactuated dynamics depend on the desired angular velocity.
     Recall the definition of $\bs{\omega}_{d, i}$ in~\eqref{eq:NSB_R_omega_ref}.
-    To find a closed-loop expression for $\bs{\omega}_{d, i}$, we shall analyze $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$ and $\bs{\omega}_{\mat{v}_{i}}$.
+    To find a closed-loop expression for $\bs{\omega}_{d, i}$, we shall analyze $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$ and $\bs{\omega}_{\bvel_{i}}$.
 
     
     
     First, we consider $\bs{\omega}_{\ivel_{{\rm NSB}, i}}$.
     In Appendix~\ref{app:v_NSB}, we show that there exist positive constants $a_{\rm NSB}$ and $b_{\rm NSB}$ such that 
     \begin{equation}
-        \norm{\bs{\omega}_{\ivel_{{\rm NSB}, i}}} \leq a_{\rm NSB}\norm{\mat{v}_u} + b_{\rm NSB}.
+        \norm{\bs{\omega}_{\ivel_{{\rm NSB}, i}}} \leq a_{\rm NSB}\norm{\bvel_u} + b_{\rm NSB}.
         \label{eq:NSB_R_omega_NSB_bound}
     \end{equation}
-    Now, let us consider $\bs{\omega}_{\mat{v}_i}$.
-    In Appendix~\ref{app:omega_v}, we show that $\bs{\omega}_{\mat{v}_i}$ depends on the angular velocities of the vehicle, thus forming an algebraic loop.
+    Now, let us consider $\bs{\omega}_{\bvel_i}$.
+    In Appendix~\ref{app:omega_v}, we show that $\bs{\omega}_{\bvel_i}$ depends on the angular velocities of the vehicle, thus forming an algebraic loop.
     However, under certain conditions, this loop can be resolved.
 
     
 
-    We show that $\bs{\omega}_{\mat{v}_{i}}$ is affine in $\bs{\omega}_i$.
+    We show that $\bs{\omega}_{\bvel_{i}}$ is affine in $\bs{\omega}_i$.
     In other words, there exist $\bs{\omega}_{0, i}$ and $\mat{A}_{\bs{\omega}_i}$ such that \vspace*{-0.35em}
     \begin{equation}
-        \bs{\omega}_{\mat{v}_{i}} = \bs{\omega}_{0, i} + \mat{A}_{\bs{\omega}_i}\,\bs{\omega}_i.
+        \bs{\omega}_{\bvel_{i}} = \bs{\omega}_{0, i} + \mat{A}_{\bs{\omega}_i}\,\bs{\omega}_i.
         \vspace*{-0.15em}
     \end{equation}
     Moreover, we show that $\mat{A}_{\bs{\omega}_i}$ satisfies 
@@ -720,30 +720,30 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{equation}
     In addition, there exist positive constants $a_v$, and $b_v$ such that 
     \begin{equation}
-        \norm{\bs{\omega}_{0, i}} \leq a_v\norm{\mat{v}_u} + b_v.
+        \norm{\bs{\omega}_{0, i}} \leq a_v\norm{\bvel_u} + b_v.
         \label{eq:NSB_R_omega_0_bound}
     \end{equation}
 
     By combining \eqref{eq:NSB_R_omega_NSB_bound}, \eqref{eq:NSB_R_det_A_bound}, and \eqref{eq:NSB_R_omega_0_bound}, we can upper bound the angular velocity with 
     \begin{equation}
-        \norm{\bs{\omega}_{d, i}} \leq \frac{\left(a_{\rm NSB} + a_v\right)\norm{\mat{v}_u} + b_{\rm NSB} + b_v}{1 - k_a} .
+        \norm{\bs{\omega}_{d, i}} \leq \frac{\left(a_{\rm NSB} + a_v\right)\norm{\bvel_u} + b_{\rm NSB} + b_v}{1 - k_a} .
     \end{equation}
     The Lyapunov function candidate 
     \begin{equation}
-        V_u = \frac{1}{2} \mat{v}_u\T\mat{v}_u
+        V_u = \frac{1}{2} \bvel_u\T\bvel_u
     \end{equation}
     for the underactuated dynamics may then be shown that, leveraging \eqref{eq:NSB_R_underactuated_dynamics_closed_loop}, has its time-derivative bounded by 
     \begin{equation}
-        \dot{V}_u \leq \mat{v}_u\T\mat{Y}\mat{v}_u + aX_{\max}\norm{\mat{v}_u}^2 + H\left(\norm{\mat{v}_u}, \norm{\ocean}\right),
+        \dot{V}_u \leq \bvel_u\T\mat{Y}\bvel_u + aX_{\max}\norm{\bvel_u}^2 + H\left(\norm{\bvel_u}, \norm{\ocean}\right),
     \end{equation}
-    where $a = (a_{\rm NSB} + a_v)/(1 - k_a)$, $X_{\max}$ is the largest singular value of $\mat{X}$, and $H$ represents the terms that grow at most linearly with $\mat{v}_u$.
+    where $a = (a_{\rm NSB} + a_v)/(1 - k_a)$, $X_{\max}$ is the largest singular value of $\mat{X}$, and $H$ represents the terms that grow at most linearly with $\bvel_u$.
     Since $\mat{Y}$ contains terms associated with hydrodynamic damping, it is negative definite.
     Therefore, $\dot{V}_u$ can be further bounded by 
     \begin{equation}
-        \dot{V}_u \leq -\left(Y_{\min} - aX_{\max}\right)\norm{\mat{v}_u}^2 + H(\cdot),
+        \dot{V}_u \leq -\left(Y_{\min} - aX_{\max}\right)\norm{\bvel_u}^2 + H(\cdot),
     \end{equation}
     where $Y_{\min}$ is the real part of the smallest eigenvalue of $-\mat{Y}$.
-    For a sufficiently large $\mat{v}_u$, the quadratic terms will dominate the linear terms.
+    For a sufficiently large $\bvel_u$, the quadratic terms will dominate the linear terms.
     Consequently, the underactuated dynamics are bounded if 
     \begin{equation}
         Y_{\min} > aX_{\max}. \label{eq:NSB_R_boudedness_condition}

@@ -2,7 +2,7 @@
 \label{sec:background_USGES}
 
 This section discusses the concept of \gls{usges}.
-In some cases, dynamical systems cannot attain global stability due to high-order nonlinearities, the choice of the control law, or actuator saturations.
+In some cases, dynamical systems cannot attain global stability due to, for instance, high-order nonlinearities, the choice of the control law, or actuator saturations.
 An example of such a system is marine vehicles controlled by \acrlong{los} guidance laws.
 In \cite{fossen_uniform_2014}, it has been shown that the structure of proportional \gls{los} guidance laws prevents the system from having global exponential convergence.
 
@@ -46,6 +46,7 @@ Theorem 5 introduces sufficient conditions for \acrfull{usges} of nonlinear syst
     \begin{subequations}
         \begin{align}
             k_{1_\Delta} \norm{\mat{x}}^a \leq V_{\Delta}(t, \mat{x}) &\leq k_{2_\Delta} \norm{\mat{x}}^a, \\
+            \lim_{\Delta \rightarrow \infty} \left(\frac{k_{1_\Delta}}{k_{2_\Delta}}\right)^{1/a} \Delta &= \infty, \\
             \frac{\partial V_{\Delta}}{\partial t} + \frac{\partial V_{\Delta}}{\partial \mat{x}} f(t, \mat{x}) &\leq -k_{3_\Delta} \norm{\mat{x}}^a,
         \end{align}
     \end{subequations}
