@@ -1,4 +1,49 @@
 \chapter{Hand Position for Underactuated Underwater Vehicles}
 \label{chap:handpos_definition}
 
-This chapter defines and motivates the hand position concept.
+This chapter motivates and defines the hand position concept.
+Compared to previous works that utilize this concept, our approach works on six-degree-of-freedom vehicles and does not introduce singularities.
+By choosing the hand position as the output of the controlled system, we can apply output feedback linearization to simplify the dynamics of the vehicle.
+Specifically, we can then transform the six-degree-of-freedom nonlinear underactuated vehicle model into a double integrator.
+This transformation enables the use of numerous control strategies that could otherwise not be used on nonholonomic or underactuated vehicles.
+The contents of this chapter are based on \cite{matous_trajectory_2023}.
+In \cite{matous_distributed_2023}, we proposed and analyzed controllers that solve the path-following and trajectory-tracking problems.
+This chapter presents an analysis of a generic hand position-based controller.
+
+\section{Introduction}
+
+This thesis studies slender torpedo-shaped \acrfullpl{auv} with a propeller that provides forward (surge) thrust, and fins that provide torque.
+The configuration of actuators means that \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
+The underactuated nature of \glspl{auv} makes them difficult to control.
+In addition, \glspl{auv} are subject to constant disturbances caused by the waves and ocean currents, commonly referred to as sea loads.
+
+In this chapter, we propose to use the \emph{hand position} concept to control the AUV.
+The hand position is a point located a given distance in front of the neutral point along the vehicle's $x$-axis (see \figref{fig:handpos_def_motivation}b for an illustration).
+The concept was first introduced in \cite{pomet_hand-position_1992} to stabilize nonholonomic vehicles with unicycle dynamics.
+Later, it was applied to control formations of unicycles \cite{lawton_hand-position-formation_2003}.
+The concept was then extended to marine vehicles moving in the horizontal plane \cite{paliotta_trajectory_2019}, and two- and three-dimensional Euler-Lagrange-like systems \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021}.
+
+\begin{figure}[t]
+    \centering
+    \def\svgwidth{0.75\textwidth}
+    \import{figures/handpos_def}{motivation.pdf_tex}
+    \caption{Illustration of (a) the traditional trajectory tracking and path following controllers, and (b) the proposed hand position-based controller. The dashed line represents the body-fixed $x$-axis.}
+    \label{fig:handpos_def_motivation}
+\end{figure}
+
+There are two main advantages to using the hand position concept.
+The first advantage stems from the applications of AUVs.
+The aim of many scientific missions is to scan a given area using a sensor attached to the AUV.
+Since the position of the sensor typically does not coincide with the neutral point, there may be a significant offset between the sensor and the desired trajectory, caused by the sea loads (see \figref{fig:handpos_def_motivation}a).
+In some cases, the hand position can be chosen such that it coincides with the position of the sensor, allowing to scan the area more accurately.
+The second advantage is that if we choose the hand position as the output of our system, it is possible to transform the nonlinear underactuated vehicle model to a double integrator, using output feedback linearization.
+This allows us to apply advanced control strategies, \emph{e.g.,} various consensus algorithms \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021,lawton_hand-position-formation_2003,restrepo_tracking-formation_2022} that cannot be directly used on nonholonomic or underactuated vehicles.
+
+Note that the three-dimensional Euler-Lagrange-like system used in \cite{li_hand-position-rigidity-3d_2021} does not accurately represent AUVs, since it does not consider the Coriolis and centripetal effects or the restoring forces (gravity and buoyancy).
+Furthermore, the model in \cite{li_hand-position-rigidity-3d_2021} has five \acrfullpl{dof}: three position coordinates, pitch angle, and yaw angle.
+The use of Euler angles inherently introduces singularities into the system.
+
+The goal of this paper is thus to further extend the hand position concept to AUVs moving in three dimensions.
+We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
+Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal dynamics, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
+

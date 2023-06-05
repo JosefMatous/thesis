@@ -12,14 +12,14 @@ The contents of this chaper are based on \cite{matous_singularity_2023}.
 
 \section{Introduction}
 
-In Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}, we presented NSB algorithms that solve the formation path following problem.
+In Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}, we presented \gls{nsb} algorithms that solve the formation path following problem.
 However, the presented algorithms are centralized, meaning that to use these methods in a real-life application, there must be a central node that communicates and coordinates with all the vehicles.
-While underwater, the AUVs typically communicate via acoustic modems.
+While underwater, the \glspl{auv} typically communicate via acoustic modems.
 These modems have low bandwidth and significant delays, making them unsuitable for real-time control.
 
-A distributed NSB algorithm was proposed in \cite{ahmad_multirobot_2014}.
+A distributed \gls{nsb} algorithm was proposed in \cite{ahmad_multirobot_2014}.
 In this algorithm, the group of vehicles is split into smaller, fully connected subgroups.
-Each subgroup performs the standard, centralized NSB algorithm.
+Each subgroup performs the standard, centralized \gls{nsb} algorithm.
 Consequently, there is still a need for fast and reliable communications.
 Furthermore, the proposed method is limited to static formations.
 A similar scheme was proposed in \cite{tan_coordinated_2022}, where a group of heterogenous surface vehicles is split into homogenous subgroups.
@@ -36,9 +36,9 @@ Furthermore, the discrete-time version is also tested in field experiments.% To 
 
 The remainder of the chapter is organized as follows.
 Section~\ref{sec:distr_NSB_problem} defines the formation path following problem.
-Section~\ref{sec:distr_NSB_NSB} presents the centralized NSB algorithm.
-In Section~\ref{sec:distr_NSB_distributed_NSB}, we present the continuous-time distributed NSB algorithm, and in Section~\ref{sec:distr_NSB_closed_loop}, we analyze its closed-loop behavior.
-Section~\ref{sec:distr_NSB_AUV} discusses how to apply the proposed algorithm to underactuated AUVs and proposes the discrete-time modification.
+Section~\ref{sec:distr_NSB_NSB} presents the centralized \gls{nsb} algorithm.
+In Section~\ref{sec:distr_NSB_distributed_NSB}, we present the continuous-time distributed \gls{nsb} algorithm, and in Section~\ref{sec:distr_NSB_closed_loop}, we analyze its closed-loop behavior.
+Section~\ref{sec:distr_NSB_AUV} discusses how to apply the proposed algorithm to underactuated \glspl{auv} and proposes the discrete-time modification.
 Sections~\ref{sec:distr_NSB_simulations} and \ref{sec:distr_NSB_experiments} present the results of numerical simulations and experiments, respectively.
 Finally, Section~\ref{sec:distr_NSB_conclusion} contains some concluding remarks.
 
@@ -77,9 +77,9 @@ The objective is to control the vehicles so that
 
 \section{NSB Algorithm for the Formation Path Following Problem}
 \label{sec:distr_NSB_NSB}
-In this section, we present the centralized formation path-following NSB algorithm for vehicles moving in three dimensions.
+In this section, we present the centralized formation path-following \gls{nsb} algorithm for vehicles moving in three dimensions.
 
-To solve the formation path-following problem, we define two tasks: path-following and formation-keeping.
+To solve the formation path-following problem, we define two tasks: path following and formation keeping.
 Obstacle avoidance is not implemented as a separate task but rather as an extension of path-following.
 The desired velocity associated with the path-following task is identical for all vehicles.
 In the \emph{nominal} case (\emph{i.e.,} when there is no risk of colliding with the obstacle), we let the velocity be given by the following line-of-sight (LOS) guidance algorithm
@@ -143,7 +143,7 @@ where
 and $k_f$ is a positive gain.
 
 It can be shown that these two tasks are \emph{orthogonal} and \emph{independent} (intuitively: the path-following velocity is common to all vehicles, while the formation-keeping velocity is differential).
-Therefore, the two tasks can be executed at the same time, and the total desired NSB velocity for vehicle $i$ is given by
+Therefore, the two tasks can be executed at the same time, and the total desired \gls{nsb} velocity for vehicle $i$ is given by
 \begin{equation}
     \ivel_{{\rm NSB}, i} = \ivel_{\rm LOS} + \ivel_{f, i}.
 \end{equation}
@@ -164,7 +164,7 @@ The second term allows the path parameter to ``speed up'' or ``slow down'' if th
 \section{Distributed NSB Algorithm}
 \label{sec:distr_NSB_distributed_NSB}
 Now, let us discuss how to make the algorithm presented in the previous section distributed.
-To perform the NSB algorithm in a distributed manner, the vehicles should not need to know the exact positions of each other.
+To perform the \gls{nsb} algorithm in a distributed manner, the vehicles should not need to know the exact positions of each other.
 Instead, they should estimate the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
 
 Let $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$ denote vehicle $i$'s estimates of the barycenter, formation radius, and path parameter, respectively.
@@ -198,7 +198,7 @@ where
     \widehat{\bs{\sigma}}_i &= \mat{p}_i - \mat{p}_{b, i}, &
     \widehat{\bs{\sigma}}_{d,i} &= \mat{R}_p \mat{p}_{f, i}^f.
 \end{align}
-The path-following and formation-keeping velocities are then combined to obtain the desired NSB velocity
+The path-following and formation-keeping velocities are then combined to obtain the desired \gls{nsb} velocity
 \begin{equation}
     \ivel_{{\rm NSB}, i} = \ivel_{{\rm LOS}, i} + \ivel_{f, i}.
 \end{equation}
@@ -570,12 +570,12 @@ The results of the three lemmas can be summarized in the following theorem.
 
 \section{Application to Underactuated AUVs}
 \label{sec:distr_NSB_AUV}
-To apply the proposed distributed NSB algorithm to underactuated AUVs, we need to resolve two issues.
-Firstly, unlike vehicles with single-integrator dynamics \eqref{eq:distr_NSB_kinematics}, the position of AUVs cannot be controlled directly.
+To apply the proposed distributed \gls{nsb} algorithm to underactuated \glspl{auv}, we need to resolve two issues.
+Firstly, unlike vehicles with single-integrator dynamics \eqref{eq:distr_NSB_kinematics}, the position of \glspl{auv} cannot be controlled directly.
 Specifically, due to underactuation, there is no input to directly control the sway and heave dynamics, so these states must be controlled indirectly through the surge, pitch, and yaw dynamics.
 Secondly, in real-life situations, the continuous-time consensus algorithm \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter} cannot be implemented, as the vehicles communicate at discrete time instances.
 In fact, the limited bandwidth of underwater communication methods causes a significant delay and long periods between transmissions.
-In this section, we introduce the model of underactuated AUVs and propose solutions to the two aforementioned problems.
+In this section, we introduce the model of underactuated \glspl{auv} and propose solutions to the two aforementioned problems.
 
 \subsection{AUV Model}
 Let $\mat{p}_i \in \mathbb{R}^3$ denote the position of vehicle $i$.
@@ -589,8 +589,8 @@ The kinematics of the vehicle are \cite{fossen_handbook_2011}
 \end{align}
 where $\mat{S} : \mathbb{R}^3 \mapsto \mathfrak{so}(3)$ is the skew-symmetric matrix operator.
 
-For the dynamics, we assume that the AUVs are equipped with a low-level controller that can track a desired surge velocity and orientation, \emph{i.e.}, the fully actuated degrees of freedom (for more information, the reader is referred to \cite{fossen_handbook_2011}).
-The reason for making this assumption is that we want to develop a control scheme that holds for a broad class of onboard low-level controllers for commercial AUVs.
+For the dynamics, we assume that the \glspl{auv} are equipped with a low-level controller that can track a desired surge velocity and orientation, \emph{i.e.}, the fully actuated degrees of freedom (for more information, the reader is referred to \cite{fossen_handbook_2011}).
+The reason for making this assumption is that we want to develop a control scheme that holds for a broad class of onboard low-level controllers for commercial \glspl{auv}.
 The vehicle dynamics can then be expressed as
 \begin{equation}
     \begin{bmatrix}
@@ -605,8 +605,8 @@ In this section, we propose a method for choosing the desired surge velocity and
 
 First, let us discuss the method for choosing the desired surge velocity.
 Ideally, $u_{d, i}$ should be chosen such that $\norm{\left[u_{d, i}, v_i, w_i\right]} = \norm{\ivel_{{\rm NSB}, i}}$.
-However, since the AUV is underactuated, and thus there are no control inputs to directly control the sway velocity, $v_i$, and the heave velocity, $w_i$, this equation cannot always be satisfied.
-In addition, AUVs typically need to maintain a positive surge velocity to be able to maneuver.
+However, since the \gls{auv} is underactuated, and thus there are no control inputs to directly control the sway velocity, $v_i$, and the heave velocity, $w_i$, this equation cannot always be satisfied.
+In addition, \glspl{auv} typically need to maintain a positive surge velocity to be able to maneuver.
 Consequently, we propose the following method for choosing the desired surge velocity
 \begin{equation}
     u_{d, i} = 
@@ -660,7 +660,7 @@ The desired orientation can then be calculated as
 \subsection{Handling Discrete-Time Communications}
 \label{sec:distr_NSB_event_triggered}
 In this section, we discuss the issue of discrete-time delayed communications.
-We assume that the AUVs can broadcast data via an acoustic modem.
+We assume that the \glspl{auv} can broadcast data via an acoustic modem.
 However, due to the relatively low bitrate and propagation speed of underwater acoustics, there is a significant delay between transmission and reception.
 To address these issues, we need to discretize the consensus scheme \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter}, compensate for the delays, and reduce the number of transmissions.
 
@@ -672,7 +672,7 @@ Each vehicle continuously updates its variables using the following equations
     \dot{r}_{f, i} &= k_r \left(\widehat{r}_{f, i} - r_{f, i}\right), \qquad
     r_{f, i}^{+} = \widehat{r}_{f, i}, \text{if } \widehat{r}_{f, i} > r_{f, i}.
 \end{align}
-To perform the consensus algorithm, each AUV transmits the following packet: $\left(t_i, s_i, \mat{p}_{b, i}, r_{f, i}, \breve{\bs{\sigma}}_i \right)$, where $t_i$ is the time of transmission, and $\breve{\bs{\sigma}}_i = \widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}$.
+To perform the consensus algorithm, each \gls{auv} transmits the following packet: $\left(t_i, s_i, \mat{p}_{b, i}, r_{f, i}, \breve{\bs{\sigma}}_i \right)$, where $t_i$ is the time of transmission, and $\breve{\bs{\sigma}}_i = \widehat{\bs{\sigma}}_i - \widehat{\bs{\sigma}}_{d,i}$.
 When vehicle $i$ receives a consensus packet from vehicle $j$, it first compensates for the delay by solving the following set of differential equations
 \begin{subequations}
     \begin{align}
@@ -694,7 +694,7 @@ After compensating for the delay, the vehicle updates its consensus variables us
 \end{align}
 where $a_p, a_s \in (0, 1)$ are the mixing gains.
 
-Finally, let us discuss the method for determining when the AUVs should transmit the consensus packets.
+Finally, let us discuss the method for determining when the \glspl{auv} should transmit the consensus packets.
 To minimize the number of transmissions, we propose an event-triggered scheme.
 When vehicle $i$ receives a consensus packet from vehicle $j$, it also calculates the following quantity:
 \begin{equation}
@@ -709,13 +709,13 @@ This event triggering scheme, inspired by the techniques discussed in~\cite{ding
 \label{sec:distr_NSB_simulations}
 
 In this section, we present the results of a numerical simulation study.
-The simulations were carried out in MATLAB using a model of the light autonomous underwater vehicle (LAUV) \cite{sousa_LAUV_2012}.
+The simulations were carried out in MATLAB using a model of the \acrfull{lauv} \cite{sousa_LAUV_2012}.
 We conducted two types of simulations. 
-We tested the continuous-time NSB algorithm proposed in Section~\ref{sec:distr_NSB_distributed_NSB}.
-Furthermore, the performance of the event-triggered NSB algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered} is compared to the performance of a cooperative path following algorithm proposed in \cite{praveen_cooperative_2018}.
+We tested the continuous-time \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_distributed_NSB}.
+Furthermore, the performance of the event-triggered \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered} is compared to the performance of a cooperative path following algorithm proposed in \cite{praveen_cooperative_2018}.
 
 First, let us present the parameters that are common to both simulations.
-We simulate four AUVs.
+We simulate four \glspl{auv}.
 The barycenter should follow an elliptic path given by
 \begin{equation}
     \mat{p}_p(s) = \inlinevector{a \cos(s), b \sin(s), c \sin(s)^2},
@@ -753,9 +753,9 @@ To test the obstacle avoidance scheme, we place a static obstacle at $\mat{p}_o 
 The minimum cone $\alpha_{\min}$ is set to $2$ degrees, and the formation radius update gain is $k_r = 0.1$.
 
 The results are shown in \figref{fig:distr_NSB_simulation}.
-\figref{fig:distr_NSB_sim_trajectory} shows the 3D trajectory of the AUVs. We can see that the AUVs converge to their desired formation while avoiding the obstacle represented by the green cylinder.
+\figref{fig:distr_NSB_sim_trajectory} shows the 3D trajectory of the \glspl{auv}. We can see that the \glspl{auv} converge to their desired formation while avoiding the obstacle represented by the green cylinder.
 \figref{fig:distr_NSB_sim_errors} shows the path-following and formation-keeping errors. Initially, these errors exponentially converge to zero. When the obstacle avoidance scheme is activated, the path-following errors start diverging, as the LOS velocity enters the collision cone. After the vehicles successfully avoid the obstacle, the errors again converge exponentially to zero.
-\figref{fig:distr_NSB_sim_distance} shows the distance between the AUVs and the obstacle. We can see that the distance is always greater than $r_o$.
+\figref{fig:distr_NSB_sim_distance} shows the distance between the \glspl{auv} and the obstacle. We can see that the distance is always greater than $r_o$.
 Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and \ref{fig:distr_NSB_sim_radius} show the errors of the consensus variables. These plots are in a logarithmic scale to demonstrate the exponential rate of convergence. Initially, the logarithmic error is clearly bounded by a decreasing straight line, demonstrating the exponential convergence. The norm of the error decreases by a factor of 10 approximately every 25 seconds. When obstacle avoidance is active, the errors start diverging but remain bounded. After avoiding the obstacle, the errors continue to decrease exponentially, but eventually, the convergence stagnates. We cannot expect that the errors continue to fall indefinitely due to numerical innacuracies, that come mostly from two sources: the inaccuracies in floating-point arithmetics and the tolerances of the ODE solver.
 
 Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
@@ -772,7 +772,7 @@ Coordination is then achieved by running a consensus scheme on the path paramete
 
 The comparison was done using a Monte Carlo simulation.
 We performed ten thousand simulations with randomly selected initial conditions and communication delays.
-The initial positions of the AUVs ranged from $\inlinevector{60,-40,0}$ to $\inlinevector{140,40,15}$.
+The initial positions of the \glspl{auv} ranged from $\inlinevector{60,-40,0}$ to $\inlinevector{140,40,15}$.
 The initial orientations were specified in Euler angles, with a zero roll angle, a pitch angle from $-\frac{\pi}{8}$ to $\frac{\pi}{8}$, and a yaw angle from $0$ to $\pi$.
 The initial linear velocities ranged from $\inlinevector{0.5, -0.2, -0.1}$ to $\inlinevector{1.5, 0.2, 0.1}$, and the initial angular velocities were zero.
 The communication delays ranged from $0$ to $5$ seconds.
@@ -781,28 +781,28 @@ The communication delays ranged from $0$ to $5$ seconds.
 Specifically, \figref{fig:distr_NSB_comparison_parameter} shows the absolute value of the path parameter error, and \figref{fig:distr_NSB_comparison_barycenter} shows the norm of the path-following error.
 Both errors are plotted in a logarithmic scale.
 In terms of path parameter errors, both algorithms perform similarly.
-In terms of path-following errors, the distributed NSB algorithm is marginally better.
+In terms of path-following errors, the distributed \gls{nsb} algorithm is marginally better.
 
 The communication requirements of the two algorithms are summarized in Table~\ref{tab:comparison}.
 This table shows the minimum, maximum, and median of the period in-between transmissions ($\tau_t$), and the total number of transmissions in one simulation ($N_t$).
-Here, we can see that distributed NSB performs considerably better in comparison to the cooperative path following method, with longer periods in-between transmissions and a lower number of transmissions.
+Here, we can see that distributed \gls{nsb} performs considerably better in comparison to the cooperative path following method, with longer periods in-between transmissions and a lower number of transmissions.
 
-However, it is worth mentioning that the packets transmitted by the cooperative path following method are smaller than the NSB packets.
-Indeed, in the scheme proposed in \cite{praveen_cooperative_2018}, the AUVs only need to transmit the path parameter and its derivative.
-In contrast, the NSB packet consists of the estimates of path parameter, barycenter, radius of formation, and formation-keeping error.
+However, it is worth mentioning that the packets transmitted by the cooperative path following method are smaller than the \gls{nsb} packets.
+Indeed, in the scheme proposed in \cite{praveen_cooperative_2018}, the \glspl{auv} only need to transmit the path parameter and its derivative.
+In contrast, the \gls{nsb} packet consists of the estimates of path parameter, barycenter, radius of formation, and formation-keeping error.
 In this context, the two algorithms present a trade-off between packet size and communication periods.
 
 \input{figures/distr_NSB/table_comparison.tex}
 
 \section{Experiments}
 \label{sec:distr_NSB_experiments}
-In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed NSB algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
-The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two LAUVs as in \figref{fig:distr_NSB_LAUV}.
+In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
+The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two \glspl{lauv} as in \figref{fig:distr_NSB_LAUV}.
 
 \begin{figure}[b]
     \centering
     \includegraphics[width = 0.6\columnwidth]{figures/distr_NSB/LAUV-Roald}
-    \caption{Photo of one of the two LAUVs used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}
+    \caption{Photo of one of the two \glspl{lauv} used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}
     \label{fig:distr_NSB_LAUV}
 \end{figure}
 
@@ -810,7 +810,7 @@ To guarantee stable communications and accurate navigation, the vehicles were op
 The algorithm was implemented in C++, using the Unified Navigation Environment (DUNE) \cite{dune}.
 
 The algorithm was tested in two scenarios: a \emph{nominal} scenario, \emph{i.e.,} formation path following without any obstacles, and a scenario with a static obstacle.
-In both scenarios, the barycenter of the AUVs should follow the elliptic path
+In both scenarios, the barycenter of the \glspl{auv} should follow the elliptic path
 \begin{equation}
     \mat{p}_p(s) = \inlinevector{a \cos(s), b \sin(s), 0}, \quad a = \SI{100}{\meter}, b = \SI{80}{\meter},
 \end{equation}
@@ -819,7 +819,7 @@ in the formation defined by
     \mat{p}_{f, 1}^f &= \inlinevector{0, -25, 0}, &
     \mat{p}_{f, 2}^f &= \inlinevector{0, 25, 0}. &
 \end{align}
-The reason for choosing a larger path and formation, compared to the simulations in Section~\ref{sec:distr_NSB_simulations}, was to reduce the risk of the AUVs colliding.
+The reason for choosing a larger path and formation, compared to the simulations in Section~\ref{sec:distr_NSB_simulations}, was to reduce the risk of the \glspl{auv} colliding.
 The obstacle was placed at $\mat{p}_o = \inlinevector{0, 80}$.
 The remaining parameters were identical to the simulations.
 
@@ -827,9 +827,9 @@ The remaining parameters were identical to the simulations.
 \input{figures/distr_NSB/figure_experiment_nominal.tex}
 
 The results are shown in \figref{fig:distr_NSB_experiment_nominal}.
-\figref{fig:distr_NSB_experiment_nominal_trajectory} shows the trajectories of the AUVs, as estimated by their onboard navigation system.
+\figref{fig:distr_NSB_experiment_nominal_trajectory} shows the trajectories of the \glspl{auv}, as estimated by their onboard navigation system.
 The disturbances in the trajectories are caused by two factors: the sea loads (waves, currents, and wind), and the errors of the navigation system.
-However, the exponential stability of the NSB algorithm given by Theorem~\ref{thm} provides some robustness towards these disturbances, \emph{c.f.,} \cite[Lemma 9.2]{khalil_nonlinear_2002}.
+However, the exponential stability of the \gls{nsb} algorithm given by Theorem~\ref{thm} provides some robustness towards these disturbances, \emph{c.f.,} \cite[Lemma 9.2]{khalil_nonlinear_2002}.
 \figref{fig:distr_NSB_experiment_nominal_parameter} shows the path parameter errors and the event-triggered communications.
 Initially, the vehicles need to communicate frequently, approximately every five seconds, because the barycenter estimates differ (as seen in \figref{fig:distr_NSB_experiment_nominal_barycenter}).
 During this transient period, the path parameter estimates initially diverge before finally converging.
@@ -847,11 +847,11 @@ In general, the results are similar to the nominal scenario, so we will only hig
 The path-following errors in \figref{fig:distr_NSB_experiment_obstacle_errors} diverge when obstacle avoidance is active.
 As previously mentioned, this behavior is caused by the fact that the vehicles cannot stay on the desired path while avoiding the obstacle.
 The estimate errors in Figs.~\ref{fig:distr_NSB_experiment_obstacle_parameter} and \ref{fig:distr_NSB_experiment_obstacle_barycenter} behave similarly to the nominal case.
-As shown in \figref{fig:distr_NSB_experiment_obstacle_distance}, the distance between the AUVs and the obstacle is always greater than $r_o$.
+As shown in \figref{fig:distr_NSB_experiment_obstacle_distance}, the distance between the \glspl{auv} and the obstacle is always greater than $r_o$.
 \figref{fig:distr_NSB_experiment_obstacle_radius} shows the errors between the estimated and true formation radius.
 Note that the formation radius errors are connected to the barycenter estimates.
 A wrong barycenter estimate may lead to both overestimation and underestimation of the formation radius.
-Despite these uncertainties, the AUVs still manage to perform all control goals safely.
+Despite these uncertainties, the \glspl{auv} still manage to perform all control goals safely.
 
 \section{Conclusions and Future Work}
 \label{sec:distr_NSB_conclusion}

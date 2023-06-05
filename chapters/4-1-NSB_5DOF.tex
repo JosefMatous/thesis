@@ -309,8 +309,8 @@ where $k_{s} > 0$ is a constant.
 In this section, we investigate the closed-loop stability of the path following task.
 We define two error states, $\tilde{\mat{X}}_1$ and $\tilde{\mat{X}}_2$, as
 \begin{align}
-    \tilde{\mat{X}}_1 &= \left[x_b^p, y_b^p, z_b^p\right]\T, 
-    \tilde{\mat{X}}_2 = \left[\tilde{\mat{X}}_{2,1}\T, \ldots, \tilde{\mat{X}}_{2,n}\T\right]\T, \label{eq:nsb_5dof_error_states} \\
+    \tilde{\mat{X}}_1 &= \left[x_b^p, y_b^p, z_b^p\right]\T, && \\
+    \tilde{\mat{X}}_2 &= \left[\tilde{\mat{X}}_{2,1}\T, \ldots, \tilde{\mat{X}}_{2,n}\T\right]\T, &
     \tilde{\mat{X}}_{2,i} &= \left[\tilde{u}_i, s_{q,i}, \tilde{\theta}_i, s_{r,i}, \tilde{\psi}_i\right]\T,
 \end{align}
 
@@ -319,14 +319,14 @@ Now, we can take the barycenter kinematics from \eqref{eq:nsb_5dof_barycenter_ki
     \begin{align}
         &\dot{x}_b^p = -k_{s}\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}} + \omega_zy_b^p - \omega_yz_b^p, \label{eq:nsb_5dof_x_pb_CL} \\
         &\begin{aligned}
-            \dot{y}_b^p &= - \frac{1}{n}\sum_{i=1}^n U_{d,i}{\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} + \omega_xz_b^p - \mathrlap{\omega_zx_b^p} \\
-            & + G_y\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\psi}_1, \ldots, \tilde{\psi}_n, \gamma_1, \ldots, \gamma_n, \\
-            & \quad\quad \mathrlap{u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p\big),}
+            \dot{y}_b^p &= - \frac{1}{n}\sum_{i=1}^n U_{d,i}{\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} + \omega_xz_b^p - \omega_zx_b^p \\
+            & \quad + G_y\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\psi}_1, \ldots, \tilde{\psi}_n, \gamma_1, \ldots, \gamma_n, \\
+            & \qquad\qquad u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p\big),
         \end{aligned} \\
-        &\begin{aligned}[t]
+        &\begin{aligned}
             \dot{z}_b^p &= \frac{1}{n} \sum_{i=1}^n U_{d,i}\frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}} + \omega_yx_b^p - \omega_xy_b^p \\
-            & \,\mathrlap{+ G_z\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n, \gamma_1, \ldots, \gamma_n, \chi_1, \ldots, \chi_n,} \\
-            & \mathrlap{\quad\, u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p, \theta_p\big).}
+            & \quad + G_z\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n, \gamma_1, \ldots, \gamma_n, \chi_1, \ldots, \chi_n, \\
+            & \qquad \qquad\, u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p, \theta_p\big).
         \end{aligned} \label{eq:nsb_5dof_z_pb_CL}
     \end{align} \label{eq:nsb_5dof_nominal}
 \end{subequations}
@@ -364,7 +364,35 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
 \end{lemma}
 
 \begin{proof}
-    The proof is given in Appendix~\ref{app:5dof_nsb_lemma_1}.
+    The complete proof is given in Appendix~\ref{app:5dof_nsb_lemma_1}.
+    Here, we only present a sketch of the proof.
+
+    The proof is split into three parts: proving the forward-completeness of the attitude control system \eqref{eq:nsb_5dof_perturbing}, \eqref{eq:nsb_5dof_estimates}, the underactuated dynamics \eqref{eq:nsb_5dof_v_dot}, \eqref{eq:nsb_5dof_w_dot}, and the path-following errors \eqref{eq:nsb_5dof_nominal}.
+
+    Using the same arguments as for the horizontal case in \cite{moe_LOS_2016}, we can prove that the system \eqref{eq:nsb_5dof_perturbing} is \glspl{ges} and the ocean current estimates \eqref{eq:nsb_5dof_estimates} are bounded.
+    Exponential stability and boundedness imply forward completeness. Therefore, \eqref{eq:nsb_5dof_perturbing} and \eqref{eq:nsb_5dof_estimates} are forward complete.
+
+    For the underactuated dynamics, we define Lyapunov function candidates
+    \begin{align} 
+        V_v(v_i) &= \frac{1}{2} v_i^2, &
+        V_w(w_i) &= \frac{1}{2} w_i^2, \label{eq:nsb_5dof_underactuated_LFC}
+    \end{align}
+    and show that there exist positive constants $\alpha_v, \alpha_w, \beta_v, \beta_w$ such that
+    \begin{align} 
+        \dot{V}_v(v_i) & \leq \alpha_v V_v(v_i) + \beta_v, &
+        \dot{V}_w(w_i) & \leq \alpha_w V_w(w_i) + \beta_w.
+    \end{align}
+    Using the comparison lemma, we conclude that $v_i$ and $w_i$ are forward-complete.
+
+    For the path-following errors, we define a Lyapunov function candidate
+    \begin{equation}
+        V_b\left(\mat{p}_b^p\right) = \frac{1}{2} \left(\left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2\right),
+    \end{equation}
+    and show that there exists a class-$\mathcal{K}_{\infty}$ function $\zeta_p$ such that
+    \begin{equation}
+        \dot{V}_p\left(\mat{p}_b^p\right) \leq V_p\left(\mat{p}_b^p\right) + \zeta_p\left(v_i, w_i, \tilde{\mat{X}}_2\right).
+    \end{equation}
+    Since all the arguments of $\zeta_p(\cdot)$ are forward complete, Corollary 2.11 of \cite{angeli_forward_1999} is satisfied, and the barycenter dynamics is forward complete, concluding the proof of Lemma~\ref{lemma_1}.
 \end{proof}
 
 \begin{lemma}
@@ -378,27 +406,48 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
 \end{lemma}
 
 \begin{proof}
-    The proof is given in Appendix~\ref{app:5dof_nsb_lemma_2}.
+    The complete proof is given in Appendix~\ref{app:5dof_nsb_lemma_2}.
+    Here, we only present a sketch of the proof.
+
+    Consider the derivatives of the Lyapunov function candidates $V_v, V_w$ from \eqref{eq:nsb_5dof_underactuated_LFC}.
+    Substituting $\tilde{\mat{X}}_1 = \mat{0}, \tilde{\mat{X}}_2 = \mat{0}$, we get the following inequalities
+    \begin{align} 
+            \dot{V}_v(v_i) &\leq \left(X_v\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\iota(\xi)} + Y_v\left(u_{d,i}, u_c\right)\right)v_i^2 + F_v(v_i), \\
+            \dot{V}_w(w_i) &\leq \left(X_w\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\kappa(\xi)} + Y_w\left(u_{d,i}, u_c\right)\right)w_i^2 + F_w(w_i),
+    \end{align}
+
+    \noindent where $F_v$ and $F_w$ grow at most linearly with $v_i$ and $w_i$, respectively.
+    Then, we conclude that for a sufficiently large $v_i, w_i$, the quadratic terms will dominate the linear terms.
+    Therefore, the underactuated dynamics are bounded if the quadratic terms are negative, which is equivalent to condition \eqref{eq:nsb_5dof_curvature_limit}.
 \end{proof}
 
 \begin{lemma}
     \label{lemma_3}
     The underactuated sway and heave dynamics are bounded near the manifold $\tilde{\mat{X}}_2 = \mat{0}$, independently of $\tilde{\mat{X}}_1$ if the assumptions in Lemma~\ref{lemma_2} are satisfied and the constant term $\Delta_0$ in the lookahead distance \eqref{eq:nsb_5dof_delta} is chosen so that
     \begin{equation}
-        \begin{split}
-            \Delta_0 > \max&\left\{\frac{3}{n\abs{\frac{Y_v\left(u, u_c\right)}{X_v\left(u, u_c\right)}} - 2\abs{\iota(s)}}, \right. \\
-            & \quad \left. \frac{3}{n\abs{\frac{Y_w\left(u, u_c\right)}{X_w\left(u, u_c\right)}} - 2\abs{\kappa(s)}}\right\},
-        \end{split} \label{eq:nsb_5dof_lookahead_limit}
+        \Delta_0 > \max\left\{\frac{3}{n\abs{\frac{Y_v\left(u, u_c\right)}{X_v\left(u, u_c\right)}} - 2\abs{\iota(s)}}, \frac{3}{n\abs{\frac{Y_w\left(u, u_c\right)}{X_w\left(u, u_c\right)}} - 2\abs{\kappa(s)}}\right\},
+        \label{eq:nsb_5dof_lookahead_limit}
     \end{equation}
     for all $u > 0$ and $u_c \in [-\norm{\ocean}, \norm{\ocean}]$.
 \end{lemma}
 
 \begin{proof}
-    The proof is given in Appendix~\ref{app:5dof_nsb_lemma_3}.
+    The complete proof is given in Appendix~\ref{app:5dof_nsb_lemma_3}.
+    Here, we only present a sketch of the proof.
+
+    Once again, we consider the derivatives of the Lyapunov function candidates {$V_v, V_w$} from \eqref{eq:nsb_5dof_underactuated_LFC}.
+    Substituting $\tilde{\mat{X}}_2 = \mat{0}$, we get the following inequalities
+    \begin{align} 
+            \dot{V}_v(v_i) &\leq \!\Bigg(\!X_{v\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_v\left(u_{d,i}, u_c\right)\!\Bigg)v_i^2 + F_v(v_i), \\
+            \dot{V}_w(w_i) &\leq \!\Bigg(\!X_{w\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_w\left(u_{d,i}, u_c\right)\!\Bigg)w_i^2 + F_w(w_i),
+    \end{align}\vspace{-3mm}
+
+    \noindent where $F_v$ and $F_w$ grow at most linearly with $v_i$ and $w_i$, respectively.
+    Using the same arguments as in the proof of Lemma~\ref{lemma_2}, we conclude that the underactuated dynamics are bounded if both \eqref{eq:nsb_5dof_curvature_limit} and \eqref{eq:nsb_5dof_lookahead_limit} hold.
 \end{proof}
 
 \begin{theorem}
-    The origin $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ of the system described by \eqref{eq:nsb_5dof_nominal},\eqref{eq:nsb_5dof_perturbing} is a USGES equilibrium point if the conditions of Lemmas~\ref{lemma_2} and \ref{lemma_3} hold and the maximum pitch angle of the path satisfies
+    The origin $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ of the system described by \eqref{eq:nsb_5dof_nominal}, \eqref{eq:nsb_5dof_perturbing} is a USGES equilibrium point if the conditions of Lemmas~\ref{lemma_2} and \ref{lemma_3} hold and the maximum pitch angle of the path satisfies
     \begin{equation}
         \theta_{p, {\rm max}} = \max_{s \in \mathbb{R}} \abs{\theta_p(s)} < \frac{\pi}{4}.
         \label{eq:nsb_5dof_theta_max}
@@ -406,7 +455,8 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     Moreover, the ocean current estimate errors \eqref{eq:nsb_5dof_estimates} and the underactuated sway and heave dynamics \eqref{eq:nsb_5dof_v_dot}, \eqref{eq:nsb_5dof_w_dot} are bounded.
 \end{theorem}
 
-\emph{Remark:} Condition \eqref{eq:nsb_5dof_theta_max} is needed to ensure that $\abs{\gamma_{\rm LOS}} < \pi/2$.
+\begin{rmk}
+Condition \eqref{eq:nsb_5dof_theta_max} is needed to ensure that $\abs{\gamma_{\rm LOS}} < \pi/2$.
 Indeed, from \eqref{eq:nsb_5dof_v_LOS}, the largest possible LOS reference angle is
 \begin{equation}
     \begin{split}
@@ -415,6 +465,7 @@ Indeed, from \eqref{eq:nsb_5dof_v_LOS}, the largest possible LOS reference angle
     \end{split}
 \end{equation}
 With \eqref{eq:nsb_5dof_theta_max} satisfied, the cosine of $\gamma_{\rm LOS}$ is always positive. We will use this fact in the proof.
+\end{rmk}
 
 \begin{proof}
 The proof follows along the lines of \cite{eek_formation_2021}, but is extended to an arbitrary number of 5DOF vehicles.

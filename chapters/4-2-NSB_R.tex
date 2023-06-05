@@ -2,44 +2,44 @@
 \label{chap:NSB_R}
 
 This chapter presents a method for formation path following control of a fleet of underactuated autonomous underwater vehicles.
-The proposed method combines several hierarchic tasks in a null space-based behavioral algorithm to safely guide the vehicles.
+The proposed method combines several hierarchic tasks in a \acrlong{nsb} algorithm to safely guide the vehicles.
 Compared to the existing literature, the algorithm includes both inter-vehicle and obstacle collision avoidance, and employs a scheme that keeps the vehicles within given operation limits.
 The algorithm is applied to a six degree-of-freedom model, using rotation matrices to describe the attitude to avoid singularities.
-Using the results of cascaded systems theory, we prove that the closed-loop system is uniformly semiglobally exponentially stable.
+Using the results of cascaded systems theory, we prove that the closed-loop system is \acrlongpl{usges}.
 We use numerical simulations to validate the results.
 The contents of this chapter are based on \cite{matous_singularity_2023}.
 
 \section{Introduction}
 
-This chapter aims to extend the NSB algorithm presented in the previous chapter.
-The previous work uses a five degree-of-freedom (5DOF) AUV model, considers only inter-vehicle collision avoidance, and proves only the stability of the path-following algorithm.
-Furthermore, the orientation of the 5DOF model was expressed using Euler angles, which causes singularities for a pitch angle of $\pm90$ degrees.
-This work applies the NSB algorithm to a full 6DOF model, uses rotation matrices to describe the attitude of the vehicles to avoid singularities, modifies and extends the tasks, and proves the stability of the combined path-following and formation-keeping tasks.
+This chapter aims to extend the \gls{nsb} algorithm presented in the previous chapter.
+The previous work uses a 5\gls{dof} \gls{auv} model, considers only inter-vehicle collision avoidance, and proves only the stability of the path-following algorithm.
+Furthermore, the orientation of the 5\gls{dof} model was expressed using Euler angles, which causes singularities for a pitch angle of $\pm90$ degrees.
+This work applies the \gls{nsb} algorithm to a full 6\gls{dof} model, uses rotation matrices to describe the attitude of the vehicles to avoid singularities, modifies and extends the tasks, and proves the stability of the combined path-following and formation-keeping tasks.
 We also add a scheme that keeps the vehicles within a given range of depths to stay within the operation limits.
 As opposed to the previous work, we do not limit the analysis to a specific low-level attitude controller.
 Consequently, the new algorithm can be integrated into existing on-board controllers.
-Assuming that the existing low-level controller allows exponential tracking, we use results from cascaded systems theory~\cite{pettersen_lyapunov_2017} to prove that the closed-loop system composed by the NSB algorithm and the low-level controller is uniformly semiglobally exponentially stable.
+Assuming that the existing low-level controller allows exponential tracking, we use results from cascaded systems theory~\cite{pettersen_lyapunov_2017} to prove that the closed-loop system composed by the \gls{nsb} algorithm and the low-level controller is \acrfullpl{usges}.
 We verify the results in numerical simulations.
 
 The remainder of the chapter is organized as follows.
-Section~\ref{sec:NSB_R_problem} introduces the model of the AUVs and defines the formation path-following problem.
-Section~\ref{sec:NSB_R_control} describes the proposed modified NSB algorithm.
+Section~\ref{sec:NSB_R_problem} introduces the model of the \glspl{auv} and defines the formation path-following problem.
+Section~\ref{sec:NSB_R_control} describes the proposed modified \gls{nsb} algorithm.
 The stability of the closed-loop system is proven in Section~\ref{sec:NSB_R_path_stability}.
 Section~\ref{sec:NSB_R_simulation} presents the results of the numerical simulations.
 Finally, Section~\ref{sec:NSB_R_conclusion} presents some concluding remarks.
 
 \section{Problem Definition}
 \label{sec:NSB_R_problem}
-In this section, we briefly present the AUV model and the formation path-following problem.
+In this section, we briefly present the \gls{auv} model and the formation path-following problem.
 
 \subsection{Vehicle Model}
-We consider a fleet of $n$ underactuated AUVs.
-The dynamics of the AUVs are described using the 6DOF control-oriented model described in Section~\ref{sec:model_control_oriented}.
+We consider a fleet of $N$ underactuated \glspl{auv}.
+The dynamics of the \glspl{auv} are described using the 6\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
 Let $\mat{p} = \inlinevector{x, y, z}$ be the position, and let $\bvel = \inlinevector{u, v, w}$ and $\bs{\omega} = \inlinevector{p, q, r}$ be the linear and angular velocities, respectively.
-To avoid the singularities caused by the use of Euler angles, the orientation of the AUV is given by a rotation matrix $\mat{R} \in SO(3)$.
+To avoid the singularities caused by the use of Euler angles, the orientation of the \gls{auv} is given by a rotation matrix $\mat{R} \in SO(3)$.
 Furthermore, let $\ocean \in \mathbb{R}^3$ be the velocities of an unknown, constant and irrotational ocean current.
 
-Recalling \eqref{eq:background_nu_dot_relative}, the dynamics of the AUVs are
+Recalling \eqref{eq:background_nu_dot_relative}, the dynamics of the \glspl{auv} are
 \begin{subequations}
 \begin{align}
     \dot{\mat{p}} &= \mat{R} \bvel, \label{eq:NSB_R_p_dot}\\
@@ -69,7 +69,7 @@ However, there are some assumptions about the low-level controller.
         \dot{\widetilde{\mat{X}}} = F \left( \widetilde{\mat{X}}, v, w, \ocean \right), \label{eq:NSB_R_low_level_closed_loop}
     \end{equation}
     consisting of \eqref{eq:NSB_R_R_dot}, \eqref{eq:NSB_R_nu_dot}, and the low-level controller.
-    We assume that $\widetilde{\mat{X}} = \mat{0}$ is a globally exponentially stable (GES) equilibrium of \eqref{eq:NSB_R_low_level_closed_loop}.
+    We assume that $\widetilde{\mat{X}} = \mat{0}$ is a \acrfull{ges} equilibrium of \eqref{eq:NSB_R_low_level_closed_loop}.
 \end{asm}
 
 An example of a global exponential attitude tracking controller can be found, \emph{e.g.,} in \cite{lee_global_2015}.
@@ -88,7 +88,7 @@ where $X(\cdot), Y(\cdot), Z(\cdot)$ are affine functions of the respective vari
 \subsection{Formation Path Following Problem}
 \label{sec:NSB_R_objectives}
 
-Similarly to the previous chapter, the goal is to control a fleet of $n$ AUVs so that they move in a prescribed formation and their barycenter follows a given path.
+Similarly to the previous chapter, the goal is to control a fleet of $N$ \glspl{auv} so that they move in a prescribed formation and their barycenter follows a given path.
 
 The prescribed path is parametrized by a smooth function $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^3$.
 We assume that the function is $\mathcal{C}^{\infty}$ and regular.
@@ -113,47 +113,31 @@ The objective is to control the vehicles so that
 \section{The Proposed Algorithm}
 \label{sec:NSB_R_control}
 
-The AUVs must perform the goals stated in Section \ref{sec:NSB_R_objectives} safely, \emph{i.e.},
+The \glspl{auv} must perform the goals stated in Section \ref{sec:NSB_R_objectives} safely, \emph{i.e.},
 avoid collisions with other vehicles and obstacles, and remain within a given range of depths.
-An upper limit on the depth of the AUVs is needed to prevent them from colliding with the seabed or exceeding their depth rating.
-A lower limit is needed in busy environments (\emph{e.g.,} harbors), where the AUVs may otherwise collide or interfere with surface vessels.
+An upper limit on the depth of the \glspl{auv} is needed to prevent them from colliding with the seabed or exceeding their depth rating.
+A lower limit is needed in busy environments (\emph{e.g.,} harbors), where the \glspl{auv} may otherwise collide or interfere with surface vessels.
 
-To solve the formation path following problem, we propose a method that combines inter-vehicle collision avoidance (COLAV), formation keeping, line-of-sight (LOS) path following, obstacle avoidance, and depth limiting in a hierarchic manner using an NSB algorithm.
-Since the NSB algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation.
+To solve the formation path following problem, we propose a method that combines inter-vehicle \acrfull{colav}, formation keeping, \acrfull{los} path following, obstacle avoidance, and depth limiting in a hierarchic manner using an \gls{nsb} algorithm.
+Since the \gls{nsb} algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation.
 
-In this section, we first present the NSB algorithm and the associated tasks.
+In this section, we first present the \gls{nsb} algorithm and the associated tasks.
 We then present in Section~\ref{sec:NSB_R_references} a strategy for converting inertial velocity references to surge/orientation ones.
 
 \subsection{NSB algorithm}
 \label{sec:NSB_R_NSB}
 
-The NSB algorithm allows us to define and combine multiple tasks in a hierarchic manner.
-For more information, the reader is referred to \cite{antonelli_2006_kinematic}.
-
-Achieving the desired behavior requires three tasks: COLAV, formation-keeping, and path-following.
-Each task will be described in detail in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}, while in the remainder of this subsection, we introduce some mathematical tools instrumental for describing each of these tasks.
+Similarly to the previous chapter, we define three tasks: \gls{colav}, formation-keeping, and path-following.
+Each task will be described in detail in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}.
 As we will explain in Section \ref{sec:NSB_R_OA}, obstacle avoidance and depth limiting will not be defined as separate tasks but rather achieved through a modification to the path-following task.
-Let us denote the variables associated with the COLAV, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
+Let us denote the variables associated with the \gls{colav}, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
 Define the so-called \emph{task variables} as $\bs{\sigma}_i = \bs{f}_i\left(\mat{p}_1, \ldots, \mat{p}_n\right), i \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,i}, i \in \left\{1,2,3\right\}$.
 
 Furthermore, let $\ivel_i, i \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
-In the standard NSB algorithm, $\ivel_i$ is obtained using the closed-loop inverse kinematics (CLIK) equation \cite{antonelli_2006_kinematic} 
-\begin{equation}
-    \label{eq:NSB_R_CLIK}
-    \ivel_i = \mat{J}_i^{\dagger}\,\bigl(\dot{\bs{\sigma}}_{d,i} - \bs{\Lambda}_i\,\widetilde{\bs{\sigma}}_i\bigr),
-\end{equation}
-where $\bs{\Lambda}_i$ is a positive definite gain matrix, $\widetilde{\bs{\sigma}}_i = \bs{\sigma}_i - \bs{\sigma}_{d, i}$, and $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian 
-\begin{equation}
-    \mat{J}_i = \frac{\partial \bs{\sigma}_{d,i}}{\partial \inlinevector{\mat{p}_1, \ldots, \mat{p}_n}}.
-\end{equation}
-However, in our case, we need to modify this equation for each task to make it applicable to underactuated AUVs.
-These modifications will be explained in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}.
-
-The combined desired velocity, $\ivel_{\rm NSB}$, is then given by \cite{antonelli_2006_kinematic}
+These velocities are combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
 \begin{equation} 
-    \scale[0.95]{\ivel_{\rm NSB} = \ivel_1 + \left(\mat{I} - \mat{J}_1^{\dagger}\mat{J}_1\right)\left(\ivel_2 + \left(\mat{I} - \mat{J}_2^{\dagger}\mat{J}_2\right)\ivel_3\right),} \label{eq:NSB_R_NSB_with_COLAV}
+    \ivel_{\rm NSB} = \ivel_1 + \mat{N}_1\left(\ivel_2 + \mat{N}_2\ivel_3\right). \label{eq:NSB_R_NSB_with_COLAV}
 \end{equation}
-where $\mat{I}$ is an identity matrix.
 
 \subsection{Inter-vehicle collision avoidance}
 \label{sec:NSB_R_COLAV}
@@ -172,13 +156,14 @@ The desired values of the task are
     \bs{\sigma}_{d,1} = d_{\rm COLAV} \, \mat{1},
 \end{equation}
 where $\mat{1}$ is a vector of ones.
-To ensure a faster response to a potential collision than in \cite{matouvs_formation_2022}, we propose the following sliding-mode-like COLAV velocity 
-\begin{equation}
-    \ivel_1 = U_{\rm COLAV} \frac{\ivel_{1, {\rm CLIK}}}{\norm{\ivel_{1, {\rm CLIK}}}},
-\end{equation}
-where $U_{\rm COLAV}$ is a positive constant, $\norm{\cdot}$ is the Euclidean norm, and $\ivel_{1, {\rm CLIK}}$ is the velocity vector given by~\eqref{eq:NSB_R_CLIK}.
+To ensure a faster response to a potential collision than in the previous chapter, we propose the following sliding-mode-like \gls{colav} velocity 
+\begin{align}
+    \ivel_1 &= - U_{\rm COLAV} \mat{J}_1^{\dagger} \frac{\widetilde{\bs{\sigma}}_1}{\norm{\widetilde{\bs{\sigma}}_1}}, &
+    \widetilde{\bs{\sigma}}_1 &= \bs{\sigma}_1 - \bs{\sigma}_{d, 1},
+\end{align}
+where $U_{\rm COLAV}$ is a positive constant.
 
-Note that this task does not guarantee robust collision avoidance.
+Similarly to the previous chapter, this task does not guarantee robust collision avoidance.
 During the transients, the relative distance may become smaller than $d_{\rm COLAV}$.
 Therefore, to ensure collision avoidance, $d_{\rm COLAV}$ should be chosen as $d_{\rm min} + d_{\rm sec}$, where $d_{\rm min}$ is the minimum safe distance between the vehicles, and $d_{\rm sec}$ is an additional security distance.
 
@@ -191,33 +176,28 @@ The formation-keeping task variable is defined as
 \end{align}
 and its desired values are 
 \begin{equation}
-    % \bs{\sigma}_{d,2} = \begin{bmatrix}
-    %     \mat{R}_p\,\mat{p}_{f,1}^p \\
-    %     \vdots \\
-    %     \mat{R}_p\,\mat{p}_{f,n-1}^p
-    % \end{bmatrix}. \label{eq:NSB_R_sigma_d_2}
-    \bs{\sigma}_{d,2} = \inlinevector{\mat{R}_p\,\mat{p}_{f,1}^p, \ldots, \mat{R}_p\,\mat{p}_{f,n-1}^p}  .
+    \bs{\sigma}_{d,2} = \inlinevector{\mat{R}_p\,\mat{p}_{f,1}^f, \ldots, \mat{R}_p\,\mat{p}_{f,n-1}^f}  .
     \label{eq:NSB_R_sigma_d_2}
 \end{equation}
-Similarly to COLAV, we use the CLIK equation~\eqref{eq:NSB_R_CLIK} to obtain the formation-keeping velocity.
-However, as motivated in Section~\ref{sec:NSB_R_references}, this velocity needs to be saturated.
-The desired velocity is thus given by 
-\begin{equation}
-    \ivel_2 = \mat{J}_2^{\dagger}\dot{\bs{\sigma}}_{d,2} - \ivels_{2, \max}\mat{J}_2^{\dagger}\,{\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right),
+%Similarly to \gls{colav}, we use the CLIK equation~\eqref{eq:NSB_R_CLIK} to obtain the formation-keeping velocity.
+%However, as motivated in Section~\ref{sec:NSB_R_references}, this velocity needs to be saturated.
+The formation-keeping velocity is given by 
+\begin{align}
+    \ivel_2 &= \mat{J}_2^{\dagger}\dot{\bs{\sigma}}_{d,2} - \ivels_{2, \max}\mat{J}_2^{\dagger}\,{\rm sat}\left(\bs{\Lambda}_2\widetilde{\bs{\sigma}}_2\right), &
+    \widetilde{\bs{\sigma}}_2 &= \bs{\sigma}_2 - \bs{\sigma}_{d, 2},
     \label{eq:NSB_R_v_form}
-\end{equation}
+\end{align}
 where $\ivels_{2, \max}$ is a positive constant, and $\rm sat$ is a saturation function given by 
 \begin{equation}
-    {\rm sat}(\mat{x}) = \mat{x} \frac{{\rm tanh}\left(\norm{\mat{x}}\right)}{\norm{\mat{x}}},
+    {\rm sat}(\mat{x}) = \mat{x} \frac{{\rm tanh}\left(\norm{\mat{x}}\right)}{\norm{\mat{x}}}.
 \end{equation}
-where $\rm tanh$ is the hyperbolic tan function.
+The use of a saturation function guarantees some bounds on the \gls{nsb} velocity, as we will explain in Section~\ref{sec:NSB_R_references}.
 
-\subsection{Path Following}
+\subsection{Path following}
 \label{sec:NSB_R_LOS}
 
-Unlike the previous two tasks, the path-following task uses LOS guidance instead of CLIK.
-Let us denote the components of $\mat{p}_b^p$ as $x_b^p, y_b^p$, and $z_b^p$.
-Furthermore, let $\Delta\left(\mat{p}_b^p\right)$ be the lookahead distance of the LOS guidance law.
+To solve the path-following, we employ the coupled \gls{los} guidance algorithm \eqref{eq:background_los_coupled}.
+Let $\Delta\left(\mat{p}_b^p\right)$ be the lookahead distance of the LOS guidance law.
 Inspired by \cite{belleter_2019_observer}, we choose an error-dependent lookahead distance 
 \begin{equation}
     \Delta\left(\mat{p}_b^p\right) = \sqrt{\Delta_0^2 + \left(x_b^p\right)^2 + \left(y_b^p\right)^2 + \left(z_b^p\right)^2}
@@ -226,7 +206,7 @@ Inspired by \cite{belleter_2019_observer}, we choose an error-dependent lookahea
 where $\Delta_0$ is a positive constant.
 The LOS velocity then is 
 \begin{equation}
-    \ivel_{\rm LOS} = \mat{R}_p\,\inlinevector{\Delta\left(\mat{p}_b^p\right), -y_b^p, -z_b^p}\,\frac{U_{\rm LOS}}{D},
+    \ivel_{\rm LOS} = \frac{U_{\rm LOS}}{D} \, \mat{R}_p\inlinevector{\Delta\left(\mat{p}_b^p\right), -y_b^p, -z_b^p},
     \label{eq:NSB_R_v_LOS}
 \end{equation}
 where $U_{\rm LOS} > 0$ is the desired path-following speed, and 
@@ -235,14 +215,12 @@ where $U_{\rm LOS} > 0$ is the desired path-following speed, and
 \end{equation}
 The task velocity is then given by 
 \begin{equation}
-    \ivel_3 = \mat{1}_n \otimes \ivel_{\rm LOS}
+    \ivel_3 = \mat{1}_N \otimes \ivel_{\rm LOS}.
     \label{eq:NSB_R_v_3}
 \end{equation}
-where $\otimes$ is the Kronecker tensor product.
 
 Note that the path parameter $s$ in~\eqref{eq:NSB_R_barycenter} can be treated as an additional degree of freedom in the control design, and used to get a stable behavior of the along-track error $x_b^p$. 
 Inspired by \cite{belleter_2019_observer}, we choose the update law of $s$ as
-
 \begin{equation}
     \dot{s} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} U_{\rm LOS} \left(\frac{\Delta}{D} + k_{s}\,\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}}\right),\label{eq:NSB_R_path_update}
 \end{equation}
@@ -254,16 +232,16 @@ where $k_{s}$ is a positive gain.
 \label{sec:NSB_R_OA}
 
 Obstacle avoidance is typically implemented individually for each vehicle \cite{antonelli_2006_kinematic}.
-However, we propose to perform this task globally by incorporating it into the path-following algorithm so that it does not interfere with the inter-vehicle COLAV. %(indeed, inter-vehicle COLAV may be ensured by changing opportunely the relative velocities of the vehicles).
+However, we propose to perform this task globally by incorporating it into the path-following algorithm so that it does not interfere with the inter-vehicle \gls{colav}. %(indeed, inter-vehicle \gls{colav} may be ensured by changing opportunely the relative velocities of the vehicles).
 
 To arrive at the proposed algorithm, we first restrict the obstacle avoidance maneuvers to the $xy$-plane to avoid interfering with the subsequent depth-limiting logic.
 Let $\mat{p}_o = \inlinevector{x_o, y_o, z_o}$ be the position of the obstacle and $r_o$ the obstacle avoidance radius.
-Note that $r_o$ must be chosen sufficiently large to cover the size of both the obstacle and the AUV. %(and relative uncertainties).
+Note that $r_o$ must be chosen sufficiently large to cover the size of both the obstacle and the \gls{auv}. %(and relative uncertainties).
 Furthermore, let us define the formation radius
 $
     r_f = \max_{i \in \{1, \ldots, n\}} \norm{\inlinevector{x_b-x_i, y_b-y_i}}
 $
-and the relative position $\mat{p}_{\rm rel} = \inlinevector{x_o - x_b, y_o - y_b}$. As illustrated in \figref{fig:NSB_R_obstacle_radius}, obstacle avoidance is ensured if 
+and the relative position $\mat{p}_{\rm rel} = \inlinevector{x_b - x_o, y_b - y_o}$. As illustrated in \figref{fig:NSB_R_obstacle_radius}, obstacle avoidance is ensured if 
 \begin{equation}
     \norm{\mat{p}_{\rm rel}} \geq r_o + r_f. \label{eq:NSB_R_obstacle_avoidance_condition}
 \end{equation}
@@ -274,19 +252,19 @@ and the relative position $\mat{p}_{\rm rel} = \inlinevector{x_o - x_b, y_o - y_
         \centering
         \def\svgwidth{\textwidth}
         \import{figures/nsb_R}{obstacle_avoidance.pdf_tex}
-        
+        \vspace*{-0.25em}
         \caption{Obstacle and formation radii}
         \label{fig:NSB_R_obstacle_radius}
-        
+        \vspace*{-0.25em}
     \end{subfigure}   
     \begin{subfigure}[t]{0.33\textwidth}
         \centering
         \def\svgwidth{\textwidth}
         \import{figures/nsb_R}{collision_cone.pdf_tex}
-        
+        \vspace*{-0.25em}
         \caption{Collision cone}
         \label{fig:NSB_R_collision_cone}
-        
+        \vspace*{-0.25em}
     \end{subfigure} 
     \caption{Illustration motivating the obstacle avoidance constraint~\eqref{eq:NSB_R_obstacle_avoidance_condition} and conflict condition~\eqref{eq:NSB_R_collision-conflict}.}     
     
@@ -298,12 +276,12 @@ To guarantee obstacle avoidance, we utilize the collision cone concept \cite{cha
 Inspired by \cite{wiig_collision_2019}, we employ a constant avoidance angle and define a switching condition.
 More precisely, let 
 \begin{equation}
-    \ivel_{\rm rel} = \inlinevector{\dot{x}_{\rm LOS} - \dot{x}_o, \dot{y}_{\rm LOS} - \dot{y}_o}
+    \ivel_{\rm rel} = \inlinevector{\ivels_{x, {\rm LOS}} - \dot{x}_o, \ivels_{y, {\rm LOS}} - \dot{y}_o}
 \end{equation}
-denote the relative line-of-sight velocity ($\dot{x}_{\rm LOS}$ and $\dot{y}_{\rm LOS}$ are the components of $\ivel_{\rm LOS}$).
-As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the AUVs and obstacle arises if 
+denote the relative line-of-sight velocity ($\ivels_{x, {\rm LOS}}$ and $\ivels_{y, {\rm LOS}}$ are the components of $\ivel_{\rm LOS}$).
+As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the \glspl{auv} and obstacle arises if 
 \begin{align}
-    \abs{\angle\left(\mat{p}_{\rm rel}, \ivel_{\rm rel}\right)} &\leq \alpha, &
+    \abs{\angle\left(\mat{p}_{\rm rel}, -\ivel_{\rm rel}\right)} &\leq \alpha, &
     \alpha &= \sin^{-1}\left(\frac{r_o+r_f}{\norm{\mat{p}_{\rm rel}}}\right),
     \label{eq:NSB_R_collision-conflict}
 \end{align}
@@ -321,9 +299,8 @@ Since our definition of a safe distance \eqref{eq:NSB_R_obstacle_avoidance_condi
 When the task is active, the $x$- and $y$-components of the LOS velocity are replaced by the obstacle avoidance velocity $\ivel_{\rm OA}$ given by 
 \begin{align}
     \ivel_{\rm OA} &= \norm{\ivel_{\rm rel}} \inlinevector{\cos(\psi_{\rm OA}), \sin(\psi_{\rm OA})} + \inlinevector{\dot{x}_o, \dot{y}_o}, \\
-    \psi_{\rm OA} &= {\rm atan}_2 \left(y_o - y_b, x_o - x_b\right) \pm \alpha,
+    \psi_{\rm OA} &= {\rm atan}_2 \left(y_o - y_b, x_o - x_b\right) \pm \alpha.
 \end{align}
-where ${\rm atan}_2$ is the four-quadrant inverse tan.
 Note that $\psi_{\rm OA}$ has two solutions corresponding to the clockwise and counterclockwise directions.
 Inspired by \cite{haraldsen_reactive_2021}, we propose the following method for choosing a direction:
 When the conflict first happens, we choose the value of $\psi_{\rm OA}$ that is closer to the direction of $\ivel_{\rm rel}$.
@@ -334,12 +311,12 @@ Afterwards, we maintain the same direction.
 As for the depth-limiting logic,
 let $z_{\min}$ and $z_{\max}$ be the operation limits.
 We assume the limits to be wide enough to accommodate the formation.
-We then propose to replace the $z$-component of the LOS velocity with a depth-limiting velocity $\dot{z}_{\rm lim}$ given by 
+We then propose to replace the $z$-component of the LOS velocity with a depth-limiting velocity $\ivels_{z, {\rm lim}}$ given by 
 \begin{equation}
-    \dot{z}_{\rm lim} = \begin{cases}
+    \ivels_{z, {\rm lim}} = \begin{cases}
         \ivels_z, & \text{if } \min_{i \in \{1, \ldots, n\}} z_i \leq z_{\min}, \\
         -\ivels_z, & \text{if } \max_{i \in \{1, \ldots, n\}} z_i \geq z_{\max}, \\
-        \dot{z}_{\rm LOS}, & \text{otherwise},
+        \ivels_{z, {\rm LOS}}, & \text{otherwise},
     \end{cases}
 \end{equation}
 where $\ivels_z$ is a positive constant.
@@ -348,14 +325,14 @@ where $\ivels_z$ is a positive constant.
 \subsection{Surge and orientation references}
 \label{sec:NSB_R_references}
 
-Since the NSB algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation references.
+Since the \gls{nsb} algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation references.
 The strategy for choosing these references changes depending on whether the avoidance or depth-limiting tasks are active.
 The proposed strategy allows us to prove the closed-loop stability of both the path-following and formation-keeping tasks (\emph{c.f.} \cite{arrichiello_formation_2006}, where no stability proofs are given, and \cite{eek_formation_2021,matouvs_formation_2022}, that only prove the stability of the path-following task).
 
 
 
 First, let us consider the case when neither the avoidance nor depth-limiting tasks are active.
-Note that due to the properties of the task velocities and Jacobians, \eqref{eq:NSB_R_NSB_with_COLAV} can be simplified to 
+Because the formation-keeping and the path-following task are independent and orthogonal, \eqref{eq:NSB_R_NSB_with_COLAV} can be simplified to 
 \begin{equation}
     \ivel_{\rm NSB} = \ivel_2 + \ivel_3.
     \label{eq:NSB_R_NSB_nominal_simplified}
@@ -374,7 +351,7 @@ To achieve the desired behavior, the surge reference $u_{d, i}$ must satisfy
 \begin{equation}
     \norm{\ivel_{{\rm NSB}, i}}^2 \geq v_i^2 + w_i^2.
 \end{equation}
-In addition, AUVs typically need to maintain a minimum surge velocity to be able to maneuver, implying a stricter inequality 
+In addition, \glspl{auv} typically need to maintain a minimum surge velocity to be able to maneuver, implying a stricter inequality 
 \begin{equation}
     \norm{\ivel_{{\rm NSB}, i}}^2 \geq u_{\min}^2 + v_i^2 + w_i^2
     \label{eq:NSB_R_NSB_speed_condition}
@@ -384,7 +361,7 @@ This inequality can be satisfied by choosing a time-varying path-following speed
 
 
 
-Substituting task velocity definitions \eqref{eq:NSB_R_v_form} and \eqref{eq:NSB_R_v_3} into \eqref{eq:NSB_R_NSB_nominal_simplified} and exploiting the structure of the task Jacobian $\mat{J}_2$, we get that the NSB velocity of vehicle $i$ is given by 
+Substituting task velocity definitions \eqref{eq:NSB_R_v_form} and \eqref{eq:NSB_R_v_3} into \eqref{eq:NSB_R_NSB_nominal_simplified} and exploiting the structure of the task Jacobian $\mat{J}_2$, we get that the \gls{nsb} velocity of vehicle $i$ is given by 
 \begin{equation}
     \ivel_{{\rm NSB}, i} = \ivel_{\rm LOS} + \dot{\mat{R}}_p(s)\mat{p}_{f,i}^f + \ivel_{2,i}, \label{eq:NSB_R_v_NSB_i}
     \vspace*{-0.55em}
@@ -402,12 +379,11 @@ Let $\bs{\omega}_p(s)$ be a vector such that
 \begin{equation}
     \abs{\dot{s}} \leq \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} U_{\rm LOS} \left(1 + k_{s}\right). \label{eq:NSB_R_path_update_bound}
 \end{equation}
-Substituting \eqref{eq:NSB_R_v_form_components}, \eqref{eq:NSB_R_R_p_dot}, and \eqref{eq:NSB_R_path_update_bound} into \eqref{eq:NSB_R_v_NSB_i}, we get the following lower bound on the NSB velocity 
-\begin{align}
-    \norm{\ivel_{{\rm NSB}, i}} &\geq U_{\rm LOS} \left(1
-        - \norm{\bs{\omega}_p}\norm{\scale[1]{\frac{\partial \mat{p}_p}{\partial s}}}^{-1}\norm{\mat{p}_{f, i}^f} \left(1 + k_{s}\right)\right) \nonumber \\
-        &\quad - \ivels_{2, \max}.
-\end{align}
+Substituting \eqref{eq:NSB_R_v_form_components}, \eqref{eq:NSB_R_R_p_dot}, and \eqref{eq:NSB_R_path_update_bound} into \eqref{eq:NSB_R_v_NSB_i}, we get the following lower bound on the \gls{nsb} velocity 
+\begin{equation}
+    \norm{\ivel_{{\rm NSB}, i}} \geq U_{\rm LOS} \left(1
+        - \norm{\bs{\omega}_p}\norm{\scale[1]{\frac{\partial \mat{p}_p}{\partial s}}}^{-1}\norm{\mat{p}_{f, i}^f} \left(1 + k_{s}\right)\right) - \ivels_{2, \max}.
+\end{equation}
 Now, assuming the existence of an upper bound on the product $$\norm{\bs{\omega}_p(s)}\norm{\partial \mat{p}_p(s) / \partial s}^{-1},$$ there exists a positive constant $k_{\rm NSB}$ such that for every vehicle 
 \begin{equation}
     \norm{\ivel_{{\rm NSB}, i}} \geq (1 - k_{\rm NSB})U_{\rm LOS} - \ivels_{2, \max}.
@@ -425,7 +401,7 @@ To avoid this, we approximate the former with
 
 
 If the avoidance or depth-limiting tasks are active, we still choose $U_{\rm LOS}$ in accordance with \eqref{eq:NSB_R_U_LOS}.
-However, since \eqref{eq:NSB_R_NSB_speed_condition} cannot be satisfied with a generic NSB velocity \eqref{eq:NSB_R_NSB_with_COLAV}, we choose the surge reference as 
+However, since \eqref{eq:NSB_R_NSB_speed_condition} cannot be satisfied with a generic \gls{nsb} velocity \eqref{eq:NSB_R_NSB_with_COLAV}, we choose the surge reference as 
 \begin{equation}
     u_{d, i} = 
     \begin{cases}
@@ -476,7 +452,7 @@ and then evolve the desired orientation according to
 \end{equation}
 Note that choosing $\bs{\omega}_{d, i}$ according to \eqref{eq:NSB_R_omega_ref} leads to the smallest (in terms of Euclidean norm) angular velocity that satisfies \eqref{eq:NSB_R_omega_ref_equation}.
 We also note that there exists a subspace of angular velocities that satisfy \eqref{eq:NSB_R_omega_ref_equation} and a subspace of rotation matrices that satisfy \eqref{eq:NSB_R_rotation_reference}.
-This differs from three degree-of-freedom (3DOF) \cite{eek_formation_2021,arrichiello_formation_2006} and 5DOF \cite{matouvs_formation_2022} models, for which only one solution exists.
+This differs from 3\gls{dof} \cite{eek_formation_2021,arrichiello_formation_2006} and 5\gls{dof} \cite{matouvs_formation_2022} models, for which only one solution exists.
 
 
 \section{Closed-Loop Analysis}
@@ -515,12 +491,13 @@ with
 \end{align}
 Substituting \eqref{eq:NSB_R_expm}, \eqref{eq:NSB_R_surge_reference}, and \eqref{eq:NSB_R_rotation_reference} into \eqref{eq:NSB_R_p_dot_closed_loop} we get 
 \begin{equation}
-    \begin{split}
-    \dot{\mat{p}}_i &= \ivel_{{\rm NSB}, i} 
-                + s(\bs{\delta}_i \times \ivel_{{\rm NSB}, i}) \\
-                & \quad + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \ivel_{{\rm NSB}, i})
+    %\begin{split}
+    \dot{\mat{p}}_i = \ivel_{{\rm NSB}, i} 
+                + s(\bs{\delta}_i \times \ivel_{{\rm NSB}, i})
+                + c\,\bs{\delta}_i\times(\bs{\delta}_i \times \ivel_{{\rm NSB}, i})
                 + \mat{R}_{i}\inlinevector{\widetilde{u}_i, 0, 0}.
-    \end{split} \label{eq:NSB_R_p_dot_closed_loop_2}
+    %\end{split} \label{eq:NSB_R_p_dot_closed_loop_2}
+    \label{eq:NSB_R_p_dot_closed_loop_2}
 \end{equation}
 Defining a perturbing term $\mat{g}_i$ as 
 \begin{equation}
@@ -552,7 +529,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \begin{bmatrix}
         0 & 0 & X_v(u_{r, i}) \\
         0 & X_w(u_{r, i}) & 0
-    \end{bmatrix}, \\
+    \end{bmatrix}, &
     \mat{Y}_i &=
     \begin{bmatrix}
         Y_v(u_{r,i}) & Z_v(p_i) \\
@@ -563,8 +540,8 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
 
 \begin{theorem} \label{thm1}
     Let Assumptions \ref{asm:symmetric}--\ref{ass5} be satisfied.
-    Then, $\bigl\langle\widetilde{\bs{\sigma}}, \widetilde{\bs{X}}\bigr\rangle = \mat{0}$ is a uniformly semiglobally exponentially stable (USGES) equilibrium point of the closed-loop system \eqref{eq:NSB_R_outer_loop}, \eqref{eq:NSB_R_low_level_closed_loop}, \eqref{eq:NSB_R_underactuated_dynamics_closed_loop}.
-    Moreover, if the second and third partial derivatives of $\mat{p}_p(s)$ with respect to $s$ are bounded and \eqref{eq:NSB_R_boudedness_condition} is satisfied, the underactuated sway and heave dynamics are bounded near the manifold $\bigl\langle\widetilde{\bs{\sigma}}, \widetilde{\bs{X}}\bigr\rangle = \mat{0}$.
+    Then, $\left[\widetilde{\bs{\sigma}}\T, \widetilde{\bs{X}}\T\right] = \mat{0}\T$ is a \acrfullpl{usges} equilibrium point of the closed-loop system \eqref{eq:NSB_R_outer_loop}, \eqref{eq:NSB_R_low_level_closed_loop}, \eqref{eq:NSB_R_underactuated_dynamics_closed_loop}.
+    Moreover, if the second and third partial derivatives of $\mat{p}_p(s)$ with respect to $s$ are bounded and \eqref{eq:NSB_R_boudedness_condition} is satisfied, the underactuated sway and heave dynamics are bounded near the manifold $\left[\widetilde{\bs{\sigma}}, \widetilde{\bs{X}}\right] = \mat{0}\T$.
 \end{theorem}
 
 \begin{proof}
@@ -575,14 +552,14 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{equation}
     The time-derivative of $V$ is 
     \begin{equation}
-        \begin{split}
-            \dot{V} &= \widetilde{\bs{\sigma}}_2\T\left(\mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}\right)
-            - \left(\mat{p}_b^p\right)\T\mat{S}\left(\bs{\omega}_p\dot{s}\right)\mat{p}_b^p \\ 
-            &\quad + \left(\mat{p}_b^p\right)\T\mat{R}_p\T\bigg(\frac{1}{n}\sum_{i=1}^n\ivel_{{\rm NSB}, i} - \dot{p}_p\bigg) .
-        \end{split} 
+        %\begin{split}
+            \dot{V}\! = \widetilde{\bs{\sigma}}_2\T\!\left(\mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}\right)
+            - \left(\mat{p}_b^p\right)\T\!\mat{S}\!\left(\bs{\omega}_p\dot{s}\right)\!\mat{p}_b^p 
+            + \left(\mat{p}_b^p\right)\T\!\mat{R}_p\T\bigg(\frac{1}{n}\sum_{i=1}^n\ivel_{{\rm NSB}, i} - \dot{p}_p\!\bigg) .
+        %\end{split} 
         \label{eq:NSB_R_Lyapunov_analysis_step1}
     \end{equation}
-    Due to the properties of the NSB tasks defined in Sections \ref{sec:NSB_R_formation} and \ref{sec:NSB_R_LOS}, the following identities hold: 
+    Due to the properties of the \gls{nsb} tasks defined in Sections \ref{sec:NSB_R_formation} and \ref{sec:NSB_R_LOS}, the following identities hold: 
     \begin{align}
         \mat{J}_2\ivel_{\rm NSB} &= \mat{J}_2\ivel_2, &
         \sum_{i=1}^n \ivel_{{\rm NSB}, i} &= \ivel_{\rm LOS}.
@@ -604,7 +581,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
         \end{split}
         \label{eq:NSB_R_Lyapunov_analysis_step2}
     \end{equation}
-    For any $\widetilde{\bs{\sigma}} \in \left\{\widetilde{\bs{\sigma}} \in \mathbb{R}^{3n}: \norm{\widetilde{\bs{\sigma}}} \leq r\right\}$, the following holds: 
+    For any $\widetilde{\bs{\sigma}} \in \ball[3N]{r}$, the following holds: 
     \begin{equation}
         \begin{split}
         \dot{V} &\leq  - \ivels_{2, \max}\lambda_{2, \min}\scale[1]{\frac{{\rm tanh}(r)}{r}}\norm{\widetilde{\bs{\sigma}}_2}^2 \\
@@ -623,31 +600,13 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
                           \scale[1]{\frac{U_{\rm LOS}k_{s}}{\sqrt{1+r^2}}}, 
                           \scale[1]{\frac{U_{\rm LOS}}{\sqrt{\Delta_0^2+2r^2}}}\right\}
     \end{equation}
-    All assumptions of \cite[Theorem 5]{pettersen_lyapunov_2017} are thus satisfied, and the origin of the nominal system is USGES.
+    All assumptions of \cite[Theorem 5]{pettersen_lyapunov_2017} are thus satisfied, and the origin of the nominal system is \glspl{usges}.
 
     
 
-    Moreover, note that the low-level controller is GES by Assumption \ref{ass5}.
-    Therefore, if the following two assumptions hold, the origin of the cascade is USGES \cite[Proposition 9]{pettersen_lyapunov_2017}:
-    
-    \begin{enumerate}
-        \item There exist three positive constants $c_1, c_2, \eta$ such that
-        \begin{align}
-            \norm{\frac{\partial V}{\partial \widetilde{\bs{\sigma}}}} \norm{\widetilde{\bs{\sigma}}} &\leq c_1 V(\bs{\sigma}_1), & 
-            \forall \norm{\widetilde{\bs{\sigma}}} &\geq \eta, \\
-            \norm{\frac{\partial V}{\partial \widetilde{\bs{\sigma}}}} &\leq c_2, &
-            \forall \norm{\widetilde{\bs{\sigma}}} &\leq \eta,
-        \end{align}
-        \item There exist two continuous functions $\alpha_{1}, \alpha_{2} : \mathbb{R}_{\geq 0} \mapsto \mathbb{R}_{\geq 0}$ such that
-    \end{enumerate}
-    
-    \begin{equation}
-        \norm{\inlinevector{\mat{J}_2\mat{G}, \frac{1}{n}\sum_{i=1}^n\mat{g}_i}} \leq \alpha_1\left(\bigl\|\widetilde{\mat{X}}\bigr\|\right) + \alpha_2\left(\bigl\|\widetilde{\mat{X}}\bigr\|\right) \norm{\widetilde{\bs{\sigma}}}.
-        \label{eq:NSB_R_USGES_assumption_2}
-    \end{equation}
-    Since $\norm{\partial V / \partial \widetilde{\bs{\sigma}}} = \norm{\widetilde{\bs{\sigma}}}$, the first assumption is satisfied for $c_1 = \sfrac{1}{2}$, $c_2 = \eta$, and any $\eta \in \mathbb{R}_{\geq 0}$.
-
-    
+    Moreover, note that the low-level controller is \gls{ges} by Assumption \ref{ass5}.
+    Therefore, if the two assumptions of Proposition~\ref{prop:background_cascade} hold, the origin of the cascade is \glspl{usges}.
+    Since $\norm{\partial V / \partial \widetilde{\bs{\sigma}}} = \norm{\widetilde{\bs{\sigma}}}$, the first assumption is satisfied for $c_1 = \sfrac{1}{2}$, $c_2 = \eta$, and any $\eta \in \mathbb{R}_{\geq 0}$.    
 
     To validate the second assumption, we first need to investigate the perturbing terms $\mat{g}_i$ from \eqref{eq:NSB_R_g_i}.
     From \eqref{eq:NSB_R_v_NSB_i} we get the following upper bound on $\ivel_{{\rm NSB}, i}$ 
@@ -673,12 +632,12 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
         \norm{\mat{g}_i} \leq \alpha_{1,i}\left(\bigl\|\widetilde{\mat{X}}_i\bigr\|\right) + 
                             \alpha_{2,i}\left(\bigl\|\widetilde{\mat{X}}_i\bigr\|\right)\norm{\widetilde{\bs{\sigma}}}. \label{eq:NSB_R_perturbing_term}
     \end{equation}
-    Therefore, \eqref{eq:NSB_R_USGES_assumption_2} can be satisfied by 
+    Therefore, \eqref{eq:background_USGES_cascade_assumption_2} can be satisfied by 
     \begin{align}
         \alpha_1(r) &= \sum_{i=1}^n \alpha_{1,i}(r), &
         \alpha_2(r) &= \sum_{i=1}^n \alpha_{2,i}(r),
     \end{align}
-    and consequently all assumptions of \cite[Proposition~9]{pettersen_lyapunov_2017} are satisfied. To summarize, the origin of the closed-loop system is USGES.
+    and consequently all assumptions of \cite[Proposition~9]{pettersen_lyapunov_2017} are satisfied. To summarize, the origin of the closed-loop system is \glspl{usges}.
 
     
 
@@ -747,15 +706,46 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     Consequently, the underactuated dynamics are bounded if 
     \begin{equation}
         Y_{\min} > aX_{\max}. \label{eq:NSB_R_boudedness_condition}
-        \qed
     \end{equation}
-    
+    We have thus shown that the origin of the closed-loop system \eqref{eq:NSB_R_outer_loop}, \eqref{eq:NSB_R_low_level_closed_loop}, \eqref{eq:NSB_R_underactuated_dynamics_closed_loop} is \glspl{usges}, and the underactuated sway and heave dynamics are bounded.
 \end{proof}
 
 \section{Simulations}
 \label{sec:NSB_R_simulation}
+
+We simulate the proposed approach on a fleet of six \glspl{lauv} \cite{sousa_LAUV_2012} using MATLAB, delegating low-level control to an attitude-tracking PID controller as in \cite{nakath_rigid_2017} and an output-linearizing P surge controller as in \cite{matouvs_formation_2022}.
+
+
+The desired path is a spiral given by 
+\begin{equation}
+    \mat{p}_p(s) = \mat{p}_{p, 0} + \inlinevector{s, a_p\,\cos(\omega_p\,s), b_p\,\sin(\omega_p\,s)}
+\end{equation}
+where 
+\begin{align*}
+    \mat{p}_{p, 0} &= \inlinevector{0, -40, 25}, &
+    a_p &= 40, &
+    b_p &= 20, &
+    \omega_p &= \scale[1]{\frac{100}{\pi}},
+\end{align*}
+while the desired formation is an isosceles triangle parallel to the $yz$ plane.
+Specifically, the desired positions in the formation-centered frame are 
+\begin{align}
+    \mathbf{p}_{f,1}^f &= \begin{bmatrix} 0 \\ 10 \\ 5\end{bmatrix}, &
+    \mathbf{p}_{f,2}^f &= \begin{bmatrix} 0 \\ -10 \\ 5\end{bmatrix}, &
+    \mathbf{p}_{f,3}^f &= \begin{bmatrix} 0 \\ 0 \\ -10\end{bmatrix}.
+\end{align}
+For the simulation parameters, we choose the velocity of the ocean current to be $\ocean = \inlinevector{0, 0.15, 0.05}$, the formation-keeping gain $\bs{\Lambda}_2 = 0.1\mat{I}$, the maximum formation-keeping velocity $\ivels_{2, \max} = \SI{0.5}{\meter\per\second}$, and the lookahead distance $\Delta_0 = \SI{5}{\meter}$.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=.75\textwidth]{figures/nsb_R/trajectory.png}
+    \vspace{-4mm}
+    \caption{The 3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 50, \ldots, 250$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
+    \label{fig:NSB_R_trajectory}
+\end{figure}
+
 \pgfplotsset{table/search path={figures/nsb_R/data}}
-\begin{figure*}[ht]
+\begin{figure}[p]
     \centering
     \begin{subfigure}[t]{0.475\textwidth}
         \centering
@@ -787,7 +777,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
         \centering
         \input{figures/nsb_R/formation_error.tex}
         \vspace{-8mm}
-        \caption{The formation-keeping error. The full, dashed, and dotted lines correspond to vehicles 1, 2, and 3, respectively. The blue rectangle represents the time when inter-agent COLAV is active.}
+        \caption{The formation-keeping error. The full, dashed, and dotted lines correspond to vehicles 1, 2, and 3, respectively. The blue rectangle represents the time when inter-agent \gls{colav} is active.}
         \label{fig:NSB_R_formation_keeping_error}
         \vspace{-1mm}
     \end{subfigure}
@@ -809,51 +799,16 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
         \vspace{-2.5mm}
     \end{subfigure}
     \caption{Simulation results.}
-    \label{fig:NSB_R_results}
-    
-\end{figure*}
-
-\begin{figure}[b]
-    \centering
-    \includegraphics[width=.75\textwidth]{figures/nsb_R/trajectory.png}
-    \vspace{-4mm}
-    \caption{The 3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 50, \ldots, 250$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
-    \label{fig:NSB_R_trajectory}
+    \label{fig:NSB_R_results}    
 \end{figure}
 
-We simulate the proposed approach on a fleet of six LAUVs \cite{sousa_LAUV_2012} using MATLAB, delegating low-level control to an attitude-tracking PID controller as in \cite{nakath_rigid_2017} and an output-linearizing P surge controller as in \cite{matouvs_formation_2022}.
-
-
-
-The desired path is a spiral given by 
-\begin{equation}
-    \mat{p}_p(s) = \mat{p}_{p, 0} + \inlinevector{s, a_p\,\cos(\omega_p\,s), b_p\,\sin(\omega_p\,s)}
-\end{equation}
-where 
-\begin{align*}
-    \mat{p}_{p, 0} &= \inlinevector{0, -40, 25}, &
-    a_p &= 40, &
-    b_p &= 20, &
-    \omega_p &= \scale[1]{\frac{100}{\pi}},
-\end{align*}
-while the desired formation is an isosceles triangle parallel to the $yz$ plane.
-Specifically, the desired positions in the formation-centered frame are 
-\begin{align}
-    \mathbf{p}_{f,1}^f &= \begin{bmatrix} 0 \\ 10 \\ 5\end{bmatrix}, &
-    \mathbf{p}_{f,2}^f &= \begin{bmatrix} 0 \\ -10 \\ 5\end{bmatrix}, &
-    \mathbf{p}_{f,3}^f &= \begin{bmatrix} 0 \\ 0 \\ -10\end{bmatrix}.
-\end{align}
-For the simulation parameters, we choose the velocity of the ocean current to be $\ocean = \inlinevector{0, 0.15, 0.05}$, the formation-keeping gain $\bs{\Lambda}_2 = 0.1\mat{I}$, the maximum formation-keeping velocity $\ivels_{2, \max} = \SI{0.5}{\meter\per\second}$, and the lookahead distance $\Delta_0 = \SI{5}{\meter}$.
-
-
-
-The very minimum relative distance to avoid collision is the length of the LAUV, \emph{i.e.}, $2.4$ m.
-For additional safety, we design the COLAV task with $d_{\rm min} = 5$ m.
+The very minimum relative distance to avoid collision is the length of the \gls{lauv}, \emph{i.e.}, $2.4$ m.
+For additional safety, we design the \gls{colav} task with $d_{\rm min} = 5$ m.
 For additional safety during transients, $d_{\rm COLAV}$ is chosen to be $10$ m.
 
 
 
-We then let the vehicles encounter an obstacle of similar size as the LAUV that moves east at a constant speed of $\SI{0.3}{\meter\per\second}$.
+We then let the vehicles encounter an obstacle of similar size as the \gls{lauv} that moves east at a constant speed of $\SI{0.3}{\meter\per\second}$.
 Given its size, we choose $r_o = d_{\rm COLAV}$.
 The minimum cone angle is set to $\alpha_{\min} = \SI{15}{\degree}$.
 The operation limits are chosen as $z_{\min} = \SI{1}{m}$, $z_{\max} = \SI{49}{m}$, and the depth-limiting velocity is $\ivels_z = \SI{0.3}{\meter\per\second}$.
@@ -861,10 +816,10 @@ Note that the limits are deliberately chosen too small for the given path and fo
 
 
 
-Figures \ref{fig:NSB_R_results} and \ref{fig:NSB_R_trajectory} show the results of this numerical simulation.
+Figures \ref{fig:NSB_R_trajectory} and \ref{fig:NSB_R_results} show the results of this numerical simulation.
 %The initial conditions are chosen identically as in \cite{matouvs_formation_2022}, so that we can directly compare the results.
 \figref{fig:NSB_R_distances} shows the distance between the vehicles and the distance to the obstacle.
-At $t = \SI{20}{\second}$, the COLAV task is activated, and the distance between the vehicles drops to approximately $9.5$ meters during the transient.
+At $t = \SI{20}{\second}$, the \gls{colav} task is activated, and the distance between the vehicles drops to approximately $9.5$ meters during the transient.
 The situation is resolved after $30$ seconds.
 At $t = \SI{35}{\second}$, the vehicles enter the collision cone and perform an evasive maneuver in a clockwise direction.
 The distance to the obstacle is always above the required limit.
@@ -879,8 +834,8 @@ When the task is active, the depth of the vehicles fluctuates around the prescri
 
 Figures \ref{fig:NSB_R_path_following_error} and \ref{fig:NSB_R_formation_keeping_error} show the path-following and formation-keeping errors.
 We can see that the path-following errors diverge when obstacle avoidance or depth limiting is active.
-Conversely, the formation-keeping errors diverge during inter-agent COLAV.
-This behavior corresponds to the interpretation of the NSB tasks --- path-following is global and thus cannot be satisfied during obstacle avoidance, whereas formation-keeping works with relative velocities and thus cannot be satisfied during inter-agent COLAV.
+Conversely, the formation-keeping errors diverge during inter-agent \gls{colav}.
+This behavior corresponds to the interpretation of the \gls{nsb} tasks --- path-following is global and thus cannot be satisfied during obstacle avoidance, whereas formation-keeping works with relative velocities and thus cannot be satisfied during inter-agent \gls{colav}.
 
 
 
@@ -896,7 +851,7 @@ The peak in sway velocities at $t = \SI{180}{\second}$ coincides with the sharpe
 \section{Conclusions and Future Work}
 \label{sec:NSB_R_conclusion}
 
-This paper extends a formation path-following NSB algorithm to underactuated 6DOF vehicles while adding obstacle avoidance and depth-limiting capabilities. 
+This chapter extends a formation path-following \gls{nsb} algorithm to underactuated 6\gls{dof}  vehicles while adding obstacle avoidance and depth-limiting capabilities. 
 Both the path-following and formation-keeping parts are proven to be stable.     
 In the proofs, we assume that the avoidance and depth-limiting tasks are not active.
 An analysis of the closed-loop system with active avoidance and depth-limiting tasks is left for future work.
