@@ -55,7 +55,7 @@
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{los_2d.pdf}}%
     \put(0.51575493,0.01476526){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\Delta$\end{tabular}}}}%
-    \put(0.63589942,0.25679899){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}{\color{navy}$\mat{V}_{\rm LOS}$}\end{tabular}}}}%
+    \put(0.63589942,0.25679899){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}{\color{navy}$\ivel_{\rm LOS}$}\end{tabular}}}}%
     \put(0.18327056,0.29734288){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_b^p$\end{tabular}}}}%
     \put(0.00480524,0.1895479){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle y^p$\end{tabular}}}}%
     \put(0.01329282,0.4962553){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle \mat{O}^p$\end{tabular}}}}%

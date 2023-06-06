@@ -277,6 +277,7 @@ Inspired by \cite{wiig_collision_2019}, we employ a constant avoidance angle and
 More precisely, let 
 \begin{equation}
     \ivel_{\rm rel} = \inlinevector{\ivels_{x, {\rm LOS}} - \dot{x}_o, \ivels_{y, {\rm LOS}} - \dot{y}_o}
+    \label{eq:NSB_R_v_rel}
 \end{equation}
 denote the relative line-of-sight velocity ($\ivels_{x, {\rm LOS}}$ and $\ivels_{y, {\rm LOS}}$ are the components of $\ivel_{\rm LOS}$).
 As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the \glspl{auv} and obstacle arises if 
@@ -538,7 +539,7 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
 \end{align}
 
 
-\begin{theorem} \label{thm1}
+\begin{theorem} \label{thm_NSB_R}
     Let Assumptions \ref{asm:symmetric}--\ref{ass5} be satisfied.
     Then, $\left[\widetilde{\bs{\sigma}}\T, \widetilde{\bs{X}}\T\right] = \mat{0}\T$ is a \acrfullpl{usges} equilibrium point of the closed-loop system \eqref{eq:NSB_R_outer_loop}, \eqref{eq:NSB_R_low_level_closed_loop}, \eqref{eq:NSB_R_underactuated_dynamics_closed_loop}.
     Moreover, if the second and third partial derivatives of $\mat{p}_p(s)$ with respect to $s$ are bounded and \eqref{eq:NSB_R_boudedness_condition} is satisfied, the underactuated sway and heave dynamics are bounded near the manifold $\left[\widetilde{\bs{\sigma}}, \widetilde{\bs{X}}\right] = \mat{0}\T$.

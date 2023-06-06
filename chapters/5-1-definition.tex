@@ -47,3 +47,58 @@ The goal of this paper is thus to further extend the hand position concept to AU
 We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
 Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal dynamics, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
 
+\section{AUV Model}
+\label{sec:handpos_def_model}
+
+We consider an underactuated \gls{auv} with dynamics described using the 6\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
+The \gls{auv} model is given by the following equations
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{p}} &= \mat{R}\bvel_r + V_c, \\
+        \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \\
+        \mat{M}\dot{\bvel}_r + \mat{C}(\bvel_r)\bvel_r + \mat{D}(\bvel_r)\bvel_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}, \label{eq:handpos_def_zeta_dot_matrix}
+    \end{align}
+\end{subequations}
+In the remainder of this section, we introduce some necessary assumptions about the \gls{auv} and rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in a more compact form.
+To do so, let us first decompose $\mat{M}$, $\mat{M}^{-1}$, $\mat{C}(\bvel_r)$, and $\mat{D}(\bvel_r)$ into 3-by-3 blocks
+\begin{subequations}
+\begin{align}
+    \mat{M}\! &=\! \begin{bmatrix}
+        \mat{M}_{11} & \mat{M}_{12} \\ \mat{M}_{21} & \mat{M}_{22}
+    \end{bmatrix}\!, &
+    \mat{C}(\bvel_r)\! &=\! \begin{bmatrix}
+        \mat{C}_{11}(\bvel_r)\!\!\! & \mat{C}_{12}(\bvel_r) \\ \mat{C}_{21}(\bvel_r)\!\!\! & \mat{C}_{22}(\bvel_r)
+    \end{bmatrix}\!, \\
+    \mat{M}^{-1}\! &=\! \begin{bmatrix}
+        \mat{M}_{11}^{\prime} & \mat{M}_{12}^{\prime} \\ \mat{M}_{21}^{\prime} & \mat{M}_{22}^{\prime}
+    \end{bmatrix}\!, &
+    \mat{D}\! &=\! \begin{bmatrix}
+        \mat{D}_{11}\!\!\! & \mat{D}_{12} \\ \mat{D}_{21}\!\!\! & \mat{D}_{22}
+    \end{bmatrix}\!.
+\end{align}
+\end{subequations}
+
+In addition to Assumptions~\ref{asm:symmetric}--\ref{asm:buoyancy} of the control-oriented model, we need to add one more simplifying assumption.
+\begin{asm}
+    \label{asm:nogravity}
+    The effect of gravity and buoyancy on the linear velocities is negligible.
+    Therefore, the following approximation
+    \begin{equation}
+        \mat{M}^{-1}\mat{g}(\mat{R}) \approx \begin{bmatrix}
+            \mat{0}_3 \\ \mat{M}_{22}^{\prime} \left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)
+        \end{bmatrix},
+    \end{equation}
+    can be used to simplify the dynamics.
+\end{asm}
+\begin{rmk}
+The effect of gravity and buoyancy on the linear velocities is given by
+\begin{equation}
+    \mat{M}_{12}^{\prime} \left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right) = \frac{Wz_{gb}\,m_{35}}{m_{33}m_{55} - m_{35}^2}\inlinevector{0, 0, \sin\theta}\!,
+\end{equation}
+where $\theta \in [-\pi/2, \pi/2]$ is the pitch angle of the vehicle.
+Assumption~\ref{asm:nogravity} can thus be used if $\theta$ remains small.
+\end{rmk}
+\begin{rmk}
+    Throughout the chapter, we will sometimes show expressions with Euler angles, because they are more intuitive than rotation matrices.
+    This does not mean that we transform our model to Euler angles, these expressions are only used for illustration.
+\end{rmk}

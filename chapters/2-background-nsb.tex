@@ -140,6 +140,7 @@ where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter o
             \end{bmatrix} \\[6pt]
             &= \left[\mat{I}_{3(N-1)},\, \mat{O}_{3(N-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(N-1) \times N} \otimes \mat{I}_3.
         \end{split}
+        \label{eq:background_NSB_formation_jacobian}
     \end{equation}
     One can verify that the rank of $\mat{J}_1$ is $3(N-1)$, and the Jacobian thus has full row rank.
 \end{rmk}
@@ -147,12 +148,14 @@ where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter o
 The desired value of the formation-keeping task variable is
 \begin{align}
     \bs{\sigma}_{d, 1} &= \inlinevector{\mat{p}_{f, 1}\T, \mat{p}_{f, 2}\T, \ldots, \mat{p}_{f, N-1}\T},
+    \label{eq:background_NSB_formation_reference}
 \end{align}
 where $\mat{p}_{f, i}$ is the desired position of vehicle $i$ within the formation (see Section~\ref{sec:background_formation_path_following}).
 
 The formation-keeping control input $\ivel_1$ is then given by
 \begin{equation}
     \ivel_1 = \mat{J}_1^{\dagger} \left(\dot{\bs{\sigma}}_{d, 1} - \bs{\Lambda}_1 (\bs{\sigma}_1 - \bs{\sigma}_{d, 1})\right),
+    \label{eq:background_NSB_formation_velocity}
 \end{equation}
 where $\bs{\Lambda}_1$ is a positive definite gain matrix.
 
