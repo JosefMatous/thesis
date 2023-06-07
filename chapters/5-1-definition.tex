@@ -1,6 +1,9 @@
 \chapter{Hand Position for Underactuated Underwater Vehicles}
 \label{chap:handpos_definition}
 
+\newcommand{\LBomega}{\Bar{p}}
+\newcommand{\LBnu}{\Bar{\bvel}_e}
+
 This chapter motivates and defines the hand position concept.
 Compared to previous works that utilize this concept, our approach works on six-degree-of-freedom vehicles and does not introduce singularities.
 By choosing the hand position as the output of the controlled system, we can apply output feedback linearization to simplify the dynamics of the vehicle.
@@ -45,7 +48,13 @@ The use of Euler angles inherently introduces singularities into the system.
 
 The goal of this paper is thus to further extend the hand position concept to AUVs moving in three dimensions.
 We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
-Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal dynamics, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
+Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal states, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
+
+The remainder of the chapter is organized as follows.
+Section~\ref{sec:handpos_def_model} presents the \gls{auv} model.
+Section~\ref{sec:handpos_def_hand_position} defines the hand position transformation and presents the necessary assumptions about the generic hand position-based controller.
+The closed-loop system is then analyzed in Section~\ref{sec:handpos_def_closed_loop_analysis}.
+Finally, Section~\ref{sec:handpos_def_conclusion} presents some concluding remarks.
 
 \section{AUV Model}
 \label{sec:handpos_def_model}
@@ -54,13 +63,13 @@ We consider an underactuated \gls{auv} with dynamics described using the 6\gls{d
 The \gls{auv} model is given by the following equations
 \begin{subequations}
     \begin{align}
-        \dot{\mat{p}} &= \mat{R}\bvel_r + V_c, \\
+        \dot{\mat{p}} &= \mat{R}\bvel_r + \ocean, \\
         \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \\
-        \mat{M}\dot{\bvel}_r + \mat{C}(\bvel_r)\bvel_r + \mat{D}(\bvel_r)\bvel_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}, \label{eq:handpos_def_zeta_dot_matrix}
+        \mat{M}\dot{\vel}_r + \mat{C}(\vel_r)\vel_r + \mat{D}\vel_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}, \label{eq:handpos_def_zeta_dot_matrix}
     \end{align}
 \end{subequations}
 In the remainder of this section, we introduce some necessary assumptions about the \gls{auv} and rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in a more compact form.
-To do so, let us first decompose $\mat{M}$, $\mat{M}^{-1}$, $\mat{C}(\bvel_r)$, and $\mat{D}(\bvel_r)$ into 3-by-3 blocks
+To do so, let us first decompose $\mat{M}$, $\mat{M}^{-1}$, $\mat{C}(\vel_r)$, and $\mat{D}$ into 3-by-3 blocks
 \begin{subequations}
 \begin{align}
     \mat{M}\! &=\! \begin{bmatrix}
@@ -102,3 +111,276 @@ Assumption~\ref{asm:nogravity} can thus be used if $\theta$ remains small.
     Throughout the chapter, we will sometimes show expressions with Euler angles, because they are more intuitive than rotation matrices.
     This does not mean that we transform our model to Euler angles, these expressions are only used for illustration.
 \end{rmk}
+
+\noindent We can then rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in the following compact form
+\begin{subequations}
+    \begin{align}
+        \dot{\bvel}_r &= \inlinevector{f_u, 0, 0} - \mathcal{D}_{\bvel}(\vel_r) - \mathcal{C}_{\bvel}(\vel_r), \\
+        \dot{\bs{\omega}} &= \left[f_p, f_q, f_r\right]^{\rm T} - \mathcal{D}_{\bs{\omega}}\hspace*{0.08em}(\vel_r) - \mathcal{C}_{\bs{\omega}}(\vel_r) - \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right),
+    \end{align}
+    \label{eq:handpos_def_ode_velocities}
+\end{subequations}
+where
+\begin{subequations}
+    \begin{align}
+        \mathcal{D}_{\bvel} &= \left(\mat{M}_{11}^{\prime}\mat{D}_{11} + \mat{M}_{12}^{\prime}\mat{D}_{21}\right)\bvel_r + \left(\mat{M}_{12}^{\prime}\mat{D}_{22} + \mat{M}_{11}^{\prime}\mat{D}_{12}\right)\bs{\omega}, \\
+        \mathcal{C}_{\bvel} &= \left(\mat{M}_{11}^{\prime}\mat{C}_{11} + \mat{M}_{12}^{\prime}\mat{C}_{21}\right)\bvel_r + \left(\mat{M}_{12}^{\prime}\mat{C}_{22} + \mat{M}_{11}^{\prime}\mat{C}_{12}\right)\bs{\omega}, \\
+        \mathcal{D}_{\bs{\omega}} &= \left(\mat{M}_{21}^{\prime}\mat{D}_{11} + \mat{M}_{22}^{\prime}\mat{D}_{21}\right)\bvel_r + \left(\mat{M}_{22}^{\prime}\mat{D}_{22} + \mat{M}_{21}^{\prime}\mat{D}_{12}\right)\bs{\omega}, \\
+        \mathcal{C}_{\bs{\omega}} &= \left(\mat{M}_{21}^{\prime}\mat{C}_{11} + \mat{M}_{22}^{\prime}\mat{C}_{21}\right)\bvel_r + \left(\mat{M}_{22}^{\prime}\mat{C}_{22} + \mat{M}_{21}^{\prime}\mat{C}_{12}\right)\bs{\omega}.
+    \end{align} \label{eq:handpos_def_ode_components}
+\end{subequations}
+
+\section{Hand Position}
+\label{sec:handpos_def_hand_position}
+In this section, we present the hand position transformation for the 3D case.
+The procedure is inspired by the 2D transformation in \cite{paliotta_trajectory_2019}.
+We begin with the following change of coordinates:
+\begin{subequations}
+    \begin{align}
+        \mat{x}_1 &= \mat{p} + \mat{R}\mat{L}, \label{eq:handpos_def_hand_position} \\
+        \mat{x}_2 &= \mat{R}\bvel_r + \mat{R}\left(\bs{\omega} \times \mat{L}\right),
+    \end{align} \label{eq:handpos_def_hand_transform_initial}
+\end{subequations}
+where $\mat{L} = \inlinevector{h, 0, 0}$, where $h > 0$ is the \emph{hand length}.
+
+We will treat $\mat{x}_1$ as the output of our system, and perform an output feedback linearization.
+Differentiating \eqref{eq:handpos_def_hand_transform_initial} with respect to time yields:
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \\
+        \dot{\mat{x}}_2 &= \mat{R}\Big(\inlinevector{f_u, hf_r, -hf_q}\! - \!\mathcal{D}_{\bvel}(\vel) - \mathcal{C}_{\bvel}(\vel) + \bs{\omega} \!\times\! \bvel_r + \bs{\omega} \times \left(\bs{\omega} \times \mat{L}\right) \label{eq:handpos_def_x_2_dot} \\
+        & \qquad + \mat{L} \times \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right) \Big). \nonumber
+    \end{align}
+\end{subequations}
+Note that $\dot{\mat{x}}_2$ does not depend on the roll torque $f_p$.
+We can therefore use $f_p$ to stabilize the roll dynamics by canceling the Coriolis effect:
+\begin{align}
+    f_p &= \mat{e}_1\T \mathcal{C}_{\bs{\omega}}(\vel), \label{eq:handpos_def_roll_torque}
+\end{align}
+
+To linearize the output dynamics, we employ the following change of input
+\begin{align}
+    \begin{bmatrix}
+        f_u \\ f_q \\ f_r
+    \end{bmatrix}
+    \!&=\!
+    \begin{bmatrix}
+        1 & 0 & 0 \\ 0 & 0 & \!\!-\frac{1}{h} \\ 0 & \frac{1}{h} & 0
+    \end{bmatrix}
+    \!\!
+    \bigg(\!\mat{R}\T\!\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \bvel_r - \bs{\omega} \times \left(\bs{\omega} \times \mat{L}\right) \nonumber \\
+    & \qquad \qquad - \mat{L} \times \Bigl(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\!\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\Bigr)\! \bigg),
+\end{align}
+where $\bs{\mu} \in \mathbb{R}^3$ is the new control input.
+This procedure transforms the system \eqref{eq:handpos_def_ode_velocities} into the following form
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \label{eq:handpos_def_x_1_dot_transformed}\\
+        \dot{\mat{x}}_2 &= \bs{\mu}, \label{eq:handpos_def_x_2_dot_transformed}\\
+        \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \label{eq:handpos_def_R_dot_CL} \\
+        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_def_omega_dot_CL} \\
+            & \quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right), \nonumber
+    \end{align} \label{eq:handpos_def_hand_position_dynamics}
+\end{subequations}
+where $\Bar{\mat{L}} = \inlinevector{1/h, 0, 0}$.
+Note that \eqref{eq:handpos_def_x_1_dot_transformed} and \eqref{eq:handpos_def_x_2_dot_transformed} form a double integrator with a constant disturbance caused by the ocean current.
+
+\subsection{Hand position-based controller}
+In this section, we present some necessary assumtpions about the hand position-based controller.
+We assume that the goal of the control algorithm is to track a desired trajectory.
+Although this assumption seems restrictive, we will demonstrate that many controllers fall into this category.
+
+Let $\bs{\xi}_{1, d}$ represent the desired trajectory, and let $\bs{\xi}_{2, d} = \dot{\bs{\xi}}_{1, d}$.
+We assume that there exist $\bs{\xi}_{2_d, \max}$ and $\dot{\bs{\xi}}_{2_d, \max}$ such that
+\begin{align}
+    \norm{\ocean} &< \norm{\bs{\xi}_{2, d}} \leq \bs{\xi}_{2_d, \max}, &
+    \norm{\dot{\bs{\xi}}_{2, d}} \leq \dot{\bs{\xi}}_{2_d, \max}.
+\end{align}
+Furthermore, we define the following error states
+\begin{subequations}
+    \begin{align}
+        \tilde{\bs{\xi}}_1 &= \mat{x}_1 - \bs{\xi}_{1, d}, \\
+        \tilde{\bs{\xi}}_2 &= \mat{x}_2 - \bs{\xi}_{2, d} + \ocean.
+    \end{align} \label{eq:handpos_def_hand_transform_CL}
+\end{subequations}
+The dynamics of these error states are given by
+\begin{subequations}
+    \begin{align}
+        \dot{\tilde{\bs{\xi}}}_1 &= \tilde{\bs{\xi}}_2, \\
+        \dot{\tilde{\bs{\xi}}}_2 &= \bs{\mu} - \dot{\bs{\xi}}_2.
+    \end{align} \label{eq:handpos_def_hand_transform_CL_dynamics}
+\end{subequations}
+
+\begin{asm}
+    The hand position-based controller is designed such that the norm of the control input $\bs{\mu}$ is finite and the origin $\left[\tilde{\bs{\xi}}_1, \tilde{\bs{\xi}}_2\right] = \mat{0}\T$ is a \acrfullpl{ugas} equilibrium of \eqref{eq:handpos_def_hand_transform_CL_dynamics}.
+\end{asm}
+
+\section{Closed-loop Analysis}
+\label{sec:handpos_def_closed_loop_analysis}
+
+In this section, we analyze the closed-loop behavior of the orientation and the angular rates.
+Because these states cannot be controlled directly through the control input $\bs{\mu}$, they are commonly referred to as the \emph{internal states}, while $\mat{x}_1$ and $\mat{x}_2$ are referred to as the \emph{external states} \cite{paliotta_trajectory_2019}.
+For a generic hand position-based controller and a generic trajectory, the internal states do not converge to a specific value.
+Consequently, we intend to prove that the internal states are bounded.
+The orientation is restricted to a closed set $SO(3)$, and thus inherently bounded.
+Only the angular rates can grow unboundedly.
+
+By the choice of the control law \eqref{eq:handpos_def_roll_torque}, the dynamics of the roll rate no longer depend on the other angular velocities.
+Indeed, from \eqref{eq:handpos_def_omega_dot_CL}, we get
+\begin{equation}
+    \begin{split}
+        \dot{p} &= - \mat{e}_1\T \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right) \\
+            &= - \frac{d_{44}}{m_{44}} p - \frac{1}{m_{44}} \mat{e}_1\T \left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right).
+    \end{split}
+\end{equation}
+Let us define
+\begin{align}
+    a_x &= \frac{d_{44}}{m_{44}}, &
+    b_x &= \frac{Wz_{gb}}{m_{44}},
+\end{align}
+and prove the following proposition:
+
+\begin{lemma}
+    \label{lemma:handpos_def_roll_rate}
+    The roll rate dynamics are bounded if $a_x > 0$.
+    Specifically, the trajectory $p(t)$ satisfies
+    \begin{equation}
+        \abs{p(t)} \leq \abs{p(0)}{\rm e}^{-a_xt} + \frac{b_x}{a_x}\left(1 - {\rm e}^{-a_xt}\right).
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Consider the following two functions
+    \begin{align}
+        V_{p} &= \frac{1}{2} p^2, &
+        W_{p} &= \sqrt{2 V_{p}}.
+    \end{align}
+    The following inequality holds for the derivative of $W_p$ along the trajectories of $p$
+    \begin{equation}
+        \dot{W}_p \leq -a_xW_p + b_x.
+    \end{equation}
+    By applying the comparison lemma, we get
+    \begin{equation}
+        W_p(t) = \abs{p(t)} \leq \abs{p(0)}{\rm e}^{-a_xt} + \frac{b_x}{a_x}\left(1 - {\rm e}^{-a_xt}\right),
+    \end{equation}
+    which concludes the proof.
+\end{proof}
+
+
+Now, we investigate the boundedness of $q$ and $r$.
+In the subsequent analysis, we will treat the roll rate and the external dynamics as a perturbation.
+From \eqref{eq:handpos_def_omega_dot_CL}, we get
+\begin{align}
+    \begin{bmatrix}
+        \dot{q} \\ \dot{r}
+    \end{bmatrix}
+    \!=\!
+    \begin{bmatrix}
+        0 & \!0\! & \!-\frac{1}{h} \\ 0 & \!\frac{1}{h}\! & 0
+    \end{bmatrix} \!\!
+    \bigg(\!&\mat{R}\T\!\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel)  - \bs{\omega} \times \mat{R}\T\!\!\left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right)\!\!\bigg).
+    \label{eq:handpos_def_qr_dot}
+\end{align}
+Note that the linear velocities of the vehicle can be expressed in terms of the external dynamics as
+\begin{equation}
+    \bvel_r = \mat{R}\T \left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \mat{L}. \label{eq:handpos_def_nu_r_transformed}
+\end{equation}
+Let us define
+\begin{equation}
+    \bvel_e = \mat{R}\T \left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) \triangleq \inlinevector{\bvels_{e, 1}, \bvels_{e, 2}, \bvels_{e, 3}}.
+\end{equation}
+Note that the norm of $\bvel_e$ can be bounded by the following expression
+\begin{equation}
+    \norm{\bvel_e} \leq \norm{\tilde{\bs{\xi}}_2} + \norm{\bs{\xi}_{2, d} - \ocean},
+\end{equation}
+and since the external dynamics are assumed \glspl{ugas}, $\norm{\bvel_e}$ converges to $\norm{\bs{\xi}_{2, d} - \ocean}$.
+Consider then the following Lyapunov function candidate
+\begin{equation}
+    V_{\bs{\omega}} = \frac{1}{2} \left(q^2 + r^2\right).
+    \label{eq:handpos_def_V_omega}
+\end{equation}
+Let us define $\widehat{\bs{\omega}} = \inlinevector{q, r}$.
+The following inequality holds for the derivative of $V_{\bs{\omega}}$ along the trajectories of \eqref{eq:handpos_def_hand_position_dynamics}
+\begin{align}
+    \dot{V}_{\bs{\omega}} \leq& -a_yq^2 - a_zr^2 + \norm{\bvel_e}\norm{\widehat{\bs{\omega}}}\left(\frac{\norm{\bs{\omega}}}{h} + a_e\right) + a_{xyz}pqr \label{eq:handpos_def_V_omega_dot}\\
+    & + a_{xy}\bvels_{e, 2}pq + a_{xz}\bvels_{e, 3}pr + a_{ye}\bvels_{e, 1}q^2 + a_{ze}\bvels_{e, 1}r^2 \nonumber \\
+    & + a_{ey}\bvels_{e, 1}\bvels_{e, 3}q + a_{ez}\bvels_{e, 1}\bvels_{e, 2}q + \norm{\widehat{\bs{\omega}}}\mu_{\max}, \nonumber
+\end{align}
+where $\mu_{\max}$ is the largest norm of the control input.
+The remaining coefficients are shown in Appendix~\ref{app:V_omega_dot}.
+
+\begin{lemma}
+    \label{lemma:handpos_def_ultimate_boundedness}
+    Let us define
+    \begin{subequations}
+        \begin{align}
+            \LBomega &= b_x / a_x, \qquad
+            \LBnu = \max_{t \in \mathbb{R}_{\geq 0}}\norm{\bs{\xi}_{2, d}(t) - \ocean}, \\
+            \Bar{\alpha}_y &= a_y - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ye}\LBnu}\right), \\
+            \Bar{\alpha}_z &= a_z - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ze}\LBnu}\right).
+        \end{align} \label{eq:handpos_def_a_bounds}
+    \end{subequations}
+
+    \noindent The angular rate dynamics are ultimately bounded if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
+\end{lemma}
+\begin{proof}
+    Consider the candidate Lyapunov function $V_{\bs{\omega}}$ and the bound on its derivative in \eqref{eq:handpos_def_V_omega_dot}.
+    Using the following identities
+    \begin{subequations}
+    \begin{align}
+        \norm{\bs{\omega}}\norm{\widehat{\bs{\omega}}} &\leq \left(\abs{p} + \norm{\widehat{\bs{\omega}}}\right)\norm{\widehat{\bs{\omega}}}, \\
+        \abs{pqr} &\leq \frac{1}{2}\abs{p}\left(q^2 + r^2\right),
+    \end{align}
+    \end{subequations}
+    we arrive at the following upper bound on $\dot{V}_{\bs{\omega}}$
+    \begin{equation}
+            \dot{V}_{\bs{\omega}} \leq -\alpha_yq^2 - \alpha_zr^2 + G\left(\bvel_e, \bs{\omega}, \tilde{\bs{\xi}}_1, \tilde{\bs{\xi}}_2, \tilde{\bs{\xi}}_I, \dot{\bs{\xi}}_{2, d}\right),
+            \label{eq:handpos_def_V_omega_dot_strict}
+    \end{equation}
+    where
+    \begin{subequations}
+        \begin{align}
+            \alpha_y\! &=\! \left(\!a_y \!- \left(\frac{1}{h}\norm{\bvel_e} + \frac{1}{2}\abs{a_{xyz}}\abs{p} + \abs{a_{ye}}\norm{\bvel_e}\right)\!\right), \\
+            \alpha_z\! &=\! \left(\!a_z \!- \left(\frac{1}{h}\norm{\bvel_e} + \frac{1}{2}\abs{a_{xyz}}\abs{p} + \abs{a_{ze}}\norm{\bvel_e}\right)\!\right),
+        \end{align} \label{eq:handpos_def_alpha_yz}
+    \end{subequations}
+    and $G(\cdot)$ represents the terms that grow at most linearly with $q$ and $r$.
+
+    From Lemma~\ref{lemma:handpos_def_roll_rate}, we can conclude that if $a_x > 0$, then
+    \begin{equation}
+        \lim_{t \rightarrow \infty} \abs{p(t)} \leq \LBomega.
+    \end{equation}
+    Moreover, this limit converges exponentially.
+    Consequently, from \eqref{eq:handpos_def_a_bounds} and \eqref{eq:handpos_def_alpha_yz}, we get the following limits
+    \begin{align}
+        \lim_{t \rightarrow \infty} \alpha_y &\geq \Bar{\alpha}_y, &
+        \lim_{t \rightarrow \infty} \alpha_z &\geq \Bar{\alpha}_z.
+    \end{align}
+    Therefore, if $\Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then there exists a finite time $T$ after which $\alpha_y, \alpha_z > 0$.
+
+    First, let us investigate the candidate Lyapunov function for $t < T$.
+    Since $\alpha_y$ and $\alpha_z$ may be negative, we cannot prove boundedness.
+    However, note that the derivative of the Lyapunov function in \eqref{eq:handpos_def_V_omega_dot_strict} has the following form
+    \begin{equation}
+        \dot{V}_{\bs{\omega}} \leq k \norm{\widehat{\bs{\omega}}}^2 + G(\cdot),
+    \end{equation}
+    where $k$ is a positive constant and $G(\cdot)$ grows at most linearly with $\norm{\widehat{\bs{\omega}}}$.
+    We can therefore conclude that the dynamics of $q$ and $r$ are forward complete \cite{angeli_forward_1999}.
+
+    For $t \geq T$, $\dot{V}_{\bs{\omega}}$ has the following form
+    \begin{equation}
+        \dot{V}_{\bs{\omega}} \leq -\alpha_yq^2 - \alpha_zr^2 + G(\cdot)% \leq -2\min\left\{\alpha_y, \alpha_z\right\}V + G(\cdot).
+    \end{equation}
+    For sufficiently large angular velocities, the quadratic term will dominate the linear term $G(\cdot)$, and $q$ and $r$ will remain bounded.
+    
+    The angular rate dynamics are thus ultimately bounded.        
+\end{proof}
+
+\section{Conclusions}
+\label{sec:handpos_def_conclusion}
+In this section, we extended the hand position concept to 6\gls{dof} underactuated underwater vehicles.
+By choosing the hand position as the output of our system, we could apply output feedback linearization to simplify the underactuated 6\gls{dof} vehicle dynamics to a double integrator without introducing any singularities.
+Then, we introduced the sufficient conditions under which the internal states are ultimately bounded.
+
+As mentioned in the Introduction, the hand position concept and its ability to transform a nonlinear underactuated model to a double integrator without singularities present an opportunity to utilize numerous control strategies that could otherwise not be used on nonholonomic or underactuated vehicles.
+In the upcoming chapters, we will present examples of such controllers.
+

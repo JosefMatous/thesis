@@ -1,0 +1,76 @@
+%% Creator: Inkscape inkscape 0.92.5, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'waypoints.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{339bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.69690265)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{waypoints.pdf}}%
+    \put(0.09218296,0.22964956){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'05"N\end{tabular}}}}%
+    \put(0.09218296,0.37900442){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'06"N\end{tabular}}}}%
+    \put(0.09218296,0.52835996){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'07"N\end{tabular}}}}%
+    \put(0.07448385,0.29977898){\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Latitude\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{waypoints.pdf}}%
+    \put(0.44265951,0.05014757){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'20"W\end{tabular}}}}%
+    \put(0.66754248,0.05014757){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'18"W\end{tabular}}}}%
+    \put(0.55309779,0.00958695){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Longitude\end{tabular}}}}%
+    \put(0.51659336,0.65873894){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textbf{\textbf{Desired path}}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{waypoints.pdf}}%
+    \put(0.31355243,0.11993695){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small 50 ft \end{tabular}}}}%
+    \put(0.31355243,0.15876438){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small 20 m \end{tabular}}}}%
+    \put(0.31154707,0.56076623){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{1}\end{tabular}}}}%
+    \put(0.29978487,0.28986062){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{2}\end{tabular}}}}%
+    \put(0.4943238,0.1543124){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{3}\end{tabular}}}}%
+    \put(0.73372313,0.18790824){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{4}\end{tabular}}}}%
+    \put(0.74655833,0.35734308){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{5}\end{tabular}}}}%
+    \put(0.64086084,0.55920687){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{6}\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

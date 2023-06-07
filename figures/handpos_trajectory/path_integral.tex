@@ -1,0 +1,48 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.10588,0.61961,0.46667}%
+\definecolor{mycolor2}{rgb}{0.91373,0.37255,0.00784}%
+\definecolor{mycolor3}{rgb}{0.45882,0.43529,0.70196}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.76\textwidth,
+height=18mm,
+at={(0,0)},
+scale only axis,
+xmin=0,
+xmax=350,
+xlabel style={font=\color{white!15!black},yshift=1mm},
+xlabel={$t$ [s]},
+ymin=-500,
+ymax=100,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\tilde{\xi}_I$ [m$\cdot$s]},
+xmajorgrids,
+ymajorgrids,
+axis background/.style={fill=white},
+title style={font=\bfseries,yshift=-2.5mm},
+title={Integral error},
+legend style={legend cell align=left, align=left, draw=white!15!black, at={(0.98,0.09)}, anchor=south east},
+legend columns=3
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{path_integral-1.tsv};
+\addlegendentry{$x$}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{path_integral-2.tsv};
+\addlegendentry{$y$}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{path_integral-3.tsv};
+\addlegendentry{$z$}
+
+\end{axis}
+
+\end{tikzpicture}%

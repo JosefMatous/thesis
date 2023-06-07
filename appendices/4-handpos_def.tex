@@ -1,0 +1,38 @@
+\chapter{Hand Position}
+\label{app:handpos}
+
+\section{The Coefficients in \eqref{eq:handpos_def_V_omega_dot}}
+\label{app:V_omega_dot}
+\begin{subequations}
+    \begin{align}
+        a_y &= \frac{d_{35}m_{55} - d_{55}m_{35} + hd_{33}m_{55} - hd_{53}m_{35}}{h(m_{33}m_{55}-m_{35}^2)},\\
+        a_z &= \frac{d_{66}m_{26}-d_{26}m_{66} + hd_{22}m_{66} - hd_{62}m_{26}}{h(m_{22}m_{66}- m_{26}^2)},\\
+        \begin{split}
+            a_{xyz} &= \frac{m_{35}m_{44} - m_{26}m_{55} - m_{35}m_{66} + hm_{26}m_{35} + hm_{22}m_{55}}{h(m_{33}m_{55}-m_{35}^2)}\\
+            &\hphantom{=}\;- \frac{m_{26}m_{55} - m_{26}m_{44} + m_{35}m_{66} + hm_{26}m_{35} + hm_{33}m_{66}}{h(m_{22}m_{66}- m_{26}^2)},
+        \end{split}\\
+        a_{xy} &= -\frac{m_{26}m_{35} + m_{22}m_{55}}{h(m_{33}m_{55}- m_{35}^2)},\\
+        a_{xz} &= -\frac{m_{26}m_{35} + m_{33}m_{66}}{h(m_{22}m_{66}- m_{26}^2)},\\
+        a_{ye} &= \frac{m_{11}m_{55} - m_{35}^2 + hm_{11}m_{35} - hm_{33}m_{35}}{h(m_{33}m_{55}- m_{35}^2)},\\
+        a_{ze} &= \frac{m_{11}m_{66} - m_{26}^2 - hm_{11}m_{26} + hm_{22}m_{26}}{h(m_{22}m_{66}- m_{26}^2)},\\
+        a_{ey} &= \frac{m_{11}m_{35} - m_{33}m_{35}}{h(m_{33}m_{55}- m_{35}^2)},\\
+        a_{ez} &= \frac{m_{11}m_{26} - m_{22}m_{26}}{h(m_{22}m_{66}- m_{26}^2)},\\
+        a_{ley} &= \frac{d_{53}m_{35} - d_{33}m_{55}}{h(m_{33}m_{55}- m_{35}^2)},\\
+        a_{lez} &= \frac{d_{22}m_{66} - d_{62}m_{26}}{h(m_{22}m_{66}- m_{26}^2)}.
+    \end{align}
+\end{subequations}
+
+\subsection{Components of the Jacobian Matrix in \eqref{eq:jacobian}}
+\label{app:jacobian}
+\begin{subequations}
+    \begin{align}
+        \Xi_{23}\! &= \!\frac{d_{53}m_{35} - d_{33}m_{55} + \norm{\xi_{2_{d,r}}}m_{35}\left(m_{11}-m_{33}\right)}{h\left(m_{33}m_{55}-{m_{35}}^2\right)} + \frac{k_{d}}{h}, \\
+        \Xi_{32}\! &= \!\frac{d_{22}m_{66} - d_{62}m_{26} + \norm{\xi_{2_{d,r}}}m_{26}\left(m_{11}-m_{22}\right)}{h\left(m_{22}m_{66}-{m_{26}}^2\right)} + \frac{k_{d}}{h}, \\
+        \Delta_1\! &= \!b_x, \\
+        \Delta_2\! &= \!\frac{\norm{\xi_{2_{d,r}}}}{h}\!\!\left(a_y-\frac{m_{35}\norm{\xi_{2_{d,r}}}\left(m_{11}-m_{33}\right)}{m_{33}m_{55}-{m_{35}}^2}\right), \\
+        \Delta_3\! &= \!\frac{\norm{\xi_{2_{d,r}}}}{h}\!\!\left(a_z+\frac{m_{26}\norm{\xi_{2_{d,r}}}\left(m_{11}-m_{22}\right)}{m_{22}m_{66}-{m_{26}}^2}\right), \\
+        \Omega_1\! &= \!a_x, \\
+        \Omega_2\! &= \!a_y \!+\! \norm{\xi_{2_{d,r}}}\!\left(a_{ye} \!+\! \frac{1}{h}\right)\! + \frac{d_{35}m_{55}-d_{55}m_{35}}{h\!\left(m_{33}m_{55}-{m_{35}}^2\right)}, \\
+        \Omega_3\! &= \!a_z \!+\! \norm{\xi_{2_{d,r}}}\!\left(a_{ze} \!+\! \frac{1}{h}\right)\! + \frac{d_{26}m_{66}-d_{66}m_{26}}{h\!\left(m_{22}m_{66}-{m_{26}}^2\right)}.
+    \end{align}
+\end{subequations}

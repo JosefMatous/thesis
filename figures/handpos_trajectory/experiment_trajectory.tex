@@ -1,0 +1,58 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.10588,0.61961,0.46667}%
+\definecolor{mycolor2}{rgb}{0.91373,0.37255,0.00784}%
+\definecolor{mycolor3}{rgb}{0.45882,0.43529,0.70196}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.4\textwidth,
+height=60mm,
+at={(0\textwidth,0mm)},
+scale only axis,
+plot box ratio=1.007 1 1.042,
+xmin=-20,
+xmax=40.4020387912503,
+tick align=outside,
+xlabel style={font=\color{white!15!black},yshift=2mm},
+xlabel={$y$ [m]},
+ymin=-60,
+ymax=0,
+ylabel style={font=\color{white!15!black},yshift=2mm},
+ylabel={$x$ [m]},
+z dir=reverse,
+zmin=-0.5,
+zmax=2,
+zlabel style={font=\color{white!15!black}},
+zlabel={$z$ [m]},
+view={69.3}{38.7},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.5mm},
+title={Trajectory},
+axis x line*=bottom,
+axis y line*=left,
+axis z line*=left,
+xmajorgrids,
+ymajorgrids,
+zmajorgrids,
+legend style={at={(0.01,0.72)}, anchor=south west, legend cell align=left, align=left, draw=white!15!black, font=\footnotesize}
+]
+\addplot3 [color=mycolor1, line width=1.0pt]
+ table[] {experiment_trajectory-1.tsv};
+ \addlegendentry{Hand position}
+
+\addplot3 [color=mycolor2, dashed, mark=x, mark options={scale=1.5, solid}, line width=1.5pt]
+ table[] {experiment_trajectory-2.tsv};
+ \addlegendentry{Reference}
+
+\addplot3[-Straight Barb, color=mycolor3, line width=1.2pt, quiver={u=\thisrow{u}, v=\thisrow{v}, w=\thisrow{w}, every arrow/.append style={-{Straight Barb[angle'=35, scale={1.2}]}}}]
+ table[] {experiment_trajectory-3.tsv};
+\addlegendentry{Vehicle orientation}
+
+\end{axis}
+\end{tikzpicture}%
