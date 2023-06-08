@@ -272,7 +272,7 @@
            id="tspan1278-4-2-7"
            x="18.647898"
            y="21.122734"
-           style="font-size:3.52777px;stroke-width:0.264583">$\gamma(s)$</tspan></text>
+           style="font-size:3.52777px;stroke-width:0.264583">$\mat{p}_p(s)$</tspan></text>
       <text
          xml:space="preserve"
          style="font-size:3.52777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.264583"
@@ -283,7 +283,7 @@
            id="tspan1278-4-2-4-7"
            x="16.408545"
            y="10.29343"
-           style="font-size:3.52777px;stroke-width:0.264583">$x_1$</tspan></text>
+           style="font-size:3.52777px;stroke-width:0.264583">$\mat{x}_1$</tspan></text>
       <text
          xml:space="preserve"
          style="font-size:3.52777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.264583"
@@ -294,7 +294,7 @@
            id="tspan1278-8"
            x="13.013403"
            y="10.001193"
-           style="font-size:3.52777px;stroke-width:0.264583">$\eta$</tspan></text>
+           style="font-size:3.52777px;stroke-width:0.264583">$\mat{p}$</tspan></text>
       <text
          xml:space="preserve"
          style="font-size:3.52777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.264583"
@@ -305,7 +305,7 @@
            id="tspan1278-4-2-7-6"
            x="28.968578"
            y="17.237165"
-           style="font-size:3.52777px;stroke-width:0.264583">$R_{\gamma}e_1$</tspan></text>
+           style="font-size:3.52777px;stroke-width:0.264583">$\mat{R}_{p}\mat{e}_1$</tspan></text>
       <text
          xml:space="preserve"
          style="font-size:3.52777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.264583"

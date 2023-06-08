@@ -54,10 +54,10 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{straight_line.pdf}}%
-    \put(0.30683259,0.02484734){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\gamma(s)$\end{tabular}}}}%
-    \put(0.24603291,0.31886893){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_1$\end{tabular}}}}%
-    \put(0.15385294,0.32680334){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\eta$\end{tabular}}}}%
-    \put(0.58704479,0.13034268){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{\gamma}e_1$\end{tabular}}}}%
+    \put(0.30683259,0.02484734){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_p(s)$\end{tabular}}}}%
+    \put(0.24603291,0.31886893){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{x}_1$\end{tabular}}}}%
+    \put(0.15385294,0.32680334){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}$\end{tabular}}}}%
+    \put(0.58704479,0.13034268){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{R}_{p}\mat{e}_1$\end{tabular}}}}%
     \put(0.32305872,0.21964915){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\begin{bmatrix} 0 \\ \widetilde{y} \\ \widetilde{z}\end{bmatrix}$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

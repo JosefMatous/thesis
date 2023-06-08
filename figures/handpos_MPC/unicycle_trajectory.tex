@@ -1,0 +1,197 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.24220,0.15040,0.66030}%
+\definecolor{mycolor2}{rgb}{0.27800,0.35560,0.97770}%
+\definecolor{mycolor3}{rgb}{0.15400,0.59020,0.92180}%
+\definecolor{mycolor4}{rgb}{0.07040,0.74570,0.72580}%
+\definecolor{mycolor5}{rgb}{0.50440,0.79930,0.34800}%
+\definecolor{mycolor6}{rgb}{0.98710,0.73475,0.24375}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=65mm,
+height=27.698mm,
+at={(0mm,0mm)},
+scale only axis,
+xmin=-28.1494884129424,
+xmax=99.9606025384325,
+xlabel style={font=\color{white!15!black}, yshift=1.5mm},
+xlabel={$x$-position},
+ymin=-21.1599330605055,
+ymax=33.4310056449558,
+ylabel style={font=\color{white!15!black}, yshift=-2.5mm},
+ylabel={$y$-position},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.75mm},
+title={Trajectory},
+legend style={at={(0.98,0.01)}, anchor=south east, legend cell align=left, align=left, draw=white!15!black},
+legend columns=2,
+]
+\addplot [color=black, line width=1.2pt]
+  table[]{unicycle_trajectory-1.tsv};
+\addlegendentry{Reference path~}
+
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{unicycle_trajectory-2.tsv};
+\addlegendentry{Vehicles}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{unicycle_trajectory-3.tsv};
+%\addlegendentry{Vehicle 2}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{unicycle_trajectory-4.tsv};
+%\addlegendentry{Vehicle 3}
+
+\addplot [color=mycolor4, line width=1.0pt]
+  table[]{unicycle_trajectory-5.tsv};
+%\addlegendentry{Vehicle 4}
+
+\addplot [color=mycolor5, line width=1.0pt]
+  table[]{unicycle_trajectory-6.tsv};
+%\addlegendentry{Vehicle 5}
+
+\addplot [color=mycolor6, line width=1.0pt]
+  table[]{unicycle_trajectory-7.tsv};
+%\addlegendentry{Vehicle 6}
+
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor1, forget plot]
+table[] {unicycle_trajectory-8.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-9.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-10.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-11.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor1, forget plot]
+table[] {unicycle_trajectory-12.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-13.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-14.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-15.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor2, forget plot]
+table[] {unicycle_trajectory-16.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-17.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-18.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-19.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor2, forget plot]
+table[] {unicycle_trajectory-20.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-21.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-22.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-23.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor3, forget plot]
+table[] {unicycle_trajectory-24.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-25.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-26.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-27.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor3, forget plot]
+table[] {unicycle_trajectory-28.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-29.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-30.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-31.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor4, forget plot]
+table[] {unicycle_trajectory-32.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-33.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-34.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-35.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor4, forget plot]
+table[] {unicycle_trajectory-36.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-37.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-38.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-39.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor5, forget plot]
+table[] {unicycle_trajectory-40.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-41.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-42.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-43.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor5, forget plot]
+table[] {unicycle_trajectory-44.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-45.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-46.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-47.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor6, forget plot]
+table[] {unicycle_trajectory-48.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-49.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-50.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-51.tsv};
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor6, forget plot]
+table[] {unicycle_trajectory-52.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-53.tsv}--cycle;
+
+\addplot[area legend, draw=none, fill=black, forget plot]
+table[] {unicycle_trajectory-54.tsv}--cycle;
+\addplot [color=black, line width=1.5pt, forget plot]
+  table[]{unicycle_trajectory-55.tsv};
+\end{axis}
+
+\end{tikzpicture}%

@@ -1,0 +1,100 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.24220,0.15040,0.66030}%
+\definecolor{mycolor2}{rgb}{0.27800,0.35560,0.97770}%
+\definecolor{mycolor3}{rgb}{0.15400,0.59020,0.92180}%
+\definecolor{mycolor4}{rgb}{0.07040,0.74570,0.72580}%
+\definecolor{mycolor5}{rgb}{0.50440,0.79930,0.34800}%
+\definecolor{mycolor6}{rgb}{0.98710,0.73475,0.24375}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=65mm,
+height=27.698mm,
+at={(0mm,0mm)},
+scale only axis,
+xmin=-27.7883619793255,
+xmax=79.9931504535794,
+xlabel style={font=\color{white!15!black}, yshift=1.5mm},
+xlabel={$x$-position},
+ymin=-15.4431607663429,
+ymax=30.4852574604193,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y$-position},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.75mm},
+title={Trajectory},
+legend style={at={(0.97,0.03)}, anchor=south east, legend cell align=left, align=left, draw=white!15!black},
+]
+\addplot [color=black, line width=1.2pt]
+  table[]{ASV_trajectory-reference.tsv};
+\addlegendentry{Reference path}
+
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle1.tsv};
+\addlegendentry{Vehicles}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle2.tsv};
+%\addlegendentry{Vehicle 2}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle3.tsv};
+%\addlegendentry{Vehicle 3}
+
+\addplot [color=mycolor4, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle4.tsv};
+%\addlegendentry{Vehicle 4}
+
+\addplot [color=mycolor5, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle5.tsv};
+%\addlegendentry{Vehicle 5}
+
+\addplot [color=mycolor6, line width=1.0pt]
+  table[]{ASV_trajectory-vehicle6.tsv};
+%\addlegendentry{Vehicle 6}
+
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor1, forget plot]
+table[] {ASV_trajectory-vehicle1polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor1, forget plot]
+table[] {ASV_trajectory-vehicle1polygon2.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor2, forget plot]
+table[] {ASV_trajectory-vehicle2polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor2, forget plot]
+table[] {ASV_trajectory-vehicle2polygon2.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor3, forget plot]
+table[] {ASV_trajectory-vehicle3polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor3, forget plot]
+table[] {ASV_trajectory-vehicle3polygon2.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor4, forget plot]
+table[] {ASV_trajectory-vehicle4polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor4, forget plot]
+table[] {ASV_trajectory-vehicle4polygon2.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor5, forget plot]
+table[] {ASV_trajectory-vehicle5polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor5, forget plot]
+table[] {ASV_trajectory-vehicle5polygon2.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor6, forget plot]
+table[] {ASV_trajectory-vehicle6polygon1.tsv}--cycle;
+
+\addplot[area legend, line width=1.0pt, draw=black, fill=mycolor6, forget plot]
+table[] {ASV_trajectory-vehicle6polygon2.tsv}--cycle;
+\end{axis}
+
+\end{tikzpicture}%

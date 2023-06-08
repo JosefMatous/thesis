@@ -20,6 +20,8 @@
 
 \usepackage{siunitx}
 \usepackage{xfrac}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \captionsetup[sub]{font=footnotesize}
 
@@ -27,12 +29,15 @@
 \definecolor{emerald}{RGB}{0,128,0}
 \definecolor{navy}{RGB}{0,0,128}
 \definecolor{maroon}{RGB}{128,0,0}
+\definecolor{axred}{RGB}{221, 0, 0}
+\definecolor{axgreen}{RGB}{0, 172, 0}
+\definecolor{axblue}{RGB}{0, 0, 255}
 
-\newtheorem{asm}{Assumption}
-\newtheorem{prop}{Proposition}
+\newtheorem{asm}{Assumption}[chapter]
+\newtheorem{prop}{Proposition}[chapter]
 \newtheorem*{rmk}{Remark}
-\newtheorem{lemma}{Lemma}
-\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{innercustomasm}{Assumption} % assumption with custom number
 \newenvironment{customasm}[1]
   {\renewcommand\theinnercustomasm{#1}\innercustomasm}
@@ -45,7 +50,7 @@
 \newenvironment{customthm}[1]
   {\renewcommand\theinnercustomthm{#1}\innercustomthm}
   {\endinnercustomthm}
-\newtheorem{dfn}{Definition}
+\newtheorem{dfn}{Definition}[chapter]
 
 \newcommand{\figref}[1]{Figure~\ref{#1}} % unify references to figures
 
@@ -77,11 +82,14 @@
 \newcommand{\rot}{\mat{R}\left(\theta, \psi\right)}
 \newcommand{\trans}{\mat{T}\left(\theta\right)}
 \newcommand{\transform}{\mat{J}\left(\pose\right)}
+\newcommand{\coef}[1]{\mathsf{#1}}
+\newcommand{\coefm}[1]{\boldsymbol{\mathsf{#1}}}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\diag}{diag}
 \DeclareMathOperator*{\blkdiag}{blkdiag}
 \DeclareMathOperator*{\rank}{rank}
+\DeclareMathOperator*{\opt}{\mathrm{minimize}}
 
 \title{Cooperative Control of Formations of Underwater Vehicles}
 \shorttitle{Cooperative Control of Formations of Underwater Vehicles}
@@ -100,6 +108,7 @@
 \addbibresource{references-distr_NSB.bib}
 \addbibresource{references-background.bib}
 \addbibresource{references-handpos.bib}
+\addbibresource{references-MPC.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
 

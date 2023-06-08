@@ -46,7 +46,7 @@ Note that the three-dimensional Euler-Lagrange-like system used in \cite{li_hand
 Furthermore, the model in \cite{li_hand-position-rigidity-3d_2021} has five \acrfullpl{dof}: three position coordinates, pitch angle, and yaw angle.
 The use of Euler angles inherently introduces singularities into the system.
 
-The goal of this paper is thus to further extend the hand position concept to AUVs moving in three dimensions.
+The goal of this chapter is thus to further extend the hand position concept to AUVs moving in three dimensions.
 We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
 Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal states, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
 
@@ -301,9 +301,9 @@ Consider then the following Lyapunov function candidate
 Let us define $\widehat{\bs{\omega}} = \inlinevector{q, r}$.
 The following inequality holds for the derivative of $V_{\bs{\omega}}$ along the trajectories of \eqref{eq:handpos_def_hand_position_dynamics}
 \begin{align}
-    \dot{V}_{\bs{\omega}} \leq& -a_yq^2 - a_zr^2 + \norm{\bvel_e}\norm{\widehat{\bs{\omega}}}\left(\frac{\norm{\bs{\omega}}}{h} + a_e\right) + a_{xyz}pqr \label{eq:handpos_def_V_omega_dot}\\
-    & + a_{xy}\bvels_{e, 2}pq + a_{xz}\bvels_{e, 3}pr + a_{ye}\bvels_{e, 1}q^2 + a_{ze}\bvels_{e, 1}r^2 \nonumber \\
-    & + a_{ey}\bvels_{e, 1}\bvels_{e, 3}q + a_{ez}\bvels_{e, 1}\bvels_{e, 2}q + \norm{\widehat{\bs{\omega}}}\mu_{\max}, \nonumber
+    \dot{V}_{\bs{\omega}} \leq& -a_yq^2 - a_zr^2 + \norm{\bvel_e}\norm{\widehat{\bs{\omega}}}\left(\frac{\norm{\bs{\omega}}}{h} + a_e\right) + a_{xyz}pqr + a_{xy}\bvels_{e, 2}pq \label{eq:handpos_def_V_omega_dot}\\
+    & + a_{xz}\bvels_{e, 3}pr + a_{ye}\bvels_{e, 1}q^2 + a_{ze}\bvels_{e, 1}r^2 + a_{ley}\bvels_{e, 3}q \nonumber \\
+    & + a_{lez}\bvels_{e, 2}r + a_{ey}\bvels_{e, 1}\bvels_{e, 3}q + a_{ez}\bvels_{e, 1}\bvels_{e, 2}r + \norm{\widehat{\bs{\omega}}}\mu_{\max}, \nonumber
 \end{align}
 where $\mu_{\max}$ is the largest norm of the control input.
 The remaining coefficients are shown in Appendix~\ref{app:V_omega_dot}.

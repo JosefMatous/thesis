@@ -1,0 +1,93 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.24220,0.15040,0.66030}%
+\definecolor{mycolor2}{rgb}{0.27800,0.35560,0.97770}%
+\definecolor{mycolor3}{rgb}{0.15400,0.59020,0.92180}%
+\definecolor{mycolor4}{rgb}{0.07040,0.74570,0.72580}%
+\definecolor{mycolor5}{rgb}{0.50440,0.79930,0.34800}%
+\definecolor{mycolor6}{rgb}{0.98710,0.73475,0.24375}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=65mm,
+height=13mm,
+at={(0mm,14mm)},
+scale only axis,
+xmin=0,
+xmax=50,
+xtick={0,5,10,15,20,25,30,35,40,45,50},
+xticklabels={\empty},
+ymin=-20.3161212520554,
+ymax=0.963323310814234,
+ylabel style={font=\color{white!15!black}},
+ylabel={$x$-position},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2.25mm},
+title={Path-following errors},
+axis x line*=bottom,
+axis y line*=left
+]
+\addplot [color=mycolor1, line width=1.0pt, forget plot]
+  table[]{ASV_errors-1x.tsv};
+\addplot [color=mycolor2, line width=1.0pt, forget plot]
+  table[]{ASV_errors-2x.tsv};
+\addplot [color=mycolor3, line width=1.0pt, forget plot]
+  table[]{ASV_errors-3x.tsv};
+\addplot [color=mycolor4, line width=1.0pt, forget plot]
+  table[]{ASV_errors-4x.tsv};
+\addplot [color=mycolor5, line width=1.0pt, forget plot]
+  table[]{ASV_errors-5x.tsv};
+\addplot [color=mycolor6, line width=1.0pt, forget plot]
+  table[]{ASV_errors-6x.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=65mm,
+height=12mm,
+at={(0mm,0mm)},
+scale only axis,
+xmin=0,
+xmax=50,
+xlabel style={font=\color{white!15!black}},
+xlabel={Time},
+ymin=-1.45386617375344,
+ymax=13.4253597741235,
+ylabel style={font=\color{white!15!black}},
+ylabel={$y$-position},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+legend style={at={(0.99,1.85)}, anchor=north east, legend cell align=left, align=left, draw=white!15!black},
+legend columns=2
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{ASV_errors-1y.tsv};
+\addlegendentry{Vehicle 1~}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{ASV_errors-2y.tsv};
+\addlegendentry{Vehicle 2}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{ASV_errors-3y.tsv};
+\addlegendentry{Vehicle 3}
+
+\addplot [color=mycolor4, line width=1.0pt]
+  table[]{ASV_errors-4y.tsv};
+\addlegendentry{Vehicle 4}
+
+\addplot [color=mycolor5, line width=1.0pt]
+  table[]{ASV_errors-5y.tsv};
+\addlegendentry{Vehicle 5}
+
+\addplot [color=mycolor6, line width=1.0pt]
+  table[]{ASV_errors-6y.tsv};
+\addlegendentry{Vehicle 6}
+
+\end{axis}
+\end{tikzpicture}%

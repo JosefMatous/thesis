@@ -9,7 +9,7 @@ In \cite{fossen_uniform_2014}, it has been shown that the structure of proportio
 \Acrlong{usges} has been studied, \emph{e.g.,} in \cite{loria_cascaded_2005,pettersen_lyapunov_2017}.
 In these works, \gls{usges} is defined as follows.
 
-\begin{dfn}
+\begin{dfn}[USGES]
     Consider a nonlinear system given by the following set of \glspl{ode}
     \begin{align}
         \dot{\mat{x}} &= f(t, \mat{x}), &
@@ -39,7 +39,7 @@ In these works, \gls{usges} is defined as follows.
 In this section, we restate Theorem 5 and Proposition 9 from \cite{pettersen_lyapunov_2017}.
 
 Theorem 5 introduces sufficient conditions for \acrfull{usges} of nonlinear systems.
-\begin{customthm}{5 \cite{pettersen_lyapunov_2017}}
+\$1{theorem}[Theorem 5. \cite{pettersen_lyapunov_2017}]
     \label{thm:background_USGES}
     Consider the system given in \eqref{eq:background_USGES_ODE}.
     If for any $\Delta > 0$, there exist a continuously differentiable Lyapunov function $V_{\Delta} : \mathbb{R}_{\geq 0} \times \ball{\Delta} \mapsto \mathbb{R}_{\geq 0}$ and positive constants $k_{1_\Delta}$, $k_{2_\Delta}$, $k_{3_\Delta}$, and $a$, such that $\forall \mat{x} \in \ball{\Delta}$, $\forall t \geq 0$
@@ -51,10 +51,10 @@ Theorem 5 introduces sufficient conditions for \acrfull{usges} of nonlinear syst
         \end{align}
     \end{subequations}
     then the origin of \eqref{eq:background_USGES_ODE} is \glspl{usges}.
-\end{customthm}
+\$1{theorem}
 
 Proposition 9 then introduces sufficient conditions for \acrfull{usges} of nonlinear cascaded systems.
-\begin{customprop}{9 \cite{pettersen_lyapunov_2017}}
+\begin{prop}[Proposition 9. \cite{pettersen_lyapunov_2017}]
     \label{prop:background_cascade}
     Consider the following cascaded nonlinear time-varying system
     \begin{subequations}
@@ -91,4 +91,4 @@ Proposition 9 then introduces sufficient conditions for \acrfull{usges} of nonli
             \label{eq:background_USGES_cascade_assumption_2}
         \end{equation}
     \end{enumerate}
-\end{customprop}
+\end{prop}
