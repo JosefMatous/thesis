@@ -54,12 +54,12 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{path.pdf}}%
-    \put(0.46542974,0.18191707){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\tilde{x}_1$\end{tabular}}}}%
+    \put(0.46542974,0.18191707){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\tilde{\mat{x}}_1$\end{tabular}}}}%
     \put(0.24858201,0.10342379){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\sigma$\end{tabular}}}}%
-    \put(0.58497658,0.02312544){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\gamma(s)$\end{tabular}}}}%
-    \put(0.86238432,0.1331311){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\frac{\partial \gamma(s)}{\partial s}$\end{tabular}}}}%
-    \put(0.2648565,0.29130145){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_1$\end{tabular}}}}%
-    \put(0.15857265,0.29783503){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\eta$\end{tabular}}}}%
+    \put(0.58497658,0.02312544){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}_p(s)$\end{tabular}}}}%
+    \put(0.86238432,0.1331311){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\frac{\partial \mat{p}_p(s)}{\partial s}$\end{tabular}}}}%
+    \put(0.2648565,0.29130145){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{x}_1$\end{tabular}}}}%
+    \put(0.15857265,0.29783503){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\mat{p}$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{path.pdf}}%
   \end{picture}%
 \endgroup%

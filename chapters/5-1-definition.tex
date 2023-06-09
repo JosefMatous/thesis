@@ -191,10 +191,10 @@ We assume that the goal of the control algorithm is to track a desired trajector
 Although this assumption seems restrictive, we will demonstrate that many controllers fall into this category.
 
 Let $\bs{\xi}_{1, d}$ represent the desired trajectory, and let $\bs{\xi}_{2, d} = \dot{\bs{\xi}}_{1, d}$.
-We assume that there exist $\bs{\xi}_{2_d, \max}$ and $\dot{\bs{\xi}}_{2_d, \max}$ such that
+We assume that there exist $\bs{\xi}_{2, d, \max}$ and $\dot{\bs{\xi}}_{2, d, \max}$ such that
 \begin{align}
-    \norm{\ocean} &< \norm{\bs{\xi}_{2, d}} \leq \bs{\xi}_{2_d, \max}, &
-    \norm{\dot{\bs{\xi}}_{2, d}} \leq \dot{\bs{\xi}}_{2_d, \max}.
+    \norm{\ocean} &< \norm{\bs{\xi}_{2, d}} \leq \bs{\xi}_{2, d, \max}, &
+    \norm{\dot{\bs{\xi}}_{2, d}} \leq \dot{\bs{\xi}}_{2, d, \max}.
 \end{align}
 Furthermore, we define the following error states
 \begin{subequations}

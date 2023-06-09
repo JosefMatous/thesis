@@ -6,6 +6,7 @@
 The chapter considers the problem of formation path-following of multiple vehicles and proposes a solution based on combining distributed model predictive control with parametrizations of the trajectories of the vehicles using polynomial splines. Introducing such parametrization leads indeed to two potential benefits: a) reducing the number of optimization variables, and b) enabling enforcing constraints on the vehicles in a computationally efficient way. Moreover, the proposed solution formulates the formation path-following problem as a distributed optimization problem that may then be solved using the alternating direction method of multipliers (ADMM).
 The proposed approach is applicable to all vehicles that can be modeled as differentially flat systems.
 In this chapter, we present numerical simulations with marine vehicles and differential drive robots.
+The contents of this chapter are based on \cite{matous_MPC_2022}.
 
 \section{Introduction}
     
@@ -36,29 +37,6 @@ Finally, Section~\ref{sec:conclusion} gives some concluding remarks.
 
 \section{Problem Description}
 \label{sec:problem-description}
-
-\begin{figure}[b]
-    \centering
-    \begin{subfigure}[t]{0.24\textwidth}
-        \def\svgwidth{\textwidth}
-        \import{figures/handpos_MPC/}{path.pdf_tex}
-        
-        \caption{The inertial coordinate frame $(X,Y)$, and the path-tangential frame $(X^p,Y^p)$.}
-        \label{fig:path}
-        
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\textwidth}
-        \def\svgwidth{\textwidth}
-        \import{figures/handpos_MPC/}{formation.pdf_tex}
-        
-        \caption{Example of a formation. In this example, the relative positions are $\Delta\bm{p}_1^p = \inlinevector{0, a}, \Delta\bm{p}_2^p = -\Delta\bm{p}_1^p$, where $a$ is some positive number.}
-        \label{fig:formation}
-        
-    \end{subfigure}
-    \caption{Illustration of the path-following problem.}
-    \label{fig:path-following}
-    %
-\end{figure}
 
 In this section, we first introduce the assumptions on the model of the vehicles.
 Then, we define the objective of formation path-following and pose it as an optimization problem.

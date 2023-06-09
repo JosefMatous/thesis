@@ -30,33 +30,33 @@ Finally, Section~\ref{sec:handpos_trajectory_conclusions} presents some concludi
 \section{Trajectory Tracking}
 \label{sec:handpos_trajectory_trajectory_tracking}
 In this section, we propose a control law for tracking a predefined trajectory.
-Let $\xi_{1_d}$ represent the desired trajectory, and let $\xi_{2_d} = \dot{\xi}_{1_d}$.
-We assume that there exist $\xi_{2_d, \max}$ and $\dot{\xi}_{2_d, \max}$ such that
+Let $\bs{\xi}_{1, d}$ represent the desired trajectory, and let $\bs{\xi}_{2, d} = \dot{\bs{\xi}}_{1, d}$.
+We assume that there exist $\bs{\xi}_{2, d, \max}$ and $\dot{\bs{\xi}}_{2, d, \max}$ such that
 \begin{align}
-    \norm{V_c} &< \norm{\xi_{2_d}} \leq \xi_{2_d, \max}, &
-    \norm{\dot{\xi}_{2_d}} \leq \dot{\xi}_{2_d, \max}.
+    \norm{\ocean} &< \norm{\bs{\xi}_{2, d}} \leq \bs{\xi}_{2, d, \max}, &
+    \norm{\dot{\bs{\xi}}_{2, d}} \leq \dot{\bs{\xi}}_{2, d, \max}.
 \end{align}
 
-The goal of trajectory tracking is to control the vehicle such that $x_1$ converges to $\xi_{1_d}$.
+The goal of trajectory tracking is to control the vehicle such that $\mat{x}_1$ converges to $\bs{\xi}_{1, d}$.
 To achieve the goal, we define the following error states
 \begin{subequations}
     \begin{align}
-        \tilde{x}_1 &= x_1 - \xi_{1_d}, \\
-        \tilde{x}_2 &= x_2 - \xi_{2_d}, \\
-        \tilde{x}_I &= \int_{0}^t \tilde{x}_1(s)\, {\rm d}s,
+        \tilde{\mat{x}}_1 &= \mat{x}_1 - \bs{\xi}_{1, d}, \\
+        \tilde{\mat{x}}_2 &= \mat{x}_2 - \bs{\xi}_{2, d}, \\
+        \tilde{\mat{x}}_I &= \int_{0}^t \tilde{\mat{x}}_1(s)\, {\rm d}s,
     \end{align} \label{eq:handpos_trajectory_error_states}
 \end{subequations}
 and choose the following PID controller
 \begin{equation}
-    \mu = -k_p \tilde{x}_1 - k_d \tilde{x}_2 - k_I \tilde{x}_I + \dot{\xi}_{2_d}, \label{eq:handpos_trajectory_external_controller}
+    \bs{\mu} = -k_p \tilde{\mat{x}}_1 - k_d \tilde{\mat{x}}_2 - k_I \tilde{\mat{x}}_I + \dot{\bs{\xi}}_{2, d}, \label{eq:handpos_trajectory_external_controller}
 \end{equation}
 
 \noindent where $k_p$, $k_d$, and $k_I$ are positive gains chosen such that the matrix
 \begin{equation}
-    H_{\xi}
+    \mat{H}_{\xi}
     =
     \begin{bmatrix}
-        O_{3 \times 3} & I_{3 \times 3} & O_{3 \times 3} \\ O_{3 \times 3} & O_{3 \times 3} & I_{3 \times 3} \\ -k_I I_{3 \times 3} & -k_p I_{3 \times 3} & -k_d I_{3 \times 3}
+        \mat{O}_{3 \times 3} & \mat{I}_{3} & \mat{O}_{3 \times 3} \\ \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{I}_{3} \\ -k_I \mat{I}_{3} & -k_p \mat{I}_{3} & -k_d \mat{I}_{3}
     \end{bmatrix} \label{eq:handpos_trajectory_H_xi}
 \end{equation}
 is Hurwitz.
@@ -66,88 +66,88 @@ In this section, we investigate the closed-loop dynamics of the system \eqref{eq
 We begin by defining an additional change of coordinates:
 \begin{subequations}
     \begin{align}
-        \tilde{\xi}_1 &= \tilde{x}_1, \\
-        \tilde{\xi}_2 &= \tilde{x}_2 + V_c, \\
-        \tilde{\xi}_I &= \tilde{x}_I - \frac{k_d}{k_I}V_c.
+        \tilde{\bs{\xi}}_1 &= \tilde{\mat{x}}_1, \\
+        \tilde{\bs{\xi}}_2 &= \tilde{\mat{x}}_2 + \ocean, \\
+        \tilde{\bs{\xi}}_I &= \tilde{\mat{x}}_I - \frac{k_d}{k_I}\ocean.
     \end{align} \label{eq:handpos_trajectory_hand_transform_CL}
 \end{subequations}
-This change is necessary to transform the equilibrium of the closed-loop system to the origin, as the error states $\tilde{x}_2$ and $\tilde{x}_I$ defined in \eqref{eq:handpos_trajectory_external_controller} do not converge to zero.
+This change is necessary to transform the equilibrium of the closed-loop system to the origin, as the error states $\tilde{\mat{x}}_2$ and $\tilde{\mat{x}}_I$ defined in \eqref{eq:handpos_trajectory_external_controller} do not converge to zero.
 
-For convenience, we will also define a concatenated state vector $\Xi\T = \left[{\tilde{\xi}}_I\T, {\tilde{\xi}}_1\T, {\tilde{\xi}}_2\T\right]$.
+For convenience, we will also define a concatenated state vector $\bs{\Xi}\T = \left[{\tilde{\bs{\xi}}}_I\T, {\tilde{\bs{\xi}}}_1\T, {\tilde{\bs{\xi}}}_2\T\right]$.
 Differentiating \eqref{eq:handpos_trajectory_hand_transform_CL} with respect to time and substituting the external dynamics \eqref{eq:handpos_def_x_1_dot_transformed}--\eqref{eq:handpos_def_x_2_dot_transformed} and the control law \eqref{eq:handpos_trajectory_external_controller}, we get
 \begin{equation}
-    \dot{\Xi} = H_{\xi} \Xi. \label{eq:handpos_trajectory_external_dynamics}
+    \dot{\bs{\Xi}} = \mat{H}_{\xi} \bs{\Xi}. \label{eq:handpos_trajectory_external_dynamics}
 \end{equation}
 
 \begin{prop}
     \label{prop:handpos_trajectory_trajectory_tracking}
-    The origin $\Xi = \mat{0}$ is a \acrfullpl{ges} equilibrium point of \eqref{eq:handpos_trajectory_external_dynamics}.
-    Consequently, $x_1$, $x_2$, and $\tilde{x}_I$ exponentially converge to $\xi_{1_d}$, $\xi_{2_d} - V_c$, and $k_I/k_d\,V_c$, respectively.
+    The origin $\bs{\Xi} = \mat{0}$ is a \acrfullpl{ges} equilibrium point of \eqref{eq:handpos_trajectory_external_dynamics}.
+    Consequently, $\mat{x}_1$, $\mat{x}_2$, and $\tilde{\mat{x}}_I$ exponentially converge to $\bs{\xi}_{1, d}$, $\bs{\xi}_{2, d} - \ocean$, and $k_I/k_d\,\ocean$, respectively.
 
     Moreover, let us define $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
     The internal dynamics are ultimately bounded if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
 \end{prop}
 \begin{proof}
-    Since the matrix $H_{\xi}$, defined in \eqref{eq:handpos_trajectory_H_xi} is Hurwitz by design, we can conclude that the external dynamics are \glspl{ges}, and $\tilde{\xi}_1$, $\tilde{\xi}_2$, and $\tilde{\xi}_I$ exponentially converge to zero.
+    Since the matrix $\mat{H}_{\xi}$, defined in \eqref{eq:handpos_trajectory_H_xi} is Hurwitz by design, we can conclude that the external dynamics are \glspl{ges}, and $\tilde{\bs{\xi}}_1$, $\tilde{\bs{\xi}}_2$, and $\tilde{\bs{\xi}}_I$ exponentially converge to zero.
 
-    From \eqref{eq:handpos_trajectory_error_states}, we can conclude that if $\tilde{\xi}_1$ exponentially converges to zero, then the hand position $x_1$ exponentially converges towards the desired trajectory $\xi_{1_d}$.
-    Similarly, if $\tilde{\xi}_2$ converges to zero, then the relative hand velocity $x_2$ converges to $\xi_{2_d} - V_c$.
-    Moreover, if $\tilde{\xi}_I$ converges to zero, then the integral state $\tilde{x}_I$ converges to $k_I/k_d\,V_c$.
+    From \eqref{eq:handpos_trajectory_error_states}, we can conclude that if $\tilde{\bs{\xi}}_1$ exponentially converges to zero, then the hand position $\mat{x}_1$ exponentially converges towards the desired trajectory $\bs{\xi}_{1, d}$.
+    Similarly, if $\tilde{\bs{\xi}}_2$ converges to zero, then the relative hand velocity $\mat{x}_2$ converges to $\bs{\xi}_{2, d} - \ocean$.
+    Moreover, if $\tilde{\bs{\xi}}_I$ converges to zero, then the integral state $\tilde{\mat{x}}_I$ converges to $k_I/k_d\,\ocean$.
     Consequently, the integral state provides an estimate of the ocean current.
 
-    Moreover, because the external dynamics are stable, the error states $\tilde{x}_1$, $\tilde{x}_2$, and $\tilde{x}_I$ are bounded.
-    Consequently, the control input $\mu$ is bounded.
+    Moreover, because the external dynamics are stable, the error states $\tilde{\mat{x}}_1$, $\tilde{\mat{x}}_2$, and $\tilde{\mat{x}}_I$ are bounded.
+    Consequently, the control input $\bs{\mu}$ is bounded.
     Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
 \subsection{Straight-line Trajectory Tracking}
 \label{sec:handpos_trajectory_straight_line_trajectory}
-In this section, we will focus on the special case when $\xi_{2_d}$ is constant, and the vehicle is thus tracking a straight line.
+In this section, we will focus on the special case when $\bs{\xi}_{2, d}$ is constant, and the vehicle is thus tracking a straight line.
 The purpose of this section is to demonstrate that in this special case, we can prove that both the external and internal dynamics are exponentially stable.
 First, let us present the necessary definitions and assumptions.
 
 \begin{dfn}
-    Two vectors $a, b \in \mathbb{R}^3$ are aligned if there exists $k \in \mathbb{R}$ such that $a = kb$.
-    Equivalently, $a$ and $b$ are aligned if $a \times b = \mat{0}_3$.
+    Two vectors $\mat{a}, \mat{b} \in \mathbb{R}^3$ are aligned if there exists $k \in \mathbb{R}$ such that $\mat{a} = k\mat{b}$.
+    Equivalently, $\mat{a}$ and $\mat{b}$ are aligned if $\mat{a} \times \mat{b} = \mat{0}_3$.
     \label{dfn:aligned}
 \end{dfn}
 \begin{asm}
-    The distance between the centers of gravity and buoyancy, $z_{gb}$, is positive, and the vector $\xi_{2_{d, r}} = (\xi_{2_d} - V_c)$ is not aligned with $e_3$.
+    The distance between the centers of gravity and buoyancy, $z_{gb}$, is positive, and the vector $\bs{\xi}_{2, d, r} = (\bs{\xi}_{2, d} - \ocean)$ is not aligned with $\mat{e}_3$.
     \label{asm:straight_line_trajectory}
 \end{asm}
 \begin{rmk}
     From \eqref{eq:gravity}, one can verify that if $z_{gb}$ is positive, then the restoring forces stabilize the vehicle's roll angle around zero.
-    Consequently, most commercial AUVs are designed so that $z_{gb} > 0$.
+    Consequently, most commercial \glspl{auv} are designed so that $z_{gb} > 0$.
     The second part of Assumption~\ref{asm:straight_line_trajectory} can be satisfied by choosing an appropriate reference trajectory.
 \end{rmk}
 
 We begin by finding the equilibria of the closed-loop system.
-Since the external dynamics is a linear system, $\Xi = 0_{9}$ is the only equilibrium.
-From \eqref{eq:handpos_def_R_dot_CL}, we can conclude that $\dot{R} = O_{3 \times 3}$ if and only if $\omega = 0_3$.
-Substituting $\Xi = 0_{9}$ and $\omega = 0_3$ into \eqref{eq:handpos_def_omega_dot_CL} yields
+Since the external dynamics is a linear system, $\bs{\Xi} = \mat{0}_9$ is the only equilibrium.
+From \eqref{eq:handpos_def_R_dot_CL}, we can conclude that $\dot{\mat{R}} = \mat{O}_{3 \times 3}$ if and only if $\bs{\omega} = \mat{0}_3$.
+Substituting $\bs{\Xi} = \mat{0}_9$ and $\bs{\omega} = \mat{0}_3$ into \eqref{eq:handpos_def_omega_dot_CL} yields
 \begin{equation}
     %\begin{split}
-        \dot{\omega} = \Bar{L} \times \left(\mathcal{D}_{\nu}(\zeta_r) + \mathcal{C}_{\nu}(\zeta_r)\right) 
-        - \left(\Bar{L}L\T\right) \left(\mathcal{D}_{\omega}(\zeta_r) + M_{22}^{\prime}\left(Wz_{gb} e_3 \times R\T e_3\right)\right).
+        \dot{\bs{\omega}} = \Bar{\mat{L}} \times \left(\mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r)\right) 
+        - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right).
     %\end{split}
     \label{eq:handpos_trajectory_omega_dot_SS}
 \end{equation}
 Note that the right-hand-side of \eqref{eq:handpos_trajectory_omega_dot_SS} has the following form
 \begin{equation}
-    \dot{\omega} = \Bar{L} \times a + \left(\Bar{L}L\T\right) b,
+    \dot{\bs{\omega}} = \Bar{\mat{L}} \times \mat{a} + \left(\Bar{\mat{L}}\mat{L}\T\right) \mat{b},
 \end{equation}
-where $a = \inlinevector{a_1, a_2, a_3}$, $b = \inlinevector{b_1, b_2, b_3}$ are vectors in $\mathbb{R}^3$.
-From the definition of $L$ and $\Bar{L}$, the following two equalities hold for any $a$ and $b$:
+where $\mat{a} = \inlinevector{a_1, a_2, a_3}$, $\mat{b} = \inlinevector{b_1, b_2, b_3}$ are vectors in $\mathbb{R}^3$.
+From the definition of $\mat{L}$ and $\Bar{\mat{L}}$, the following two equalities hold for any $\mat{a}$ and $\mat{b}$:
 \begin{align}
-    \Bar{L} \times a &= \frac{1}{h} \inlinevector{0, -a_3, a_2}, &
-    \left(\Bar{L}L\T\right) b &= \inlinevector{b_1, 0, 0}.
+    \Bar{\mat{L}} \times \mat{a} &= \frac{1}{h} \inlinevector{0, -a_3, a_2}, &
+    \left(\Bar{\mat{L}}\mat{L}\T\right) \mat{b} &= \inlinevector{b_1, 0, 0}.
 \end{align}
-Consequently, $\dot{\omega}$ is zero if and only if both terms of the right-hand-side of \eqref{eq:handpos_trajectory_omega_dot_SS} are zero.
+Consequently, $\dot{\bs{\omega}}$ is zero if and only if both terms of the right-hand-side of \eqref{eq:handpos_trajectory_omega_dot_SS} are zero.
 
-The first term is zero only if $\left(\mathcal{D}_{\nu}(\zeta_r) + \mathcal{C}_{\nu}(\zeta_r)\right)$ is aligned with $e_1$.
+The first term is zero only if $\left(\mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r)\right)$ is aligned with $\mat{e}_1$.
 In other words, there exists $k \in \mathbb{R}$ such that
 \begin{equation}
-    \mathcal{D}_{\nu}(\zeta_r) + \mathcal{C}_{\nu}(\zeta_r) = k e_1. \label{eq:handpos_trajectory_steady_state_condition_1}
+    \mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r) = k \mat{e}_1. \label{eq:handpos_trajectory_steady_state_condition_1}
 \end{equation}
 Substituting \eqref{eq:handpos_def_ode_components} into \eqref{eq:handpos_trajectory_steady_state_condition_1}, we get the following equation
 \begin{equation}
@@ -156,11 +156,13 @@ Substituting \eqref{eq:handpos_def_ode_components} into \eqref{eq:handpos_trajec
         \frac{m_{66}d_{22} - d_{62}m_{26} + m_{26}\left(m_{11} - m_{22}\right)u_r}{m_{22}m_{66} - m_{26}^2}\,v_r \\
         \frac{m_{55}d_{33} - d_{53}m_{35} - m_{35}\left(m_{11} - m_{33}\right)u_r}{m_{33}m_{55} - m_{35}^2}\,w_r
     \end{bmatrix}
-     = k e_1, \label{eq:handpos_trajectory_steady_state_condition_1_expanded}
+     = \begin{bmatrix}
+        k \\ 0 \\ 0
+     \end{bmatrix}, \label{eq:handpos_trajectory_steady_state_condition_1_expanded}
 \end{equation}
 which has at least one solution given by
 \begin{equation}
-    \inlinevector{u_r, v_r, w_r} = \frac{m_{11}}{d_{11}} k e_1. \label{eq:handpos_trajectory_steady_state_solution_1}
+    \inlinevector{u_r, v_r, w_r} = \frac{m_{11}}{d_{11}} k \mat{e}_1. \label{eq:handpos_trajectory_steady_state_solution_1}
 \end{equation}
 Note that if
 \begin{equation}
@@ -172,23 +174,23 @@ Note that if
 then \eqref{eq:handpos_trajectory_steady_state_solution_1} is the only solution of \eqref{eq:handpos_trajectory_steady_state_condition_1_expanded}.
 From \eqref{eq:handpos_def_nu_r_transformed}, the steady-state linear velocities must also satisfy
 \begin{align}
-    \nu_r &= R\T \xi_{2_{d, r}}& &\implies& \norm{\nu_r} &= \norm{\xi_{2_{d, r}}}. \label{eq:handpos_trajectory_steady_state_condition_2}
+    \bvel_r &= \mat{R}\T \bs{\xi}_{2, d, r}& &\implies& \norm{\bvel_r} &= \norm{\bs{\xi}_{2, d, r}}. \label{eq:handpos_trajectory_steady_state_condition_2}
 \end{align}
 Combining \eqref{eq:handpos_trajectory_steady_state_solution_1} and \eqref{eq:handpos_trajectory_steady_state_condition_2} gives us two possible steady-state linear velocities
 \begin{equation}
-    \nu_r = \pm \norm{\xi_{2_{d, r}}}\,e_1,
+    \bvel_r = \pm \norm{\bs{\xi}_{2, d, r}}\,\mat{e}_1,
 \end{equation}
 which leads to the following condition on the steady-state orientation
 \begin{equation}
-    R e_1 = \pm \frac{\xi_{2_{d, r}}}{\norm{\xi_{2_{d, r}}}}. \label{eq:handpos_trajectory_steady_state_R_1}
+    \mat{R} \mat{e}_1 = \pm \frac{\bs{\xi}_{2, d, r}}{\norm{\bs{\xi}_{2, d, r}}}. \label{eq:handpos_trajectory_steady_state_R_1}
 \end{equation}
 This condition does not uniquely define the steady-state orientation.
 Indeed, in terms of Euler angles, \eqref{eq:handpos_trajectory_steady_state_R_1}, defines the steady-state yaw and pitch angles.
-%Note that the steady-state pitch angle is $\pm \frac{\pi}{2}$ radians only if $\xi_{2_{d, r}}$ is aligned with $e_3$.
+%Note that the steady-state pitch angle is $\pm \frac{\pi}{2}$ radians only if $\bs{\xi}_{2, d, r}$ is aligned with $\mat{e}_3$.
 An additional condition on the steady-state orientation comes from the second term in \eqref{eq:handpos_trajectory_omega_dot_SS}.
 This term is zero if
 \begin{equation}
-    e_1\T \left(Wz_{gb} e_3 \times R\T e_3\right) = 0. \label{eq:handpos_trajectory_steady_state_R_2}
+    \mat{e}_1\T \left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right) = 0. \label{eq:handpos_trajectory_steady_state_R_2}
 \end{equation}
 If Assumption~\ref{asm:straight_line_trajectory} holds, then \eqref{eq:handpos_trajectory_steady_state_R_2} is equivalent to
 \begin{equation}
@@ -208,24 +210,24 @@ These four equilibria are illustrated in Figure~\ref{fig:equilibria}.
 \end{figure}
 
 In the remainder of this section, we will analyze the equilibrium in which the vehicle has a positive surge velocity, and the roll angle is zero, \emph{c.f.,} Figure~\ref{fig:equilibria}a.
-Let $R_0$ denote the steady-state orientation.
-We define the orientation error, $\delta$, as
+Let $\mat{R}_0$ denote the steady-state orientation.
+We define the orientation error, $\bs{\delta}$, as
 \begin{equation}
-    \delta = {\rm logm}\left(R_0\T\,R\right),
+    \bs{\delta} = {\rm logm}\left(\mat{R}_0\T\,\mat{R}\right),
     \label{eq:handpos_trajectory_delta}
 \end{equation}
 where ${\rm logm}: SO(3) \mapsto \ball[3]{\pi}$ is the matrix logarithm \cite{iserles_lie_2000}, and introduce the following change of coordinates
 \begin{align}
-    \tilde{\xi}_I^{\prime} &= R\T\,\tilde{\xi}_I, &
-    \tilde{\xi}_1^{\prime} &= R\T\,\tilde{\xi}_1, &
-    \tilde{\xi}_2^{\prime} &= R\T\,\tilde{\xi}_2.
+    \tilde{\bs{\xi}}_I^{\prime} &= \mathbf{R}\T\,\tilde{\bs{\xi}}_I, &
+    \tilde{\bs{\xi}}_1^{\prime} &= \mathbf{R}\T\,\tilde{\bs{\xi}}_1, &
+    \tilde{\bs{\xi}}_2^{\prime} &= \mathbf{R}\T\,\tilde{\bs{\xi}}_2.
 \end{align}
-The motivation behind the change of coordinates is to simplify the relation between the external dynamics and $\nu_r$.
-From, \eqref{eq:handpos_def_nu_r_transformed}, $\nu_r$ is given by
+The motivation behind the change of coordinates is to simplify the relation between the external dynamics and $\bvel_r$.
+From, \eqref{eq:handpos_def_nu_r_transformed}, $\bvel_r$ is given by
 \begin{equation}
     \begin{split}
-    \nu_r &= R\T\left(\tilde{\xi}_2 + \xi_{2_d} - V_c\right) - \omega \times L \\
-        &= \tilde{\xi}_2^{\prime} + {\rm expm}(\delta)\T \norm{\xi_{2_{d,r}}}e_1 - \omega \times L,
+    \bvel_r &= \mathbf{R}\T\left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \mat{L} \\
+        &= \tilde{\bs{\xi}}_2^{\prime} + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1 - \bs{\omega} \times \mat{L},
     \end{split}
 \end{equation}
 where ${\rm expm}: \ball[3]{\pi} \mapsto SO(3)$ is the inverse of ${\rm logm}$.
@@ -233,45 +235,45 @@ where ${\rm expm}: \ball[3]{\pi} \mapsto SO(3)$ is the inverse of ${\rm logm}$.
 The complete closed-loop system is then given by
 \begin{subequations}
     \begin{align}
-        \dot{\tilde{\xi}}_I^{\prime} &= \tilde{\xi}_1^{\prime} - \omega \times \tilde{\xi}_I^{\prime}, \\
-        \dot{\tilde{\xi}}_1^{\prime} &= \tilde{\xi}_2^{\prime} - \omega \times \tilde{\xi}_1^{\prime}, \\
-        \dot{\tilde{\xi}}_2^{\prime} &= -k_I \tilde{\xi}_I^{\prime} - k_p \tilde{\xi}_1^{\prime} - k_d \tilde{\xi}_2^{\prime} - \omega \times \tilde{\xi}_2^{\prime}, \\
-        \dot{\delta} &= \omega, \\
-        \dot{\omega} &= \Bar{L} \times \bigg(-k_I \tilde{\xi}_I^{\prime} - k_p \tilde{\xi}_1^{\prime} - k_d \tilde{\xi}_2^{\prime} + \mathcal{D}_{\nu}(\zeta_r) + \mathcal{C}_{\nu}(\zeta_r) \nonumber \\
-        &\qquad \qquad - \omega \times \left(\tilde{\xi}_2^{\prime} + {\rm expm}(\delta)\T \norm{\xi_{2_{d,r}}}e_1\right)\bigg) \nonumber \\
-        &\quad - \left(\Bar{L}L\T\right) \left(\mathcal{D}_{\omega}(\zeta_r) + M_{22}^{\prime}\left(Wz_{gb} e_3 \times R\T e_3\right)\right).
+        \dot{\tilde{\bs{\xi}}}_I^{\prime} &= \tilde{\bs{\xi}}_1^{\prime} - \bs{\omega} \times \tilde{\bs{\xi}}_I^{\prime}, \\
+        \dot{\tilde{\bs{\xi}}}_1^{\prime} &= \tilde{\bs{\xi}}_2^{\prime} - \bs{\omega} \times \tilde{\bs{\xi}}_1^{\prime}, \\
+        \dot{\tilde{\bs{\xi}}}_2^{\prime} &= -k_I \tilde{\bs{\xi}}_I^{\prime} - k_p \tilde{\bs{\xi}}_1^{\prime} - k_d \tilde{\bs{\xi}}_2^{\prime} - \bs{\omega} \times \tilde{\bs{\xi}}_2^{\prime}, \\
+        \dot{\bs{\delta}} &= \bs{\omega}, \\
+        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \bigg(-k_I \tilde{\bs{\xi}}_I^{\prime} - k_p \tilde{\bs{\xi}}_1^{\prime} - k_d \tilde{\bs{\xi}}_2^{\prime} + \mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r) \nonumber \\
+        &\qquad \qquad - \bs{\omega} \times \left(\tilde{\bs{\xi}}_2^{\prime} + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1\right)\bigg) \nonumber \\
+        &\quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right).
     \end{align}
 \end{subequations}
-Next, we define a vector $z\T = \left[{\tilde{\xi}_I^{\prime\,{\rm T}}}, {\tilde{\xi}_1^{\prime\,{\rm T}}}, {\tilde{\xi}_2^{\prime\,{\rm T}}}, \delta\T, \omega\T\right]$ and a function $f$ such that $\dot{z} = f(z)$.
-Let $J$ denote the Jacobian of $f(z)$, evaluated at $z = 0_{15}$.
-$J$ is given by
+Next, we define a vector $\mat{z}\T = \left[{\tilde{\bs{\xi}}_I^{\prime\,{\rm T}}}, {\tilde{\bs{\xi}}_1^{\prime\,{\rm T}}}, {\tilde{\bs{\xi}}_2^{\prime\,{\rm T}}}, \bs{\delta}\T, \bs{\omega}\T\right]$ and a function $f$ such that $\dot{\mat{z}} = f(\mat{z})$.
+Let $\mat{J}$ denote the Jacobian of $f(\mat{z})$, evaluated at $\mat{z} = \mat{0}$.
+$\mat{J}$ is given by
 
 \begin{equation}
-    J \!=\! \begin{bmatrix}
-        O_{3 \times 3} & I_{3 \times 3} & O_{3 \times 3} & O_{3 \times 3} & O_{3 \times 3} \\
-        O_{3 \times 3} & O_{3 \times 3} & I_{3 \times 3} & O_{3 \times 3} & O_{3 \times 3} \\
-        -k_I I_{3 \times 3}\!\!\! & -k_p I_{3 \times 3}\!\!\! & -k_d I_{3 \times 3}\!\!\!\! & O_{3 \times 3} & O_{3 \times 3} \\
-        O_{3 \times 3} & O_{3 \times 3} & O_{3 \times 3} & O_{3 \times 3} & I_{3 \times 3} \\
-        J_{\xi_I} & J_{\xi_1} & J_{\xi_2} & J_{\delta} & J_{\omega}
+    \mat{J} \!=\! \begin{bmatrix}
+        \mat{O}_{3 \times 3} & \mat{I}_{3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} \\
+        \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{I}_{3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} \\
+        -k_I \mat{I}_{3}\!\!\! & -k_p \mat{I}_{3}\!\!\! & -k_d \mat{I}_{3}\!\!\!\! & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} \\
+        \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{I}_{3} \\
+        \mat{J}_{\bs{\xi}_I} & \mat{J}_{\bs{\xi}_1} & \mat{J}_{\bs{\xi}_2} & \mat{J}_{\bs{\delta}} & \mat{J}_{\bs{\omega}}
     \end{bmatrix}, \label{eq:handpos_trajectory_jacobian}
 \end{equation}
 where
 \begin{subequations}
     \begin{align}
-        J_{\xi_I} &= -S\left(\frac{k_I}{h}e_1\right), &
-        J_{\xi_1} &= -S\left(\frac{k_p}{h}e_1\right), \\
-        J_{\xi_2} &= \begin{bmatrix}
+        \mat{J}_{\bs{\xi}_I} &= -\mat{S}\left(\frac{k_I}{h}\mat{e}_1\right), &
+        \mat{J}_{\bs{\xi}_1} &= -\mat{S}\left(\frac{k_p}{h}\mat{e}_1\right), \\
+        \mat{J}_{\bs{\xi}_2} &= \begin{bmatrix}
             0 & 0 & 0 \\
-            0 & 0 & \Xi_{23} \\
-            0 & \Xi_{32} & 0
+            0 & 0 & {\Xi}_{23} \\
+            0 & {\Xi}_{32} & 0
         \end{bmatrix}, &
-        J_{\omega} &= - \begin{bmatrix}
+        \mat{J}_{\bs{\omega}} &= - \begin{bmatrix}
             \Omega_1 & 0 & 0 \\
             0 & \Omega_2 & 0 \\
             0 & 0 & \Omega_3
         \end{bmatrix} \\            
         %{\rm diag}\left(\Omega_1, \Omega_2, \Omega_3\right), \\
-        J_{\delta} &= \mathrlap{\begin{bmatrix}
+        \mat{J}_{\bs{\delta}} &= \mathrlap{\begin{bmatrix}
             -\Delta_1\cos\theta & 0 & \Delta_1\sin\theta \\
             0 & -\Delta_2 & 0 \\
             0 & 0 & -\Delta_3
@@ -280,35 +282,35 @@ where
     \label{eq:handpos_trajectory_jacobian_blocks}
 \end{subequations}
 where $\theta$ is the steady-state pitch angle.
-The components of $J_{\xi_2}$, $J_{\omega}$, and $J_{\delta}$ are shown in Appendix~\ref{app:jacobian}.
+The components of $\mat{J}_{\bs{\xi}_2}$, $\mat{J}_{\bs{\omega}}$, and $\mat{J}_{\bs{\delta}}$ are shown in Appendix~\ref{app:jacobian}.
 
 \begin{prop}
-    The point $z = 0_{15}$ is a (locally) exponentially stable equilibrium point of $\dot{z} = f(z)$ if Assumption~\ref{asm:straight_line_trajectory} holds, and all $\Delta_i$ and $\Omega_i$ for $i \in \{1,2,3\}$ are positive.
+    The point $\mat{z} = \mat{0}_{15}$ is a (locally) exponentially stable equilibrium point of $\dot{\mat{z}} = f(\mat{z})$ if Assumption~\ref{asm:straight_line_trajectory} holds, and all $\Delta_i$ and $\Omega_i$ for $i \in \{1,2,3\}$ are positive.
     \label{prop:straight_line_trajectory}
 \end{prop}
 \begin{proof}
-    Using the indirect Lyapunov method, the system is locally exponentially stable if $J$ is Hurwitz.
+    Using the indirect Lyapunov method, the system is locally exponentially stable if $\mat{J}$ is Hurwitz.
     Let us define
     \begin{align}
-        J_{21}\! &= \!\begin{bmatrix}
-            O_{3 \times 3}\!\! & O_{3 \times 3}\!\! & O_{3 \times 3} \\
-            J_{\xi_I} & J_{\xi_1} & J_{\xi_2}
+        \mat{J}_{21}\! &= \!\begin{bmatrix}
+            \mat{O}_{3 \times 3}\!\! & \mat{O}_{3 \times 3}\!\! & \mat{O}_{3 \times 3} \\
+            \mat{J}_{\bs{\xi}_I} & \mat{J}_{\bs{\xi}_1} & \mat{J}_{\bs{\xi}_2}
         \end{bmatrix}, &
-        J_{22}\! &= \!\begin{bmatrix}
-            O_{3 \times 3}\!\! & I_{3 \times 3} \\
-            J_{\delta} & J_{\omega}
+        \mat{J}_{22}\! &= \!\begin{bmatrix}
+            \mat{O}_{3 \times 3}\!\! & \mat{I}_{3} \\
+            \mat{J}_{\delta} & \mat{J}_{\omega}
         \end{bmatrix}\!.
     \end{align}
-    The matrix $J$ can then be written in the following form
+    The matrix $\mat{J}$ can then be written in the following form
     \begin{equation}
-        J = \begin{bmatrix}
-            H_{\xi} & O_{9 \times 6} \\
-            J_{21} & J_{22}
+        \mat{J} = \begin{bmatrix}
+            \mat{H}_{\xi} & \mat{O}_{9 \times 6} \\
+            \mat{J}_{21} & \mat{J}_{22}
         \end{bmatrix}.
     \end{equation}
-    Due to its block triangular structure, the eigenvalues of $J$ are equal to the union of eigenvalues of $H_{\xi}$ and $J_{22}$.
-    Note that $H_{\xi}$ is Hurwitz by design.
-    Furthermore, the eigenvalues of $J_{22}$, $\lambda_1, \ldots, \lambda_6$ are given by
+    Due to its block triangular structure, the eigenvalues of $J$ are equal to the union of eigenvalues of $\mat{H}_{\xi}$ and $\mat{J}_{22}$.
+    Note that $\mat{H}_{\xi}$ is Hurwitz by design.
+    Furthermore, the eigenvalues of $\mat{J}_{22}$, $\lambda_1, \ldots, \lambda_6$ are given by
     \begin{subequations}
         \begin{align}
             \lambda_1, \lambda_2 &= -\frac{\Omega_{1}}{2} \pm \frac{\sqrt{{\Omega_{1}}^2-4\,\Delta_{1}\cos\theta_0}}{2}, \\
@@ -335,33 +337,33 @@ Let $s$ be the path parameter, $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^{3}$ th
 We assume that $\mat{p}_p$ is $\mathcal{C}^2$ and parametrized by the arc length (see Section~\ref{sec:background_paths}).
 Let us define the following three functions
 \begin{align}
-    \xi_{1_d} &= \mat{p}_p(s), &
-    \xi_{2_d} &= \dot{\xi}_{1_d} = \dot{s}\frac{\partial \mat{p}_p\left(s\right)}{\partial s}, &
-    \xi_{2_d}^{*} &= U_d \frac{\partial \mat{p}_p(s)}{\partial s},
+    \bs{\xi}_{1, d} &= \mat{p}_p(s), &
+    \bs{\xi}_{2, d} &= \dot{\bs{\xi}}_{1, d} = \dot{s}\frac{\partial \mat{p}_p\left(s\right)}{\partial s}, &
+    \bs{\xi}_{2, d}^{*} &= U_d \frac{\partial \mat{p}_p(s)}{\partial s},
 \end{align}
 The goal of the path following is to control the vehicle and continuously update the path parameter such that
 \begin{align}
-    \lim_{t \rightarrow \infty} x_1(t) - \xi_{1_d}(t) &= 0_3, &
+    \lim_{t \rightarrow \infty} \mat{x}_1(t) - \bs{\xi}_{1, d}(t) &= \mat{0}_3, &
     \lim_{t \rightarrow \infty} \dot{s}(t) &= U_d. \label{eq:handpos_trajectory_control_goal_path}
 \end{align}
 
 To solve the path following problem, we define the following error states
 \begin{subequations}
     \begin{align}
-        \tilde{x}_1 &= x_1 - \xi_{1_d}, \\
-        \tilde{x}_2 &= x_2 - \xi_{2_d}^{*}, \\
-        \tilde{x}_I &= \int_{0}^t \tilde{x}_1(\tau) {\rm d}\tau,
+        \tilde{\mat{x}}_1 &= \mat{x}_1 - \bs{\xi}_{1, d}, \\
+        \tilde{\mat{x}}_2 &= \mat{x}_2 - \bs{\xi}_{2, d}^{*}, \\
+        \tilde{\mat{x}}_I &= \int_{0}^t \tilde{\mat{x}}_1(\tau) {\rm d}\tau,
     \end{align}
 \end{subequations}
 and propose a PID controller analogous to the one in Section~\ref{sec:handpos_trajectory_trajectory_tracking}
 \begin{equation}
-    \mu = -k_p\tilde{x}_1 - k_d\tilde{x}_2 - k_I\tilde{x}_I + \dot{\xi}_{2_d}^{*}.
+    \bs{\mu} = -k_p\tilde{\mat{x}}_1 - k_d\tilde{\mat{x}}_2 - k_I\tilde{\mat{x}}_I + \dot{\bs{\xi}}_{2, d}^{*}.
 \end{equation}
 Inspired by \cite{belleter_2019_observer}, we propose the following update law for the path parameter 
 \begin{equation}
     \dot{s} = U_d\left(1 + \varepsilon\tanh\left(k_{\sigma}\sigma\right)\right), \label{eq:handpos_trajectory_s_dot}
 \end{equation}
-where $\varepsilon$ and $k_{\sigma}$ are positive gains, and $\sigma = \tilde{x}_1\T \frac{\partial \mat{p}_p(s)}{\partial s}$ is the projection of the path following error onto the path-tangential vector (see Figure~\ref{fig:path}).
+where $\varepsilon$ and $k_{\sigma}$ are positive gains, and $\sigma = \tilde{\mat{x}}_1\T \frac{\partial \mat{p}_p(s)}{\partial s}$ is the projection of the path following error onto the path-tangential vector (see Figure~\ref{fig:handpos_trajectory_path}).
 The motivation behind this update scheme is to allow the path to parameter ``slow down'' or ``speed up'' if the vehicle is lagging or leading the desired path.
 
 \begin{figure}[tb]
@@ -370,7 +372,7 @@ The motivation behind this update scheme is to allow the path to parameter ``slo
     \import{figures/handpos_trajectory}{path.pdf_tex}
     \vspace*{-2mm}
     \caption{Illustration of the path function, the path following error, and its projection.}
-    \label{fig:path}
+    \label{fig:handpos_trajectory_path}
 \end{figure}
 
 \subsection{Closed-loop Analysis}
@@ -378,21 +380,21 @@ Here we investigate the properties of the closed-loop system.
 Similarly to Section~\ref{sec:handpos_trajectory_trajectory_tracking}, we define the following change of coordinates
 \begin{subequations}
     \begin{align}
-        \tilde{\xi}_1 &= \tilde{x}_1, \\
-        \tilde{\xi}_2 &= \tilde{x}_2 + V_c, \\
-        \tilde{\xi}_I &= \tilde{x}_I - \frac{k_d}{k_I}V_c.
+        \tilde{\bs{\xi}}_1 &= \tilde{\mat{x}}_1, \\
+        \tilde{\bs{\xi}}_2 &= \tilde{\mat{x}}_2 + \ocean, \\
+        \tilde{\bs{\xi}}_I &= \tilde{\mat{x}}_I - \frac{k_d}{k_I}\ocean.
     \end{align} \label{eq:handpos_trajectory_hand_transform_CL_path}
 \end{subequations}
 The external dynamics of the vehicle are then given by
 \begin{equation}
-    \dot{\Xi} = H_{\xi}\Xi + \inlinevector{0_3\T, d\T, k_d d\T}, \label{eq:handpos_trajectory_external_dynamics_path}
+    \dot{\bs{\Xi}} = \mat{H}_{\xi}\bs{\Xi} + \inlinevector{\mat{0}_3\T, \mat{d}\T, k_d \mat{d}\T}, \label{eq:handpos_trajectory_external_dynamics_path}
 \end{equation}
-where $H_{\xi}$ is given by \eqref{eq:handpos_trajectory_H_xi}, and
+where $\mat{H}_{\xi}$ is given by \eqref{eq:handpos_trajectory_H_xi}, and
 \begin{equation}
-    d = \varepsilon U_d \tanh\left(k_{\sigma}\sigma\right) \frac{\partial \mat{p}_p(s)}{\partial s}. \label{eq:handpos_trajectory_external_perturbation}
+    \mat{d} = \varepsilon U_d \tanh\left(k_{\sigma}\sigma\right) \frac{\partial \mat{p}_p(s)}{\partial s}. \label{eq:handpos_trajectory_external_perturbation}
 \end{equation}
-Since $H_{\xi}$ is Hurwitz by design, for any positive definite matrix $Q$ there exists a positive definite matrix $P$ such that $H_{\xi}\T P + P H_{\xi} = -Q$.
-Let $\varrho$ denote the ratio between the smallest eigenvalue of $Q$ and the largest eigenvalue of $P$, and let us choose $Q$ such that $\varrho$ is maximized.
+Since $\mat{H}_{\xi}$ is Hurwitz by design, for any positive definite matrix $\mat{Q}$ there exists a positive definite matrix $\mat{P}$ such that $\mat{H}_{\xi}\T \mat{P} + \mat{P} \mat{H}_{\xi} = -\mat{Q}$.
+Let $\varrho$ denote the ratio between the smallest eigenvalue of $\mat{Q}$ and the largest eigenvalue of $\mat{P}$, and let us choose $\mat{Q}$ such that $\varrho$ is maximized.
 
 \begin{prop}
     \label{prop:handpos_trajectory_path_following}
@@ -400,13 +402,13 @@ Let $\varrho$ denote the ratio between the smallest eigenvalue of $Q$ and the la
     \begin{equation}
         \varrho > 2\left(1 + k_d\right)\varepsilon k_{\sigma} U_d.
     \end{equation}
-    Consequently, $x_1$, $x_2$, and $\tilde{x}_I$ exponentially converge to $\xi_{1_d}$, $\xi_{2_d}^{*} - V_c$, and $k_d/k_I\,V_c$, respectively, and $\dot{s}$ converges to $U_d$.
+    Consequently, $\mat{x}_1$, $\mat{x}_2$, and $\tilde{\mat{x}}_I$ exponentially converge to $\bs{\xi}_{1, d}$, $\bs{\xi}_{2, d}^{*} - \ocean$, and $k_d/k_I\,\ocean$, respectively, and $\dot{s}$ converges to $U_d$.
 
     Moreover, let us define 
     \begin{equation}
         \LBnu = \max_{s, \sigma \in \mathbb{R}} \norm{
             U_d\left(1 + \varepsilon\tanh(k_{\sigma}\sigma)\right) \frac{\partial \mat{p}_p(s)}{\partial s}
-            - V_c}
+            - \ocean}
             \label{eq:handpos_trajectory_LBnu_path}
     \end{equation}
     and $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
@@ -415,35 +417,35 @@ Let $\varrho$ denote the ratio between the smallest eigenvalue of $Q$ and the la
 \begin{proof}
     Consider the following Lyapunov function candidate
     \begin{equation}
-        V = \Xi\T P \Xi,
+        V = \bs{\Xi}\T \mat{P} \bs{\Xi},
     \end{equation}
     The derivative of $V$ along the trajectories of the closed-loop system \eqref{eq:handpos_trajectory_external_dynamics_path} is given by
     \begin{equation}
     \begin{split}
-        \dot{V} &= \Xi\T\left(H_{\xi}\T P + PH_{\xi}\right)\Xi + 2 \left[0_3\T, d\T, k_d d\T\right] P \Xi \\
-            &\leq -\lambda_{Q,\min}\norm{\Xi}^2 + 2 \lambda_{P,\max}\left(1 + k_d\right)\norm{d}\norm{\Xi},
+        \dot{V} &= \bs{\Xi}\T\left(\mat{H}_{\xi}\T \mat{P} + \mat{P}\mat{H}_{\xi}\right)\bs{\Xi} + 2 \left[\mat{0}_3\T, \mat{d}\T, k_d \mat{d}\T\right] \mat{P} \bs{\Xi} \\
+            &\leq -\lambda_{\mat{Q},\min}\norm{\bs{\Xi}}^2 + 2 \lambda_{\mat{P},\max}\left(1 + k_d\right)\norm{\mat{d}}\norm{\bs{\Xi}},
     \end{split}
     \end{equation}
-    where $\lambda_{Q,\min}$ is the smallest eigenvalue of $Q$, and $\lambda_{P,\max}$ is the largest eigenvalue of $P$.
-    From \eqref{eq:handpos_trajectory_external_perturbation}, we get the following upper bound on $\norm{d}$
+    where $\lambda_{\mat{Q},\min}$ is the smallest eigenvalue of $\mat{Q}$, and $\lambda_{\mat{P},\max}$ is the largest eigenvalue of $\mat{P}$.
+    From \eqref{eq:handpos_trajectory_external_perturbation}, we get the following upper bound on $\norm{\mat{d}}$
     \begin{equation}
-        \norm{d} \leq \varepsilon k_{\sigma} U_d \norm{\tilde{\xi}_1} \leq \varepsilon k_{\sigma} U_d \norm{\Xi},
+        \norm{\mat{d}} \leq \varepsilon k_{\sigma} U_d \norm{\tilde{\bs{\xi}}_1} \leq \varepsilon k_{\sigma} U_d \norm{\bs{\Xi}},
     \end{equation}
     and arrive at the following expression
     \begin{equation}
-        \dot{V} \leq - \left(\lambda_{Q,\min} - 2 \lambda_{P,\max}\left(1 + k_d\right)\varepsilon k_{\sigma} U_d\right) \norm{\Xi}^2.
+        \dot{V} \leq - \left(\lambda_{\mat{Q},\min} - 2 \lambda_{\mat{P},\max}\left(1 + k_d\right)\varepsilon k_{\sigma} U_d\right) \norm{\bs{\Xi}}^2.
     \end{equation}
     Therefore, if the following inequality holds
     \begin{equation}
-        \frac{\lambda_{Q,\min}}{\lambda_{P,\max}} = \varrho > 2\left(1 + k_d\right)\varepsilon k_{\sigma} U_d,
+        \frac{\lambda_{\mat{Q},\min}}{\lambda_{\mat{P},\max}} = \varrho > 2\left(1 + k_d\right)\varepsilon k_{\sigma} U_d,
     \end{equation}
-    the origin of the closed-loop system is \glspl{ges}, and thus $\tilde{\xi}_1$, $\tilde{\xi}_2$, and $\tilde{\xi}_I$ exponentially converge to zero.
-    Using the same arguments as in the proof of Proposition~\ref{prop:handpos_trajectory_trajectory_tracking}, we can conclude that $x_1$, $x_2$, and $\tilde{x}_I$ exponentially converge to $\xi_{1_d}$, $\xi_{2_d}^{*} - V_c$, and $k_d/k_I\,V_c$, respectively.
-    In addition, substituting $\tilde{\xi}_1 = 0_3$ into the path parameter update law \eqref{eq:handpos_trajectory_s_dot} gives $\dot{s} = U_d$.
+    the origin of the closed-loop system is \glspl{ges}, and thus $\tilde{\bs{\xi}}_1$, $\tilde{\bs{\xi}}_2$, and $\tilde{\bs{\xi}}_I$ exponentially converge to zero.
+    Using the same arguments as in the proof of Proposition~\ref{prop:handpos_trajectory_trajectory_tracking}, we can conclude that $\mat{x}_1$, $\mat{x}_2$, and $\tilde{\mat{x}}_I$ exponentially converge to $\bs{\xi}_{1, d}$, $\bs{\xi}_{2, d}^{*} - \ocean$, and $k_d/k_I\,\ocean$, respectively.
+    In addition, substituting $\tilde{\bs{\xi}}_1 = \mat{0}_3$ into the path parameter update law \eqref{eq:handpos_trajectory_s_dot} gives $\dot{s} = U_d$.
 
-    Moreover, because the external dynamics are stable, the error states $\tilde{x}_1$, $\tilde{x}_2$, and $\tilde{x}_I$ are bounded.
-    Consequently, the control input $\mu$ is bounded.
-    Note that $\LBnu$ defined in \eqref{eq:handpos_trajectory_LBnu_path} represents the upper bound on $\norm{\xi_{2_d} - V_c}$.
+    Moreover, because the external dynamics are stable, the error states $\tilde{\mat{x}}_1$, $\tilde{\mat{x}}_2$, and $\tilde{\mat{x}}_I$ are bounded.
+    Consequently, the control input $\bs{\mu}$ is bounded.
+    Note that $\LBnu$ defined in \eqref{eq:handpos_trajectory_LBnu_path} represents the upper bound on $\norm{\bs{\xi}_{2, d} - \ocean}$.
     Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
@@ -454,9 +456,9 @@ Similarly to Section~\ref{sec:handpos_trajectory_straight_line_trajectory}, we c
 Moreover, straight-line paths are natively supported by most guidance, navigation, and control systems, \emph{e.g.}, the \acrfull{dune} \cite{dune}.
 Such paths can be parametrized by the following function
 \begin{equation}
-    \mat{p}_p(s) = \mat{p}_0 + R_p e_1 s, \label{eq:handpos_trajectory_straight_line_function}
+    \mat{p}_p(s) = \mat{p}_0 + \mat{R}_p \mat{e}_1 s, \label{eq:handpos_trajectory_straight_line_function}
 \end{equation}
-where $\mat{p}_0 \in \mathbb{R}^3$ is the origin of the path, and $R_{p} \in SO(3)$ defines the orientation of the path.
+where $\mat{p}_0 \in \mathbb{R}^3$ is the origin of the path, and $\mat{R}_{p} \in SO(3)$ defines the orientation of the path.
 
 \begin{figure}[tb]
     \centering
@@ -470,41 +472,41 @@ Instead of the path parameter update law \eqref{eq:handpos_trajectory_s_dot}, we
 This approach is commonly done in the literature when following straight lines or circles \cite{breivik_path_following_2004}.
 From \eqref{eq:handpos_trajectory_straight_line_function}, the path parameter of the closest point to $x_1$ is given by
 \begin{equation}
-    s = \left(x_1 - \mat{p}_0\right)\T R_p e_1. \label{eq:handpos_trajectory_straight_line_parameter}
+    s = \left(\mat{x}_1 - \mat{p}_0\right)\T \mat{R}_p \mat{e}_1. \label{eq:handpos_trajectory_straight_line_parameter}
 \end{equation}
 In addition, let us define cross-track errors, $\widetilde{y}$ and $\widetilde{z}$, as
 \begin{equation}
-    \inlinevector{0, \widetilde{y}, \widetilde{z}} = R_p\T \left(x_1 - \mat{p}_p(s)\right). \label{eq:handpos_trajectory_cross_track_errors}
+    \inlinevector{0, \widetilde{y}, \widetilde{z}} = \mat{R}_p\T \left(\mat{x}_1 - \mat{p}_p(s)\right). \label{eq:handpos_trajectory_cross_track_errors}
 \end{equation}
 The cross-track errors are illustrated in Figure~\ref{fig:straight_line}.
 Substituting \eqref{eq:handpos_trajectory_straight_line_parameter} and \eqref{eq:handpos_trajectory_straight_line_function} into \eqref{eq:handpos_trajectory_cross_track_errors}, we get
 \begin{align}
-    \begin{bmatrix} \widetilde{y} \\ \widetilde{z} \end{bmatrix} &= \hat{I}\T R_p\T \left(x_1 - \mat{p}_0\right), &
-    \hat{I}\T &= \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}.
+    \begin{bmatrix} \widetilde{y} \\ \widetilde{z} \end{bmatrix} &= \hat{\mat{I}}\T \mat{R}_p\T \left(\mat{x}_1 - \mat{p}_0\right), &
+    \hat{\mat{I}}\T &= \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}.
 \end{align}
 
 For a straight-line path, the control goal \eqref{eq:handpos_trajectory_control_goal_path} is equivalent to controlling the vehicle such that $\widetilde{y}$ and $\widetilde{z}$ converge to zero.
 To achieve the goal, we define the following error states
 %\begin{subequations}
     \begin{align}
-        \widetilde{x}_1 &= \inlinevector{\widetilde{y}, \widetilde{z}}, &
-        \widetilde{x}_2 &= R_p\T x_2 - U_d e_1, &
-        \widetilde{x}_I &= \int_{0}^{t} \widetilde{x}_1(\tau) {\rm d}\tau,
+        \tilde{\mat{x}}_1 &= \inlinevector{\widetilde{y}, \widetilde{z}}, &
+        \tilde{\mat{x}}_2 &= \mat{R}_p\T \mat{x}_2 - U_d \mat{e}_1, &
+        \tilde{\mat{x}}_I &= \int_{0}^{t} \tilde{\mat{x}}_1(\tau) {\rm d}\tau,
     \end{align} 
 %\end{subequations}
 and a PID control law
 \begin{equation}
-    \mu = -k_p R_p \hat{I} \widetilde{x}_1 - k_d R_p \widetilde{x}_2 - k_I R_p \hat{I} \widetilde{x}_I,
+    \bs{\mu} = -k_p \mat{R}_p \hat{\mat{I}} \tilde{\mat{x}}_1 - k_d \mat{R}_p \tilde{\mat{x}}_2 - k_I \mat{R}_p \hat{\mat{I}} \tilde{\mat{x}}_I,
     \label{eq:handpos_trajectory_straight_line_path_PID}
 \end{equation}
 where $k_p$, $k_d$, and $k_I$ are positive gains chosen such that the matrix
 \begin{equation}
-    \Bar{H}_{\xi}
+    \Bar{\mat{H}}_{\xi}
     =
     \begin{bmatrix}
-        O_{2 \times 2} & I_{2 \times 2} & O_{2 \times 3} \\
-        O_{2 \times 2} & O_{2 \times 2} & \hat{I}\T \\
-        -k_I \hat{I} & -k_p \hat{I} & -k_d I_{3 \times 3}
+        \mat{O}_{2 \times 2} & \mat{I}_{2} & \mat{O}_{2 \times 3} \\
+        \mat{O}_{2 \times 2} & \mat{O}_{2 \times 2} & \hat{\mat{I}}\T \\
+        -k_I \hat{\mat{I}} & -k_p \hat{\mat{I}} & -k_d \mat{I}_{3}
     \end{bmatrix},
     \label{eq:handpos_trajectory_H_xi_prime}
 \end{equation}
@@ -512,72 +514,72 @@ is Hurwitz.
 Similarly to the previous sections, we can perform the following change of coordinates
 \begin{subequations}
     \begin{align}
-        \widetilde{\xi}_1 &= \widetilde{x}_1, \\
-        \widetilde{\xi}_2 &= \widetilde{x}_2 + \tilde{I} R_p\T V_c, \\
-        \widetilde{\xi}_I &= \widetilde{x}_I - \frac{k_d}{k_I}\hat{I}\T R_p\T V_c,
+        \widetilde{\bs{\xi}}_1 &= \tilde{\mat{x}}_1, \\
+        \widetilde{\bs{\xi}}_2 &= \tilde{\mat{x}}_2 + \tilde{\mat{I}} \mat{R}_p\T \ocean, \\
+        \widetilde{\bs{\xi}}_I &= \tilde{\mat{x}}_I - \frac{k_d}{k_I}\hat{\mat{I}}\T \mat{R}_p\T \ocean,
     \end{align} \label{eq:handpos_trajectory_error_coordinates_straight_line_path}
 \end{subequations}
-where $\tilde{I} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$.
-For convenience, let us define $\Xi^{\prime\T} = \left[\widetilde{\xi}_I^{\prime\T}, \widetilde{\xi}_1^{\prime\T}, \widetilde{\xi}_2^{\prime\T}\right]$.
+where $\tilde{\mat{I}} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$.
+For convenience, let us define $\bs{\Xi}^{\prime\T} = \left[\widetilde{\bs{\xi}}_I^{\prime\T}, \widetilde{\bs{\xi}}_1^{\prime\T}, \widetilde{\bs{\xi}}_2^{\prime\T}\right]$.
 \begin{prop}
     The external dynamics are \gls{ges}.
-    Specifically, $\widetilde{y}$ and $\widetilde{z}$ converge to zero, $x_2$ converges to $U_d R_p e_1 - R_p \tilde{I} R_p\T V_c$, and $\widetilde{x}_I$ converges to $\frac{k_d}{k_I} \hat{I}\T R_p\T V_c$.
+    Specifically, $\widetilde{y}$ and $\widetilde{z}$ converge to zero, $x_2$ converges to $U_d \mat{R}_p \mat{e}_1 - \mat{R}_p \tilde{\mat{I}} \mat{R}_p\T \ocean$, and $\tilde{\mat{x}}_I$ converges to $\frac{k_d}{k_I} \hat{\mat{I}}\T \mat{R}_p\T \ocean$.
 
-    Moreover, let us define $\xi_{2_d} = U_d R_p e_1$, $\LBnu = \norm{\xi_{2_d} - V_c}$, and $a_x$, $\Bar{\alpha}_y$, and $\Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
+    Moreover, let us define $\bs{\xi}_{2, d} = U_d \mat{R}_p \mat{e}_1$, $\LBnu = \norm{\bs{\xi}_{2, d} - \ocean}$, and $a_x$, $\Bar{\alpha}_y$, and $\Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
     The internal dynamics are ultimately bounded if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
     \label{prop:straight_line_path}
 \end{prop}
 \begin{proof}
     Differentiating \eqref{eq:handpos_trajectory_error_coordinates_straight_line_path} with respect to time yields
     \begin{equation}
-        \dot{\Xi} = \Bar{H}_{\xi} \Xi,
+        \dot{\bs{\Xi}} = \Bar{\mat{H}}_{\xi} \bs{\Xi},
     \end{equation}
-    with $\Bar{H}_{\xi}$ defined in \eqref{eq:handpos_trajectory_H_xi_prime}.
-    Since $\Bar{H}_{\xi}$ is Hurwitz by design, $\Xi$ exponentially converges to zero.
-    From \eqref{eq:handpos_trajectory_error_coordinates_straight_line_path}, if $\Xi$ converges to zero, then the cross-track errors $\widetilde{y}$ and $\widetilde{z}$ converge to zero, $x_2$ converges to $U_d R_p e_1 - R_p \tilde{I} R_p\T V_c$, and $\widetilde{x}_I$ converges to $\frac{k_d}{k_I} \hat{I}\T R_p\T V_c$.
+    with $\Bar{\mat{H}}_{\xi}$ defined in \eqref{eq:handpos_trajectory_H_xi_prime}.
+    Since $\Bar{\mat{H}}_{\xi}$ is Hurwitz by design, $\bs{\Xi}$ exponentially converges to zero.
+    From \eqref{eq:handpos_trajectory_error_coordinates_straight_line_path}, if $\bs{\Xi}$ converges to zero, then the cross-track errors $\widetilde{y}$ and $\widetilde{z}$ converge to zero, $\mat{x}_2$ converges to $U_d \mat{R}_p \mat{e}_1 - \mat{R}_p \tilde{\mat{I}} \mat{R}_p\T \ocean$, and $\tilde{\mat{x}}_I$ converges to $\frac{k_d}{k_I} \hat{\mat{I}}\T \mat{R}_p\T \ocean$.
 
-    Moreover, because the external dynamics are stable, the error states $\tilde{x}_1$, $\tilde{x}_2$, and $\tilde{x}_I$ are bounded.
-    Consequently, the control input $\mu$ is bounded.
+    Moreover, because the external dynamics are stable, the error states $\tilde{\mat{x}}_1$, $\tilde{\mat{x}}_2$, and $\tilde{\mat{x}}_I$ are bounded.
+    Consequently, the control input $\bs{\mu}$ is bounded.
     Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
 Finally, let us investigate the exponential stability of the whole closed-loop system.
 We begin by finding the equilibria.
-Let us define the desired relative velocity $\xi_{2_{d, r}} = U_d R_p e_1 - R_p \tilde{I} R_p\T V_c$.
+Let us define the desired relative velocity $\bs{\xi}_{2, d, r} = U_d \mat{R}_p \mat{e}_1 - \mat{R}_p \tilde{\mat{I}} \mat{R}_p\T \ocean$.
 Using the same procedure as in Section~\ref{sec:handpos_trajectory_straight_line_trajectory}, we can conclude that if Assumption~\ref{asm:straight_line_trajectory} holds, then the steady-state orientation must satisfy
 \begin{align}
-    Re_1 &= \pm \frac{\xi_{2_{d, r}}}{\norm{\xi_{2_{d, r}}}}, &
+    \mat{R}\mat{e}_1 &= \pm \frac{\bs{\xi}_{2, d, r}}{\norm{\bs{\xi}_{2, d, r}}}, &
     \sin\phi &= 0,
 \end{align}
 where $\phi$ is the steady-state roll angle.
 
-Using the orientation error $\delta$, as defined in \eqref{eq:handpos_trajectory_delta}, the complete closed-loop system is given by
+Using the orientation error $\bs{\delta}$, as defined in \eqref{eq:handpos_trajectory_delta}, the complete closed-loop system is given by
 \begin{subequations}
     \begin{align}
-        \dot{\tilde{\xi}}_I &= \tilde{\xi}_1, \\
-        \dot{\tilde{\xi}}_1 &= \tilde{\xi}_2, \\
-        \dot{\tilde{\xi}}_2 &= -k_I \hat{I} \tilde{\xi}_I - k_p \hat{I} \tilde{\xi}_1 - k_d \tilde{\xi}_2, \\
-        \dot{\delta} &= \omega, \\
-        \dot{\omega} &= \Bar{L} \times \bigg(-k_I R\T R_p \hat{I} \tilde{\xi}_I - k_p R\T R_p \hat{I} \tilde{\xi}_1 \nonumber \\
-        &\qquad \qquad - k_d R\T R_p \tilde{\xi}_2 + \mathcal{D}_{\nu}(\zeta) + \mathcal{C}_{\nu}(\zeta) \nonumber \\
-        &\qquad \qquad - \omega \times \left(R\T\! R_p \tilde{\xi}_2 + {\rm expm}(\delta)\T \norm{\xi_{2_{d,r}}}e_1\right)\!\bigg) \nonumber \\
-        &\quad - \left(\Bar{L}L\T\right) \left(\mathcal{D}_{\omega}(\zeta) + M_{22}\left(Wz_{gb} e_3 \times R\T e_3\right)\right),
+        \dot{\tilde{\bs{\xi}}}_I &= \tilde{\bs{\xi}}_1, \\
+        \dot{\tilde{\bs{\xi}}}_1 &= \tilde{\bs{\xi}}_2, \\
+        \dot{\tilde{\bs{\xi}}}_2 &= -k_I \hat{\mat{I}} \tilde{\bs{\xi}}_I - k_p \hat{\mat{I}} \tilde{\bs{\xi}}_1 - k_d \tilde{\bs{\xi}}_2, \\
+        \dot{\bs{\delta}} &= \bs{\omega}, \\
+        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \bigg(-k_I \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_I - k_p \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_1 \nonumber \\
+        &\qquad \qquad - k_d \mathbf{R}\T \mat{R}_p \tilde{\bs{\xi}}_2 + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) \nonumber \\
+        &\qquad \qquad - \bs{\omega} \times \left(\mathbf{R}\T\! \mat{R}_p \tilde{\bs{\xi}}_2 + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1\right)\!\bigg) \nonumber \\
+        &\quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right),
     \end{align}
 \end{subequations}
-Next, we define a vector $\Bar{z}\T = \left[\Xi\T, \delta\T, \omega\T\right]$ and a function $\Bar{f}$ such that $\dot{\Bar{z}} = \Bar{f}(\Bar{z})$.
-Let $\Bar{J}$ denote the Jacobian of $\Bar{f}(\Bar{z})$, evaluated at $\Bar{z} = 0_{13}$.
-$\Bar{J}$ is given by
+Next, we define a vector $\Bar{\mat{z}}\T = \left[\bs{\Xi}\T, \bs{\delta}\T, \bs{\omega}\T\right]$ and a function $\Bar{f}$ such that $\dot{\Bar{\mat{z}}} = \Bar{f}(\Bar{\mat{z}})$.
+Let $\Bar{\mat{J}}$ denote the Jacobian of $\Bar{f}(\Bar{\mat{z}})$, evaluated at $\Bar{\mat{z}} = \mat{0}_{13}$.
+$\Bar{\mat{J}}$ is given by
 
 \begin{equation}
-    \Bar{J} \!=\! \begin{bmatrix}
-        O_{2 \times 2} & I_{2 \times 2} & O_{2 \times 3} & O_{2 \times 3}\!\!\! & O_{2 \times 3} \\
-        O_{2 \times 2} & O_{2 \times 2} & \hat{I}\T & O_{2 \times 3}\!\!\! & O_{2 \times 3} \\
-        -k_I \hat{I}\!\! & -k_p \hat{I}\!\!\! & -k_d I_{3 \times 3}\!\!\!\! & O_{3 \times 3}\!\!\! & O_{3 \times 3} \\
-        O_{3 \times 2} & O_{3 \times 2} & O_{3 \times 3} & O_{3 \times 3}\!\!\! & I_{3 \times 3} \\
-        R\T\! R_p \hat{I}J_{\xi_I}\!\!\!\! & R\T\! R_p \hat{I}J_{\xi_1}\!\!\!\! & R\T\! R_p J_{\xi_2}\!\!\!\! & J_{\delta} & J_{\omega}
-    \end{bmatrix}\!. \label{eq:handpos_trajectory_path_jacobian}
+    \Bar{\mat{J}} = \begin{bmatrix}
+        \mat{O}_{2 \times 2} & \mat{I}_{2} & \mat{O}_{2 \times 3} & \mat{O}_{2 \times 3} & \mat{O}_{2 \times 3} \\
+        \mat{O}_{2 \times 2} & \mat{O}_{2 \times 2} & \hat{\mat{I}}\T & \mat{O}_{2 \times 3} & \mat{O}_{2 \times 3} \\
+        -k_I \hat{\mat{I}} & -k_p \hat{\mat{I}} & -k_d \mat{I}_{3} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} \\
+        \mat{O}_{3 \times 2} & \mat{O}_{3 \times 2} & \mat{O}_{3 \times 3} & \mat{O}_{3 \times 3} & \mat{I}_{3} \\
+        \mathbf{R}^{ \rm T} \mat{R}_p \hat{\mat{I}}\mat{J}_{\bs{\xi}_I} & \mathbf{R}^{ \rm T} \mat{R}_p \hat{\mat{I}}\mat{J}_{\bs{\xi}_1} & \mathbf{R}^{ \rm T} \mat{R}_p \mat{J}_{\bs{\xi}_2} & \mat{J}_{\delta} & \mat{J}_{\bs{\omega}}
+    \end{bmatrix}. \label{eq:handpos_trajectory_path_jacobian}
 \end{equation}
-The blocks of $\Bar{J}$ are shown in \eqref{eq:handpos_trajectory_jacobian_blocks}.
+The blocks of $\Bar{\mat{J}}$ are shown in \eqref{eq:handpos_trajectory_jacobian_blocks}.
 Using the same reasoning as in the proof of Proposition~\ref{prop:straight_line_trajectory}, we can conclude that the closed-loop system is exponentially stable if Assumption~\ref{asm:straight_line_trajectory} holds and all $\Delta_i$ and $\Omega_i$ for $i \in \left\{1,2,3\right\}$ are positive. \qed
 
 \section{Simulations}
@@ -593,17 +595,17 @@ The simulations were carried out in MATLAB using a model of the \acrfull{lauv}.
 
 We tested the trajectory tracking algorithm proposed in Section~\ref{sec:handpos_trajectory_trajectory_tracking}, the curved path following algorithm proposed in Section~\ref{sec:handpos_trajectory_path_following}, and the straight-line path following algorithm in Section~\ref{sec:handpos_trajectory_straight_line_path}.
 The following parameters are common for the first two tests:
-The initial state of the vehicle is $\eta(0) = 0_3$, $R(0) = I_{3 \times 3}$, $\nu_r(0) = e_1$, $\omega(0) = 0_3$.
-The hand length is $h = \SI{5}{\meter}$, the velocity of the ocean current is $V = \inlinevector{0.15, -0.1, 0.05}$, and the PID gains are $k_p = 0.03, k_d = 0.4, k_I = 8.5 \cdot 10^{-4}$.
+The initial state of the vehicle is $\mat{p}(0) = \mat{0}_3$, $\mat{R}(0) = \mat{I}_{3}$, $\bvel_r(0) = \mat{e}_1$, $\mat{\omega}(0) = \mat{0}_3$.
+The hand length is $h = \SI{5}{\meter}$, the velocity of the ocean current is $\ocean\T = \left[0.15, -0.1, 0.05\right]$, and the PID gains are $k_p = 0.03, k_d = 0.4, k_I = 8.5 \cdot 10^{-4}$.
 
 \subsection{Trajectory Tracking}
 \input{figures/handpos_trajectory/fig_waypoint.tex}
 In this test, the vehicle should track a figure eight trajectory
 \begin{equation}
-    \xi_{1_d}\!(t) \!=\!\! \inlinevector{50\!\cos\!\left(\frac{\pi}{200}t\right)\!\!, 25\!\sin\!\left(\frac{2\pi}{200}t\right)\!\!, 15\cos\!\left(\frac{2\pi}{200}t\right)}\!\!\!\!\!.
+    \bs{\xi}_{1, d}(t) = \inlinevector{50\cos\left(\frac{\pi}{200}t\right), 25\sin\left(\frac{2\pi}{200}t\right), 15\cos\left(\frac{2\pi}{200}t\right)}\!\!.
 \end{equation}
 We use the trajectory tracking controller proposed in Section~\ref{sec:handpos_trajectory_trajectory_tracking}.
-The PID gains are chosen such that $H_{\xi}$ is Hurwitz, guaranteeing the stability of the external dynamics.
+The PID gains are chosen such that $\mat{H}_{\xi}$ is Hurwitz, guaranteeing the stability of the external dynamics.
 The value of $\Bar{\alpha}_y = \Bar{\alpha}_z$ for the chosen parameters is $0.05$, guaranteeing the boundedness of the internal dynamics by Proposition~\ref{prop:handpos_trajectory_trajectory_tracking}.
 
 The results are shown in Figure~\ref{fig:trajectory_tracking}.
@@ -639,7 +641,7 @@ After the transient period, $\dot{s}$ converges to $U_d$.
 Since the vehicle model and parameters of the controller are identical for both simulations, the results of these simulations are very similar.
 The main difference between the proposed controllers is that in path following, one has an additional ``degree of freedom'' when choosing the path parameter, while in trajectory tracking, the trajectory is parametrized in time and thus fixed.
 In \cite{aguiar_trajectory_tracking_2007}, it is argued that the control signals of path following controllers are smoother and have a lower peak value than in the case of trajectory tracking controllers.
-This fact is confirmed by the simulations, as the peak value of the control input $\mu$ is $\SI{0.1}{\meter\per\second\squared}$ lower, and the surge velocity $u_r$ is $\SI{0.2}{\meter\per\second}$ lower in the path following simulation.
+This fact is confirmed by the simulations, as the peak value of the control input $\bs{\mu}$ is $\SI{0.1}{\meter\per\second\squared}$ lower, and the surge velocity $u_r$ is $\SI{0.2}{\meter\per\second}$ lower in the path following simulation.
 
 \subsection{Straight-line Path Following}
 \label{sec:handpos_trajectory_simulation_waypoints}
@@ -648,9 +650,9 @@ In this test, the vehicle should follow a path consisting of a series of waypoin
 The vehicle switches to the next line segment when the distance to the current waypoint is less than five meters.
 The desired path is shown in Figure~\ref{fig:waypoints}.
 The parameters of the simulation are chosen identically to the experiment described in the next section.
-The initial position of the vehicle is $\eta(0) = \inlinevector{-1.8, -9.3, 0}$, the initial yaw angle is $185$ degrees, and the remaining angles and velocities are zero.
+The initial position of the vehicle is $\mat{p}(0) = \inlinevector{-1.8, -9.3, 0}$, the initial yaw angle is $185$ degrees, and the remaining angles and velocities are zero.
 The desired path-following speed is $U_d = \SI{1.3}{\meter\per\second}$, and the gains of the PID controller are $k_p = 0.2$, $k_d = 0.9$, $k_I = 0.01$.
-The gains are chosen so that $\Bar{H}_{\xi}$ is Hurwitz, guaranteeing the exponential stability of the external dynamics by Proposition~\ref{prop:straight_line_path}.
+The gains are chosen so that $\Bar{\mat{H}}_{\xi}$ is Hurwitz, guaranteeing the exponential stability of the external dynamics by Proposition~\ref{prop:straight_line_path}.
 
 The results are shown in Figure~\ref{fig:waypoint_following}.
 Figure~\ref{fig:waypoint_trajectory} shows the trajectory of the vehicle.
@@ -675,7 +677,7 @@ The reason for choosing this specific controller for experimental validation is 
 % Consider the hand position $x_1$, as defined in \eqref{eq:handpos_trajectory_hand_position}.
 % The derivative of $x_1$ is given by
 % \begin{equation}
-%     \dot{x}_1 = R\nu_r + R \left(\omega \times L\right) + V_c. \label{eq:handpos_trajectory_x_1_dot}
+%     \dot{x}_1 = R\bvel_r + R \left(\omega \times L\right) + \ocean. \label{eq:handpos_trajectory_x_1_dot}
 % \end{equation}
 % By treating $u_r$, $q$, and $r$ as the input to our system, we can use the following change of inputs
 % \begin{equation}
@@ -684,32 +686,32 @@ The reason for choosing this specific controller for experimental validation is 
 %     \begin{bmatrix}
 %         1 & 0 & 0 \\ 0 & 0 & -\frac{1}{h} \\ 0 & \frac{1}{h} & 0
 %     \end{bmatrix}
-%     \left( R\T\hat{\mu} - \begin{bmatrix} 0 \\ v_r \\ w_r \end{bmatrix} \right),
+%     \left( \mathbf{R}\T\hat{\bs{\mu}} - \begin{bmatrix} 0 \\ v_r \\ w_r \end{bmatrix} \right),
 % \end{equation}
-% where $\hat{\mu} \in \mathbb{R}^3$ is the new input, to transform \eqref{eq:handpos_trajectory_x_1_dot} into
+% where $\hat{\bs{\mu}} \in \mathbb{R}^3$ is the new input, to transform \eqref{eq:handpos_trajectory_x_1_dot} into
 % \begin{equation}
-%     \dot{x}_1 = \hat{\mu} + V_c.
+%     \dot{x}_1 = \hat{\bs{\mu}} + \ocean.
 % \end{equation}
-% Consider then the error states $\widetilde{x}_1^{\prime}$ and $\widetilde{x}_I^{\prime}$, as defined in \eqref{eq:handpos_trajectory_straight_line_path_PID}, and the following PI control law
+% Consider then the error states $\tilde{\mat{x}}_1^{\prime}$ and $\tilde{\mat{x}}_I^{\prime}$, as defined in \eqref{eq:handpos_trajectory_straight_line_path_PID}, and the following PI control law
 % \begin{equation}
-%     \hat{\mu} = -k_p\hat{I}\widetilde{x}_1^{\prime} - k_I\hat{I}\widetilde{x}_I^{\prime} + U_d R_p e_1,
+%     \hat{\bs{\mu}} = -k_p\hat{\mat{I}}\tilde{\mat{x}}_1^{\prime} - k_I\hat{\mat{I}}\tilde{\mat{x}}_I^{\prime} + U_d \mat{R}_p \mat{e}_1,
 % \end{equation}
 % where $k_p$ and $k_I$ are positive gains.
 % Similarly to Section~\ref{sec:handpos_trajectory_straight_line_path}, we introduce a change of coordinates
 % \begin{subequations}
 %     \begin{align}
-%         \Bar{\xi}_1^{\prime} &= \widetilde{x}_1^{\prime}, \\
-%         \Bar{\xi}_I^{\prime} &= \widetilde{x}_I^{\prime} - \frac{k_p}{k_I}\tilde{I}V_c,
+%         \Bar{\bs{\xi}}_1^{\prime} &= \tilde{\mat{x}}_1^{\prime}, \\
+%         \Bar{\bs{\xi}}_I^{\prime} &= \tilde{\mat{x}}_I^{\prime} - \frac{k_p}{k_I}\tilde{\mat{I}}\ocean,
 %     \end{align}
 % \end{subequations}
-% and define a vector $\Bar{\Xi}^{\prime\T} = \left[\Bar{\xi}_I^{\prime\T}, \Bar{\xi}_1^{\prime\T}\right]$.
-% It is straightforward to show that $\dot{\Bar{\Xi}}^{\prime} = \Bar{H}\Bar{\Xi}^{\prime}$, where
+% and define a vector $\Bar{\bs{\Xi}}^{\prime\T} = \left[\Bar{\bs{\xi}}_I^{\prime\T}, \Bar{\bs{\xi}}_1^{\prime\T}\right]$.
+% It is straightforward to show that $\dot{\Bar{\bs{\Xi}}}^{\prime} = \Bar{H}\Bar{\bs{\Xi}}^{\prime}$, where
 % \begin{equation}
 %     \Bar{H} 
 %     = 
 %     \begin{bmatrix}
-%         O_{2 \times 2} & I_{2 \times 2} \\
-%         -k_I I_{2 \times 2} & -k_p I_{2 \times 2}
+%         \mat{O}_{2 \times 2} & \mat{I}_{2} \\
+%         -k_I \mat{I}_{2} & -k_p \mat{I}_{2}
 %     \end{bmatrix}.
 % \end{equation}
 % The matrix $\Bar{H}$ is Hurwitz for any positive $k_p$ and $k_I$, and the external dynamics are thus GES.
@@ -722,7 +724,7 @@ The parameters of the controller are identical to the simulation in Section~\ref
 
 The results of the experiment are shown in Figure~\ref{fig:experiment}.
 Figure~\ref{fig:experiment_trajectory} shows the trajectory of the AUV.
-The green line represents the hand position $x_1$, the red line represents the desired path, and the arrows represent the orientation of the vehicle, with the base of the arrow located at $\eta$, and the tip of the arrow pointing towards $x_1$.
+The green line represents the hand position $\mat{x}_1$, the red line represents the desired path, and the arrows represent the orientation of the vehicle, with the base of the arrow located at $\mat{p}$, and the tip of the arrow pointing towards $\mat{x}_1$.
 Figure~\ref{fig:experiment_errors} shows the cross-track errors.
 The dotted lines show when the waypoints change.
 The sudden increase in cross-track errors is caused by the switching logic explained in the previous paragraph.
