@@ -1,4 +1,4 @@
-%% Creator: Inkscape inkscape 0.92.5, www.inkscape.org
+%% Creator: Inkscape 1.1.2 (0a00cf5339, 2022-02-04), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'waypoints.pdf' (pdf, eps, ps)
 %%
@@ -54,22 +54,22 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{waypoints.pdf}}%
-    \put(0.09218296,0.22964956){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'05"N\end{tabular}}}}%
-    \put(0.09218296,0.37900442){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'06"N\end{tabular}}}}%
-    \put(0.09218296,0.52835996){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'07"N\end{tabular}}}}%
-    \put(0.07448385,0.29977898){\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Latitude\end{tabular}}}}}%
+    \put(0.07890863,0.22964956){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'05"N\end{tabular}}}}%
+    \put(0.07890863,0.37900442){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'06"N\end{tabular}}}}%
+    \put(0.07890863,0.52835996){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}41°11'07"N\end{tabular}}}}%
+    \put(0.06120951,0.29977898){\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Latitude\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{waypoints.pdf}}%
-    \put(0.44265951,0.05014757){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'20"W\end{tabular}}}}%
-    \put(0.66754248,0.05014757){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'18"W\end{tabular}}}}%
-    \put(0.55309779,0.00958695){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Longitude\end{tabular}}}}%
+    \put(0.44265951,0.04572279){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'20"W\end{tabular}}}}%
+    \put(0.66754248,0.04572279){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8°42'18"W\end{tabular}}}}%
+    \put(0.55309779,0.00073739){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Longitude\end{tabular}}}}%
     \put(0.51659336,0.65873894){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textbf{\textbf{Desired path}}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{waypoints.pdf}}%
-    \put(0.31355243,0.11993695){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small 50 ft \end{tabular}}}}%
-    \put(0.31355243,0.15876438){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small 20 m \end{tabular}}}}%
+    \put(0.31355243,0.11993695){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize 50 ft \end{tabular}}}}%
+    \put(0.31355243,0.15876438){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize 20 m \end{tabular}}}}%
     \put(0.31154707,0.56076623){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{1}\end{tabular}}}}%
-    \put(0.29978487,0.28986062){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{2}\end{tabular}}}}%
-    \put(0.4943238,0.1543124){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{3}\end{tabular}}}}%
-    \put(0.73372313,0.18790824){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{4}\end{tabular}}}}%
+    \put(0.29536009,0.28986062){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{2}\end{tabular}}}}%
+    \put(0.48547424,0.1543124){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{3}\end{tabular}}}}%
+    \put(0.72929835,0.18790824){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{4}\end{tabular}}}}%
     \put(0.74655833,0.35734308){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{5}\end{tabular}}}}%
     \put(0.64086084,0.55920687){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\waypoint{6}\end{tabular}}}}%
   \end{picture}%

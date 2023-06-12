@@ -9,56 +9,59 @@
             \label{fig:path_trajectory}
         \end{subfigure}
 
-        \vspace*{-5.5mm}
+        %\vspace*{-1.5mm}
 
         \begin{subfigure}{\textwidth}
             \hspace*{\fill}
             \input{figures/handpos_trajectory/path_omega.tex}
-            %\vspace*{-2.5mm}
+            \vspace*{-8mm}
             \caption{The angular velocities.}
             \label{fig:path_omega}
         \end{subfigure}
 
-        \vspace*{-3.5mm}
+        %\vspace*{-1.5mm}
 
         \begin{subfigure}{\textwidth}
-            \hspace*{\fill}
+            \hspace*{-1.5mm}
             \input{figures/handpos_trajectory/path_parameter.tex}
-            %\vspace*{-3.5mm}
+            \vspace*{-8mm}
             \caption{The time-derivative of the path parameter.}
             \label{fig:path_parameter}
         \end{subfigure}
-        \vspace*{-2mm}
+        \vspace*{-7mm}
     \end{minipage}
     \hspace*{\fill}
     \begin{minipage}{0.48\textwidth}
         \begin{subfigure}{\textwidth}
+            \hspace*{-2.5mm}
             \input{figures/handpos_trajectory/path_position.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_1$.}
             \label{fig:path_position}
         \end{subfigure}
 
-        \vspace*{-3.5mm}
+        %\vspace*{-1.5mm}
 
         \begin{subfigure}{\textwidth}
+            \hspace*{1mm}
             \input{figures/handpos_trajectory/path_velocity.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_2$.}
             \label{fig:path_velocity}
         \end{subfigure}
 
-        \vspace*{-3.5mm}
+        %\vspace*{-1.5mm}
 
         \begin{subfigure}{\textwidth}
+            \hspace*{-1.7mm}
             \input{figures/handpos_trajectory/path_integral.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_I$.}
             \label{fig:path_integral}
         \end{subfigure}
-        \vspace*{-2mm}
+        \vspace*{-7mm}
     \end{minipage}
-    \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:path_following}.
+    \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:handpos_trajectory_path_following}.
     %(a) Trajectory. The green line represents the hand position $x_1$, the red line represents the desired trajectory $\bs{\xi}_{1_d}$, and the polygons represent the position and orientation of the AUV.
     %(b) Angular velocities of the vehicle.
     %(c) Time-derivative of the path parameter, compared to the desired path-following speed $U_d$.

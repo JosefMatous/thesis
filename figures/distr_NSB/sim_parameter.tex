@@ -12,7 +12,7 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=0.8\textwidth,
+width=0.75\textwidth,
 height=18mm,
 scale only axis,
 xmin=0,
@@ -30,26 +30,26 @@ ylabel={$|\tilde{s}_{i}|$ [--]},
 axis background/.style={fill=white},
 title style={font=\bfseries, yshift=-1mm},
 title={Path parameter errors},
-legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small, at={(1.02,1.1)}, anchor=north east},
-legend columns=2
+%legend style={/tikz/column 2/.style={column sep=2pt,}, font=\small, at={(1.02,1.1)}, anchor=north east},
+%legend columns=2
 ]
 \addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
 table[] {sim_parameter-5.tsv}--cycle;
 
 \addplot [color=mycolor1, line width=0.8pt]
   table[]{sim_parameter-1.tsv};
-\addlegendentry{AUV 1}
+%\addlegendentry{AUV 1}
 
 \addplot [color=mycolor2, line width=0.8pt]
   table[]{sim_parameter-2.tsv};
-\addlegendentry{AUV 2}
+%\addlegendentry{AUV 2}
 
 \addplot [color=mycolor3, line width=0.8pt]
   table[]{sim_parameter-3.tsv};
-\addlegendentry{AUV 3}
+%\addlegendentry{AUV 3}
 
 \addplot [color=mycolor4, line width=0.8pt]
   table[]{sim_parameter-4.tsv};
-\addlegendentry{AUV 4}
+%\addlegendentry{AUV 4}
 \end{axis}
 \end{tikzpicture}%

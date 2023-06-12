@@ -748,7 +748,6 @@ Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and
 Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
 
 \subsection{Event-triggered Consensus}
-\input{figures/distr_NSB/figure_comparison.tex}
 
 In this section, we test the event-triggered scheme proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 We choose the mixing gains $a_p = a_s = 0.4$, and the penalty gains: $b_p = 10^{-4}, b_s = 4$.
@@ -764,8 +763,9 @@ The initial orientations were specified in Euler angles, with a zero roll angle,
 The initial linear velocities ranged from $\inlinevector{0.5, -0.2, -0.1}$ to $\inlinevector{1.5, 0.2, 0.1}$, and the initial angular velocities were zero.
 The communication delays ranged from $0$ to $5$ seconds.
 
-\figref{fig:distr_NSB_comparison} shows the resulting errors.
-Specifically, \figref{fig:distr_NSB_comparison_parameter} shows the absolute value of the path parameter error, and \figref{fig:distr_NSB_comparison_barycenter} shows the norm of the path-following error.
+\input{figures/distr_NSB/figure_comparison.tex}
+
+\figref{fig:distr_NSB_comparison} shows the absolute value of the path parameter error and the norm of the path-following error.
 Both errors are plotted in a logarithmic scale.
 In terms of path parameter errors, both algorithms perform similarly.
 In terms of path-following errors, the distributed \gls{nsb} algorithm is marginally better.
@@ -786,7 +786,7 @@ In this context, the two algorithms present a trade-off between packet size and 
 In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two \glspl{lauv} as in \figref{fig:distr_NSB_LAUV}.
 
-\begin{figure}[b]
+\begin{figure}[tb]
     \centering
     \includegraphics[width = 0.6\columnwidth]{figures/distr_NSB/LAUV-Roald}
     \caption{Photo of one of the two \glspl{lauv} used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}
@@ -798,13 +798,15 @@ The algorithm was implemented in C++, using the Unified Navigation Environment (
 
 The algorithm was tested in two scenarios: a \emph{nominal} scenario, \emph{i.e.,} formation path following without any obstacles, and a scenario with a static obstacle.
 In both scenarios, the barycenter of the \glspl{auv} should follow the elliptic path
-\begin{equation}
-    \mat{p}_p(s) = \inlinevector{a \cos(s), b \sin(s), 0}, \quad a = \SI{100}{\meter}, b = \SI{80}{\meter},
-\end{equation}
+\begin{align}
+    \mat{p}_p(s) &= \inlinevector{a \cos(s), b \sin(s), 0},& 
+    a &= \SI{100}{\meter},& 
+    b &= \SI{80}{\meter},
+\end{align}
 in the formation defined by
 \begin{align}
     \mat{p}_{f, 1}^f &= \inlinevector{0, -25, 0}, &
-    \mat{p}_{f, 2}^f &= \inlinevector{0, 25, 0}. &
+    \mat{p}_{f, 2}^f &= \inlinevector{0, 25, 0}.
 \end{align}
 The reason for choosing a larger path and formation, compared to the simulations in Section~\ref{sec:distr_NSB_simulations}, was to reduce the risk of the \glspl{auv} colliding.
 The obstacle was placed at $\mat{p}_o = \inlinevector{0, 80}$.

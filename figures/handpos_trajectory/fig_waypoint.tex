@@ -9,47 +9,47 @@
             \label{fig:waypoint_trajectory}
         \end{subfigure}
 
-        \vspace*{-4.5mm}
+        %\vspace*{-4.5mm}
 
         \begin{subfigure}{\textwidth}
-            \hspace*{\fill}
+            \hspace*{-2mm}
             \input{figures/handpos_trajectory/waypoints_omega.tex}
-            %\vspace*{-2.5mm}
+            \vspace*{-5mm}
             \caption{The angular velocities.}
             \label{fig:waypoint_omega}
         \end{subfigure}
 
-        \vspace*{-2mm}
+        \vspace*{-4mm}
     \end{minipage}
     \hspace*{\fill}
     \begin{minipage}{0.48\textwidth}
         \begin{subfigure}{\textwidth}
             \input{figures/handpos_trajectory/waypoints_position.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_1$.}
             \label{fig:waypoint_position}
         \end{subfigure}
 
-        \vspace*{-3.5mm}
+        %\vspace*{-3.5mm}
 
         \begin{subfigure}{\textwidth}
             \input{figures/handpos_trajectory/waypoints_velocity.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_2$.}
             \label{fig:waypoint_velocity}
         \end{subfigure}
 
-        \vspace*{-3.5mm}
+        %\vspace*{-3.5mm}
 
         \begin{subfigure}{\textwidth}
             \input{figures/handpos_trajectory/waypoints_integral.tex}
-            %\vspace*{-4mm}
+            \vspace*{-8mm}
             \caption{The $x$- $y$- and $z$-components of $\tilde{\bs{\xi}}_I$.}
             \label{fig:waypoint_integral}
         \end{subfigure}
-        \vspace*{-2mm}
+        \vspace*{-4mm}
     \end{minipage}
-    \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:path_following}.
+    \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:handpos_trajectory_path_following}.
     %(a) Trajectory. The green line represents the hand position $x_1$, the red line represents the desired trajectory $\xi_{1_d}$, and the polygons represent the position and orientation of the AUV.
     %(b) Angular velocities of the vehicle.
     %(c) The cross-track errors.
@@ -61,10 +61,10 @@
 
 \begin{figure}[tb]
     \centering
-    \def\svgwidth{0.48\textwidth}
+    \def\svgwidth{0.7\textwidth}
     \input{figures/handpos_trajectory/waypoints.tex}
     \import{figures/handpos_trajectory}{waypoints.pdf_tex}
-    \vspace*{-3.5mm}
-    \caption{The desired path used in the simulation in Section~\ref{sec:simulation_waypoints} and experiment, with waypoints in (latitude, longitude, depth) format.}
+    \vspace*{-0.5mm}
+    \caption{The desired path used in the simulation in Section~\ref{sec:handpos_trajectory_simulation_waypoints} and experiment, with waypoints in (latitude, longitude, depth) format.}
     \label{fig:waypoints}
 \end{figure}

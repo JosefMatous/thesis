@@ -12,7 +12,7 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=0.8\textwidth,
+width=0.75\textwidth,
 height=18mm,
 scale only axis,
 xmin=0,
@@ -38,19 +38,19 @@ table[] {sim_radius-5.tsv}--cycle;
 
 \addplot [color=mycolor1, line width=0.8pt]
   table[]{sim_radius-1.tsv};
-\addlegendentry{AUV 1}
+%\addlegendentry{AUV 1}
 
 \addplot [color=mycolor2, line width=0.8pt, dashed]
   table[]{sim_radius-2.tsv};
-\addlegendentry{AUV 2}
+%\addlegendentry{AUV 2}
 
 \addplot [color=mycolor3, line width=0.8pt, dotted]
   table[]{sim_radius-3.tsv};
-\addlegendentry{AUV 3}
+%\addlegendentry{AUV 3}
 
 \addplot [color=mycolor4, line width=0.8pt, dotted]
   table[]{sim_radius-4.tsv};
-\addlegendentry{AUV 4}
+%\addlegendentry{AUV 4}
 \end{axis}
 
 \end{tikzpicture}%

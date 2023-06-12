@@ -453,7 +453,7 @@ For more details, the reader is referred to \cite{fossen_handbook_2011,borhaug_s
 
 Because the vehicle is underactuated (second-order nonholonomic), we cannot use the origin of the body-fixed frame $(x,y)$ as the output of our system.
 Instead, we choose a different point, located on the central axis ($x$-axis) of the vehicle, as the output of our system (see \figref{fig:ASV}).
-In the literature, this point is referred to as the \emph{hand position} of the vehicle \cite{awton_hand-position-formation_2003,paliotta_trajectory_2019}.
+In the literature, this point is referred to as the \emph{hand position} of the vehicle \cite{lawton_hand-position-formation_2003,paliotta_trajectory_2019}.
 The hand position is defined as
 \begin{equation}
     \bm{y} = \inlinevector{x + L\,\cos(\psi), y + L\,\sin(\psi)}, \label{eq:hand}
@@ -495,7 +495,7 @@ Using output-feedback linearization, we have simplified the system to a double i
 \begin{table}[b]
     \begin{center}
     \captionsetup{width=.48\textwidth}
-    \caption{Simulation parameters} \label{tab:params}
+    \caption{Simulation parameters} \label{tab:handpos_MPC_params}
     
     \begin{subtable}[t]{0.22\textwidth}
         \caption{Marine vehicles}

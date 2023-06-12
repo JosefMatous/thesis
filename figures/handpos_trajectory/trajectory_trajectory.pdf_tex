@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.0.1 (3bc2e813f5, 2020-09-07), www.inkscape.org
+%% Creator: Inkscape 1.1.2 (0a00cf5339, 2022-02-04), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'trajectory_trajectory.pdf' (pdf, eps, ps)
 %%
@@ -54,18 +54,18 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{trajectory_trajectory.pdf}}%
-    \put(0.57388336,0.15561327){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small Hand position\end{tabular}}}}%
-    \put(0.57521042,0.11362123){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small Reference\end{tabular}}}}%
+    \put(0.47606186,0.15725091){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize Hand position\end{tabular}}}}%
+    \put(0.47785729,0.10535031){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize Reference\end{tabular}}}}%
     \put(0.44814527,0.45906988){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textbf{Trajectory}\end{tabular}}}}%
-    \put(0.05538712,0.43056668){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $-10$\end{tabular}}}}%
-    \put(0.08756371,0.06210174){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $-20$\end{tabular}}}}%
-    \put(0.07816819,0.21518399){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $20$\end{tabular}}}}%
-    \put(0.09050846,0.29985522){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $10$\end{tabular}}}}%
-    \put(0.2003996,0.00295415){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $50$\end{tabular}}}}%
-    \put(0.89845444,0.05699591){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $-50$\end{tabular}}}}%
-    \put(0.57070629,0.02957605){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $0$\end{tabular}}}}%
-    \put(0.10632399,0.13772593){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $0$\end{tabular}}}}%
-    \put(0.10268652,0.36170164){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $0$\end{tabular}}}}%
+    \put(0.046649,0.43056668){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -10$\end{tabular}}}}%
+    \put(0.07882559,0.05773268){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -20$\end{tabular}}}}%
+    \put(0.06943007,0.21518399){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 20$\end{tabular}}}}%
+    \put(0.08177034,0.29985522){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 10$\end{tabular}}}}%
+    \put(0.2003996,-0.00141491){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 50$\end{tabular}}}}%
+    \put(0.89845444,0.05262685){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -50$\end{tabular}}}}%
+    \put(0.57070629,0.02520699){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
+    \put(0.10632399,0.13772593){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
+    \put(0.10268652,0.36170164){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
     \put(0.71472983,0.01521064){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $x\,[\si{\meter}]$\end{tabular}}}}%
     \put(0.05444806,0.07776138){\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $y\,[\si{\meter}]$\end{tabular}}}}}%
     \put(0.05756289,0.29616829){\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\small $z\,[\si{\meter}]$\end{tabular}}}}}%
