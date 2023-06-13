@@ -3,7 +3,7 @@
 
 \pgfplotsset{table/search path={figures/handpos_MPC/data}}
 
-The chapter considers the problem of formation path-following of multiple vehicles and proposes a solution based on combining distributed model predictive control with parametrizations of the trajectories of the vehicles using polynomial splines. Introducing such parametrization leads indeed to two potential benefits: a) reducing the number of optimization variables, and b) enabling enforcing constraints on the vehicles in a computationally efficient way. Moreover, the proposed solution formulates the formation path-following problem as a distributed optimization problem that may then be solved using the alternating direction method of multipliers (ADMM).
+The chapter considers the problem of formation path-following of multiple vehicles and proposes a solution based on combining distributed model predictive control with parametrizations of the trajectories of the vehicles using polynomial splines. Introducing such parametrization leads indeed to two potential benefits: a) reducing the number of optimization variables, and b) enabling enforcing constraints on the vehicles in a computationally efficient way. Moreover, the proposed solution formulates the formation path-following problem as a distributed optimization problem that may then be solved using the \gls{admm}.
 The proposed approach is applicable to all vehicles that can be modeled as differentially flat systems.
 In this chapter, we present numerical simulations with marine vehicles and differential drive robots.
 The contents of this chapter are based on \cite{matous_MPC_2022}.
@@ -29,177 +29,172 @@ However, there is, to the best of our knowledge, no reported work on how to appl
 The goal of this chapter is thus to propose a spline-based \gls{mpc} strategy for the coordinated path-following problem, test its suitability for the purpose, and understand which trade-offs characterize this scheme. As we explain in the next section, spline-based \gls{mpc} imposes some assumptions on the structure of the model of the vehicles.    
 The spline-based \gls{mpc} scheme can thus be seen as a trade-off between lower computational requirements and more restrictive assumptions on the model.
 
-The remainder of the paper is organized as follows.
-In Section~\ref{sec:problem-description}, we present the general assumptions on the model of the vehicles and formally define the formation path-following problem.
-In Section~\ref{sec:spline-based-MPC}, we propose the distributed spline-based \gls{mpc} scheme.
-Section~\ref{sec:case_studies} presents two case studies.
-Finally, Section~\ref{sec:conclusion} gives some concluding remarks.
+The remainder of the chapter is organized as follows.
+In Section~\ref{sec:MPC_problem-description}, we present the general assumptions on the model of the vehicles and formally define the formation path-following problem.
+In Section~\ref{sec:MPC_spline-based-MPC}, we propose the distributed spline-based \gls{mpc} scheme.
+Section~\ref{sec:MPC_case_studies} presents two case studies.
+Finally, Section~\ref{sec:MPC_conclusion} gives some concluding remarks.
 
 \section{Problem Description}
-\label{sec:problem-description}
+\label{sec:MPC_problem-description}
 
 In this section, we first introduce the assumptions on the model of the vehicles.
 Then, we define the objective of formation path-following and pose it as an optimization problem.
 
 
 
-\subsection{Vehicle Model}
-\label{ssec:vehicle-model}
+\subsection{Vehicle model}
+\label{ssec:MPC_vehicle-model}
 
 
 
-Here, we discuss the dynamics of a single agent in the network. Let $\bm{x} \in \mathbb{R}^{n_{\bm{x}}}$ be the vector of states.
+Here, we discuss the dynamics of a single agent in the network. Let $\mat{x} \in \mathbb{R}^{n_{\mat{x}}}$ be the vector of states.
 We assume that the state vector includes the position of the agent.
-Without loss of generality, let the first $n_{\bm{q}}$ states be the position of the vehicle.
+Without loss of generality, let the first $n_{\mat{q}}$ states be the position of the vehicle.
 We can then define the position vector of the vehicle as
 \begin{equation}
-    \bm{q} = \inlinevector{x_1, \ldots, x_{n_{\bm{q}}}}.
+    \mat{q} = \inlinevector{x_1, \ldots, x_{n_{\mat{q}}}}.
 \end{equation}
-Since vehicles typically move in either two or three dimensions, we assume that $n_{\bm{q}} \in \left\{2,3\right\}$.
-Let $\bm{u} \in \mathbb{R}^{n_{\bm{q}}}$ be the vector of control inputs.
+Since vehicles typically move in either two or three dimensions, we assume that $n_{\mat{q}} \in \left\{2,3\right\}$.
+Let $\mat{u} \in \mathbb{R}^{n_{\mat{q}}}$ be the vector of control inputs.
 We assume the dynamics of the vehicle to be given by an ordinary differential equation
 \begin{equation}
-    \dot{\bm{x}} = \bm{f} \left(\bm{x}, \bm{u}\right).
-\label{equ:dynamics-of-an-agent}
+    \dot{\mat{x}} = f \left(\mat{x}, \mat{u}\right).
+\label{equ:MPC_dynamics-of-an-agent}
 \end{equation}
-%where $\bm{f} : \mathbb{R}^{n_{\bm{x}}} \times \mathbb{R}^{n_{\bm{q}}} \mapsto \mathbb{R}^{n_{\bm{x}}}$ 
-Note that we assume the number of inputs to be equal to $n_{\bm{q}}$.
+%where $f : \mathbb{R}^{n_{\mat{x}}} \times \mathbb{R}^{n_{\mat{q}}} \mapsto \mathbb{R}^{n_{\mat{x}}}$ 
+Note that we assume the number of inputs to be equal to $n_{\mat{q}}$.
 In cases where this assumption does not hold because the vehicle is overactuated, we need to reduce the number of inputs by introducing a control allocation scheme (see, \emph{e.g.,} \cite{johansen_control_2013}).
 
-Let $\bm{y} \in \mathbb{R}^{n_{\bm{q}}}$ be the output of the system.
+Let $\mat{y} \in \mathbb{R}^{n_{\mat{q}}}$ be the output of the system.
 Note that, in general, the output can be different from the position of the vehicle.
 However, as discussed in the next paragraph, it must be possible to obtain the position from the output.
 
 We assume the system to be differentially flat \cite{fliess_1995_flatness}, \emph{i.e.}, we assume that the input and state can be determined from the output, its derivatives, and antiderivatives. Moreover, we assume that the relation between the output and the position is polynomial.
-In other words, there exist suitable (nonlinear) functions $\bm{\phi}_{\bm{u}}$ and $\bm{\phi}_{\bm{x}}$, and a multidimensional polynomial function $\bm{\phi}_{\bm{q}}$ of suitable dimensions such that, at any time,
+In other words, there exist suitable (nonlinear) functions $\bm{\phi}_{\mat{u}}$ and $\bm{\phi}_{\mat{x}}$, and a multidimensional polynomial function $\bm{\phi}_{\mat{q}}$ of suitable dimensions such that, at any time,
 %
 \begin{align}
-    \bm{u} &= \bm{\phi}_{\bm{u}} \left(\bm{y}, \dot{\bm{y}}, \ddot{\bm{y}}, \ldots, \bm{y}^{(r')}\right), \label{eq:phi_u} \\
-    \bm{x} &= \bm{\phi}_{\bm{x}} \left(\bm{y}^{(-r'')}, \ldots, \bm{y}, \dot{\bm{y}}, \ddot{\bm{y}}, \ldots, \bm{y}^{(r')}\right), \label{eq:phi_x} \\ 
-    \bm{q} &= \bm{\phi}_{\bm{q}} \left(\bm{y}^{(-r'')}, \ldots, \bm{y}, \dot{\bm{y}}, \ddot{\bm{y}}, \ldots, \bm{y}^{(r')}\right), \label{eq:phi_q}
+    \mat{u} &= \bm{\phi}_{\mat{u}} \left(\mat{y}, \dot{\mat{y}}, \ddot{\mat{y}}, \ldots, \mat{y}^{(r')}\right), \label{eq:MPC_phi_u} \\
+    \mat{x} &= \bm{\phi}_{\mat{x}} \left(\mat{y}^{(-r'')}, \ldots, \mat{y}, \dot{\mat{y}}, \ddot{\mat{y}}, \ldots, \mat{y}^{(r')}\right), \label{eq:MPC_phi_x} \\ 
+    \mat{q} &= \bm{\phi}_{\mat{q}} \left(\mat{y}^{(-r'')}, \ldots, \mat{y}, \dot{\mat{y}}, \ddot{\mat{y}}, \ldots, \mat{y}^{(r')}\right), \label{eq:MPC_phi_q}
 \end{align}
 %
 where $r'$ and $r''$ are positive integers.
 
-To model the constraints on the dynamics of the vehicle, we use a multidimensional function $\bm{e}$.
+To model the constraints on the dynamics of the vehicle, we use a multidimensional function $\mat{e}$.
 The set of feasible states and inputs is given by
 \begin{equation}
-    \big\{\left(\bm{x}, \bm{u}\right) \big| \bm{e} (\bm{x}, \bm{u}) \geq \bm{0}\big\}
-    \label{eq:e}
+    \big\{\left(\mat{x}, \mat{u}\right) \big| \mat{e} (\mat{x}, \mat{u}) \geq \bm{0}\big\}
+    \label{eq:MPC_e}
 \end{equation}
 where the inequality is defined component-wise.
-We assume that substituting \eqref{eq:phi_u}, \eqref{eq:phi_x} into \eqref{eq:e} yields a set of polynomial constraints.
-In other words, we assume that there exists a multidimensional polynomial function $\bm{h}$ such that
+We assume that substituting \eqref{eq:MPC_phi_u}, \eqref{eq:MPC_phi_x} into \eqref{eq:MPC_e} yields a set of polynomial constraints.
+In other words, we assume that there exists a multidimensional polynomial function $\mat{h}$ such that
 \begin{equation}
-    \bm{e} (\bm{x}, \bm{u})
+    \mat{e} (\mat{x}, \mat{u})
     \geq
     \bm{0}
     \, \iff \,
-    \bm{h} \left( \bm{y}^{(-r'')}, \ldots, \bm{y}^{(r')} \right)
+    \mat{h} \left( \mat{y}^{(-r'')}, \ldots, \mat{y}^{(r')} \right)
     \geq
     \bm{0}.
-\label{equ:constraint-h-geq-0}
+\label{equ:MPC_constraint-h-geq-0}
 \end{equation}
 
 
 
-\subsection{Formation Path-Following}
-\label{ssec:formation-path-following}
+\subsection{Formation path-following problem}
+\label{ssec:MPC_formation-path-following}
 
 
 
-The goal is to control $N$ vehicles, all subject to the dynamics introduced in Section~\ref{ssec:vehicle-model}, so that they move in a prescribed formation while their barycenter follows a given path.
-Let $\bm{p} : \mathbb{R} \rightarrow \mathbb{R}^{n_{\bm{q}}}$ be a function that represents this path. We assume that the function is continuously differentiable and its first derivative satisfies
+The goal is to control $N$ vehicles, all subject to the dynamics introduced in Section~\ref{ssec:MPC_vehicle-model}, so that they move in a prescribed formation while their barycenter follows a given path.
+Let $\mat{p}_p : \mathbb{R} \rightarrow \mathbb{R}^{n_{\mat{q}}}$ be a parametrization by arc length that is continuously differentiable.
+This implies that for every path point $\mat{p}(s)$, we can define a path-tangential coordinate frame and a corresponding rotation matrix $\mat{R}_p(s)$ between the inertial and path-tangential frames (see Section~\ref{sec:background_paths}).
+
+The vehicles should converge to a dynamic formation that rotates with the desired path (see Section~\ref{sec:background_formation_keeping}).
+Let $\mat{p}_{f, 1}^f, \ldots, \mat{p}_{f, N}^f$ be the position vectors that represent the desired formation.
+Using this notation, the desired trajectory for agent $i$ is given by
 \begin{equation}
-    \norm{\frac{\partial \bm{p}(s)}{\partial s}} = 1.
-    \label{eq:path_assumption}
-\end{equation}
-This implies that for every path point $\bm{p}(s)$, we can define a path-tangential coordinate frame and a corresponding rotation matrix $\bm{R}_p(s)$ between the inertial and path-tangential frames (a 2D example is shown in \figref{fig:path}).
-
-Let then $\bm{q}_1(t), \ldots, \bm{q}_N(t)$ be the trajectories of the $N$ vehicles composing the fleet, and let $\Delta \bm{p}_1^p, \ldots, \Delta \bm{p}_N^p$ be the desired  positions of the vehicles in the formation, relative to the barycenter. Using this notation, the desired trajectory for agent $i$ is given by
-\begin{equation}
-    \bm{q}_{d,i}(s) = \bm{p}(s) + \bm{R}_p(s)\, \Delta \bm{p}_i^p,
+    \mat{q}_{d,i}(s) = \mat{p}_p(s) + \mat{R}_p(s)\, \mat{p}_{f, i}^f,
 \end{equation} 
 for a given $s$.
-An example formation is shown in \figref{fig:formation}.
 
-The objective of the control system is to steer the actual vehicle positions $\bm{q}_i(t)$ to follow the desired trajectories $\bm{q}_{d,i}$. Ideally, this means that for a given function $s(t)$ we seek the actual positions to be such that
+The objective of the control system is to steer the actual vehicle positions $\mat{q}_i(t)$ to follow the desired trajectories $\mat{q}_{d,i}$. Ideally, this means that for a given function $s(t)$ we seek the actual positions to be such that
 \begin{equation}
-    \bm{q}_i(t)
-    \equiv
-    \bm{q}_{d,i}\big(s(t)\big),
+    \mat{q}_i(t)
+    \rightarrow
+    \mat{q}_{d,i}\big(s(t)\big),
     \quad i = 1, \ldots, N.
-    \label{eq:path_goal}
+    \label{eq:MPC_path_goal}
 \end{equation} 
 
-Note that the path parameter $s(t)$ from the previous equation can be treated as an additional \emph{degree of freedom} when designing the controller. Consequently, we also need to find a suitable control law for $s(t)$. For this purpose, let $U_d$ be the desired speed of the barycenter of the formation. %It is then possible to use~\eqref{eq:path_assumption} to connect the desired speed of such barycenter with the actual speed of the actual barycenter $U(t)$ by means of
-When the vehicles follow the path perfectly, the actual speed of the barycenter is given by
+Similarly to the \gls{nsb} algorithms in Part~\ref{part:NSB}, the path parameter $s(t)$ can be treated as an additional \emph{degree of freedom} when designing the controller. Consequently, we also need to find a suitable control law for $s(t)$. For this purpose, let $U_d$ be the desired speed of the barycenter of the formation. %It is then possible to use~\eqref{eq:MPC_path_assumption} to connect the desired speed of such barycenter with the actual speed of the actual barycenter $U(t)$ by means of
+If the vehicles follow the path perfectly, the actual speed of the barycenter is given by
 \begin{equation}
     U(t)
     =
-    \norm{\dot{\bm{p}} \big( s(t) \big)}
+    \norm{\dot{\mat{p}_p} \big( s(t) \big)}
     =
-    \norm{\frac{\partial \bm{p}(s)}{\partial s}\,\dot{s}(t) } = \abs{\dot{s}(t)}.
+    \norm{\frac{\partial \mat{p}_p(s)}{\partial s}\,\dot{s}(t) } = \abs{\dot{s}(t)}.
 \end{equation}
 The equivalence above implies that the path parameter $s(t)$ should thus be chosen such that
 \begin{equation}
-    \dot{s} \equiv U_d.
-    \label{eq:param_goal}
+    \dot{s} \rightarrow U_d.
+    \label{eq:MPC_param_goal}
 \end{equation}
 
 
 
-\subsection{A centralized solution to the path-formation problem}
-\label{ssec:}
+\subsection{A centralized solution to the formation path-following problem}
+\label{ssec:MPC_centralized}
 
 
 
-The problem of finding for each agent $i$ its actuation signal $\bm{u}_i(t)$ that guarantees following the desired path $\bm{q}_{d,i} \big( s(t) \big)$ as close as possible can thanks to~\eqref{eq:phi_u}--\eqref{eq:phi_q} be transformed into the problem of finding a corresponding output trajectory $\bm{y}_i(t)$.
+The problem of finding for each agent $i$ its actuation signal $\mat{u}_i(t)$ that guarantees following the desired path $\mat{q}_{d,i} \big( s(t) \big)$ as close as possible can thanks to~\eqref{eq:MPC_phi_u}--\eqref{eq:MPC_phi_q} be transformed into the problem of finding a corresponding output trajectory $\mat{y}_i(t)$.
 
-In general, it is not possible to find an output trajectory $\bm{y}_i(t)$ such that \eqref{eq:path_goal} is satisfied, since the dynamics of the agents are constrained by both~\eqref{equ:dynamics-of-an-agent} and~\eqref{equ:constraint-h-geq-0}. This means that at any time $t$, there is a position error
+In general, it is not possible to find an output trajectory $\mat{y}_i(t)$ such that \eqref{eq:MPC_path_goal} is satisfied, since the dynamics of the agents are constrained by both~\eqref{equ:MPC_dynamics-of-an-agent} and~\eqref{equ:MPC_constraint-h-geq-0}. This means that at any time $t$, there is a position error
 %
 \begin{equation}
-    \widetilde{\bm{q}}_i(t)
+    \widetilde{\mat{q}}_i(t)
     =
-    \bm{q}_i(t)
+    \mat{q}_i(t)
     -
-    \bm{q}_{d,i} \big( s(t) \big) .
-    \label{eq:q_tilde}
+    \mat{q}_{d,i} \big( s(t) \big) .
+    \label{eq:MPC_q_tilde}
 \end{equation}
 %
-Thanks to \eqref{eq:phi_q}, we can express $\widetilde{\bm{q}}_i(t)$ in terms of $\bm{y}_i(t)$
+Thanks to \eqref{eq:MPC_phi_q}, we can express $\widetilde{\mat{q}}_i(t)$ in terms of $\mat{y}_i(t)$
 \begin{equation}
-    \widetilde{\bm{q}}_i(t)
+    \widetilde{\mat{q}}_i(t)
     =
-    \bm{\phi}_{\bm{q}}\left(\bm{y}^{(-r'')}(t), \ldots, \bm{y}^{(r')}(t)\right)
+    \bm{\phi}_{\mat{q}}\left(\mat{y}^{(-r'')}(t), \ldots, \mat{y}^{(r')}(t)\right)
     -
-    \bm{q}_{d,i} \big( s(t) \big), \label{eq:y_tilde}
+    \mat{q}_{d,i} \big( s(t) \big), \label{eq:MPC_y_tilde}
 \end{equation}
-and thus solve the problem by optimizing $\bm{y}_i(t)$ and $s(t)$.
+and thus solve the problem by optimizing $\mat{y}_i(t)$ and $s(t)$.
 
 The problem should be cast in a receding horizon fashion to reject potential disturbances as the mission proceeds.     
-We thus propose to formulate the \emph{centralized} problem of optimizing a part of the trajectory, i.e., $\bm{y}_i(t:t+T)$, \linebreak $s(t:t+T)$, as that of optimizing the constrained problem
+We thus propose to formulate the \emph{centralized} problem of optimizing a part of the trajectory, i.e., $\mat{y}_i(t:t+T)$, \ldots, $s(t:t+T)$, as that of optimizing the constrained problem
 %
 \begin{equation}
-    \begin{array}{rcl}
-        \opt_{ \left\lbrace \bm{y}_i(t:t+T) \right\rbrace, s(t:t+T)}
-        &
+    \begin{split}
+        \opt_{ \left\lbrace \mat{y}_i(t:t+T) \right\rbrace, s(t:t+T)}
         \sum_{i=1}^N
         &
         \int_{t}^{t+T}
-        \widetilde{\bm{q}}_i\T(\tau) \, \bm{Q}_{\bm{p}} \, \widetilde{\bm{q}}_i(\tau) {\rm d}\tau \\
-        &
+        \widetilde{\mat{q}}_i\T(\tau) \, \bm{Q}_{\mat{p}} \, \widetilde{\mat{q}}_i(\tau) {\rm d}\tau \\
         & 
         +
         \int_{t}^{t+T} Q_s\,\left(\dot{s}(\tau) - U_d\right)^2 {\rm d}\tau, 
-    \end{array}
-\label{eq:optimization_centralized}
+    \end{split}
+\label{eq:MPC_optimization_centralized}
 \end{equation}
-with $T$ being the prediction horizon, $\bm{Q}_{\bm{p}}$ and $Q_s$ positive weight matrices, $\widetilde{q}_{i}$ the position error as defined in~\eqref{eq:y_tilde}, and subject to, for every agent $i = 1, \ldots, N$, to the constraints~\ref{constraint:io} to~\ref{constraint:initial-condition} below:
+with $T$ being the prediction horizon, $\bm{Q}_{\mat{p}}$ and $Q_s$ positive weight matrices, $\widetilde{q}_{i}$ the position error as defined in~\eqref{eq:MPC_y_tilde}, and subject to, for every agent $i = 1, \ldots, N$, to the constraints~\ref{constraint:io} to~\ref{constraint:initial-condition} below:
 \begin{enumerate}[label=C\arabic*]
-    \item the implicit constraint on the inputs and states, \emph{i.e.}, $\bm{h} \left( \bm{y}_i^{(-r'')}(\tau), \ldots, \bm{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T]$,
+    \item the implicit constraint on the inputs and states, \emph{i.e.}, $$\mat{h} \left( \mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T],$$,
     \label{constraint:io}
-    \item the constraint on the initial condition of the state of the system, i.e., $\bm{\phi}_{\bm{x}} \left(\bm{y}_i^{(-r'')}(t), \ldots, \bm{y}^{(r')}_i(t)\right) = \bm{x}_{i}(t)$,
+    \item the constraint on the initial condition of the state of the system, i.e., $\bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t)$,
     \item the constraint on the initial condition of the path of the agents, \emph{i.e.}, $s(t)$. In other words, $s(t)$ is not a decision variable, while $s(t+\tau)$ for any $\tau > 0$ is.
     \label{constraint:initial-condition}
 \end{enumerate}
@@ -207,29 +202,29 @@ We note that the variational problem above may not be solvable using off-the-she
 
 
 
-\subsection{A distributed solution to the path-formation problem}
+\subsection{A distributed solution to the formation path-following Problem}
 
 
 
-Before doing this rewriting, we note that it is possible to make \eqref{eq:optimization_centralized} distributed by letting the path parameter $s(t)$ be a local variable (\emph{i.e.}, $s_i(t)$), and adding a synchronization constraint on the set of $s_i(t)$'s. This leads to the local reformulation
+Before doing this rewriting, we note that it is possible to make \eqref{eq:MPC_optimization_centralized} distributed by letting the path parameter $s(t)$ be a local variable (\emph{i.e.}, $s_i(t)$), and adding a synchronization constraint on the set of $s_i(t)$'s. This leads to the local reformulation
 
 \begin{subequations}
     \begin{align}
         \begin{split}
-            &\opt_{ \left\lbrace \bm{y}_i(t:t+T), s_i(t:t+T) \right\rbrace }
+            &\opt_{ \left\lbrace \mat{y}_i(t:t+T), s_i(t:t+T) \right\rbrace }
             \int_{t}^{t+T}
-                \widetilde{\bm{q}}_i\T(\tau)
-                \, \bm{Q}_{\bm{p}} \, 
-                \widetilde{\bm{q}}_i(\tau)
+                \widetilde{\mat{q}}_i\T(\tau)
+                \, \bm{Q}_{\mat{p}} \, 
+                \widetilde{\mat{q}}_i(\tau)
                 {\rm d}\tau \\
             & \qquad \qquad \qquad \qquad
             + \int_{t}^{t+T} Q_s \,\left(\dot{s}_i(\tau) - U_d\right)^2 {\rm d}\tau , 
-        \end{split} \label{eq:criterion}\\
-        & \text{subject to } \, h\left(\bm{y}_i^{(-r'')}(\tau), \ldots, \bm{y}^{(r')}_i(\tau)\right) \geq \bm{0}, \label{eq:constraint_h} \\
-        & \phantom{\text{subject to } \,} \phi_{\bm{x}} \left(\bm{y}_i^{(-r'')}(t), \ldots, \bm{y}^{(r')}_i(t)\right) = \bm{x}_{i}(t), \label{eq:constraint_x0} \\
-        & \phantom{\text{subject to } \,} s_i(\tau) = s_j(\tau), \quad \forall j, \tau \in [t, t+T] \label{eq:constraint_gamma_s}
+        \end{split} \label{eq:MPC_criterion}\\
+        & \text{subject to } \, h\left(\mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau)\right) \geq \bm{0}, \label{eq:MPC_constraint_h} \\
+        & \phantom{\text{subject to } \,} \bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t), \label{eq:MPC_constraint_x0} \\
+        & \phantom{\text{subject to } \,} s_i(\tau) = s_j(\tau), \quad \forall j, \tau \in [t, t+T] \label{eq:MPC_constraint_gamma_s}
     \end{align}
-\label{eq:optimization_distributed}
+\label{eq:MPC_optimization_distributed}
 
 \end{subequations}
 
@@ -237,79 +232,79 @@ Before doing this rewriting, we note that it is possible to make \eqref{eq:optim
 
 
 
-\section{A distributed Spline-Based \gls{mpc} approach to the path-formation problem}
-\label{sec:spline-based-MPC}
+\section{A Distributed Spline-Based MPC Approach to the Formation Path-Following Problem}
+\label{sec:MPC_spline-based-MPC}
 
 
 
-The goal of this section is to show how constraining $\bm{y}_i$ and $s_i$ to be splines enables rewriting the variational problem above in a way that is computationally tractable.
+The goal of this section is to show how constraining $\mat{y}_i$ and $s_i$ to be splines enables rewriting the variational problem above in a way that is computationally tractable.
 
-For the sake of readability, we will use the convention for which sans-serif fonts (\emph{e.g.}, $\coefm{y}$) indicate quantities relative to splines, while serif fonts (\emph{e.g.}, $\bm{y}$) indicate trajectories parametrized in time as above. %Moreover, without loss of generality we assume $t = 0$, so that the to-be-designed trajectory is $\bm{y}_i(0:T)$.
+For the sake of readability, we will use the convention for which sans-serif fonts (\emph{e.g.}, $\coefm{y}$) indicate quantities relative to splines, while serif fonts (\emph{e.g.}, $\mat{y}$) indicate trajectories parametrized in time as above. %Moreover, without loss of generality we assume $t = 0$, so that the to-be-designed trajectory is $\mat{y}_i(0:T)$.
 
 
 
 \subsection{Spline parametrization}
-\label{ssec:spline_param}
+\label{ssec:MPC_spline_param}
 
 
 
 Let $\coefm{b} = \inlinevector{\coef{b}_1, \ldots, \coef{b}_n}$ be the vector of basis functions of a B-spline, and let $\coefm{y}_i = \inlinevector{\coefm{y}_{i,1}\T, \ldots, \coefm{y}_{i,n}\T}$ be a generic matrix and $\coefm{s}_i = \inlinevector{\coef{s}_{i,1}, \ldots, \coef{s}_{i,n}}$ a generic vector of spline coefficients. Assume then that the trajectories and path parameters may be expressed as B-splines, i.e., as
 %
 \begin{align}
-    \bm{y}_i(\tau) &= \sum_{l=1}^n \coefm{y}_{i,l}\,\coef{b}_l(\tau) = \coefm{y}_i\T\,\coefm{b}(\tau), \\
+    \mat{y}_i(\tau) &= \sum_{l=1}^n \coefm{y}_{i,l}\,\coef{b}_l(\tau) = \coefm{y}_i\T\,\coefm{b}(\tau), \\
     s_i(\tau) &= \sum_{l=1}^n \coef{s}_{i,l}\,\coef{b}_l(\tau) = \coefm{s}_i\T\,\coefm{b}(\tau).
 \end{align}
 %
 This assumption implies the possibility of exploiting the convex hull property
 \begin{equation}
-    \coefm{y}_i \geq \bm{0} \, \implies \, \bm{y}(\tau) \geq \bm{0},
+    \coefm{y}_i \geq \bm{0} \, \implies \, \mat{y}(\tau) \geq \bm{0},
 \end{equation}
 that implies that any polynomial constraint on a spline can be replaced by a (stricter) constraint on the spline coefficients.
 In other words, by assuming the output to be a spline, we assume that there exists a function $\mathsf{h}$ such that
 \begin{equation}
     \mathsf{h}\left(\coefm{y}_i\right) \geq \bm{0}
     \, \implies \,
-    h\left(\bm{y}_i^{(-r'')}(\tau), \ldots, \bm{y}^{(r')}_i(\tau)\right) \geq \bm{0}.
+    h\left(\mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau)\right) \geq \bm{0}.
 \end{equation}
 
-This eventually enables us to rewrite the trajectory optimization problems in Section~\ref{sec:problem-description} as corresponding spline-based \gls{mpc} problems. %In more details,   
+This eventually enables us to rewrite the trajectory optimization problems in Section~\ref{sec:MPC_problem-description} as corresponding spline-based \gls{mpc} problems. %In more details,   
 
 %First, we need to locally approximate the path function and the associated rotation matrix using polynomials
 To do so, each agent $i$ must locally approximate the path function and the associated rotation matrix as polynomials
 \begin{align}
-    \bm{p}(s) &\approx \bm{p}_0 + \bm{p}_1\,s + \ldots + \bm{p}_m\,s^m, \\
-    \bm{R}_p(s) &\approx \bm{R}_{p,0} + \bm{R}_{p,1}\,s + \ldots + \bm{R}_{p,m}\,s^m,
+    \mat{p}_p(s) &\approx \mat{p}_{p, 0} + \mat{p}_{p, 1}\,s + \ldots + \mat{p}_{p, m}\,s^m, \\
+    \mat{R}_p(s) &\approx \mat{R}_{p,0} + \mat{R}_{p,1}\,s + \ldots + \mat{R}_{p,m}\,s^m,
 \end{align}
 over an interval $\left[s_i(t), s_i(t) + s_T\right]$, where $t$ is the current time and $s_T$ is chosen such that $s_T \geq U_d T$.
 We then need to impose an additional constraint on the path parameter
 \begin{equation}
-    s_i(t) \leq s_i(\tau) \leq s_i(t) + s_T, \quad \forall \tau \in \left[t, t + T\right], \label{eq:constraint_s_range}
+    s_i(t) \leq s_i(\tau) \leq s_i(t) + s_T, \quad \forall \tau \in \left[t, t + T\right], \label{eq:MPC_constraint_s_range}
 \end{equation}
 to ensure that the polynomial approximation is valid.
 
-This approximation transforms the criterion from \eqref{eq:criterion} into a polynomial function.
-The optimization problem \eqref{eq:optimization_distributed} can then be reformulated in terms of spline coefficients 
+This approximation transforms the criterion from \eqref{eq:MPC_criterion} into a polynomial function.
+The optimization problem \eqref{eq:MPC_optimization_distributed} can then be reformulated in terms of spline coefficients 
 \begin{subequations}
     \begin{align}
             \opt_{\coefm{y}_i, \coefm{s}_i} &\, J_i\left(\coefm{y}_i, \coefm{s}_i\right), \\
         \text{subject to } & \coefm{y}_i \in \coef{Y}_i, \\
         & \coefm{s}_i \in \coef{S}_i, \\
-        & \coefm{s}_i = \coefm{s}_j, \quad \forall j = 1, \ldots, N, \label{eq:s_constraint}
-    \end{align} \label{eq:optimization_spline} 
+        & \coefm{s}_i = \coefm{s}_j, \quad \forall j = 1, \ldots, N, \label{eq:MPC_s_constraint}
+    \end{align} \label{eq:MPC_optimization_spline} 
 \end{subequations}
 
-\noindent where $J_i$ is the objective function from \eqref{eq:criterion}, reformulated using the spline coefficients, and $\coef{Y}_i$ and $\coef{S}_i$ are the sets of feasible coefficients given by \eqref{eq:constraint_h}, \eqref{eq:constraint_x0} and \eqref{eq:constraint_s_range}.
+\noindent where $J_i$ is the objective function from \eqref{eq:MPC_criterion}, reformulated using the spline coefficients, and $\coef{Y}_i$ and $\coef{S}_i$ are the sets of feasible coefficients given by \eqref{eq:MPC_constraint_h}, \eqref{eq:MPC_constraint_x0} and \eqref{eq:MPC_constraint_s_range}.
 
 This optimization problem is then solved in discrete time-steps.
-Similarly to collocation-based MPC, we can use the results from the previous time-step to ``warm-start'' the optimization problem.
-We do this by extrapolating the previous results over the new horizon (see \figref{fig:warm_start}).
+Similarly to collocation-based \gls{mpc}, we can use the results from the previous time-step to ``warm-start'' the optimization problem.
+We do this by extrapolating the previous results over the new horizon (see \figref{fig:MPC_warm_start}).
 
 \begin{figure}[!htbp]
     \centering
     \input{figures/handpos_MPC/warm_start.tex}
     
     \caption{Warm-starting the optimization problem. The grey area represents the prediction horizon.}
-    \label{fig:warm_start}
+    \label{fig:MPC_warm_start}
 \end{figure}
 
 
@@ -318,16 +313,16 @@ We do this by extrapolating the previous results over the new horizon (see \figr
 
 
 
-In \cite{boyd_2011_distributed}, it is discussed that ADMM tends to converge to ``modest accuracy'' within a few iterations.
-Due to this property, ADMM is often used to solve distributed \gls{mpc} problems.
+In \cite{boyd_2011_distributed}, it is discussed that \gls{admm} tends to converge to ``modest accuracy'' within a few iterations.
+Due to this property, \gls{admm} is often used to solve distributed \gls{mpc} problems.
 
 We assume \emph{synchronous bidirectional reliable} communication.
 In other words, we assume that all vehicles exchange information simultaneously and there are no packet losses.
 Bidirectional communication implies that the communication network can be described by an undirected graph $\mathcal{G} = \left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V} = \left\{1, 2, \ldots, N\right\}$ correspond to the agents, and $\mathcal{E} \subseteq \mathcal{V}^2$ represents the communication between pairs of agents, \emph{i.e.,} $(i,j) \in \mathcal{E}$ implies that agent $i$ can exchange information with agent $j$. We further assume that $\mathcal{G}$ is connected.
 
-We use relaxed ADMM \cite{bastianello_asynchronous_2021} to solve the problem.
+We use relaxed \gls{admm} \cite{bastianello_asynchronous_2021} to solve the problem.
 Let $\mathcal{N}_i$ be the set of neighbors of agent $i$.
-Relaxed ADMM solves the optimization problem \eqref{eq:optimization_spline} by introducing an auxiliary variable $\coefm{z}_{ji}$ for all $i \in \mathcal{V}, j \in \mathcal{N}_i$.
+Relaxed \gls{admm} solves the optimization problem \eqref{eq:MPC_optimization_spline} by introducing an auxiliary variable $\coefm{z}_{ji}$ for all $i \in \mathcal{V}, j \in \mathcal{N}_i$.
 The optimization problem is then solved iteratively in two steps.
 First, we compute $\coefm{y}_i$ and $\coefm{s}_i$ by solving
 \begin{equation}
@@ -337,7 +332,7 @@ First, we compute $\coefm{y}_i$ and $\coefm{s}_i$ by solving
     \mathcal{L}_i
     \left(
         \coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji}
-    \right), \label{eq:ADMM_primal_update}
+    \right), \label{eq:MPC_ADMM_primal_update}
 \end{equation}
 where $\mathcal{L}_i(\coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji})$ is the augmented Lagrangian given by
 \begin{equation}
@@ -346,26 +341,26 @@ where $\mathcal{L}_i(\coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji})$ is the augmented
 where $\rho > 0$ is a penalty and $d_i$ is the cardinality of $\mathcal{N}_i$.
 In the second step, we update the auxiliary variables
 \begin{equation}
-    \coefm{z}_{ji} \leftarrow (1 - \alpha) \coefm{z}_{ji} + \alpha \left(2\rho\coefm{s}_j - \coefm{z}_{ij}\right), \label{eq:ADMM_dual_update}
+    \coefm{z}_{ji} \leftarrow (1 - \alpha) \coefm{z}_{ji} + \alpha \left(2\rho\coefm{s}_j - \coefm{z}_{ij}\right), \label{eq:MPC_ADMM_dual_update}
 \end{equation}
 where $0 < \alpha < 1$ is the step size. To perform this step, each agent $j \in \mathcal{N}_i$ sends a packet
 \begin{equation}
-    \coefm{w}_{ji} = 2\rho\coefm{s}_i - \coefm{z}_{ji}, \label{eq:ADMM_packet}
+    \coefm{w}_{ji} = 2\rho\coefm{s}_i - \coefm{z}_{ji}, \label{eq:MPC_ADMM_packet}
 \end{equation}
-to agent $i$. The update law \eqref{eq:ADMM_dual_update} then becomes
+to agent $i$. The update law \eqref{eq:MPC_ADMM_dual_update} then becomes
 \begin{equation}
-    \coefm{z}_{ji} \leftarrow (1 - \alpha) \coefm{z}_{ji} + \alpha \coefm{w}_{ji}. \label{eq:ADMM_dual_update_packet}
+    \coefm{z}_{ji} \leftarrow (1 - \alpha) \coefm{z}_{ji} + \alpha \coefm{w}_{ji}. \label{eq:MPC_ADMM_dual_update_packet}
 \end{equation} 
 
-To further reduce the needed communication bandwidth, we only perform one ADMM iteration per \gls{mpc} step. An overview of the resulting distributed \gls{mpc} is shown in Algorithm \ref{alg:admm}.
+To further reduce the needed communication bandwidth, we only perform one \gls{admm} iteration per \gls{mpc} step. An overview of the resulting distributed \gls{mpc} is shown in Algorithm \ref{alg:admm}.
 
 \begin{algorithm}[b]
-    \caption{ADMM for Distributed MPC}\label{alg:admm}
+    \caption{\gls{admm} for Distributed \gls{mpc}}\label{alg:admm}
     \begin{algorithmic}[1]
-        \State {\bf Initialization:} Perform several ADMM iterations to get $\coefm{y}_i^0, \coefm{s}_i^0$ and $\coefm{z}_{ij}^0$
+        \State {\bf Initialization:} Perform several \gls{admm} iterations to get $\coefm{y}_i^0, \coefm{s}_i^0$ and $\coefm{z}_{ij}^0$
         \For{$k = 1,2,\ldots$} every $\Delta T$
             \State Use extrapolation to estimate $\widehat{\coefm{y}}_i^k, \widehat{\coefm{s}}_i^k$ and $\widehat{\coefm{z}}_{ij}^k$
-            \State Perform one ADMM iteration using $\widehat{\coefm{y}}_i^k, \widehat{\coefm{s}}_i^k$ and $\widehat{\coefm{z}}_{ij}^k$ as the initial guess
+            \State Perform one \gls{admm} iteration using $\widehat{\coefm{y}}_i^k, \widehat{\coefm{s}}_i^k$ and $\widehat{\coefm{z}}_{ij}^k$ as the initial guess
         \EndFor
     \end{algorithmic}
 \end{algorithm}
@@ -373,15 +368,15 @@ To further reduce the needed communication bandwidth, we only perform one ADMM i
 
 
 \section{Case Studies}
-\label{sec:case_studies}
+\label{sec:MPC_case_studies}
 
 
 In this section, we demonstrate the proposed \gls{mpc} scheme on marine vehicles and differential drive robots.
 In both cases, the goal is to follow a sine-wave path given by
 \begin{equation}
-    \bm{p}(s) = \inlinevector{\sigma(s),\; 15\,\sin \left(\frac{\pi}{100}\,\sigma(s)\right)},
+    \mat{p}(s) = \inlinevector{\sigma(s),\; 15\,\sin \left(\frac{\pi}{100}\,\sigma(s)\right)},
 \end{equation}
-where $\sigma(s)$ is a function chosen such that \eqref{eq:path_assumption} is satisfied and $\sigma(0) = 0$.
+where $\sigma(s)$ is a function chosen such that \eqref{eq:MPC_path_assumption} is satisfied and $\sigma(0) = 0$.
 This path is then locally approximated using a fifth-order polynomial with $s_T = 75$.
 
 In both case studies, the prediction horizon is set to $50$ seconds.
@@ -390,13 +385,13 @@ Consequently, each spline is represented by $13$ coefficients.
 
 In both case studies, we consider a formation of six vehicles.
 The formation is chosen such that the vehicles form an equilateral triangle with a side length of $20$ meters.
-The desired relative positions of the vehicles, as well as the communication graph are illustrated in \figref{fig:triangle_formation}.
+The desired relative positions of the vehicles, as well as the communication graph are illustrated in \figref{fig:MPC_triangle_formation}.
 
 
 \subsection{Marine vehicles}
 
 
-In the first case study, we consider marine vehicles with three degrees of freedom.
+In the first case study, we consider marine vehicles with six degrees of freedom.
 The model presented in this section describes both autonomous surface vehicles (ASVs) and autonomous underwater vehicles (AUVs) moving in the horizontal plane.
 First, let us present the assumptions this model is based on.
 \begin{enumerate}[label=A\arabic*]
@@ -407,14 +402,14 @@ First, let us present the assumptions this model is based on.
     Its velocity in the inertial coordinate frame is given by $\bm{V} = \inlinevector{V_x, V_y}$.
 \end{enumerate}
 Under these assumptions, the model of the vehicle is given by the following differential equations \cite{fossen_handbook_2011}
-\begin{subequations}\label{eq:ASV-model}
+\begin{subequations}\label{eq:MPC_ASV-model}
     \begin{align}
-        \dot{x} &= u_{r}\cos\psi - v_{r}\sin\psi + V_x\label{eq:ASV-model-a}\\
-        \dot{y} &= u_{r}\sin\psi + v_{r}\cos\psi + V_y\label{eq:ASV-model-b}\\
-        \dot{\psi} &= r\label{eq:ASV-model-c}\\
-        \dot{u}_{r} &= F_{u_r}(v_{r}) + \tau_{u}\label{eq:ASV-model-d}\\ 
-        \dot{v}_{r} &= X(u_{r})r + Y(u_{r})v_{r}\label{eq:ASV-model-e}\\ 
-        \dot{r} &= F_{r}(u_{r},v_{r},r) + \tau_{r}\label{eq:ASV-model-f}
+        \dot{x} &= u_{r}\cos\psi - v_{r}\sin\psi + V_x\label{eq:MPC_ASV-model-a}\\
+        \dot{y} &= u_{r}\sin\psi + v_{r}\cos\psi + V_y\label{eq:MPC_ASV-model-b}\\
+        \dot{\psi} &= r\label{eq:MPC_ASV-model-c}\\
+        \dot{u}_{r} &= F_{u_r}(v_{r}) + \tau_{u}\label{eq:MPC_ASV-model-d}\\ 
+        \dot{v}_{r} &= X(u_{r})r + Y(u_{r})v_{r}\label{eq:MPC_ASV-model-e}\\ 
+        \dot{r} &= F_{r}(u_{r},v_{r},r) + \tau_{r}\label{eq:MPC_ASV-model-f}
     \end{align}
 \end{subequations}
 where $\eta \triangleq \inlinevector{x, y, \psi}$ is the pose of the vehicle in the {\it North-East-Down} (NED) coordinate frame, $\nu_{r} \triangleq \inlinevector{u_r, v_r, r}$ are the relative (with respect to the ocean current) velocities in the body-fixed coordinate frame, namely the surge velocity, sway velocity, and yaw rate, respectively, and $\tau_{u}$, $\tau_{r}$ are the control inputs.
@@ -429,7 +424,7 @@ For more details, the reader is referred to \cite{fossen_handbook_2011,borhaug_s
         \def\svgwidth{\textwidth}
         \import{figures/handpos_MPC/}{ASV.pdf_tex}
         \caption{Marine vehicle}
-        \label{fig:ASV}
+        \label{fig:MPC_ASV}
         
     \end{subfigure}
     \begin{subfigure}[t]{0.15\textwidth}
@@ -437,7 +432,7 @@ For more details, the reader is referred to \cite{fossen_handbook_2011,borhaug_s
         \def\svgwidth{\textwidth}
         \import{figures/handpos_MPC/}{unicycle.pdf_tex}
         \caption{Differential drive robot}
-        \label{fig:unicycle}
+        \label{fig:MPC_unicycle}
         
     \end{subfigure}
     \begin{subfigure}[t]{0.143\textwidth}
@@ -445,18 +440,18 @@ For more details, the reader is referred to \cite{fossen_handbook_2011,borhaug_s
         \def\svgwidth{\textwidth}
         \import{figures/handpos_MPC/}{triangle_formation.pdf_tex}
         \caption{Desired formation}
-        \label{fig:triangle_formation}
+        \label{fig:MPC_triangle_formation}
         
     \end{subfigure}
     \caption{Graphical representations of the vehicles and the formation used in the case studies.}
 \end{figure}
 
 Because the vehicle is underactuated (second-order nonholonomic), we cannot use the origin of the body-fixed frame $(x,y)$ as the output of our system.
-Instead, we choose a different point, located on the central axis ($x$-axis) of the vehicle, as the output of our system (see \figref{fig:ASV}).
+Instead, we choose a different point, located on the central axis ($x$-axis) of the vehicle, as the output of our system (see \figref{fig:MPC_ASV}).
 In the literature, this point is referred to as the \emph{hand position} of the vehicle \cite{lawton_hand-position-formation_2003,paliotta_trajectory_2019}.
 The hand position is defined as
 \begin{equation}
-    \bm{y} = \inlinevector{x + L\,\cos(\psi), y + L\,\sin(\psi)}, \label{eq:hand}
+    \mat{y} = \inlinevector{x + L\,\cos(\psi), y + L\,\sin(\psi)}, \label{eq:MPC_hand}
 \end{equation}
 where $L > 0$ is the hand length.
 
@@ -489,15 +484,15 @@ where $\mathfrak{R} : \mathbb{R} \mapsto {\rm SO}(2)$ denotes the rotation matri
 
 Using output-feedback linearization, we have simplified the system to a double integrator 
 \begin{equation}
-    \ddot{\bm{y}} = \bm{u}. 
+    \ddot{\mat{y}} = \mat{u}. 
 \end{equation}
 
-\begin{table}[b]
+\begin{table}[tb]
     \begin{center}
-    \captionsetup{width=.48\textwidth}
+    \captionsetup{width=.9\textwidth}
     \caption{Simulation parameters} \label{tab:handpos_MPC_params}
     
-    \begin{subtable}[t]{0.22\textwidth}
+    \begin{subtable}[t]{0.4\textwidth}
         \caption{Marine vehicles}
         \label{tab:ASV}
         
@@ -505,15 +500,15 @@ Using output-feedback linearization, we have simplified the system to a double i
             {\bf Parameter} & {\bf Value} \\
             \hline
             $\Delta T$ & $1$ \\
-            $\bm{Q}_p$ & $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ \\
+            $\bm{Q}_p$ & $\mat{I}_3$ \\
             $Q_s$ & $10$ \\
             $\rho$ & $10$ \\
             $\alpha$ & $0.6$ \\
-            $L$ & $1$ \\
-            $\bm{V}$ & $\begin{bmatrix} 0.15 \\ 0.1 \end{bmatrix}$
+            $h$ & $1$ \\
+            $\bm{V}$ & $\begin{bmatrix} 0.15 \\ 0.1 \\ -0.05 \end{bmatrix}$
         \end{tabular}
     \end{subtable}
-    \begin{subtable}[t]{0.22\textwidth}
+    \begin{subtable}[t]{0.4\textwidth}
         \caption{Differential drive robots}
         \label{tab:unicycle}
         
@@ -521,7 +516,7 @@ Using output-feedback linearization, we have simplified the system to a double i
             {\bf Parameter} & {\bf Value} \\
             \hline
             $\Delta T$ & $0.1$ \\
-            $\bm{Q}_p$ & $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ \\
+            $\bm{Q}_p$ & $\mat{I}_2$ \\
             $Q_s$ & $10$ \\
             $\rho$ & $10$ \\
             $\alpha$ & $0.6$ \\
@@ -536,15 +531,16 @@ Using output-feedback linearization, we have simplified the system to a double i
 
 \begin{figure*}[!htbp]
     \centering
-    \begin{subfigure}[c]{0.48\textwidth}
+    \begin{subfigure}[c]{0.9\textwidth}
         \centering
-        \input{figures/handpos_MPC/ASV_trajectory.tex}
+        \def\svgwidth{\textwidth}
+        \import{figures/handpos_MPC}{auv_trajectory.pdf_tex}
         
     \end{subfigure}
-    \begin{subfigure}[c]{0.48\textwidth}
-        \centering
-        
-        \input{figures/handpos_MPC/ASV_errors.tex}
+    \vspace*{5mm}
+    \begin{subfigure}[c]{0.9\textwidth}
+        \centering        
+        \input{figures/handpos_MPC/auv_errors.tex}
         
     \end{subfigure}
     % \begin{subfigure}[c]{0.48\textwidth}
@@ -555,23 +551,24 @@ Using output-feedback linearization, we have simplified the system to a double i
     %     \centering
     %     \input{figures/handpos_MPC/ASV_constraints.tex}
     % \end{subfigure}
+    \vspace*{-8mm}
     \caption{Results of numerical simulations with six marine vehicles.}
-    \label{fig:ASV_simulations}
+    \label{fig:MPC_AUV_simulations}
     
 \end{figure*}
 
 Having transformed the system model into the required form, we validated the proposed method in numerical simulations.
 The simulations were carried out on a 3DOF model of the light autonomous underwater vehicle (LAUV) developed at the University of Porto \cite{sousa_LAUV_2012}.
 The parameters are shown in Table~\ref{tab:ASV}.
-The results are shown in \figref{fig:ASV_simulations}.
+The results are shown in \figref{fig:MPC_AUV_simulations}.
 The left plot shows how the vehicles converge to the desired formation.
-The right plot shows the path-following errors $\widetilde{\bm{q}}_i$.
+The right plot shows the path-following errors $\widetilde{\mat{q}}_i$.
 We only show the first 50 seconds since the errors converge to zero afterwards.
 % The top-left plot shows how the vehicles converge to the desired formation.
-% The top-right plot shows the path-following errors $\widetilde{\bm{q}}_i$.
+% The top-right plot shows the path-following errors $\widetilde{\mat{q}}_i$.
 % We only show the first 50 seconds since the errors converge to zero afterwards.
 % The bottom-left plot shows how the derivatives of the path parameter, $\dot{s}_i$, converge to the desired path-following speed.
-% Finally, the bottom-right plot shows the satisfaction of constraint \eqref{eq:constraint_gamma_s}.
+% Finally, the bottom-right plot shows the satisfaction of constraint \eqref{eq:MPC_constraint_gamma_s}.
 % Specifically, we show the deviation of individual path parameters from their mean value, \emph{i.e.,} $s_i - 1/N\sum_{j=1}^N s_j$.
 
 
@@ -584,7 +581,7 @@ The model is given by
         \dot{x}_1 &= u_1\,\cos x_3, \\
         \dot{x}_2 &= u_1\,\sin x_3, \\
         \dot{x}_3 &= u_2,
-    \end{align} \label{eq:unicycle_ode_x} 
+    \end{align} \label{eq:MPC_unicycle_ode_x} 
 \end{subequations}
 
 \noindent where $x_1, x_2$ give the position, $x_3$ is the orientation of the vehicle, and $u_1$ and $u_2$ are the tangential and angular velocities.
@@ -597,28 +594,28 @@ First, we introduce $z = \tan \frac{x_3}{2}$ and use the following trigonometric
     \cos x_3 &= \frac{1 - z^2}{1 + z^2}, &
     \sin x_3 &= \frac{2z}{1 + z^2}. 
 \end{align}
-Next, we substitute $z$ and a modified input $\bar{u}_1 = \frac{u_1}{1 + z^2}$ into the first two lines of \eqref{eq:unicycle_ode_x} to obtain 
+Next, we substitute $z$ and a modified input $\bar{u}_1 = \frac{u_1}{1 + z^2}$ into the first two lines of \eqref{eq:MPC_unicycle_ode_x} to obtain 
 \begin{align}
     \dot{x}_1 &= \bar{u}_1 \left(1 - z^2\right), &
     \dot{x}_2 &= 2 \bar{u}_1 z. 
 \end{align}
-We choose $\bm{y} = \inlinevector{\bar{u}_1, z}$ as the output of the system.
+We choose $\mat{y} = \inlinevector{\bar{u}_1, z}$ as the output of the system.
 The states and inputs can then be expressed as 
 \begin{subequations}
     \begin{align}
         x_1(t) &= \int_{0}^t y_1(\tau) \left(1 - y_2^2(\tau)\right)\, {\rm d}\tau + x_1(0), \\
         x_2(t) &= \int_{0}^t 2 y_1(\tau) y_2(\tau)\, {\rm d}\tau + x_2(0), \\
         x_3(t) &= 2 \arctan y_2(t), \\
-        u_1(t) &= y_1(t) \left(1 + y_2^2(t)\right), \label{eq:unicycle_u1} \\
-        u_2(t) &= \frac{2 \dot{y}_2(t)}{1 + y_2^2(t)}. \label{eq:unicycle_u2}
-    \end{align} \label{eq:unicycle_transform} 
+        u_1(t) &= y_1(t) \left(1 + y_2^2(t)\right), \label{eq:MPC_unicycle_u1} \\
+        u_2(t) &= \frac{2 \dot{y}_2(t)}{1 + y_2^2(t)}. \label{eq:MPC_unicycle_u2}
+    \end{align} \label{eq:MPC_unicycle_transform} 
 \end{subequations}
 Let us assume that there are no constraints on the states and the constraints on the inputs are given by
 \begin{align}
     u_{1, \min} &\leq u_1(t) \leq u_{1, \max}, &
     u_{2, \min} &\leq u_2(t) \leq u_{2, \max},
 \end{align}
-From \eqref{eq:unicycle_u1}, \eqref{eq:unicycle_u2}, the constraints can be expressed as
+From \eqref{eq:MPC_unicycle_u1}, \eqref{eq:MPC_unicycle_u2}, the constraints can be expressed as
 \begin{subequations}
     \begin{align}
         u_{1, \min} &\leq y_1(t) \left(1 + y_2^2(t)\right) \leq u_{1, \max}, \\
@@ -629,28 +626,29 @@ We have thus shown how to express the states, inputs and constraints in terms of
 
 \begin{figure*}[t]
     \centering
-    \begin{subfigure}{0.48\textwidth}
+    \begin{subfigure}{0.9\textwidth}
         \centering
         \input{figures/handpos_MPC/unicycle_trajectory.tex}
         
     \end{subfigure}
-    \begin{subfigure}{0.48\textwidth}
+    \begin{subfigure}{0.9\textwidth}
         \centering
         \input{figures/handpos_MPC/unicycle_errors.tex}
         
     \end{subfigure}
+    \vspace*{-3mm}
     \caption{Results of numerical simulations with six differential drive robots.}
-    \label{fig:unicycle_simulations}
+    \label{fig:MPC_unicycle_simulations}
     
 \end{figure*}
 
-The results of numerical simulations are shown in \figref{fig:unicycle_simulations}.
+The results of numerical simulations are shown in \figref{fig:MPC_unicycle_simulations}.
 The parameters are shown in Table~\ref{tab:unicycle}.
-Due to the numerical inaccuracies caused by \eqref{eq:unicycle_transform} and arising primarily from the multiplication and division of splines, the \gls{mpc} time-step $\Delta T$ must be shorter than in the previous case-study.
+Due to the numerical inaccuracies caused by \eqref{eq:MPC_unicycle_transform} and arising primarily from the multiplication and division of splines, the \gls{mpc} time-step $\Delta T$ must be shorter than in the previous case-study.
 
 
 \section{Conclusions}
-\label{sec:conclusion}
+\label{sec:MPC_conclusion}
 
 
 In this paper, we have proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.

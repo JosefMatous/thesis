@@ -588,8 +588,6 @@ Using the same reasoning as in the proof of Proposition~\ref{prop:straight_line_
 \pgfplotsset{table/search path={figures/handpos_trajectory/data}}
 \input{figures/handpos_trajectory/fig_trajectory.tex}
 
-\input{figures/handpos_trajectory/fig_path.tex}
-
 In this section, we present the results of numerical simulations.
 The simulations were carried out in MATLAB using a model of the \acrfull{lauv}.
 
@@ -599,7 +597,6 @@ The initial state of the vehicle is $\mat{p}(0) = \mat{0}_3$, $\mat{R}(0) = \mat
 The hand length is $h = \SI{5}{\meter}$, the velocity of the ocean current is $\ocean\T = \left[0.15, -0.1, 0.05\right]$, and the PID gains are $k_p = 0.03, k_d = 0.4, k_I = 8.5 \cdot 10^{-4}$.
 
 \subsection{Trajectory Tracking}
-\input{figures/handpos_trajectory/fig_waypoint.tex}
 In this test, the vehicle should track a figure eight trajectory
 \begin{equation}
     \bs{\xi}_{1, d}(t) = \inlinevector{50\cos\left(\frac{\pi}{200}t\right), 25\sin\left(\frac{2\pi}{200}t\right), 15\cos\left(\frac{2\pi}{200}t\right)}\!\!.
@@ -616,7 +613,7 @@ Initially, the angular velocities grow.
 However, after the external dynamics have converged, the angular velocities remain bounded.
 
 \subsection{Path Following}
-\input{figures/handpos_trajectory/fig_experiment.tex}
+\input{figures/handpos_trajectory/fig_path.tex}
 
 In this test, we have chosen a path with the same shape as in the trajectory tracking test.
 The path parametrization is given by
@@ -629,10 +626,10 @@ We use the path following controller proposed in Section~\ref{sec:handpos_trajec
 The gains of the path parameter update law are chosen as $\varepsilon = 0.5$, and $k_{\sigma} = 0.1$.
 The value of $\Bar{\alpha}_y = \Bar{\alpha}_z$ for the chosen parameters is $0.02$, guaranteeing the boundedness of the internal dynamics by Proposition~\ref{prop:handpos_trajectory_path_following}.
 
-The results are shown in Figure~\ref{fig:trajectory_tracking}.
-Figure~\ref{fig:trajectory_trajectory} shows the 3D trajectory of the vehicle, and Figures~\ref{fig:trajectory_position}, \ref{fig:trajectory_velocity}, and \ref{fig:trajectory_integral} show the external dynamics.
+The results are shown in Figure~\ref{fig:path_following}.
+Figure~\ref{fig:path_trajectory} shows the 3D trajectory of the vehicle, and Figures~\ref{fig:path_position}, \ref{fig:path_velocity}, and \ref{fig:path_integral} show the external dynamics.
 Compared to the trajectory tracking simulation, the vehicle converges to the desired path faster, after approximately $90$ seconds.
-Figure~\ref{fig:trajectory_omega} shows the angular velocities of the vehicle.
+Figure~\ref{fig:path_omega} shows the angular velocities of the vehicle.
 The behavior is very similar to the trajectory tracking simulation.
 Figure~\ref{fig:path_parameter} shows the derivative of the path parameter.
 We can see that $\dot{s}$ decreases or increases depending on whether the vehicle is ``behind'' or ``in front of'' the desired path.
@@ -645,6 +642,18 @@ This fact is confirmed by the simulations, as the peak value of the control inpu
 
 \subsection{Straight-line Path Following}
 \label{sec:handpos_trajectory_simulation_waypoints}
+
+\begin{figure}[tb]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{figures/handpos_trajectory/waypoints.tex}
+    \import{figures/handpos_trajectory}{waypoints.pdf_tex}
+    \vspace*{-0.5mm}
+    \caption{The desired path used in the simulation in Section~\ref{sec:handpos_trajectory_simulation_waypoints} and experiment, with waypoints in (latitude, longitude, depth) format.}
+    \label{fig:waypoints}
+\end{figure}
+
+\input{figures/handpos_trajectory/fig_waypoint.tex}
 
 In this test, the vehicle should follow a path consisting of a series of waypoints connected by line segments.
 The vehicle switches to the next line segment when the distance to the current waypoint is less than five meters.
@@ -667,6 +676,8 @@ The error states then exponentially converge to zero.
 
 \section{Experiments}
 \label{sec:handpos_trajectory_experiments}
+
+\input{figures/handpos_trajectory/fig_experiment.tex}
 
 In this section, we present the results of an experiment performed on the \gls{lauv}.
 In the experiment, we verify the effectiveness of the straight-line path following controller proposed in Section~\ref{sec:handpos_trajectory_straight_line_path}.
@@ -732,14 +743,9 @@ The errors then exponentially converge to within 0.2 meters of zero, which is ap
 In addition to measurement noise, the control system is also subject to disturbances caused by the sea loads, and perturbations caused by modeling errors.
 However, the experiments confirm that the integral state and the overall exponential stability of the controller provide some robustness to these effects.
 
-\section{Conclusions and Future Work}
+\section{Conclusions}
 \label{sec:handpos_trajectory_conclusions}
-In this chapter, we extended the hand position concept to 6DOF underactuated underwater vehicles.
-By choosing the hand position as the output of our system, we could apply output feedback linearization to simplify the underactuated 6DOF vehicle dynamics to a double integrator without introducing any singularities. %with a constant disturbance caused by the ocean current.
-We then showed that a simple PID-based controller can be used to solve both the trajectory tracking and path following control problems.
-Using Lyapunov analysis, we proved the exponential stability of the external dynamics and ultimate boundedness of the internal dynamics.
+In this chapter, we showed how the hand position transformation combined with a simple PID-based controller can be used to solve both the trajectory-tracking and path-following control problems.
+Using Lyapunov analysis, we proved the exponential stability of the external dynamics.
 Moreover, in the special case of straight-line trajectories and paths, we could modify the controllers and prove the exponential stability of the total system.
 The proposed controllers were tested both in numerical simulations and experiments.
-
-As mentioned in the Introduction, the hand position concept and its ability to transform a nonlinear underactuated model to a double integrator without singularities present an opportunity to utilize numerous control strategies that could otherwise not be used on nonholonomic or underactuated vehicles.
-The work presented in this chapter may thus be used as a basis for applying other control algorithms, \emph{e.g.,} multiagent consensus control, to the underwater domain, similarly to how the stability proofs for marine vehicles moving in the horizontal plane in \cite{paliotta_trajectory_2019} served as a basis for the consensus algorithm proposed in \cite{restrepo_tracking-formation_2022}.

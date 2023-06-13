@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="134.66927mm"
+   height="60.95525mm"
+   viewBox="0 0 134.66927 60.95525"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="auv_trajectory.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="2.9897026"
+     inkscape:cx="173.59586"
+     inkscape:cy="125.43054"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer3" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Boundingbox"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-30.197767,-13.147746)"
+     style="display:none">
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.355394;stroke-linejoin:bevel;stroke-dasharray:0.355394, 0.355394"
+       id="rect30661"
+       width="134.66927"
+       height="60.95525"
+       x="30.197767"
+       y="13.147746"
+       rx="8.0066156e-06"
+       ry="5.4723509e-06" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Plot"
+     transform="translate(-30.197767,-13.147746)">
+    <image
+       width="135.50899"
+       height="56.642002"
+       preserveAspectRatio="none"
+       xlink:href="auv_trajectory.png"
+       id="image880"
+       x="37.109062"
+       y="16.755442" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Labels"
+     transform="translate(-30.197767,-13.147746)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="80.044632"
+       y="67.078835"
+       id="text4142"><tspan
+         sodipodi:role="line"
+         id="tspan4140"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="80.044632"
+         y="67.078835">$\scriptstyle 0$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="55.409916"
+       y="63.280739"
+       id="text4142-9"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="55.409916"
+         y="63.280739">$\scriptstyle 0$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="57.59877"
+       y="66.089653"
+       id="text4142-9-2"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="57.59877"
+         y="66.089653">$\scriptstyle 20$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="49.045521"
+       y="53.347477"
+       id="text4142-9-2-6"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-1"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="49.045521"
+         y="53.347477">$\scriptstyle 20$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="50.906525"
+       y="44.68499"
+       id="text4142-9-2-3"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-6"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="50.906525"
+         y="44.68499">$\scriptstyle 0$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="35.506992"
+       y="46.87011"
+       id="text4142-9-2-3-0"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-6-2"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="35.506992"
+         y="46.87011">$z$ [m]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="39.613728"
+       y="67.4618"
+       id="text4142-9-2-3-0-3"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-6-2-7"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="39.613728"
+         y="67.4618">$y$ [m]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="120.04844"
+       y="68.957191"
+       id="text4142-9-2-3-0-3-5"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-6-2-7-9"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="120.04844"
+         y="68.957191">$x$ [m]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="46.89315"
+       y="61.819012"
+       id="text4142-9-2-0"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-9"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="46.89315"
+         y="61.819012">$\scriptstyle -20$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="46.003689"
+       y="35.706821"
+       id="text4142-9-2-0-8"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-9-7"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="46.003689"
+         y="35.706821">$\scriptstyle -20$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="84.605507"
+       y="22.029421"
+       id="text4142-9-2-0-8-9"><tspan
+         sodipodi:role="line"
+         id="tspan4140-1-7-9-7-2"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="84.605507"
+         y="22.029421">\textbf{Trajectory}</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="99.3526"
+       y="65.050117"
+       id="text4142-3"><tspan
+         sodipodi:role="line"
+         id="tspan4140-6"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="99.3526"
+         y="65.050117">$\scriptstyle 50$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="118.28207"
+       y="62.980843"
+       id="text4142-3-7"><tspan
+         sodipodi:role="line"
+         id="tspan4140-6-5"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="118.28207"
+         y="62.980843">$\scriptstyle 100$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="138.93227"
+       y="60.746792"
+       id="text4142-3-7-3"><tspan
+         sodipodi:role="line"
+         id="tspan4140-6-5-5"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="138.93227"
+         y="60.746792">$\scriptstyle 150$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="159.07964"
+       y="58.398788"
+       id="text4142-3-7-3-6"><tspan
+         sodipodi:role="line"
+         id="tspan4140-6-5-5-2"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="159.07964"
+         y="58.398788">$\scriptstyle 200$</tspan></text>
+  </g>
+</svg>

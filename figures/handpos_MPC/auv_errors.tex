@@ -16,14 +16,14 @@
 \begin{axis}[%
 width=65mm,
 height=13mm,
-at={(0mm,14mm)},
+at={(0mm,28mm)},
 scale only axis,
 xmin=0,
-xmax=50,
-xtick={0,5,10,15,20,25,30,35,40,45,50},
+xmax=75,
+xtick={0,25,50,75},
 xticklabels={\empty},
-ymin=-20.3161212520554,
-ymax=0.963323310814234,
+ymin=-13.7990047605275,
+ymax=10,
 ylabel style={font=\color{white!15!black}},
 ylabel={$ x$ [m]},
 axis background/.style={fill=white},
@@ -33,17 +33,48 @@ axis x line*=bottom,
 axis y line*=left
 ]
 \addplot [color=mycolor1, line width=1.0pt, forget plot]
-  table[]{ASV_errors-1x.tsv};
+  table[]{auv_errors-1.tsv};
 \addplot [color=mycolor2, line width=1.0pt, forget plot]
-  table[]{ASV_errors-2x.tsv};
+  table[]{auv_errors-2.tsv};
 \addplot [color=mycolor3, line width=1.0pt, forget plot]
-  table[]{ASV_errors-3x.tsv};
+  table[]{auv_errors-3.tsv};
 \addplot [color=mycolor4, line width=1.0pt, forget plot]
-  table[]{ASV_errors-4x.tsv};
+  table[]{auv_errors-4.tsv};
 \addplot [color=mycolor5, line width=1.0pt, forget plot]
-  table[]{ASV_errors-5x.tsv};
+  table[]{auv_errors-5.tsv};
 \addplot [color=mycolor6, line width=1.0pt, forget plot]
-  table[]{ASV_errors-6x.tsv};
+  table[]{auv_errors-6.tsv};
+\end{axis}
+
+\begin{axis}[%
+width=65mm,
+height=12mm,
+at={(0mm,14mm)},
+scale only axis,
+xmin=0,
+xmax=75,
+xtick={0,25,50,75},
+xticklabels={\empty},
+ymin=-20,
+ymax=10,
+ylabel style={font=\color{white!15!black}},
+ylabel={$ y$ [m]},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left
+]
+\addplot [color=mycolor1, line width=1.0pt, forget plot]
+  table[]{auv_errors-7.tsv};
+\addplot [color=mycolor2, line width=1.0pt, forget plot]
+  table[]{auv_errors-8.tsv};
+\addplot [color=mycolor3, line width=1.0pt, forget plot]
+  table[]{auv_errors-9.tsv};
+\addplot [color=mycolor4, line width=1.0pt, forget plot]
+  table[]{auv_errors-10.tsv};
+\addplot [color=mycolor5, line width=1.0pt, forget plot]
+  table[]{auv_errors-11.tsv};
+\addplot [color=mycolor6, line width=1.0pt, forget plot]
+  table[]{auv_errors-12.tsv};
 \end{axis}
 
 \begin{axis}[%
@@ -55,39 +86,34 @@ xmin=0,
 xmax=50,
 xlabel style={font=\color{white!15!black}},
 xlabel={$t$ [s]},
-ymin=-1.45386617375344,
-ymax=13.4253597741235,
+ymin=-3.91528768549262,
+ymax=12.9802706675211,
 ylabel style={font=\color{white!15!black}},
-ylabel={$ y$ [m]},
+ylabel={$ z$ [m]},
 axis background/.style={fill=white},
 axis x line*=bottom,
 axis y line*=left,
-legend style={at={(0.99,1.85)}, anchor=north east, legend cell align=left, align=left, draw=white!15!black},
+legend style={at={(1.03,1.7)}, anchor=north east, legend cell align=left, align=left, draw=white!15!black},
 legend columns=2
 ]
 \addplot [color=mycolor1, line width=1.0pt]
-  table[]{ASV_errors-1y.tsv};
-\addlegendentry{Vehicle 1~}
-
+  table[]{auv_errors-13.tsv};
+  \addlegendentry{AUV 1~}
 \addplot [color=mycolor2, line width=1.0pt]
-  table[]{ASV_errors-2y.tsv};
-\addlegendentry{Vehicle 2}
-
+  table[]{auv_errors-14.tsv};
+  \addlegendentry{AUV 2}
 \addplot [color=mycolor3, line width=1.0pt]
-  table[]{ASV_errors-3y.tsv};
-\addlegendentry{Vehicle 3}
-
+  table[]{auv_errors-15.tsv};
+  \addlegendentry{AUV 3}
 \addplot [color=mycolor4, line width=1.0pt]
-  table[]{ASV_errors-4y.tsv};
-\addlegendentry{Vehicle 4}
-
+  table[]{auv_errors-16.tsv};
+  \addlegendentry{AUV 4}
 \addplot [color=mycolor5, line width=1.0pt]
-  table[]{ASV_errors-5y.tsv};
-\addlegendentry{Vehicle 5}
-
+  table[]{auv_errors-17.tsv};
+  \addlegendentry{AUV 5}
 \addplot [color=mycolor6, line width=1.0pt]
-  table[]{ASV_errors-6y.tsv};
-\addlegendentry{Vehicle 6}
-
+  table[]{auv_errors-18.tsv};
+  \addlegendentry{AUV 6}
 \end{axis}
+
 \end{tikzpicture}%
