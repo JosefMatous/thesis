@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="171mm"
    height="97.089081mm"
    viewBox="0 0 171 97.089083"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="AUV_pose.svg">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="AUV_pose.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <marker
@@ -32,36 +32,6 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="marker1932"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Mend"
-       inkscape:isstock="true"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.4,0,0,-0.4,-4,0)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path1930" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="marker1830"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Mend"
-       inkscape:isstock="true"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.4,0,0,-0.4,-4,0)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path1828" />
-    </marker>
-    <marker
-       style="overflow:visible"
        id="marker1228"
        refX="0"
        refY="0"
@@ -74,36 +44,6 @@
          style="fill:#dd0000;fill-opacity:1;fill-rule:evenodd;stroke:#dd0000;stroke-width:1pt;stroke-opacity:1"
          d="M 0,0 5,-5 -12.5,0 5,5 Z"
          id="path1226" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="marker1194"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Mend"
-       inkscape:isstock="true"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.4,0,0,-0.4,-4,0)"
-         style="fill:#00ac00;fill-opacity:1;fill-rule:evenodd;stroke:#00ac00;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path1192" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="Arrow1Mend"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Mend"
-       inkscape:isstock="true"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.4,0,0,-0.4,-4,0)"
-         style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:1pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path905" />
     </marker>
     <marker
        style="overflow:visible"
@@ -156,8 +96,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="492.1408"
-     inkscape:cy="67.007854"
+     inkscape:cx="409.11178"
+     inkscape:cy="48.487322"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -167,10 +107,11 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1">
+     inkscape:window-height="1011"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid833"
@@ -185,7 +126,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -218,15 +158,15 @@
          sodipodi:nodetypes="ccccc" />
     </g>
     <path
-       style="fill:none;stroke:#dd0000;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1228)"
+       style="fill:none;stroke:#000000;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1228-9-5)"
        d="M 6.9490076,93.544333 51.315749,19.243406"
        id="path890" />
     <path
-       style="fill:none;stroke:#00ac00;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1194)"
+       style="fill:none;stroke:#000000;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1228-9-5)"
        d="M 6.9490076,93.544331 H 141.11831"
        id="path892" />
     <path
-       style="fill:none;stroke:#0000ff;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       style="fill:none;stroke:#000000;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1228-9-5)"
        d="M 6.9490076,93.544331 V 110.91685"
        id="path894"
        sodipodi:nodetypes="cc" />
@@ -234,29 +174,6 @@
        style="fill:none;stroke:#000000;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.46, 0.865;stroke-dashoffset:0;stroke-opacity:1"
        d="M 72.964579,60.937451 153.94725,30.201457"
        id="path1296" />
-    <path
-       style="fill:none;stroke:#ff7f2a;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 72.964579,60.937451 156.35267,48.910324"
-       id="path1298" />
-    <path
-       style="fill:none;stroke:#de0000;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 72.96458,60.937454 89.00075,34.2105"
-       id="path890-6-8"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1830)"
-       d="m 89.00075,34.2105 c 0,0 20.44613,-0.668174 23.65336,18.842502"
-       id="path1826"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1932)"
-       d="m 156.35267,48.910324 c 0,0 -3.74177,-10.557147 -7.21628,-15.902538"
-       id="path1928"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000080;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2058)"
-       d="m 140.708,60.827821 24.32153,24.054258"
-       id="path2054" />
     <g
        id="g957"
        style="stroke-width:0.9;stroke-miterlimit:4;stroke-dasharray:none"
@@ -286,101 +203,76 @@
     <text
        xml:space="preserve"
        style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
+       x="118.65808"
+       y="38.968571"
+       id="text1268-9-1-6-3-0"><tspan
+         sodipodi:role="line"
+         id="tspan1266-2-8-5-1-0"
+         x="118.65808"
+         y="38.968571"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$h$</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Text">
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
        x="33.306625"
        y="25.390604"
-       id="text1268"><tspan
+       id="text1268"
+       transform="translate(-4.2448424,-15.926542)"><tspan
          sodipodi:role="line"
          id="tspan1266"
          x="33.306625"
          y="25.390604"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">\color{axred}$X$</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$x$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
        x="126.19318"
        y="106.29462"
-       id="text1268-5"><tspan
+       id="text1268-5"
+       transform="translate(-4.2448424,-15.926542)"><tspan
          sodipodi:role="line"
          id="tspan1266-6"
          x="126.19318"
          y="106.29462"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">\color{axgreen}$Y$</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$y$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="11.502308"
-       y="106.81303"
+       x="7.7866321"
+       y="90.886482"
        id="text1268-54"><tspan
          sodipodi:role="line"
          id="tspan1266-5"
-         x="11.502308"
-         y="106.81303"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">\color{axblue}$Z$</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="96.217628"
-       y="32.464256"
-       id="text1268-9"><tspan
-         sodipodi:role="line"
-         id="tspan1266-2"
-         x="96.217628"
-         y="32.464256"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$\psi$</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="143.52502"
-       y="42.59568"
-       id="text1268-9-1"><tspan
-         sodipodi:role="line"
-         id="tspan1266-2-8"
-         x="143.52502"
-         y="42.59568"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$\theta$</tspan></text>
+         x="7.7866321"
+         y="90.886482"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$z$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
        x="56.431606"
        y="67.357292"
-       id="text1268-9-1-6"><tspan
+       id="text1268-9-1-6"
+       transform="translate(-4.2448424,-15.926542)"><tspan
          sodipodi:role="line"
          id="tspan1266-2-8-5"
          x="56.431606"
          y="67.357292"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">CO</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$\mat{p}$</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="152.08604"
-       y="70.221436"
-       id="text1268-5-8"><tspan
-         sodipodi:role="line"
-         id="tspan1266-6-2"
-         x="152.08604"
-         y="70.221436"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">\color{navy}$\mathbf{V}_c$</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="156.70152"
-       y="28.288534"
+       x="152.98584"
+       y="12.361992"
        id="text1268-9-1-6-3"><tspan
          sodipodi:role="line"
          id="tspan1266-2-8-5-1"
-         x="156.70152"
-         y="28.288534"
+         x="152.98584"
+         y="12.361992"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$\mathbf{y}$</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10.5833px;line-height:1.25;font-family:'Modern No. 20';-inkscape-font-specification:'Modern No. 20, ';stroke-width:0.264583"
-       x="118.65808"
-       y="37.910236"
-       id="text1268-9-1-6-3-0"><tspan
-         sodipodi:role="line"
-         id="tspan1266-2-8-5-1-0"
-         x="118.65808"
-         y="37.910236"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.264583">$L$</tspan></text>
   </g>
 </svg>

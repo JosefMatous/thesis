@@ -1,3 +1,495 @@
-\chapter{Tracking Control of Cooperative Marine Vehicles Under Hard and Soft Constraints}
+\chapter{Tracking Control of AUVs Under Hard and Soft Constraints}
 \label{chap:handpos_tracking}
+
+This chapter investigates the tracking-in-formation problem for a group of underactuated autonomous marine vehicles interconnected over a directed topology.
+The agents are subject to \emph{hard} inter-agent constraints, \emph{i.e.,} connectivity maintenance and collision avoidance, and \emph{soft} constraints, specifically on the non-negativity of the surge velocity, as well as to constant disturbances in the form of unknown ocean currents.
+The control approach is based on two concepts: the 3D hand position output linearization presented in Chapter~\ref{chap:handpos_definition}, and the edge-based framework for multi-agent consensus under constraints.
+We establish \emph{almost-everywhere} uniform asymptotic stability of the output dynamics with guaranteed respect of the constraints.
+Numerical and high-fidelity simulations are provided to illustrate the effectiveness of our approach.
+The contents of this chapter are based on \cite{restrepo_formation_2022,restrepo_tracking_2023}, with proofs extended from 2D to 3D.
+
+\section{Introduction}
+
+In order to successfully carry out the tracking-in-formation mission in the framework of multi-agent systems of autonomous vehicles, some practical challenges need to be addressed.
+For instance, in order to guarantee the safety of the system and the success of the mission, the vehicles must guarantee the maintenance of a safe distance between them. Moreover, due to the use of onboard sensors and the challenges posed by the underwater environment, the vehicles need to keep a sufficiently close distance to guarantee the reliability of the communication and the connectivity of the multi-agent system.
+Furthermore, in special cases when the vehicles use optical sensors or communications, the followers are limited by \gls{fov} constraints.
+
+nder the control designs proposed in the literature, in many instances, in order to guarantee the satisfaction of the inter-agent constraints, the vehicles are forced to move backwards, oftentimes during a prolonged period of time and at relatively high  speeds (for backwards motion of a marine vehicle). 
+However, although marine vehicles are able to move backwards, they are not well-suited to do so due to their shapes and their propulsion system. 
+This issue, however, has not been addressed in the literature of multi-\gls{auv} systems.
+
+In this chapter, we propose a distributed control law that solves the tracking-in-formation problem for multiple marine vehicles interacting over a directed communication graph and that guarantees, simultaneously, connectivity preservation and inter-agent collision avoidance.
+Moreover, we address the issue of backwards motion by imposing a non-negativity constraint on the surge velocity of the vehicles.
+More precisely, on one hand we encode via \glspl{blf} the proximity and safety constraints as \emph{hard constraints} that need to be always satisfied.
+On the other hand, we encode the non-negativity of the surge velocity as a \emph{soft constraint}, so that it is imposed on the vehicles as long as it does not interfere with the hard constraints, in which case it is dynamically relaxed.
+The proposed controller is based on the hand-position-based input-output feedback linearization method presented in Chapter~\ref{chap:handpos_definition} and on the so-called \emph{edge-agreement} representation of multi-agent systems \cite{mesbahi_graph_2010}, in which the relative states of the connected agents are used instead of the absolute ones, making it well adapted to practical applications where, usually, only relative measurements are available.
+With regards to the stability analysis, differing from most of the existing works in the literature, where only non-uniform convergence to the formation and to the target vehicle is guaranteed, we establish \emph{almost-everywhere} uniform asymptotic stability of the tracking-in-formation objective and we show that the output error dynamics converge to the origin exponentially fast, while satisfying the constraints.
+
+The remainder of the chapter is organized as follows.
+In Section \ref{sec:preliminaries} we present the model of the multi-agent system and the problem formulation. For clarity of exposition, in Section~\ref{sec:ctrl} we present the control design when considering only the hard constraints, followed by the stability analysis in Section \ref{sec:proof}. Then, in Section~\ref{sec:soft} we present the control design adding the soft constraints. Finally, simulation results and conclusions are presented in Sections~\ref{sec:simulations} and \ref{sec:conclusions}, respectively.
+
+\section{Model and problem formulation}\label{sec:preliminaries}
+
+\subsection{Model of the marine vehicle}
+
+We consider underactuated \glspl{auv} with six \acrfullpl{dof}, and apply the hand position transformation from Chapter~\ref{chap:handpos_definition}.
+Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the transformed system are
+\begin{subequations}
+    \begin{align}
+        \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \label{eq:handpos_tracking_x_1_dot_transformed}\\
+        \dot{\mat{x}}_2 &= \bs{\mu}, \label{eq:handpos_tracking_x_2_dot_transformed}\\
+        \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \label{eq:handpos_tracking_R_dot_CL} \\
+        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_tracking_omega_dot_CL} \\
+            & \quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right). \nonumber
+    \end{align} \label{eq:handpos_tracking_hand_position_dynamics}
+\end{subequations}
+
+\subsection{Problem statement}
+
+We consider a multi-agent system composed of $N$ marine vehicles modeled by \eqref{eq:handpos_tracking_hand_position_dynamics}.
+The states of the vehicles are denoted by double subscripts (\emph{e.g.,} the hand position of vehicle $i$ is $\mat{x}_{1, i}$).
+The interaction between the \glspl{auv} is given by a directed graph $\mathcal{G}=(\mathcal{V},\mathcal{E})$ which is either a spanning tree or a cycle.
+Moreover, we consider that the multi-agent system is subject to inter-agent output constraints.
+For one part, these constraints may come from embedded relative-measurements devices, which are reliable only if used within a limited range. Hence, the vehicles must remain within a limited distance from their neighbors in order to maintain the connectivity of the graph.
+Furthermore, to ensure the safety of the system, the agents must avoid collisions among themselves, that is, they must always guarantee a minimal distance with respect to their neighbors.
+These connectivity and collision-avoidance constraints may be defined as a set of restrictions on $\mat{x}_1$. Also, such constraints may be considered as \emph{hard} constraints since they are fundamental for ensuring the safety of the system and for reaching the control goal.
+
+More precisely, define the relative output 
+\begin{equation}\label{eq:z1k-def}
+    \mat{z}_{1, k} = \mat{x}_{1, i} - \mat{x}_{1, j}, \quad \forall k\leq M, \quad e_k=(i,j)\in\mathcal{E},
+\end{equation}
+where $M$ is the cardinality of $\mathcal{E}$.
+For each $k\leq M$, let $\delta_k$ and ${\Delta_k}$ be, the minimal and maximal distances between agents $i$ and $j$ so that collisions are avoided and that the communication through edge $e_k$ is reliable, respectively.
+Then, the set of inter-agent output constraints is defined as
+\begin{equation}
+\label{eq:setDk} \mathcal D_k = \big\{z_{1k}\in\mathbb{R}^{2}:\delta_k<|z_{1k}|<{\Delta_k}\big\},\quad \forall\, k\leq M.
+\end{equation}
+
+Coming back to each individual agent, it is important to note that, in practice, marine vehicles are not optimized for moving backwards. However, backwards motion is not prevented from the dynamical model \eqref{eq:handpos_tracking_hand_position_dynamics}.
+Therefore, in order to let the vehicles evolve in an optimal way, besides the inter-agent connectivity and collision-avoidance constraints, we could formulate the additional constraints
+\begin{equation}
+\label{eq:posvel} u_{r, i}(t)> 0,\quad \forall\, i\leq N, \quad \forall t\geq 0.
+\end{equation}
+However, in some cases, the constraints \eqref{eq:posvel} could conflict with the constraints defined by the set \eqref{eq:setDk}. 
+Indeed, there might exist situations when the only way to avoid a collision or avoid losing connectivity is to move backwards. 
+Moreover, although not optimized to, marine vehicles \emph{can} move backwards.
+The latter fact motivates us to reformulate the constraints \eqref{eq:posvel} as \emph{soft} constraints, that is, to impose a positive surge velocity as long as this does not interfere with the satisfaction of the hard constraints \eqref{eq:setDk}.
+We formulate these soft constraints as follows:
+\begin{equation}
+\label{eq:soft} u_{r, i}(t) + \rho_i(t) > 0,\quad \forall\, i\leq N, \quad \forall t\geq 0,
+\end{equation}
+where $\rho_i:\mathbb{R}_{\geq 0}\to\mathbb{R}_{\geq 0}$ will be defined later, such that $\rho_i(t)\approxeq0$ when there are no conflicts with the hard constraints and $\rho_i(t)>0$ otherwise, allowing $u_{r, i}(t)$ to become negative. Akin, to \eqref{eq:setDk} we may define the set of soft constraints as
+\begin{equation}
+\label{eq:setC} \mathcal{C}_i = \big\{u_{r, i}\in\mathbb{R}:u_{r, i}>-\rho_i(t)\big\},\quad \forall\, i\leq N.
+\end{equation}
+
+Now, let $\mat{x}_{1, o}$, $\mat{x}_{2, o}$, and $\bs{\mu}_o$ define the position, velocity, and acceleration of a virtual target, and let its dynamics be modeled as a second-order integrator
+\begin{equation}\label{360}
+\dot{\mat{x}}_{1, o} = \mat{x}_{2, o},\quad
+\dot{\mat{x}}_{2, o} = \bs{\mu}_o(t).
+\end{equation}
+Moreover, assume the following.
+\begin{asm}\label{hyp:target}
+	For all $t$, there exist positive constants $\underline{x}_{2, o}$, $\overline{x}_{2, o}$, and $\overline{\mu}_o$ such that $\norm{\ocean} < \underline{x}_{2, o}\leq \norm{\mat{x}_{2, o}(t)} \leq \overline{x}_{2, o}$, and $\norm{\bs{\mu}_o(t)}\leq \overline{\mu}_o$.
+\end{asm}
+
+Then, the control goal is for the $N$ marine vehicles to achieve the desired formation and track the target modeled by \eqref{360}, all while guaranteeing that the hard constraints given by the set $\mathcal{D}_k$ in \eqref{eq:setDk} and the soft constraints \eqref{eq:soft} are respected.
+
+For the tracking part of the problem, we consider the case that only one agent, labeled $i=1$ without loss of generality, has access to the state of the target, and knows the upper bound $\overline{\mu}_o$ on the target's acceleration.
+Let $\mat{z}_{1, o}^d \in \mathbb{R}^3$ be the desired displacement with respect to the target. Then, we define the tracking error states as
+\begin{equation}\label{367}
+\tilde{\mat{z}}_{1, o} = \mat{x}_{1, 1} - \mat{x}_{1, o} - \mat{z}_{1, o}^d, \quad
+\mat{z}_{2, o}= \mat{x}_{2, 1} - \mat{x}_{2, o}.
+\end{equation}
+
+To address the formation part, we rely on the edge-agreement framework \cite{mesbahi_graph_2010} where instead of considering the states of each individual agent (the nodes of the graph), we consider the variables $\mat{z}_{1, k}$ defined in \eqref{eq:z1k-def} which correspond to the edges in the graph.
+Hence, let us denote by $\mat{E} \in \mathbb{R}^{N\times M}$ the incidence matrix of graph $\mathcal{G}$, where its $(i,k)$th entry is defined as follows: $\left[\mat{E}\right]_{ik} = -1$ if $i$ is the terminal node of edge $e_k$, $\left[\mat{E}\right]_{ik} = 1$ if $i$ is the initial node of edge $e_k$, and $\left[\mat{E}\right]_{ik} = 0$ otherwise.
+Let $\mat{x}_1\T = \left[\mat{x}_{1, 1}\T\,\cdots\,\mat{x}_{1, N}\T\right]$ be the collection of the hand-position coordinates of all the agents of the system, and let $\mat{z}_1\T = [\mat{z}_{1, 1}\T\cdots \mat{z}_{1, M}\T]\T$ be the collection of all the relative positions between the pairs of neighboring agents.
+Then, we can express the edge states in the following compact form
+\begin{equation}\begin{aligned}\label{eq:z1-def}
+\mat{z}_1= [\mat{E}\T \otimes \mat{I}_3] \mat{x}_1.
+\end{aligned}\end{equation}
+The formation error, in turn, is defined as
+\begin{equation}\begin{aligned}\label{eq:tildez1-def}
+\tilde{\mat{z}}_1=[\mat{E}\T \otimes \mat{I}_3] \mat{x}_1 - \mat{z}_1^d, \qquad
+\mat{z}_1^{d, {\rm T}} = \left[\mat{z}_{1, 1}^{d{\rm T}}\cdots \mat{z}_{1, M}^{d{\rm T}}\right]
+\end{aligned}\end{equation}
+where $\mat{z}_{1, k}^d\in\mathbb{R}^{2}$ denotes the desired relative position between a pair of neighboring agents over edge $e_k$.
+In the same way, let $\mat{x}_2\T=\left[\mat{x}_{2, 1}\T\,\cdots\,\mat{x}_{2, N}\T\right]$ be the collection of the hand-position velocities.
+Then, the relative hand-position velocities in the edge coordinates, $\mat{z}_2$, are given by
+\begin{equation}\begin{aligned}\label{eq:z2-def}
+\mat{z}_2=[\mat{E}\T \otimes \mat{I}_3] \mat{x}_2.
+\end{aligned}\end{equation}
+Let us also define the collection of the control inputs $\bs{\mu}\T=\left[\bs{\mu}_1\T\,\cdots\,\bs{\mu}_N\T\right]$.
+Then, mathematically, the tracking-in-formation problem translates into designing a distributed controller $\bs{\mu}$ such that 
+\begin{subequations}\label{n194}\begin{align}
+	\lim\limits_{t \rightarrow \infty} \tilde{\mat{z}}_{1, o}(t) &= \mat{0} & \lim\limits_{t \rightarrow \infty} \mat{z}_{2, o}(t) &= \mat{0} \label{n194-a}\\
+	\lim\limits_{t \rightarrow \infty} \tilde{\mat{z}}_1(t) &= \mat{0} & \lim\limits_{t \rightarrow \infty} \mat{z}_2(t) &= \mat{0}. \label{n194-b}
+\end{align}\end{subequations}
+
+Now, as observed in \cite{restrepo_edge-directed_2020}, using an appropriate labeling of the edges, the incidence matrix can be expressed as $\mat{E} = \left[\mat{E}_t\quad \mat{E}_c\right],$
+where $\mat{E}_t\in\mathbb{R}^{N\times(N-1)}$ denotes the full column-rank incidence matrix corresponding to an arbitrary spanning tree $\mathcal G_t \subset \mathcal G$ and $\mat{E}_c \in \mathbb{R}^{N\times(M-N+1)}$ represents the incidence matrix corresponding to the remaining edges in $\mathcal G \setminus \mathcal G_t$.
+Similarly, the error edge states may be split as $\mat{z}_\iota=\left[\mat{z}_{\iota, t}\T\;\;\mat{z}_{\iota, c}\T\right]\T$, $\iota=\{1,2\}$, where $\mat{z}_{\iota, t}\in\mathbb{R}^{2(N-1)}$ are the states corresponding to the edges of $\mathcal G_t$ and $\mat{z}_{\iota, c} \in \mathbb{R}^{n(M-N+1)}$ denote the states of the remaining edges, $\mathcal G \setminus \mathcal G_t$.
+Moreover, defining 
+\begin{equation}\label{n205}
+\mathcal{R} = \left[\mat{I}_{N-1}\quad \mat{T}\right], \quad \mat{T}=\left(\mat{E}_t\T \mat{E}_t\right)^{-1}\mat{E}_t\T \mat{E}_c,
+\end{equation}
+we have the following identities
+\begin{equation}\label{n209}
+\mat{E} = \mat{E}_t \mathcal{R}, \quad \mat{z}_1 = \big[\mathcal{R}\T\otimes \mat{I}_3\big] \tilde{\mat{z}}_{1, t}, \;\; \iota\in\{1,2\}.
+\end{equation}
+
+%Then, akin to \eqref{n209}, after \eqref{eq:tildez1-def}, \eqref{eq:z2-def}, \eqref{n209}, and \eqref{n203}, denoting $z_{1t}^d\in\mathbb{R}^{n(N-1)}$ as the vector of desired relative displacements corresponding to $\mathcal G_t$, we have
+%\begin{equation}
+%\label{n212} \tilde z_1 = \big[R\T\otimes \mat{I}_3\big] \tilde z_{1t}, \quad z_2 = \big[R\T\otimes \mat{I}_3\big] z_{2t}.
+%\end{equation}
+Then, using \eqref{n209} and denoting $\mat{z}_{1, t}^d\in\mathbb{R}^{n(N-1)}$ as the vector of desired relative displacements corresponding to $\mathcal G_t$, a reduced-order model for the external dynamics in terms of the edges of a spanning tree is given by
+\begin{subequations}\allowdisplaybreaks\label{n216}\begin{align}
+	\dot{\mat{z}}_{1, o}&=\mat{z}_{2, o}+\ocean\label{n217-t}\\
+	\dot{\tilde{\mat{z}}}_{1, t} &=\mat{z}_{2, t}\label{n217}\\
+	\dot{\mat{z}}_{2, o}&=\bs{\mu}_1-\bs{\mu}_o(t)\label{n218-t}\\
+	\dot{\mat{z}}_{2, t}&=\big[\mat{E}_t\T\otimes \mat{I}_3\big]\bs{\mu}.\label{n218}
+	\end{align}\end{subequations}
+In these coordinates, the control objective as defined in \eqref{n194} is achieved if the origin of system \eqref{n216} is asymptotically stabilized.
+More precisely, we consider the following problem. 
+
+{\it Tracking-in-formation under hard and soft constraints:} Consider a system of $N$ autonomous marine vehicles with dynamics given by \eqref{eq:handpos_tracking_hand_position_dynamics}, interacting over a directed graph which is either a spanning tree or a cycle.
+Assume, in addition, that the agents are subject to the hard inter-agent output constraints given by the set defined in \eqref{eq:setDk} and the soft constraints given by \eqref{eq:setC}.
+Under these conditions, find distributed controllers $bs{\mu}_i$, $i\leq N$, that asymptotically stabilize the origin of \eqref{n216} and render the sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant, \emph{i.e.}, $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ ($u_{r, i}(t_0)\in\mathcal{C}_i$) implies that $\mat{z}_{1, k}(t)\in \mathcal{D}_k$ ($u_{r, i}(t)\in\mathcal{C}_i$), $\forall k\leq M$ ($\forall i\leq N$) and $\forall t\geq t_0$.
+
+\section{Control design for tracking under proximity and safety constraints}
+\label{sec:ctrl}
+
+For clarity of exposition, in this section we begin by presenting the control design considering \emph{only} the hard constraints, i.e. connectivity maintenance and collision avoidance. The inclusion of the soft constraints is addressed in Section~\ref{sec:soft}.
+
+We will show how the tracking-in-formation problem, with the previously formulated inter-agent constraints, can be solved following a backstepping approach which is well adapted to the normal form of the external dynamics \eqref{n216}. We start by defining a virtual control law for \eqref{n217-t}-\eqref{n217} with $\mat{z}_{2, o}$ and $\mat{z}_{2, t}$ as inputs. 
+In order to account for the output constraints, a good choice of control design for the virtual inputs consists in using the gradient of a \acrfull{blf} \cite{tee_barrier_2009}.
+
+\subsection{On barrier Lyapunov functions}
+
+\Glspl{blf} are reminiscent of Lyapunov functions in that they are positive definite, but their domain is restricted by design to open subsets of the Euclidean space and they grow unbounded as their argument approaches the boundary of their domain.
+We define them as follows, \emph{c.f.,} \cite{tee_barrier_2009}.
+\begin{dfn}[BLF]\label{def:TAC-barrier-function}
+	Consider the system $\dot{x} = f(x)$ and let $\mathcal M \subset \mathbb{R}^n$ be an open set containing the origin.
+	A \gls{blf} is a positive definite function $V : \mathcal M \mapsto \mathbb{R}_{\geq 0}$ that satisfies
+	\[%% \dot V(x)=
+	\nabla V(x)\T f(x) = \frac{\partial V(x)}{\partial x}\T f(x)\leq 0,\]	
+	and $V(x) \rightarrow \infty$ and $\norm{\nabla V(x)} \rightarrow \infty$ as $x \rightarrow \partial \mathcal M$. 
+\end{dfn}
+
+Akin to \eqref{eq:setDk}, the inter-agent constraints in terms of the formation error are given, for all $k\leq M$, by the set
+\begin{equation}\label{n367}
+\tilde{\mathcal{D}}_k=\{\tilde{\mat{z}}_{1, k}\in\mathbb{R}^{3}\,|\,\delta_k<\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}<\Delta_k\}.
+\end{equation}
+Then, for each $k\leq M$, we define a candidate \gls{blf} $W_k:\mathcal{\tilde D}_k\mapsto\mathbb{R}_{\geq 0}$, of the form
+\begin{equation}\label{317}
+W_k(\tilde{\mat{z}}_{1, k}) = \frac{1}{2}\left[\norm{\tilde{\mat{z}}_{1, k}}^2+B_k(\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d)\right],
+\end{equation}
+where 
+\begin{equation*}\label{520}\begin{aligned}
+B_k(\mat{z}_{1, k}) =&\; 
+\kappa_{1, k}\left[\ln\left(\frac{\Delta_k^2}{\Delta_k^2-\norm{\mat{z}_{1, k}}^2}\right)-\ln\left(\frac{\Delta_k^2}{\Delta_k^2-\norm{\mat{z}_{1, k}^d}^2}\right)\right]
+\\&\hspace{-2mm}+\kappa_{2, k}\left[\ln\left(\frac{\norm{\mat{z}_{1, k}}^2}{\norm{\mat{z}_{1, k}}^2-\delta_k^2}\right)-\ln\left(\frac{\norm{\mat{z}_{1, k}^d}^2}{\norm{\mat{z}_{1, k}^d}^2-\delta_k^2}\right)\right], 
+\end{aligned}\end{equation*}
+\begin{equation*}\label{379}
+\kappa_{1, k} = \frac{\delta_k^2}{\norm{\mat{z}_{1, k}^d}^2(\norm{\mat{z}_{1, k}^d}^2-\delta_k^2)},\quad \kappa_{2, k}=\frac{1}{\Delta_k^2-\norm{\mat{z}_{1, k}^d}^2}.
+\end{equation*}
+
+Note that $B_k$ is a non-negative function that satisfies: ${B}_k(\mat{z}_{1, k}^d) = 0$, $\nabla{B}_k(\mat{z}_{1, k}^d) = \mat{0}$, and ${B}_k(\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d)\rightarrow\infty$ as either $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\Delta_k$ or $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\delta_k$.
+Therefore, the candidate \gls{blf} \eqref{317} satisfies: $W_k(\tilde{\mat{z}}_{1, k})\rightarrow\infty$ as either $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\Delta_k$ or $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\delta_k$.
+
+\begin{rmk}\label{rmk:V:equilibria}
+	The function in \eqref{317} is reminiscent of scalar potential functions in constrained environments. Hence, the appearance of multiple critical points is inevitable \cite{rimon_exact_1992}.
+	Indeed, the gradient of the \gls{blf} \eqref{317}, $\nabla W_k(\tilde{\mat{z}}_{1, k})$, vanishes at the origin and at an isolated saddle point separated from the origin. 
+	Therefore, when using the gradient of \eqref{317}, the closed-loop system has multiple equilibria.
+	We address such technicalities using tools for \textit{multi-stable} systems \cite{forni_cascade_2016,monzon2006local}.
+\end{rmk}
+
+Now, we define a \gls{blf} for the multi-agent system as
+\begin{equation}\label{512}
+W(\tilde{\mat{z}}_{1})=\sum_{k\leq M} \varrho_k W_k(\tilde{\mat{z}}_{1, k}), \quad \varrho_k>0,
+\end{equation}
+and, in light of Remark~\ref{rmk:V:equilibria}, let $\tilde{\mat{z}}_1^*\in\mathbb{R}^{nM}$ denote the vector containing the saddle points of the \gls{blf} for each edge \eqref{317}.
+Moreover, let us define the disjoint set
+\begin{equation}\label{517}
+\mathcal{W}=\{0\}\cup\{\tilde{\mat{z}}_1^*\},
+\end{equation}
+which corresponds to the critical points of $W$ in \eqref{317}.
+Then, $W$ satisfies
+\begin{equation}\label{eq:BLF-bounds}
+\frac{a_1}{2}\dst{\tilde{\mat{z}}_{1}}{\mathcal{W}}^2 \leq W(\tilde{\mat{z}}_{1}) \leq a_2\norm{\nabla W(\tilde{\mat{z}}_{1})}^2,
+\end{equation}
+where $a_{1}, a_2 > 0$ and $\dst{\tilde{\mat{z}}_{1}}{\mathcal{W}} = \min \big\{\norm{\tilde{\mat{z}}_{1}}, \norm{\tilde{\mat{z}}_{1} - \tilde{\mat{z}}_{1}^*}\big\}$.
+
+\subsection{Control design for systems over directed graphs}
+
+Let us define the so-called in-incidence matrix $\mat{E}_\odot \in \mathbb{R}^{N\times M}$, whose elements are defined as follows: $\left[\mat{E}_\odot\right]_{i, k} = -1$ if $i$ is the terminal node of edge $e_k$ and $\left[\mat{E}_\odot\right]_{ik} = 0$ otherwise. Then, in the edge-agreement framework, the virtual controllers are given by
+\begin{equation}\label{n284}\begin{aligned}[b]
+\mat{z}_{2, t}^*&=[\mat{E}_t\T \otimes \mat{I}_3] \mat{x}_2^*\\
+\mat{x}_2^*&=-c_1[\mat{E}_\odot\otimes \mat{I}_3] \nabla W(\tilde{\mat{z}}_{1, t})-c_1[\mat{C}\otimes \mat{I}_3]\tilde{\mat{z}}_{1, o} - \oceanhat,
+\end{aligned}\end{equation}
+where $c_1$ is a positive gain, $\oceanhat$ is a vector of estimates of the ocean current for each agent, and $\mat{C}\T=\left[1\;\;\mat{0}_{N-1}\T\right]$.
+To avoid a cumbersome notation we write $\nabla W(\tilde{\mat{z}}_{1, t})$ in place of the more appropriate spelling $\nabla W\left(\left[\mathcal{R}\T\otimes \mat{I}_3\right]\tilde{\mat{z}}_{1, t}\right)$.
+
+% \begin{rmk}
+% 	For undirected graphs the virtual control law takes the form
+% 	\begin{equation}
+% 	\nu_{h}^*=-c_1[E\otimes \mat{I}_3]\nabla W(\tilde z_{1})-c_1[C\otimes \mat{I}_3]\tilde z_{1o}-\hat V,
+% 	\end{equation}
+% 	where $E$ is the incidence matrix, cf. \cite{restrepo_ECC_2022}.
+% \end{rmk}
+
+Defining velocity errors $\tilde{\mat{z}}_{2, t} = \mat{z}_{2, t} - \mat{z}_{2, t}^*$, $\tilde{\mat{z}}_{2, o} = \tilde{\mat{z}}_{2, 1} - \mat{z}_{2, o}$, and using \eqref{n284}, the subsystem \eqref{n217-t}--\eqref{n217} becomes
+\begin{equation}\label{553}\begin{aligned}[b]
+\left[\begin{matrix}
+\dot{\tilde{\mat{z}}}_{1, o}\\\dot{\tilde{\mat{z}}}_{1, t}
+\end{matrix}\right]=&-c_1\left[\left[\begin{matrix}
+1&\mat{C}\T \mat{E}_t\\\mat{E}_t\T \mat{C}&\mat{E}_t\T \mat{E}_\odot
+\end{matrix}\right]\otimes \mat{I}_3\right]\left[\begin{matrix}
+{\tilde{\mat{z}}}_{1, o}\\\nabla W({\tilde{\mat{z}}}_{1})
+\end{matrix}\right]\\&+\left[\left[\begin{matrix}
+\mat{C}\T\\\mat{E}_t\T
+\end{matrix}\right]\otimes \mat{I}_3\right]\oceantilde +\left[\begin{matrix}
+\tilde{\mat{z}}_{2, o}\\\tilde{\mat{z}}_{2, t}
+\end{matrix}\right]
+\end{aligned}\end{equation}
+where the estimation error $\oceantilde$ is defined as
+\begin{equation}\label{548}\begin{aligned}[b]
+\oceantilde&=\bar{\mat{V}}_c-\oceanhat,\quad \text{with } \bar{\mathbf{V}}_c = \mat{1}_N\otimes\ocean.
+\end{aligned}\end{equation}
+With the aim of making $\oceantilde \rightarrow \mat{0}$, we design the adaptation law
+\begin{subequations}\label{560}\begin{align}
+	\oceanhat &= c_v\left(\mat{x}_1-\bs{\varphi}\right), \quad c_v>0\label{560-a}\\
+	\dot{\bs{\varphi}} &= \mat{x}_2 + \oceanhat.\label{560-b}
+\end{align}\end{subequations}
+Using \eqref{560} and \eqref{eq:handpos_tracking_x_1_dot_transformed}--\eqref{eq:handpos_tracking_x_2_dot_transformed}, the derivative of \eqref{548} becomes
+\begin{equation}\label{564}\begin{aligned}[b]
+\dot{\tilde{\mat{V}}}_c&= -c_v\left(\mat{x}_2+\bar{\mat{V}}_c-\mat{x}_2-\oceanhat\right)=-c_v\oceantilde.
+\end{aligned}\end{equation}
+
+In the error coordinates $\tilde{\mat{z}}_{2, o}$ and $\tilde{\mat{z}}_{2, t}$, we have
+\begin{subequations}\label{559}\begin{align}
+	\dot{\tilde{\mat{z}}}_{2, o} &= \bs{\mu}_1 - \dot{\mat{x}}_{2, 1}^*\label{559-a}\\
+	\dot{\tilde{\mat{z}}}_{2, t} &= \big[\mat{E}_t\T\otimes \mat{I}_3\big]\bs{\mu} - \dot{\mat{z}}_{2, t}^*.\label{559-b}
+	\end{align}\end{subequations}
+Hence, we design the tracking-in-formation control law as
+\begin{equation}\label{n338}\begin{aligned}[b]
+\bs{\mu} = &-c_2\big[\mat{E}_\odot \mathcal{R}\T\otimes \mat{I}_3\big]\tilde{\mat{z}}_{2, t}-c_2[\mat{C} \otimes \mat{I}_3]\tilde{\mat{z}}_{2, o} + \dot{\bar{\mat{x}}}_2^*\\&-\gamma\rm{sign}\left(\big[\mat{E}_\odot \mathcal{R}\T\otimes \mat{I}_3\big]\tilde{\mat{z}}_{2, t}+[\mat{C} \otimes \mat{I}_3]\tilde{\mat{z}}_{2, o}\right) + \bs{\mu}^*(t)
+\end{aligned}\end{equation}
+where $c_2,\gamma>0$, ${\bar{\mat{x}}}_2^*=-c_1[\mat{E}_\odot\!\otimes\! \mat{I}_3]\nabla W(\tilde{\mat{z}}_{1})-c_1[\mat{C}\!\otimes\! \mat{I}_3]\tilde{\mat{z}}_{1, o}$. 
+The signal $\bs{\mu}^*(t)\T=\left[\bs{\mu}_1^*(t)\;\cdots\;\bs{\mu}_N^*(t)\right]$, satisfying $\norm{\bs{\mu}^*(t)}\leq\bar\mu^*$ for a constant $\bar\mu^*$, is given by
+\begin{equation}\label{417}
+\bs{\mu}_i^*(t)=\mat{R}_i\T f_{u, i}^* \mat{e}_1,
+\end{equation}
+where $f_{u, i}^*$ is an additional bounded control input that will be used to deal with the soft constraints, \emph{c.f.,} Section~\ref{sec:soft}. 
+
+\subsection{Closed-loop analysis}
+
+First, let us define $\bs{\varsigma}_1\T = \left[\tilde{\mat{z}}_{1, o}\T\;\;\tilde{\mat{z}}_{1, t}\T\right]$, and $\bs{\varsigma}_2\T=\left[\tilde{\mat{z}}_{2, o}\T\;\;\tilde{\mat{z}}_{2, t}\T\right]$.
+We note that the control goal defined in \eqref{n194} is equivalent to $\lim\limits_{t \rightarrow \infty} \bs{\varsigma}_1 = \mat{0}$, $\lim\limits_{t \rightarrow \infty} \bs{\varsigma}_2 = \mat{0}$.
+Consequently, $\bs{\varsigma}_1$ and $\bs{\varsigma}_2$ are valid error variables.
+From \eqref{553}, \eqref{559}, and \eqref{n338}, the closed-loop dynamics are
+\begin{subequations}\label{n560}\begin{align}
+	\dot{\bs{\varsigma}}_1 =& -c_1\mathcal{L}_1\bar{\bs{\varsigma}}_1+\bs{\varsigma}_2+\mathcal{T}_1\tilde{\mat{V}}_c, \label{n560-a}\\
+	\dot{\bs{\varsigma}}_2 =& -c_2\mathcal{L}_2\bs{\varsigma}_{2\!}+\!c_{v\!}\mathcal{T}_1\!\tilde{\mat{V}}_c\!+\!\mathcal{T}_1\!\left[\bs{\mu}^*\!(t)-\mathbf{1}_{N}\!\otimes\!\bs{\mu}_o(t)\right]\!-\!\gamma\mathcal{T}_1{\rm sign}\!\left(\mathcal{T}_2\T\!\bs{\varsigma}_2\right)\!\mathrlap{,}\label{n560-b}\\
+	\dot{\tilde{\mat{V}}}_c =& -c_v\tilde{\mat{V}}_c, \label{n560-c}
+\end{align}\end{subequations}	
+where
+\begin{subequations} \label{570} \begin{align}
+	\bar\varsigma_1\T &= \left[\tilde{\mat{z}}_{1, o}\;\;\nabla W(\tilde{\mat{z}}_{1})\T \right], & & \label{570-a} \\
+	\mathcal{L}_1&=\left[\left[\begin{matrix}
+		1&\mat{C}\T \mat{E}_t\\\mat{E}_t\T \mat{C}&\mat{E}_t\T \mat{E}_\odot
+		\end{matrix}\right]\otimes \mat{I}_3\right],& 
+		\mathcal{T}_1 &=\left[\left[\begin{matrix}
+		\mat{C}\T\\\mat{E}_t\T
+		\end{matrix}\right]\!\otimes\! \mat{I}_3\right] \label{570-b} \\
+		\mathcal{L}_2&=\left[\left[\begin{matrix}
+		1&\mat{C}\T \mat{E}_t\\\mat{E}_t\T \mat{C}&\mat{E}_t\T \mat{E}_\odot \mathcal{R}\T
+		\end{matrix}\right]\otimes \mat{I}_3\right],&
+		\mathcal{T}_2&=\left[\left[\begin{matrix}
+		\mat{C}\T\\\mathcal{R} \mat{E}_\odot\T
+		\end{matrix}\right]\!\otimes\! \mat{I}_3\right]. \label{570-c}
+\end{align} \end{subequations}
+
+The first part of the main result is stated as follows:
+\begin{prop}\label{thm:USV}
+	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which is either a spanning tree or a cycle.
+	Then, under Assumption~\ref{hyp:target} and
+	\begin{equation}
+		\gamma\geq\bar\mu^*+\sqrt{2N}\bar\mu_o, \label{590}
+	\end{equation}
+	the controller \eqref{n338} renders the constraints set \eqref{eq:setDk} forward invariant and guarantees the achievement of the tracking-in-formation objective \eqref{n194} for almost all initial conditions such that $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$, for all $k\leq M$.
+
+	Moreover, let us define $\bs{\xi}_{2, d} = \mat{x}_{2, o}$ and $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
+	The internal dynamics are ultimately bounded if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
+\end{prop}
+
+\begin{proof}
+	We begin by analyzing the external dynamics \eqref{n560}.
+	First define the function 
+	\begin{equation}\label{n587}
+	W_1(\bs{\varsigma}_1)=\frac{1}{2}\norm{\tilde{\mat{z}}_{1, o}}^2 + W(\tilde{\mat{z}}_{1, t}),
+	\end{equation}
+	where, with a slight abuse of notation, $\tilde{\mat{z}}_{1, t} \mapsto W(\tilde z_{1t})$ is defined in \eqref{512}.
+	The derivative of $W_1$ along the trajectories of \eqref{n560-a} yields
+	\begin{equation}\label{n744}
+	\dot W_1(\bs{\varsigma}_1) =-c_1\bar{\bs{\varsigma}}_1\T\mathcal{L}_1\bar{\bs{\varsigma}}_1+\bar{\bs{\varsigma}}_1\T\bs{\varsigma}_2+\bar{\bs{\varsigma}}_1\T\mathcal{T}_1\tilde{\mat{V}}_c.
+	\end{equation}
+	Note that for any directed graph containing a spanning tree, $-\mat{E}_t\T \mat{E}_\odot$ is Hurwitz (\emph{c.f.,} \cite[Proposition~1]{restrepo_edge-directed_2020}).
+	Consequently, from \eqref{570-b}, we can conclude that there exist $c_1', c_v' > 0$ such that
+	\begin{equation}\label{n771}
+	\dot W_1(\bs{\varsigma}_1) \leq-c_1'\norm{\bar{\bs{\varsigma}}_1}^2+\norm{\bar{\bs{\varsigma}}_1}\norm{\bs{\varsigma}_2}+c_v'\norm{\bar{\bs{\varsigma}}_1}\norm{\oceantilde}.
+	\end{equation}
+	
+	Moreover, for any directed graph containing a spanning tree, it follows that $-\mat{E}_t\T \mat{E}_\odot \mathcal{R}\T$ is Hurwitz (\emph{c.f.,} \cite{mukherjee_robustness_2018}).
+	Consequently, we can define the following candidate Lyapunov function 
+	\begin{equation}\label{n745}
+	W_2(\bs{\varsigma}_2)=\frac{1}{2}\bs{\varsigma}_2\T \mat{P}\bs{\varsigma}_2
+	\end{equation}
+	where $\mat{P}$ is a positive definite such that for any positive definite $\mat{Q}$, it holds that $\mathcal{L}_2\T \mat{P} + \mat{P}\mathcal{L}_2=\mat{Q}$.
+	Then, the derivative of \eqref{n745} along the trajectories of \eqref{n560-b}, is defined by the differential inclusion $\bs{\varsigma}_2\in F_2(t,\bs{\varsigma}_2)$, where
+	\begin{equation*}
+	F_2(t,\bs{\varsigma}_2)\!=\!\begin{cases}
+	\eqref{n560-b},& \text{if } \mathcal{T}_2\T\bs{\varsigma}_2\neq \mat{0},\\
+	-c_2\mathcal{L}_2\bs{\varsigma}_2+c_{v\!}\mathcal{T}_1\oceantilde-\gamma\lambda+\!\mathcal{T}_{1\!}\left[\bs{\mu}^*\!(t)-\mathbf{1}_{N}\!\otimes\!\bs{\mu}_o(t)\right],& \text{if } \mathcal{T}_2\T\bs{\varsigma}_2=\mat{0},
+	\end{cases}
+	\end{equation*}
+	and $\lambda\in\left[-1,1\right]$.
+	Thus, using \eqref{590} and the fact that $\norm{s}_1 = s\T{\rm sign}(s)$, the derivative of $W_2$ is
+	\begin{align}
+	\nonumber\dot W_2(\bs{\varsigma}_2) &=-c_2\bs{\varsigma}_2\T \mat{P}\mathcal{L}_2\bs{\varsigma}_2+c_v\bs{\varsigma}_2\T \mat{P}\mathcal{T}_1\oceantilde-\gamma\bs{\varsigma}_2\T \mat{P}\mathcal{T}_1{\rm sign}\left(\mathcal{T}_2\T\bs{\varsigma}_2\right)\\
+	\nonumber&\quad +\bs{\varsigma}_2\T \mat{P}\mathcal{T}_1\left[\bs{\mu}^*(t)-\mathbf{1}_{N}\otimes\bs{\mu}_o(t)\right]\\
+	&\leq-c_2'\norm{\bs{\varsigma}_2}^2+c_v''\norm{\bs{\varsigma}_2}\norm{\oceantilde},\label{n775}
+	\end{align}
+	where $c_2'$ and $c_v''$ are positive constants.
+	
+	Next, let us define $\bs{\varsigma}\T=\left[\bs{\varsigma}_1\T\;\;\bs{\varsigma}_2\T\;\;\oceantilde\T\right]$ and define the candidate Lyapunov function 
+	\begin{equation}\label{n780}
+	W_\varsigma(\bs{\varsigma})=W_1(\bs{\varsigma}_1)+\kappa_1W_2(\bs{\varsigma}_2)+\frac{\kappa_2}{2}\norm{\oceantilde}^2,
+	\end{equation}
+	where $\kappa_1$ and $\kappa_2$ are positive constants.
+	From \eqref{n771}, \eqref{n775}, and \eqref{n560-c}, we have
+	\begin{equation}\label{n784} \begin{aligned}
+	\dot W_\varsigma(\bs{\varsigma}) &\leq -c_1'\norm{\bar{\bs{\varsigma}}_1}^2-\kappa_1c_2'\norm{\bs{\varsigma}_2}^2-\kappa_2c_v\norm{\oceantilde}^2+\norm{\bar{\bs{\varsigma}}_1}\norm{\bs{\varsigma}_2} \\
+	&\quad +c_v'\norm{\bs{\varsigma}_1}\norm{\oceantilde}+\kappa_1c_v''\norm{\bs{\varsigma}_2}\norm{\oceantilde}.
+	\end{aligned} \end{equation}
+	Setting $\kappa_1,\,\kappa_2$ large enough, we can find $\bar{c}_1, \bar{c}_2, \bar{c}_3, \bar{c} > 0$ such that
+	\begin{equation}\label{n790}
+	\dot W_\varsigma(\bs{\varsigma})\leq -\bar c_1\norm{\bar{\bs{\varsigma}}_1}^2-\bar c_2\norm{\bs{\varsigma}_2}^2-\bar c_v\norm{\oceantilde}^2
+		\leq-\bar c\, W_\varsigma(\bs{\varsigma}).
+	\end{equation}
+	Now, let $\mathcal{W}_\varsigma$ be the set of the equilibria of the closed-loop system \eqref{n560}.
+	Recalling Remark~\ref{rmk:V:equilibria}, $\mathcal{W}_\varsigma$ is given by
+	\begin{equation}
+	\mathcal{W}_\varsigma = \{0\}\times\mathcal{W}\times\{0\}\times\{0\}^{2(N-1)}\times\{0\}^{2N}
+	\end{equation}
+	where $\mathcal{W}$ is defined in \eqref{517}. Then, from \eqref{eq:BLF-bounds} we have
+	\begin{equation}\label{n799}\begin{aligned}
+	\dot W_\varsigma(\bs{\varsigma})\leq& -\bar c'\dst{\bs{\varsigma}}{\mathcal{W}_\varsigma}^2.
+	\end{aligned}\end{equation}
+	Thus, the closed-loop system \eqref{n560} is uniformly asymptotically multi-stable at $\mathcal{W}_\varsigma$, \emph{c.f.,}~\cite{forni_cascade_2016}.
+	Furthermore, the critical point $\tilde{\mat{z}}_1^*$ of the barrier Lyapunov function is a saddle point.
+	After \cite[Proposition~1]{monzon2006local}, it follows that the region of attraction of the unstable equilibrium $\tilde{\mat{z}}_1^*$ has zero Lebesgue measure. Therefore, we conclude that the origin of \eqref{n560} is {\it almost-everywhere} uniformly asymptotically stable in $\mathbb{D}=\mathbb{R}^3\times\mathcal{\tilde D}\times \mathbb{R}^{3M}\times \mathbb{R}^{3N}$, except for a zero-measure set of initial conditions.
+	
+	In order to establish forward invariance of the set $\mathcal{\tilde D}$ we proceed by contradiction.
+	Assume that there exists $T>0$ such that $\tilde{\mat{z}}_{1, k}(t) \in \mathcal{\tilde D}_k$ for all $t \in [t_0,t_0+T)$, but $\tilde{\mat{z}}_{1, k}(t_0+T) \notin \mathcal{\tilde D}_k$ for at least one $k\leq M$.
+	In other words, we have $\norm{\mat{z}_{1, k}(t)}\rightarrow \Delta_k$ or $\norm{\mat{z}_{1, k}(t)}\rightarrow \delta_k$ as $t\rightarrow t_0+T$ for at least one ${k\leq M}$.
+	From the definition of $\tilde{\mat{z}}_{1, t}\mapsto W(\tilde{\mat{z}}_{1, t})$ in \eqref{512} and $\tilde{\mat{z}}_{1, k}\mapsto W_k(\tilde{\mat{z}}_{1, k})$ in \eqref{317}, this implies that $W_\varsigma(\bs{\varsigma}(t)) \rightarrow\infty$ as $t\rightarrow t_0+T$ which is in contradiction with \eqref{n790}.
+	We can therefore conclude that $W_\varsigma(\bs{\varsigma}(t))$ is bounded for all initial conditions such that $\tilde{\mat{z}}_{1}(t_0)\in \mathcal{\tilde D}$, therefore, $W_\varsigma(\bs{\varsigma}(t))\leq W_\varsigma(\bs{\varsigma}(t_0)) <\infty$ for all $\bs{\varsigma}(t_0)\in\mathbb{D}$ and all $t\geq t_0$.
+	The respect of the inter-agent constraints follows from the forward invariance of $\mathcal{\tilde D}$.
+	
+	Since \eqref{n560} is asymptotically stable at the origin with domain of attraction $\mathbb{D}$ it follows that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, there exist small positive constants $\underline\epsilon(\bs{\varsigma}(t_0))$ and $\overline\epsilon(\bs{\varsigma}(t_0))$ such that $\tilde{\mat{z}}_{1, k}(t)\in\mathcal{\tilde D}_{\epsilon k}$, where
+	$$\mathcal{\tilde D}_{\epsilon k}\!=\!\left\{\tilde{\mat{z}}_{1, k}\in\mathbb{R}^{3}\,|\,\delta_k+\underline\epsilon\leq\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\leq\Delta_k-\overline\epsilon\right\},\; \forall k\leq M.$$
+	Moreover, for any $\tilde{\mat{z}}_{1}\in\mathcal{\tilde D}_{\epsilon}$, with $\mathcal{\tilde D}_{\epsilon}=\bigcap_{k\leq M} \mathcal{\tilde{D}}_{\epsilon k}$, we have that the \gls{blf} $W$ in \eqref{512} satisfies		
+	\begin{equation}\label{629}
+	\frac{a_1}{2}\dst{\tilde{\mat{z}}_{1. t}}{\mathcal{W}}^2\leq W(\tilde{\mat{z}}_{1, t})\leq \frac{a_2'}{2}\dst{\tilde{\mat{z}}_{1, t}}{\mathcal{W}}^2.
+	\end{equation}	
+	Therefore, from \eqref{629} and \eqref{n790}, we conclude that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, the trajectories $\bs{\varsigma}(t)$ of the external dynamics converge to the origin exponentially.
+
+	The ultimate boundedness of the internal dynamics can be proven using Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
+	If the initial conditions satisfy $\bs{\varsigma}(t_0)\in\mathbb{D}$, the input $\bs{\mu}$ defined in \eqref{n338} is bounded.
+	Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
+\end{proof}
+
+\section{Control design for tracking with hard and soft constraints}
+\label{sec:soft}
+
+In this section we build on the results of Section~\ref{sec:ctrl} to include the soft constraints defined in \eqref{eq:soft} that act on the surge velocity of the marine vehicles.
+For this purpose we explicitly design the additional control input $f_{u, i}^*$ introduced in Eq. \eqref{417} and we analyze the closed-loop system in terms of the barrier function framework.
+
+%\subsection{Control design for soft-constraints satisfaction}
+
+Consider the surge velocity subsystem \eqref{eq:background_component_form_u_dot} with an additional control input. That is,
+\begin{equation}\label{622}
+	\dot{u}_{r, i} = F_{u}(\vel_{r, i}) + f_{u, i} + f_{u, i}^*.
+\end{equation}
+In order to satisfy the soft constraints, we design the additional input $f_{u, i}^*$ as the gradient of a barrier function.
+For each agent $i$, define the barrier function 
+\begin{equation}\label{628}
+	U_i(t,u_{r, i}):=-\ln\left(\frac{u_{r, i} + \rho_i(t)}{u_{r, i} + \rho_i(t) +1}\right).
+\end{equation}
+Note that if $u_{r, i} + \rho_i(t)>0$, then $U_i(t,u_{r, i})>0$ for all $t\geq0$, and $U_i(t,u_{r, i})\rightarrow\infty$ as $u_{r, i} + \rho_i(t)\rightarrow0$.
+Then, we set the additional control input to
+\begin{equation}\label{630}
+ f_{u, i}^*= -\kappa_u\nabla U_i(t,u_{r, i}) = -\kappa_u\frac{\partial U_i(t,u_{r, i})}{\partial u_{r, i}}, \quad i\leq N,
+\end{equation}
+with $\kappa_u>0$ and
+\begin{equation}\label{631}
+\dot{\rho}_i= -\kappa_\rho \rho_i + \frac{1}{2}\left[1-{\rm sign}\left(\sigma-\abs{F_{u}(\vel_{r, i})+f_{u, i}}\right)\right]\abs{F_{u}(\vel_{r, i})+f_{u, i}},
+\end{equation}
+where $\kappa_\rho,\;\sigma>0$ are design constants.
+Initially, we set $\rho_i(t_0)=0$.
+
+\begin{rmk}\label{rmk:rho}
+	Note that under \eqref{631} and the initial condition $\rho_i(t_0)=0$, we have that $\rho_i(t)\geq 0$, for all $t\geq t_0$. To see this, note that second term on the right-hand side of \eqref{631} is always positive. Therefore, $\dot{\rho}_i(t)\geq -\kappa_\rho \rho_i(t)$, which means that the set $\mathcal{C}_\rho=\{\rho_i\in\mathbb{R}\, | \,\rho_i\geq 0\}$ is forward invariant.
+\end{rmk}
+
+\begin{rmk}
+	The definition of \eqref{631} is loosely inspired by the framework developed in \cite{mehdifar2022funnel} to deal with hard and soft constraints in the setting of prescribed-performance control of single-agent systems.
+	The signal $\rho_i(t)$ adjusts the soft constraints whenever the hard constraints become conflicting. 
+	Note that when $\abs{F_{u}+f_{u, i}}\leq \sigma$ for a given $\sigma$, it means that the edges connected to vehicle $i$ are far from the border of the set $\tilde{\mathcal{D}}_k$, since under the barrier-function-based law \eqref{n338} the controller $f_{u, i}$ grows unbounded as $\mat{z}_{1, k}\rightarrow\partial\tilde{\mathcal{D}}_k$ for any $k\leq M$.
+	In this case, the second term on the right-hand side of \eqref{631} is equal to zero. Hence, assuming that in an interval $t\in[t_0,t_0+T]$, $\abs{F_{u}+f_{u, i}}\leq \sigma$, then \eqref{eq:soft}, with $\rho(t)=0$, corresponds to a positive-velocity constraint.
+	Conversely, when $\abs{F_{u}+f_{u, i}}>\sigma$, the right-hand side of \eqref{631} becomes positive and $\rho_i$ grows. Hence, $u_{r, i}$ may take negative values, \emph{i.e.,} $u_{r, i}>-\rho_i(t)$, avoiding possible conflicts between the constraints. Then, as the vehicles move away from the border of the set $\tilde{\mathcal{D}}_k$, $\abs{F_{u}+f_{u, i}}\leq\sigma$ again and $\rho_i(t)\rightarrow0$ exponentially fast, recovering the non-negativity constraint.
+\end{rmk}
+
+Then, the second part of our main result is stated as follows:
+\begin{prop}\label{thm:USV-2}
+	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which is either a spanning tree or a cycle.
+	Then, under the same assumptions as in Proposition~\ref{thm:USV}, and with initial conditions such that $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ for all $k\leq M$ and $u_{r, i}(t_0)\in\mathcal{C}_i$ for all $i\leq N$, the controller \eqref{n338}, with $f_{u, i}^*$ given by \eqref{630}, achieves the tracking-in-formation objective \eqref{n194} almost everywhere and renders the constraints sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant.
+	Moreover, the internal dynamics are ultimately bounded.
+\end{prop}
+
+\begin{proof}
+	In Proposition~\ref{thm:USV} we established that the controller \eqref{n338} with the additional bounded input $f_{u, i}^*$	renders the hard-constraints set \eqref{eq:setDk} forward invariant and guarantees the achievement of the tracking-in-formation objective \eqref{n194} for almost all initial conditions such that $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$, for all $k\leq M$.
+	Therefore, to prove Proposition~\ref{thm:USV-2}, what remains is to show that $f_{u, i}^*$ given by \eqref{630} is bounded and guarantees the satisfaction of the soft constraints \eqref{eq:posvel}.	
+	For that purpose, consider the barrier function \eqref{628}, whose derivative along the trajectories of \eqref{622} in $\mathcal{C}_i$ yields 
+	\begin{equation}\label{667}
+		\dot{U}_{i}(t,u_{r, i}) = \nabla U_i(t,u_{r, i})\left(-\kappa_u\nabla U_i(t,u_{r, i}) + F_{u}(\vel_{r, i}) + f_{u, i} + \dot{\rho}_i(t)\right).
+	\end{equation}
+	
+	Now, in view of \eqref{631}, we split the analysis into two cases.
+	
+	\noindent \emph{Case 1} ($\abs{F_{u}+f_{u, i}}\leq \sigma$): in this case \eqref{667} becomes
+	\begin{equation}\label{677}\begin{aligned}
+	\dot{U}_{i}(t,u_{r, i})\leq&-\kappa_u\abs{\nabla U_i(t,u_{r, i})}^2+\abs{\nabla U_i(t,u_{r, i})}\left[\sigma - \kappa_\rho\rho_i(t)\right]\\
+	\leq& -\kappa_u'\abs{\nabla U_i(t,u_{ri})}^2+\lambda_\sigma\sigma^2+\frac{\kappa_\rho\rho_i(t)}{(u_{r, i} + \rho_i(t))(u_{r, i} + \rho_i(t) +1)},
+	\end{aligned}\end{equation}
+	with $\kappa_u',\;\lambda_\sigma>0$.
+	Since $\rho_i(t)$ is non-negative in $\mathcal{C}_i$ for all $t\geq t_0$, \emph{c.f.,} Remark~\ref{rmk:rho}, the last term on the right-hand side of \eqref{677} is bounded by a constant $\lambda_\rho>0$. Therefore, we have 
+	\begin{equation}\label{681}
+	\dot{U}_{i}(t,u_{r, i})\leq-\kappa_u\abs{\nabla U_i(t,u_{r, i})}^2+\lambda_\sigma\sigma^2+\lambda_\rho.
+	\end{equation}
+	
+	\noindent \emph{Case 2} ($\abs{F_{u}+f_{u, i}}> \sigma$): for $u_{r, i}\in\mathcal{C}_i$, \eqref{667} becomes
+	\begin{equation}\label{687}\begin{aligned}
+	\dot{U}_{i}(t,u_{r, i})\leq&\abs{\nabla U_i(t,u_{r, i})}\left[\abs{F_{u}+f_{u, i}} - \kappa_\rho\rho_i(t) - \abs{F_{u}+f_{u, i}}\right]\\
+	& -\kappa_u\abs{\nabla U_i(t,u_{r, i})}^2 \\
+	\leq& -\kappa_u\abs{\nabla U_i(t,u_{r, i})}^2+\lambda_\rho.
+	\end{aligned}\end{equation}
+	
+	From \eqref{681}-\eqref{687} we conclude that for $u_{r, i}\in\mathcal{C}_i$, the barrier function $U_i(t,u_{r, i})$ is bounded along the trajectories. Therefore, akin to the forward invariance of $\mathcal{\tilde D}$ established in the proof of Proposition~\ref{thm:USV}, it is straightforward to show forward invariance of $\mathcal{C}_i$.
+	Hence, there exists a constant $\bar{f}^*$ such that $\abs{f_{u, i}(t)}\leq\bar{f}^*$ for all $t\geq t_0$.
+
+	Note that the additional input $f_{u, i}^*$ does not affect the internal dynamics. Hence, the analysis of the internal dynamics presented in the proof of Proposition~\ref{thm:USV} still holds under the action of $f_{u, i}^*$.	
+\end{proof}
 

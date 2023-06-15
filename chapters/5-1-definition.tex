@@ -40,7 +40,7 @@ The aim of many scientific missions is to scan a given area using a sensor attac
 Since the position of the sensor typically does not coincide with the neutral point, there may be a significant offset between the sensor and the desired trajectory, caused by the sea loads (see \figref{fig:handpos_def_motivation}a).
 In some cases, the hand position can be chosen such that it coincides with the position of the sensor, allowing to scan the area more accurately.
 The second advantage is that if we choose the hand position as the output of our system, it is possible to transform the nonlinear underactuated vehicle model to a double integrator, using output feedback linearization.
-This allows us to apply advanced control strategies, \emph{e.g.,} various consensus algorithms \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021,lawton_hand-position-formation_2003,restrepo_tracking-formation_2022} that cannot be directly used on nonholonomic or underactuated vehicles.
+This allows us to apply advanced control strategies, \emph{e.g.,} various consensus algorithms \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021,lawton_hand-position-formation_2003,restrepo_formation_2022} that cannot be directly used on nonholonomic or underactuated vehicles.
 
 Note that the three-dimensional Euler-Lagrange-like system used in \cite{li_hand-position-rigidity-3d_2021} does not accurately represent AUVs, since it does not consider the Coriolis and centripetal effects or the restoring forces (gravity and buoyancy).
 Furthermore, the model in \cite{li_hand-position-rigidity-3d_2021} has five \acrfullpl{dof}: three position coordinates, pitch angle, and yaw angle.
@@ -99,18 +99,18 @@ In addition to Assumptions~\ref{asm:symmetric}--\ref{asm:buoyancy} of the contro
     \end{equation}
     can be used to simplify the dynamics.
 \end{asm}
-\begin{rmk}
+\begin{rmk*}
 The effect of gravity and buoyancy on the linear velocities is given by
 \begin{equation}
     \mat{M}_{12}^{\prime} \left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right) = \frac{Wz_{gb}\,m_{35}}{m_{33}m_{55} - m_{35}^2}\inlinevector{0, 0, \sin\theta}\!,
 \end{equation}
 where $\theta \in [-\pi/2, \pi/2]$ is the pitch angle of the vehicle.
 Assumption~\ref{asm:nogravity} can thus be used if $\theta$ remains small.
-\end{rmk}
-\begin{rmk}
+\end{rmk*}
+\begin{rmk*}
     Throughout the chapter, we will sometimes show expressions with Euler angles, because they are more intuitive than rotation matrices.
     This does not mean that we transform our model to Euler angles, these expressions are only used for illustration.
-\end{rmk}
+\end{rmk*}
 
 \noindent We can then rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in the following compact form
 \begin{subequations}

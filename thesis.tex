@@ -37,7 +37,8 @@
 
 \newtheorem{asm}{Assumption}[chapter]
 \newtheorem{prop}{Proposition}[chapter]
-\newtheorem*{rmk}{Remark}
+\newtheorem{rmk}{Remark}[chapter]
+\newtheorem*{rmk*}{Remark}
 \newtheorem{lemma}{Lemma}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{innercustomasm}{Assumption} % assumption with custom number
@@ -64,6 +65,7 @@
 \newcommand{\norm}[1]{\left\|#1\right\|}
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\ball}[2][n]{\ensuremath{\mathfrak{B}_{#2}^{#1}}}
+\newcommand{\dst}[2]{\ensuremath{\abs{#1}_{#2}}}
 
 \newcommand{\pose}{\bs{\eta}}
 \newcommand{\vel}{\bs{\nu}}
@@ -111,6 +113,7 @@
 \addbibresource{references-background.bib}
 \addbibresource{references-handpos.bib}
 \addbibresource{references-MPC.bib}
+\addbibresource{references-tracking.bib}
 
 \input{glossary.tex} % add glossary and acronym lists before document
 

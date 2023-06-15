@@ -30,14 +30,14 @@ Then, the smallest input (in terms of Euclidean norm) that guarantees the desire
 \end{equation}
 where $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
 
-\begin{rmk}
+\begin{rmk*}
     In many applications, the task variable should track some pre-defined desired value, $\bs{\sigma}_{d, i}$.
     In such cases, we typically choose
     \begin{equation}
         \dot{\bs{\sigma}}_i^{*} = \dot{\bs{\sigma}}_{d, i} - \bs{\Lambda}_i \left(\bs{\sigma}_i - \bs{\sigma}_{d,i}\right),    
     \end{equation}
     where $\bs{\Lambda}_i$ is a positive definite gain matrix.
-\end{rmk}
+\end{rmk*}
 
 If the task is \emph{redundant}, \emph{i.e.}, if the inequality $m_i < n$ strictly holds, then there exists a subspace of control inputs that do not interfere with the task.
 Let $\ivel_{\rm add}$ be an additional input.
@@ -120,7 +120,7 @@ The task variable, $\bs{\sigma}_1$, is given by
 \end{align}
 where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter of the formation (see Section~\ref{sec:background_formation_path_following}).
 
-\begin{rmk}
+\begin{rmk*}
     The formation-keeping task contains the relative positions of the first $N-1$ vehicles.
     The relative position of the last vehicle is omitted because it can be expressed as a linear combination of the remaining relative positions.
     Indeed, from \eqref{eq:background_formation_variable}, we get
@@ -143,7 +143,7 @@ where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter o
         \label{eq:background_NSB_formation_jacobian}
     \end{equation}
     One can verify that the rank of $\mat{J}_1$ is $3(N-1)$, and the Jacobian thus has full row rank.
-\end{rmk}
+\end{rmk*}
 
 The desired value of the formation-keeping task variable is
 \begin{align}

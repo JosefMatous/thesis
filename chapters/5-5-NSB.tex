@@ -1,3 +1,10 @@
 \chapter{Combining NSB with the Hand Position Approach}
 \label{chap:handpos_NSB}
 
+This chapter presents an extended \acrfull{nsb} algorithm for the formation control of fleets of underactuated autonomous underwater vehicles. 
+The \gls{nsb} controller is developed to work directly with second-order integrator systems, handling the double integrator dynamics in task space. 
+The method is applied to the formation path-following problem of a fleet of underactuated autonomous underwater vehicles. 
+The nonlinear six-degrees-of-freedom models of the vehicles are transformed into second-order integrator systems using the 3D hand position output linearizing approach presented in Chapter~\ref{chap:handpos_definition}. 
+The behavioral controller implements a hierarchy of path-following, formation-keeping, and collision-avoidance tasks.
+The closed-loop system is proven \acrlongpl{ugas}, and the proposed method is validated through numerical simulations.
+The contents of this chapter are based on \cite{lie_formation_2023}.

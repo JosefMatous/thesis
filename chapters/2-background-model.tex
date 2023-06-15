@@ -280,9 +280,9 @@ We have thus shown that \eqref{eq:neutral_point_force} is satisfied with
 \noindent Moreover, if all the numerators in \eqref{eq:tau_upqr} are nonzero, then the converse holds as well, \emph{i.e.,} for all $t_u, t_p, t_q, t_r$, there exists an input $\mat{f}$ such that \eqref{eq:neutral_point_force} holds.
 Consequently, we can treat $t_u, t_p, t_q, t_r$ as the new inputs to the system.
 
-\begin{rmk}
+\begin{rmk*}
     If the vehicle has rotational symmetry around the $x$-axis (\emph{i.e.,} if $m_{22} = m_{33}$, $m_{35} = -m_{26}$, $m_{55} = m_{66}$, $b_{33} = -b_{24}$, and $b_{53} = b_{64}$), then we have $\varepsilon_1 = -\varepsilon_2$, and the transformation \eqref{eq:background_transformation} corresponds to moving the body-fixed coordinate frame a distance $\varepsilon_1$ along the body-fixed $x$-axis.
-\end{rmk}
+\end{rmk*}
 
 \begin{asm}
     \label{asm:buoyancy}
@@ -306,7 +306,7 @@ Consider an \gls{auv} model that satisfies Assumptions~\ref{asm:symmetric}--\ref
 Then, the model in the component form is given by
 \begin{subequations}
     \begin{align}
-        \dot{u}_r &= F_u(\vel_r) + f_u, \\
+        \dot{u}_r &= F_u(\vel_r) + f_u, \label{eq:background_component_form_u_dot} \\
         \dot{v}_r &= X_v(u_r)r + Y_v(u_r)v_r + Z_v(p)w_r, \\
         \dot{w}_r &= X_w(u_r)q + Y_w(u_r)w_r + Z_w(p)v_r + G(\mat{R}), \\
         \dot{p} &= F_p(\vel_r) + t_p, \\

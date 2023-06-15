@@ -115,11 +115,11 @@ First, let us present the necessary definitions and assumptions.
     The distance between the centers of gravity and buoyancy, $z_{gb}$, is positive, and the vector $\bs{\xi}_{2, d, r} = (\bs{\xi}_{2, d} - \ocean)$ is not aligned with $\mat{e}_3$.
     \label{asm:straight_line_trajectory}
 \end{asm}
-\begin{rmk}
+\begin{rmk*}
     From \eqref{eq:gravity}, one can verify that if $z_{gb}$ is positive, then the restoring forces stabilize the vehicle's roll angle around zero.
     Consequently, most commercial \glspl{auv} are designed so that $z_{gb} > 0$.
     The second part of Assumption~\ref{asm:straight_line_trajectory} can be satisfied by choosing an appropriate reference trajectory.
-\end{rmk}
+\end{rmk*}
 
 We begin by finding the equilibria of the closed-loop system.
 Since the external dynamics is a linear system, $\bs{\Xi} = \mat{0}_9$ is the only equilibrium.
@@ -322,13 +322,13 @@ The components of $\mat{J}_{\bs{\xi}_2}$, $\mat{J}_{\bs{\omega}}$, and $\mat{J}_
     Therefore, the real part of $\lambda_1, \ldots, \lambda_6$ is strictly negative if Assumption~\ref{asm:straight_line_trajectory} holds and all $\Delta_i$ and $\Omega_i$ for $i \in \{1,2,3\}$ are positive.
 \end{proof}
 
-\begin{rmk}
+\begin{rmk*}
     For surface vessels, it has been shown that a similar controller can achieve almost global asymptotic stability \cite{paliotta_trajectory_2019}.
     For underwater vehicles, proving almost global stability is complicated.
     It can be shown that vehicles with rotational symmetry around the $x$-axis violate inequality \eqref{eq:handpos_trajectory_inequality}.
     Since most commercial AUVs have a cylindrical shape, this type of symmetry is common among underwater vehicles.
     If a vehicle violates inequality \eqref{eq:handpos_trajectory_inequality}, then there exists a subspace of unstable equilibria in addition to the four previously described equilibrium points, making almost global results impossible.
-\end{rmk}
+\end{rmk*}
 
 \section{Path Following}
 \label{sec:handpos_trajectory_path_following}

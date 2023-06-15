@@ -5,7 +5,7 @@
 
 The chapter considers the problem of formation path-following of multiple vehicles and proposes a solution based on combining distributed model predictive control with parametrizations of the trajectories of the vehicles using polynomial splines. Introducing such parametrization leads indeed to two potential benefits: a) reducing the number of optimization variables, and b) enabling enforcing constraints on the vehicles in a computationally efficient way. Moreover, the proposed solution formulates the formation path-following problem as a distributed optimization problem that may then be solved using the \gls{admm}.
 The proposed approach is applicable to all vehicles that can be modeled as differentially flat systems.
-In this chapter, we present numerical simulations with marine vehicles and differential drive robots.
+In this chapter, we present numerical simulations with \acrlongpl{auv} and differential drive robots.
 The contents of this chapter are based on \cite{matous_MPC_2022}.
 
 \section{Introduction}
@@ -192,7 +192,7 @@ We thus propose to formulate the \emph{centralized} problem of optimizing a part
 \end{equation}
 with $T$ being the prediction horizon, $\bm{Q}_{\mat{p}}$ and $Q_s$ positive weight matrices, $\widetilde{q}_{i}$ the position error as defined in~\eqref{eq:MPC_y_tilde}, and subject to, for every agent $i = 1, \ldots, N$, to the constraints~\ref{constraint:io} to~\ref{constraint:initial-condition} below:
 \begin{enumerate}[label=C\arabic*]
-    \item the implicit constraint on the inputs and states, \emph{i.e.}, $$\mat{h} \left( \mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T],$$,
+    \item the implicit constraint on the inputs and states, \emph{i.e.}, $$\mat{h} \left( \mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T],$$
     \label{constraint:io}
     \item the constraint on the initial condition of the state of the system, i.e., $\bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t)$,
     \item the constraint on the initial condition of the path of the agents, \emph{i.e.}, $s(t)$. In other words, $s(t)$ is not a decision variable, while $s(t+\tau)$ for any $\tau > 0$ is.
@@ -354,7 +354,7 @@ to agent $i$. The update law \eqref{eq:MPC_ADMM_dual_update} then becomes
 
 To further reduce the needed communication bandwidth, we only perform one \gls{admm} iteration per \gls{mpc} step. An overview of the resulting distributed \gls{mpc} is shown in Algorithm \ref{alg:admm}.
 
-\begin{algorithm}[b]
+\begin{algorithm}[t]
     \caption{\gls{admm} for Distributed \gls{mpc}}\label{alg:admm}
     \begin{algorithmic}[1]
         \State {\bf Initialization:} Perform several \gls{admm} iterations to get $\coefm{y}_i^0, \coefm{s}_i^0$ and $\coefm{z}_{ij}^0$
@@ -371,165 +371,48 @@ To further reduce the needed communication bandwidth, we only perform one \gls{a
 \label{sec:MPC_case_studies}
 
 
-In this section, we demonstrate the proposed \gls{mpc} scheme on marine vehicles and differential drive robots.
-In both cases, the goal is to follow a sine-wave path given by
-\begin{equation}
-    \mat{p}(s) = \inlinevector{\sigma(s),\; 15\,\sin \left(\frac{\pi}{100}\,\sigma(s)\right)},
-\end{equation}
-where $\sigma(s)$ is a function chosen such that \eqref{eq:MPC_path_assumption} is satisfied and $\sigma(0) = 0$.
-This path is then locally approximated using a fifth-order polynomial with $s_T = 75$.
-
-In both case studies, the prediction horizon is set to $50$ seconds.
-The path parameter and outputs are represented by cubic splines with $11$ breakpoints.
+In this section, we demonstrate the proposed \gls{mpc} scheme on \acrfullpl{auv} and differential drive robots.
+In both cases, we simulate six vehicles, the prediction horizon is set to $50$ seconds, and the path parameter and outputs are represented by cubic splines with $11$ breakpoints.
 Consequently, each spline is represented by $13$ coefficients.
 
-In both case studies, we consider a formation of six vehicles.
-The formation is chosen such that the vehicles form an equilateral triangle with a side length of $20$ meters.
-The desired relative positions of the vehicles, as well as the communication graph are illustrated in \figref{fig:MPC_triangle_formation}.
-
-
-\subsection{Marine vehicles}
-
-
-In the first case study, we consider marine vehicles with six degrees of freedom.
-The model presented in this section describes both autonomous surface vehicles (ASVs) and autonomous underwater vehicles (AUVs) moving in the horizontal plane.
-First, let us present the assumptions this model is based on.
-\begin{enumerate}[label=A\arabic*]
-    \item The vehicles are port-starboard symmetric.
-    \item The vehicles are maneuvering at low speeds.
-    Consequently, the hydrodynamic damping is linear.
-    \item The vehicles are affected by a constant irrotational ocean current.
-    Its velocity in the inertial coordinate frame is given by $\bm{V} = \inlinevector{V_x, V_y}$.
-\end{enumerate}
-Under these assumptions, the model of the vehicle is given by the following differential equations \cite{fossen_handbook_2011}
-\begin{subequations}\label{eq:MPC_ASV-model}
-    \begin{align}
-        \dot{x} &= u_{r}\cos\psi - v_{r}\sin\psi + V_x\label{eq:MPC_ASV-model-a}\\
-        \dot{y} &= u_{r}\sin\psi + v_{r}\cos\psi + V_y\label{eq:MPC_ASV-model-b}\\
-        \dot{\psi} &= r\label{eq:MPC_ASV-model-c}\\
-        \dot{u}_{r} &= F_{u_r}(v_{r}) + \tau_{u}\label{eq:MPC_ASV-model-d}\\ 
-        \dot{v}_{r} &= X(u_{r})r + Y(u_{r})v_{r}\label{eq:MPC_ASV-model-e}\\ 
-        \dot{r} &= F_{r}(u_{r},v_{r},r) + \tau_{r}\label{eq:MPC_ASV-model-f}
-    \end{align}
-\end{subequations}
-where $\eta \triangleq \inlinevector{x, y, \psi}$ is the pose of the vehicle in the {\it North-East-Down} (NED) coordinate frame, $\nu_{r} \triangleq \inlinevector{u_r, v_r, r}$ are the relative (with respect to the ocean current) velocities in the body-fixed coordinate frame, namely the surge velocity, sway velocity, and yaw rate, respectively, and $\tau_{u}$, $\tau_{r}$ are the control inputs.
-The functions $F_{u_r}$, $F_{r}$, $X$ and $Y$ represent the Coriolis, centrifugal, and hydrodynamic effects.
-Due to space constraints, the definitions of these functions are omitted.
-For more details, the reader is referred to \cite{fossen_handbook_2011,borhaug_straight_2007}.
+\subsection{AUVs}
 
 \begin{figure}[b]
     \centering
-    \begin{subfigure}[t]{0.15\textwidth}
+    \begin{subfigure}[t]{0.35\textwidth}
         \centering
         \def\svgwidth{\textwidth}
-        \import{figures/handpos_MPC/}{ASV.pdf_tex}
-        \caption{Marine vehicle}
-        \label{fig:MPC_ASV}
-        
+        \import{figures/handpos_MPC/}{AUV_pose.pdf_tex}
+        \caption{Output of the \gls{auv} model.}
+        \label{fig:MPC_AUV_pose}        
     \end{subfigure}
-    \begin{subfigure}[t]{0.15\textwidth}
+    \hspace*{0.15\textwidth}
+    \begin{subfigure}[t]{0.35\textwidth}
         \centering
         \def\svgwidth{\textwidth}
-        \import{figures/handpos_MPC/}{unicycle.pdf_tex}
-        \caption{Differential drive robot}
-        \label{fig:MPC_unicycle}
-        
+        \import{figures/handpos_MPC/}{AUV_formation.pdf_tex}
+        \caption{Desired formation.}
+        \label{fig:MPC_AUV_formation}
     \end{subfigure}
-    \begin{subfigure}[t]{0.143\textwidth}
-        \centering
-        \def\svgwidth{\textwidth}
-        \import{figures/handpos_MPC/}{triangle_formation.pdf_tex}
-        \caption{Desired formation}
-        \label{fig:MPC_triangle_formation}
-        
-    \end{subfigure}
-    \caption{Graphical representations of the vehicles and the formation used in the case studies.}
+    \caption{Illustration of the case study with \acrfullpl{auv}.}
 \end{figure}
 
-Because the vehicle is underactuated (second-order nonholonomic), we cannot use the origin of the body-fixed frame $(x,y)$ as the output of our system.
-Instead, we choose a different point, located on the central axis ($x$-axis) of the vehicle, as the output of our system (see \figref{fig:MPC_ASV}).
-In the literature, this point is referred to as the \emph{hand position} of the vehicle \cite{lawton_hand-position-formation_2003,paliotta_trajectory_2019}.
-The hand position is defined as
-\begin{equation}
-    \mat{y} = \inlinevector{x + L\,\cos(\psi), y + L\,\sin(\psi)}, \label{eq:MPC_hand}
-\end{equation}
-where $L > 0$ is the hand length.
-
-The advantage of using the hand position is that we can employ output-feedback linearization to simplify the dynamics.
-This procedure follows along the lines of \cite{paliotta_trajectory_2019} with one modification.
-In \cite{paliotta_trajectory_2019}, the ocean current is assumed to be unknown.
-Here, we assume that the vehicle either can measure the ocean current or employs an observer that provides an accurate estimate of the current (see, \emph{e.g.,} \cite{zhu_kalman_2016}).
-
-We thus introduce the following change of coordinates 
-\begin{subequations}
-    \begin{align}
-        \xi_1 &= x + L\,\cos\psi, \\
-        \xi_2 &= y + L\,\sin\psi, \\
-        \xi_3 &= u_{r}\cos\psi - v_{r}\sin\psi + V_x - L r\,\cos \psi, \\
-        \xi_4 &= u_{r}\sin\psi + v_{r}\cos\psi + V_y + L r\,\sin \psi,
-    \end{align}
-\end{subequations}
-and the following change of inputs 
-\begin{equation}
-    \begin{bmatrix} \tau_u \\ L\tau_r \end{bmatrix} 
-    = 
-    \mathfrak{R}(\psi)\T \begin{bmatrix}-F_{\xi_{3}}(\psi, u_r, v_r, r)+u_{1}\\-F_{\xi_{4}}(\psi, u_r, v_r, r)+u_{2}\end{bmatrix}, 
-\end{equation}
-where $\mathfrak{R} : \mathbb{R} \mapsto {\rm SO}(2)$ denotes the rotation matrix and
-\begin{equation}
-    \begin{bmatrix}F_{\xi_{3}}(\cdot)\\F_{\xi_{4}}(\cdot)\end{bmatrix}
-    = 
-    \mathfrak{R}(\psi)\begin{bmatrix}F_{u_r}(\cdot)-v_{r}r-Lr^2 \\ u_{r}r+X(\cdot)r+Y(\cdot)v_{r}+F_r(\cdot)L\end{bmatrix}.
-\end{equation}
-
-Using output-feedback linearization, we have simplified the system to a double integrator 
+In the first case study, we consider \glspl{auv} with six degrees of freedom.
+Because the vehicle is underactuated (second-order nonholonomic), we cannot use the origin of the body-fixed frame $\mat{p}$ as the output of our system.
+Instead, we choose the hand position defined in Chapter~\ref{chap:handpos_definition} as the output (see \figref{fig:MPC_AUV_pose}).
+Using output-feedback linearization, we can simplify the system to a double integrator 
 \begin{equation}
     \ddot{\mat{y}} = \mat{u}. 
 \end{equation}
 
-\begin{table}[tb]
-    \begin{center}
-    \captionsetup{width=.9\textwidth}
-    \caption{Simulation parameters} \label{tab:handpos_MPC_params}
-    
-    \begin{subtable}[t]{0.4\textwidth}
-        \caption{Marine vehicles}
-        \label{tab:ASV}
-        
-        \begin{tabular}[t]{r|l}
-            {\bf Parameter} & {\bf Value} \\
-            \hline
-            $\Delta T$ & $1$ \\
-            $\bm{Q}_p$ & $\mat{I}_3$ \\
-            $Q_s$ & $10$ \\
-            $\rho$ & $10$ \\
-            $\alpha$ & $0.6$ \\
-            $h$ & $1$ \\
-            $\bm{V}$ & $\begin{bmatrix} 0.15 \\ 0.1 \\ -0.05 \end{bmatrix}$
-        \end{tabular}
-    \end{subtable}
-    \begin{subtable}[t]{0.4\textwidth}
-        \caption{Differential drive robots}
-        \label{tab:unicycle}
-        
-        \begin{tabular}[t]{r|l}
-            {\bf Parameter} & {\bf Value} \\
-            \hline
-            $\Delta T$ & $0.1$ \\
-            $\bm{Q}_p$ & $\mat{I}_2$ \\
-            $Q_s$ & $10$ \\
-            $\rho$ & $10$ \\
-            $\alpha$ & $0.6$ \\
-            $u_{1, \min}$ & $-1$ \\
-            $u_{1, \max}$ & $2$ \\
-            $u_{2, \min}$ & $-\pi / 8$ \\
-            $u_{2, \max}$ & $\pi / 8$
-        \end{tabular}
-    \end{subtable}
-    \end{center}
-\end{table}
+\begin{rmk*}
+    In Chapters~\ref{chap:handpos_definition} and \ref{chap:handpos_trajectory}, we assumed that only the relative velocities of the \gls{auv} are known.
+    Here, we assume that the absolute velocities of the \gls{auv} are known as well.
+    This assumption implies that the ocean current $\ocean$ can either be measured or estimated.
+    We note that there exist methods for estimating the ocean current, \emph{e.g.,} \cite{zhu_kalman_2016}.
+\end{rmk*}
 
-\begin{figure*}[!htbp]
+\begin{figure}[t]
     \centering
     \begin{subfigure}[c]{0.9\textwidth}
         \centering
@@ -555,15 +438,42 @@ Using output-feedback linearization, we have simplified the system to a double i
     \caption{Results of numerical simulations with six marine vehicles.}
     \label{fig:MPC_AUV_simulations}
     
-\end{figure*}
+\end{figure}
 
 Having transformed the system model into the required form, we validated the proposed method in numerical simulations.
-The simulations were carried out on a 3DOF model of the light autonomous underwater vehicle (LAUV) developed at the University of Porto \cite{sousa_LAUV_2012}.
-The parameters are shown in Table~\ref{tab:ASV}.
+The simulations were carried out on a 6\gls{dof} model of the \acrfull{lauv}.
+The barycenter should follow a spiral path given by
+\begin{equation}
+    \mat{p}_p(s) = \inlinevector{\rho(s), a_p \cos(\rho(s)), b_p \sin(\rho(s))},
+\end{equation}
+where $a_p = b_p = \SI{20}{\meter}$, and $\rho(s)$ is a monotonically increasing function designed such that $\mat{p}_p(s)$ is a parametrization by arc length.
+The desired formation is shaped like an octahedron; the relative position vectors are given by
+\begin{equation}
+    \begin{bmatrix}
+        \mat{p}_{f, 1}^f & \cdots & \mat{p}_{f, 6}^f
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        a_f & 0 & 0 & 0 & 0 & -a_f\\ 
+        0 & b_f & -b_f & 0 & 0 & 0\\ 
+        0 & 0 & 0 & c_f & -c_f & 0
+    \end{bmatrix},
+\end{equation}
+where $a_f = \SI{15}{\meter}$, and $b_f = c_f = \SI{10}{\meter}$.
+The adjacency matrix of the communications graph is given by
+\begin{equation}
+    \mat{A} = 
+    \begin{bmatrix}
+        0 & 1 & 1 & 1 & 1 & 0\\ 1 & 0 & 0 & 1 & 1 & 1\\ 1 & 0 & 0 & 1 & 1 & 1\\ 1 & 1 & 1 & 0 & 0 & 1\\ 1 & 1 & 1 & 0 & 0 & 1\\ 0 & 1 & 1 & 1 & 1 & 0
+    \end{bmatrix}.
+\end{equation}
+The desired formation and the communications graph are illustrated in \figref{fig:MPC_AUV_formation}.
+The \gls{mpc} and \gls{admm} parameters are shown in Table~\ref{tab:MPC_AUV}.
+
 The results are shown in \figref{fig:MPC_AUV_simulations}.
-The left plot shows how the vehicles converge to the desired formation.
-The right plot shows the path-following errors $\widetilde{\mat{q}}_i$.
-We only show the first 50 seconds since the errors converge to zero afterwards.
+The top plot shows how the vehicles converge to the desired formation.
+The bottom plot shows the path-following errors $\widetilde{\mat{q}}_i$.
+We only show the first 75 seconds since the errors converge to zero afterwards.
 % The top-left plot shows how the vehicles converge to the desired formation.
 % The top-right plot shows the path-following errors $\widetilde{\mat{q}}_i$.
 % We only show the first 50 seconds since the errors converge to zero afterwards.
@@ -573,8 +483,31 @@ We only show the first 50 seconds since the errors converge to zero afterwards.
 
 
 \subsection{Differential drive robots}
+\begin{figure}[b]
+    \centering
+    \begin{subfigure}[t]{0.35\textwidth}
+        \centering
+        \def\svgwidth{0.71\textwidth}
+        \import{figures/handpos_MPC/}{unicycle.pdf_tex}
+        \vspace*{-1.5mm}
+        \caption{Unicycle model.}
+        \label{fig:MPC_unicycle}        
+        \vspace*{-3mm}
+    \end{subfigure}
+    \hspace*{0.1\textwidth}
+    \begin{subfigure}[t]{0.35\textwidth}
+        \centering
+        \def\svgwidth{0.71\textwidth}
+        \import{figures/handpos_MPC/}{triangle_formation.pdf_tex}
+        \vspace*{-1mm}
+        \caption{Desired formation.}
+        \label{fig:MPC_triangle_formation}
+        \vspace*{-3mm}
+    \end{subfigure}
+    \caption{Illustration of the case study with differential drive robots.}
+\end{figure}
 
-In the second case study, we consider differential drive robots modeled as unicycles.
+In the second case study, we consider differential drive robots modeled as unicycles (see \figref{fig:MPC_unicycle}).
 The model is given by
 \begin{subequations}
     \begin{align}
@@ -624,7 +557,7 @@ From \eqref{eq:MPC_unicycle_u1}, \eqref{eq:MPC_unicycle_u2}, the constraints can
 \end{subequations}
 We have thus shown how to express the states, inputs and constraints in terms of the outputs.
 
-\begin{figure*}[t]
+\begin{figure}[t]
     \centering
     \begin{subfigure}{0.9\textwidth}
         \centering
@@ -640,18 +573,87 @@ We have thus shown how to express the states, inputs and constraints in terms of
     \caption{Results of numerical simulations with six differential drive robots.}
     \label{fig:MPC_unicycle_simulations}
     
-\end{figure*}
+\end{figure}
+
+Having transformed the system model into the required form, we validated the proposed method in numerical simulations.
+The barycenter should follow a sine wave given by
+\begin{equation}
+    \mat{p}_p(s) = \inlinevector{\rho(s), a_p \sin(\rho(s))},
+\end{equation}
+where $a_p = \SI{15}{\meter}$, and $\rho(s)$ is a monotonically increasing function designed such that $\mat{p}_p(s)$ is a parametrization by arc length.
+The desired formation is shaped like an equilateral triangle; the relative position vectors are given by
+\begin{equation}
+    \begin{bmatrix}
+        \mat{p}_{f, 1}^f & \cdots & \mat{p}_{f, 6}^f
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        4 a_f & a_f & a_f & -2 a_f & -2 a_f & -2 a_f \\
+        0 & -b_f & b_f & -2 b_f & 0 & 2 b_f
+    \end{bmatrix},
+\end{equation}
+where $a_f = \qty[parse-numbers=false]{\frac{5\sqrt{3}}{3}}{\meter}$, and $b_f = \SI{5}{\meter}$.
+The adjacency matrix of the communications graph is given by
+\begin{equation}
+    \mat{A} = 
+    \begin{bmatrix}
+        0 & 1 & 1 & 0 & 0 & 0\\ 1 & 0 & 1 & 1 & 1 & 0\\ 1 & 1 & 0 & 0 & 1 & 1\\ 0 & 1 & 0 & 0 & 1 & 0\\ 0 & 1 & 1 & 1 & 0 & 1\\ 0 & 0 & 1 & 0 & 1 & 0
+    \end{bmatrix}.
+\end{equation}
+The desired formation and the communications graph are illustrated in \figref{fig:MPC_triangle_formation}.
+The \gls{mpc} and \gls{admm} parameters are shown in Table~\ref{tab:MPC_unicycle}.
 
 The results of numerical simulations are shown in \figref{fig:MPC_unicycle_simulations}.
-The parameters are shown in Table~\ref{tab:unicycle}.
 Due to the numerical inaccuracies caused by \eqref{eq:MPC_unicycle_transform} and arising primarily from the multiplication and division of splines, the \gls{mpc} time-step $\Delta T$ must be shorter than in the previous case-study.
-
 
 \section{Conclusions}
 \label{sec:MPC_conclusion}
 
+\begin{table}[t]
+    \begin{center}
+    \captionsetup{width=.9\textwidth}
+    \caption{Simulation parameters} \label{tab:handpos_MPC_params}
+    \vspace*{-2mm}
+    
+    \begin{subtable}[t]{0.4\textwidth}
+        \caption{Marine vehicles}
+        \label{tab:MPC_AUV}
+        
+        \begin{tabular}[t]{r|l}
+            {\bf Parameter} & {\bf Value} \\
+            \hline
+            $\Delta T$ & $1$ \\
+            $\bm{Q}_p$ & $\mat{I}_3$ \\
+            $Q_s$ & $10$ \\
+            $\rho$ & $10$ \\
+            $\alpha$ & $0.6$ \\
+            $h$ & $1$ \\
+            $\ocean$ & $\begin{bmatrix} 0.15 \\ 0.1 \\ -0.05 \end{bmatrix}$
+        \end{tabular}
+    \end{subtable}
+    \begin{subtable}[t]{0.4\textwidth}
+        \caption{Differential drive robots}
+        \label{tab:MPC_unicycle}
+        
+        \begin{tabular}[t]{r|l}
+            {\bf Parameter} & {\bf Value} \\
+            \hline
+            $\Delta T$ & $0.1$ \\
+            $\bm{Q}_p$ & $\mat{I}_2$ \\
+            $Q_s$ & $10$ \\
+            $\rho$ & $10$ \\
+            $\alpha$ & $0.6$ \\
+            $u_{1, \min}$ & $-1$ \\
+            $u_{1, \max}$ & $2$ \\
+            $u_{2, \min}$ & $-\pi / 8$ \\
+            $u_{2, \max}$ & $\pi / 8$
+        \end{tabular}
+    \end{subtable}
+    \end{center}
+\end{table}
 
-In this paper, we have proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.
+
+In this chapter, we have proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.
 We have shown that using splines makes the distributed control problem computationally tractable.
 Compared to collocation, the spline parametrization allows us to represent a longer prediction horizon using fewer variables.    
 This is also beneficial for the communication, and thus makes it easier to do distributed control in environments where the communication bandwidth is limited (\emph{e.g.,} underwater).
