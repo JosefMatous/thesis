@@ -321,7 +321,7 @@ The first part of the main result is stated as follows:
 	the controller \eqref{n338} renders the constraints set \eqref{eq:setDk} forward invariant and guarantees the achievement of the tracking-in-formation objective \eqref{n194} for almost all initial conditions such that $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$, for all $k\leq M$.
 
 	Moreover, let us define $\bs{\xi}_{2, d} = \mat{x}_{2, o}$ and $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z$ in accordance with \eqref{eq:handpos_def_a_bounds}.
-	The internal dynamics are ultimately bounded if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
+	The internal dynamics are ultimately bounded for almost all initial conditions if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$.
 \end{prop}
 
 \begin{proof}
@@ -399,7 +399,9 @@ The first part of the main result is stated as follows:
 	The respect of the inter-agent constraints follows from the forward invariance of $\mathcal{\tilde D}$.
 	
 	Since \eqref{n560} is asymptotically stable at the origin with domain of attraction $\mathbb{D}$ it follows that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, there exist small positive constants $\underline\epsilon(\bs{\varsigma}(t_0))$ and $\overline\epsilon(\bs{\varsigma}(t_0))$ such that $\tilde{\mat{z}}_{1, k}(t)\in\mathcal{\tilde D}_{\epsilon k}$, where
-	$$\mathcal{\tilde D}_{\epsilon k}\!=\!\left\{\tilde{\mat{z}}_{1, k}\in\mathbb{R}^{3}\,|\,\delta_k+\underline\epsilon\leq\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\leq\Delta_k-\overline\epsilon\right\},\; \forall k\leq M.$$
+	\begin{equation} \label{n800}
+	\mathcal{\tilde D}_{\epsilon k}\!=\!\left\{\tilde{\mat{z}}_{1, k}\in\mathbb{R}^{3}\,|\,\delta_k+\underline\epsilon\leq\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\leq\Delta_k-\overline\epsilon\right\},\; \forall k\leq M.
+	\end{equation}
 	Moreover, for any $\tilde{\mat{z}}_{1}\in\mathcal{\tilde D}_{\epsilon}$, with $\mathcal{\tilde D}_{\epsilon}=\bigcap_{k\leq M} \mathcal{\tilde{D}}_{\epsilon k}$, we have that the \gls{blf} $W$ in \eqref{512} satisfies		
 	\begin{equation}\label{629}
 	\frac{a_1}{2}\dst{\tilde{\mat{z}}_{1. t}}{\mathcal{W}}^2\leq W(\tilde{\mat{z}}_{1, t})\leq \frac{a_2'}{2}\dst{\tilde{\mat{z}}_{1, t}}{\mathcal{W}}^2.
@@ -407,7 +409,8 @@ The first part of the main result is stated as follows:
 	Therefore, from \eqref{629} and \eqref{n790}, we conclude that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, the trajectories $\bs{\varsigma}(t)$ of the external dynamics converge to the origin exponentially.
 
 	The ultimate boundedness of the internal dynamics can be proven using Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
-	If the initial conditions satisfy $\bs{\varsigma}(t_0)\in\mathbb{D}$, the input $\bs{\mu}$ defined in \eqref{n338} is bounded.
+	We showed that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, there exist small positive constants $\underline\epsilon(\bs{\varsigma}(t_0))$ and $\overline\epsilon(\bs{\varsigma}(t_0))$ such that $\tilde{\mat{z}}_{1, k}(t)\in\mathcal{\tilde D}_{\epsilon k}$, with $\mathcal{\tilde D}_{\epsilon k}$ defined in \eqref{n800}.
+	Consequently, for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, the input $\bs{\mu}$ defined in \eqref{n338} is bounded.
 	Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
@@ -493,3 +496,105 @@ Then, the second part of our main result is stated as follows:
 	Note that the additional input $f_{u, i}^*$ does not affect the internal dynamics. Hence, the analysis of the internal dynamics presented in the proof of Proposition~\ref{thm:USV} still holds under the action of $f_{u, i}^*$.	
 \end{proof}
 
+\section{Simulations}
+\label{sec:simulations}
+
+In this section we illustrate the performance of the controller \eqref{n338} through simulations in MATLAB and \gls{dune} \cite{dune}.
+The MATLAB simulation enables us to validate the closed-loop behavior under ideal conditions.
+The \acrfull{dune} is a software platform designed to run on autonomous underwater vehicles. It also contains a high-fidelity \gls{auv} simulator, allowing us to validate the proposed control algorithm, reproducing as closely as possible a laboratory experiment.
+
+%\textcolor{red}{Could you also add/modify this last sentence on DUNE?}
+
+The simulation case consists in the tracking-in-formation problem for six \glspl{auv} subject to hard (proximity and collision-avoidance) and soft (positive surge velocity) constraints.
+It is only assumed that the vehicles are interconnected at the initial time, so the controller must preserve such connectivity.
+We consider that the agents interact over a directed spanning tree illustrated in Fig.~\ref{fig:topo} and that only the agent labeled ``1" has knowledge of the (relative) state of the target (labeled ``0").
+
+\begin{figure}[!htb]
+	\centering
+	\begin{tikzpicture}[auto, scale=0.85]%, node distance=34mm, thick]
+	\small
+	\tikzset{mynode/.style={circle,draw,minimum size=14pt,inner sep=0pt,thick},
+		myarrow/.style={-, >=latex', shorten >=0pt, line width=0.6pt},
+		myarrow_dir/.style={->, >=latex', shorten >=0pt, line width=0.6pt},}
+	
+	%    \node at (0,-1) {$\bullet$};
+	\node[mynode] (n0) at (0.65,0.38) {$0$};
+	\node[mynode] (n1) at (0,-0.4) {$1$};
+	\node[mynode] (n2) at (1.3,-0.4) {$2$};    
+	\node[mynode] (n3) at (-1.1,.38) {$3$};
+	\node[mynode] (n4) at (-1.1,-.4) {$4$};
+	\node[mynode] (n5) at (2.4,.38) {$5$};
+	\node[mynode] (n6) at (2.4,-.4) {$6$};
+	
+	\path[myarrow_dir] (n1) edge node [yshift=11.5pt, xshift=15pt] {$e_2$} (n3);
+	\path[myarrow_dir] (n1) edge node {$e_3$} (n4);
+	\path[myarrow_dir] (n1) edge node [yshift=-11.5pt] {$e_1$} (n2);
+	\path[myarrow_dir] (n2) edge node {$e_4$} (n5);
+	\path[myarrow_dir] (n2) edge node [yshift=-11.5pt, xshift=0pt] {$e_5$} (n6);
+	\path[myarrow_dir] (n0) edge node [yshift=5.4pt, xshift=0pt]{$e_0$} (n1);
+	
+	\end{tikzpicture}
+	\renewcommand{\baselinestretch}{0.45}\caption{Interaction topology: directed spanning tree. \label{fig:topo}} \renewcommand{\baselinestretch}{1}
+\end{figure}
+
+\subsection{MATLAB example}
+\pgfplotsset{table/search path={figures/handpos_tracking/data}}
+\input{figures/handpos_tracking/figure_sim.tex}
+
+Here we simulate six \acrfullpl{lauv}.
+The ocean current velocity is set to $\ocean= \left[0.05\;\;-0.08\;\;-0.03\right]\T$.
+The desired formation corresponds to an octahedron, analogous to the one shown in Section~\ref{sec:MPC_case_study_AUV}.
+The desired relative positions $\mat{z}_{1, k}^d$ are given by
+\begin{equation}
+	\begin{bmatrix}
+		\mat{z}_{1, 1}^d & \cdots & \mat{z}_{1, 5}^d
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		15 & 15 & 15 & 0 & 15\\ -10 & 10 & 0 & 10 & 10\\ 0 & 0 & -10 & 10 & 0
+	\end{bmatrix}
+\end{equation}
+The trajectory of the virtual target is
+\begin{equation}
+	\mat{x}_{1, o} = \mat{p}_0 \inlinevector{a \cos(\omega_o t), b \sin(\omega_o t), c \sin(\omega_o t)^2},
+\end{equation}
+where
+\begin{align*}
+	\mat{p}_0 &= \inlinevector{0, 0, 0}, &
+	a &= 50, &
+	b &= 30, &
+	c &= 5, &
+	\omega_o &= \frac{\pi}{150}.
+\end{align*}
+The maximal and minimal distance parameters are $\Delta_k=\SI{50}{\meter}$ and $\delta_k=\SI{5}{\meter}$.
+The hand position point is chosen at $l=\SI{5}{\meter}$, and the control gains are set to $c_1=0.1$, $c_2=0.5$, $\gamma=0.25$, $c_v=0.2$, $\kappa_u=0.1$, $\kappa_\rho=4$, and $\sigma=0.3$.
+Furthermore, in order to avoid discontinuities in the control, the non-smooth ${\rm sign}(s)$ function in \eqref{n338} and \eqref{631} is replaced by the smooth approximation $\tanh\left(c_a\, s\right)$, with $c_a = 10^3$.
+
+\figref{fig:handpos_tracking_sim} presents the results of the simulation scenario.
+Specifically, \figref{fig:handpos_tracking_trajectory} shows the 3D trajectories of the \glspl{auv}.
+We can see that the vehicles successfully reach the desired formation while following the target, as is also evidenced from the formation and tracking errors in \figref{fig:handpos_tracking_formation_errors} and the velocity errors in \figref{fig:handpos_tracking_velocity_errors}.
+Furthermore, note that the hard connectivity and collision-avoidance constraints, shown as dashed black lines in \figref{fig:handpos_tracking_distances}, are always respected.
+On the other hand, the surge velocities in \figref{fig:handpos_tracking_surge} are kept as non-negative as possible as long as the soft constraints do not interfere with the hard constraints.
+%To see this more clearly, Fig.~\ref{fig:ur} shows the surge velocities for an identical simulation scenario, except for the soft-constraint requirement on the velocities. It is clear by comparing with Fig.~\ref{fig:ur2}, that without the proposed strategy, the surge velocities would take greater negative values.
+
+\subsection{DUNE simulations}
+
+Here, we simulate a formation of six \glspl{lauv} using \gls{dune}.
+The parameters of the simulation are chosen identically to the MATLAB example.
+
+% Figs.~\ref{fig:hifi_path}-\ref{fig:hifi_ur2} present the results of the simulation.
+% As shown in Fig.~\ref{fig:hifi_path}, the AUVs manage to reach the desired formation. However, the transient behavior is different from the one under the ideal conditions of the MATLAB simulation.
+% The main reason behind these differences is that in the DUNE simulation, the yaw moment of the rudder depends on the speed of the vehicle.
+% Consequently, the AUVs cannot turn if their speed is low.
+% Furthermore, the formation and velocity errors in Figs.~\ref{fig:hifi_z1kt}-\ref{fig:hifi_z2k} do not converge to zero but rather to a small area around zero.
+% These nonzero steady-state errors are caused by two factors: the uncertainty of the navigation system, and the delay in the actuators.
+% The vehicles still manage to respect the hard connectivity and collision-avoidance constraints, shown as dashed red lines in Fig.~\ref{fig:hifi_z1k}.
+% The surge velocities in Fig.~\ref{fig:hifi_ur2} are mostly non-negative, excluding AUV 4.
+% For comparison, the surge velocities shown in Fig.~\ref{fig:hifi_ur} result from a simulation without the soft-constraint requirement, and it is clear that in contrast to Fig.~\ref{fig:hifi_ur2}, in this case the velocities of vehicles 3 and 5 also become negative around 100s.
+
+\section{Conclusions}\label{sec:conclusions}
+
+In this chapter, we addressed the tracking-in-formation control problem of cooperative autonomous underwater vehicles interacting over directed graphs and under \emph{hard} inter-agent constraints (proximity and collision avoidance) and \emph{soft} constraints (positive surge velocity). 
+We proposed a distributed control law that solves this problem and that guarantees, simultaneously, connectivity preservation and inter-agent collision avoidance.
+With respect to the stability analysis, it is important to emphasize that, beyond mere convergence properties as usually established in the literature of multi-agent systems, we establish almost-everywhere uniform asymptotic stability with exponential convergence of the tracking errors. 
+Current research focuses on validating the results experimentally.
