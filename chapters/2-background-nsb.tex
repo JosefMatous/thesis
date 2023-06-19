@@ -34,9 +34,11 @@ where $\mat{J}_i^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacob
     In many applications, the task variable should track some pre-defined desired value, $\bs{\sigma}_{d, i}$.
     In such cases, we typically choose
     \begin{equation}
-        \dot{\bs{\sigma}}_i^{*} = \dot{\bs{\sigma}}_{d, i} - \bs{\Lambda}_i \left(\bs{\sigma}_i - \bs{\sigma}_{d,i}\right),    
+        \dot{\bs{\sigma}}_i^{*} = \dot{\bs{\sigma}}_{d, i} - \bs{\Lambda}_i \left(\bs{\sigma}_i - \bs{\sigma}_{d,i}\right),  
+        \label{eq:background_CLIK}  
     \end{equation}
     where $\bs{\Lambda}_i$ is a positive definite gain matrix.
+    In the literature, \eqref{eq:background_CLIK} is commonly referred to as the \gls{clik} equation \cite{antonelli_kinematic_2006}.
 \end{rmk*}
 
 If the task is \emph{redundant}, \emph{i.e.}, if the inequality $m_i < n$ strictly holds, then there exists a subspace of control inputs that do not interfere with the task.
@@ -60,6 +62,7 @@ with $\ivel_{i}$ given by \eqref{eq:background_NSB_velocity_i}.
 The second variant uses the so-called \emph{augmented} Jacobians
 \begin{align}
     \Bar{\mat{J}}_i &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_i\T}.
+    \label{eq:background_NSB_augmented}
 \end{align}
 Let $\Bar{\mat{N}}_i$ denote the null-space projector of $\Bar{\mat{J}}_i$.
 Then, the control input $\ivel$ is given by
@@ -70,6 +73,7 @@ The advantages and disadvantages of both approaches are discussed in \cite{anton
 In this thesis, we will mostly use the first variant.
 
 \subsection{Independence and orthogonality}
+\label{sec:background_NSB_independence}
 The concepts of independence and orthogonality are important when analyzing the interactions between the tasks.
 Specifically, these concepts determine whether the tasks can be executed simultaneously, and how the null-space projector affects the lower-priority tasks.
 
