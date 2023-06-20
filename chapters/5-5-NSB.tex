@@ -11,9 +11,9 @@ The contents of this chapter are based on \cite{lie_formation_2023}.
 
 \section{Introduction}
 
-The \gls{nsb} algorithm, as presented in the existing literature, is developed for kinematic single-integrator systems \cite{arrichiello_formation_2006, matous_singularity-free_2022, eek_formation_2021}. In this work, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common,  due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Although existing \gls{nsb} methods are developed for first-order systems, \gls{auv} dynamics are inherently second-order. Therefore, any first-order solution is necessarily perturbed by the dynamics of the maneuvering controller. In contrast, our formulation handles the second-order dynamics directly in the task space as interpretable spring-damper systems.
+The \gls{nsb} algorithm, as presented in the existing literature, is developed for kinematic single-integrator systems \cite{arrichiello_formation_2006,matous_singularity_2023,eek_formation_2021}. In this work, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common,  due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Although existing \gls{nsb} methods are developed for first-order systems, \gls{auv} dynamics are inherently second-order. Therefore, any first-order solution is necessarily perturbed by the dynamics of the maneuvering controller. In contrast, our formulation handles the second-order dynamics directly in the task space as interpretable spring-damper systems.
 
-We apply the proposed \gls{nsb} method to a fleet of \glspl{auv}. \Glspl{auv} are underactuated systems with inherently nonlinear dynamics. What enables us to still use the proposed \gls{nsb} method, developed for vehicles with linear double integrator dynamics, is the use of the hand position input-output linearization method, \cite{restrepo_tracking--formation_2022, cai_adaptive_2015, paliotta_trajectory_2019, matous_trajectory_2023}, for maneuvering control. Specifically, we apply the 3D hand position method proposed in \cite{matous_trajectory_2023}, which transforms the underactuated six-degrees-of-freedom \gls{auv} model into a double-integrator system. Subsequently, through the design of specific path-following, formation-keeping, and collision-avoidance tasks, the fleet is controlled to follow a preplanned path in formation while avoiding collisions both within the fleet and with external obstacles. The stability of the system is proved, and its effectiveness is verified in simulation. Because our reformulated NSB method works directly with the second-order system given by the hand position controller, there is no need to transform desired velocities or accelerations into surge and orientation references, as has been done in previous works. This reduces one level of complexity in the controller design.
+We apply the proposed \gls{nsb} method to a fleet of \glspl{auv}. \Glspl{auv} are underactuated systems with inherently nonlinear dynamics. What enables us to still use the proposed \gls{nsb} method, developed for vehicles with linear double integrator dynamics, is the use of the hand position input-output linearization method presented in Chapter~\ref{chap:handpos_definition}. Subsequently, through the design of specific path-following, formation-keeping, and collision-avoidance tasks, the fleet is controlled to follow a preplanned path in formation while avoiding collisions both within the fleet and with external obstacles. The stability of the system is proved, and its effectiveness is verified in simulation. Because our reformulated NSB method works directly with the second-order system given by the hand position controller, there is no need to transform desired velocities or accelerations into surge and orientation references, as has been done in previous works. This reduces one level of complexity in the controller design.
 
 This chapter is organized as follows. Section \ref{sec:NSB} presents the extended \gls{nsb} algorithm which is applicable for general double-integrator systems. Section \ref{sec:case_study} presents a case study of this \gls{nsb} algorithm applied to a fleet of \glspl{auv}. Section \ref{sec:conclusion} presents some concluding remarks.
 
@@ -48,7 +48,7 @@ Recalling \eqref{eq:background_CLIK}, the desired velocity of task $i$, $\ivel_i
 where $\bm{\Lambda}_i$ is a positive definite gain matrix, $\Tilde{\bm{\sigma}}_i = \bm{\sigma}_i - \bm{\sigma}_{d,i}$ is the task error, and $\mathbf{J}_i^\dagger$ is the pseudo-inverse of the task Jacobian. 
 To achieve second-order differential control, we instead propose the \gls{soclik} equation inspired by robotic manipulators \cite{siciliano_closed-loop_1990}
 \begin{equation}
-    \dot{\ivel}_i = \mathbf{J}_i^\dagger \bigl(\ddot{\bm{\sigma}}_{d,i} - \mathbf{\Lambda}_{p,i}\Tilde{\bm{\sigma}}_i - \mathbf{\Lambda}_{d,i} \dot{\Tilde{\bm{\sigma}}}_i - \dot{\mathbf{J}}_i \ivel\bigl), \label{eq:general_acceleration}
+    \dot{\ivel}_i = \mathbf{J}_i^\dagger \bigl(\ddot{\bm{\sigma}}_{d,i} - \mathbf{\Lambda}_{p,i}\Tilde{\bm{\sigma}}_i - \mathbf{\Lambda}_{d,i} \dot{\Tilde{\bm{\sigma}}}_i - \dot{\mathbf{J}}_i \ivel\bigr), \label{eq:general_acceleration}
 \end{equation}
 where $\mathbf{\Lambda}_{p,i}$ and $\mathbf{\Lambda}_{d,i}$ are positive definite gain matrices.
 
@@ -65,7 +65,7 @@ where $\mathbf{N}_i$ is the null space projector of the task, guarantees the des
 Similarly to first-order \gls{nsb} methods, we can combine the tasks by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
 The desired acceleration is then given by
 \begin{equation}
-    \bm{\mu} = dot{\ivel}_1 + \sum_{i=2}^N \bar{\mathbf{N}}_{i-1}\dot{\ivel}_i,
+    \bm{\mu} = \dot{\ivel}_1 + \sum_{i=2}^N \bar{\mathbf{N}}_{i-1}\dot{\ivel}_i,
     \label{eq:NSB_double}
 \end{equation}
 where $\bar{\mathbf{N}}_i$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
@@ -89,7 +89,7 @@ The proof utilizes the concepts of independence and orthogonality defined in Sec
 
 \begin{proof}
     First, let us find the closed-loop expressions for $\ddot{\Tilde{\bm{\sigma}}}_1$ and $\ddot{\Tilde{\bm{\sigma}}}_2$.
-    From \eqref{eq:task_second_derivative}, \eqref{eq:NSB_double}, we get
+    From \eqref{eq:task_second_derivative} and \eqref{eq:NSB_double}, we get
     \begin{subequations}\label{eq:proof_second_derivatives}
         \begin{align}
             \ddot{\Tilde{\bm{\sigma}}}_1 &= \mathbf{J}_1\dot{\ivel}_1 + \mathbf{J}_1\mathbf{N}_1\dot{\ivel}_2 + \dot{\mathbf{J}}_1\ivel - \ddot{\bm{\sigma}}_{d, 1}, \\
@@ -171,20 +171,18 @@ We note that $\ddot{\bm{\sigma}}_{d,1} = \dot{\bm{\sigma}}_{d,1}= \mat{0}$.
 
 The task Jacobian is given by the stacked partial derivatives for each active collision
 \begin{subequations}
-\begin{gather}
-    \mathbf{J}_1 = \left[\left(\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)\T, \ldots, \left(\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)\T\right]\T,\\
-    \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i} =\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}, \; \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_j} = -\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}.
-\end{gather}
+\begin{align}
+    \mathbf{J}_1 &= \left[\left(\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)\T, \ldots, \left(\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)\T\right]\T,\\
+    \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i} &=\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}, \qquad
+    \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_j} = -\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}.
+\end{align}
 \end{subequations}
 The derivative of the task Jacobian is similarly given by a stack of time-differentiated partial derivatives
 \begin{subequations}
-\begin{gather}
-    \dot{\mathbf{J}}_1 = \left[{\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)}\T, \ldots, {\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)}\T\right]\T,\\
-    \begin{split}
-    {\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i}}= \bigg(&\frac{\mathbb{I}_3}{\|\mathbf{p}_i - \mathbf{p}_j\|} \\&- \frac{\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\T}{\|\mathbf{p}_i - \mathbf{p}_j\|^3}\bigg)\bigl(\mathbf{v}_i-\mathbf{v}_j\bigr),
-    \end{split}%\\
-     %\dot{\frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_j}} = -\dot{\frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i}}.
-\end{gather}
+\begin{align}
+    \dot{\mathbf{J}}_1 &= \left[{\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)}\T, \ldots, {\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)}\T\right]\T,\\
+    {\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i}} &= \bigg(\frac{\mathbf{I}_3}{\|\mathbf{p}_i - \mathbf{p}_j\|} - \frac{\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\T}{\|\mathbf{p}_i - \mathbf{p}_j\|^3}\bigg)\bigl(\mathbf{v}_i-\mathbf{v}_j\bigr),
+\end{align}
 \end{subequations}
 
 The resulting \gls{soclik} equation for the task is
@@ -192,7 +190,7 @@ The resulting \gls{soclik} equation for the task is
     \dot{\mathbf{v}}_1 = -\mathbf{J}_1^\dagger \bigl( \mathbf{\Lambda}_{p,1}\Tilde{\bm{\sigma}}_1 + \mathbf{\Lambda}_{d,1} \dot{\bm{\sigma}}_1 + \dot{\mathbf{J}}_1 (\mathbf{v}+\stackedocean)\bigr),
 \end{equation}
 with $\dot{\bm{\sigma}}_{1\,} \!\!= \mathbf{J}_1 (\mathbf{v}\! + \!\stackedocean)$. %We note that because of the symmetry of the task and the structure of the task Jacobian, the constant ocean currents will cancel out in $\dot{\mathbf{v}}_1$ under the assumption that it is equal for all vehicles.
-Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}_1 \mathbf{V}_{c\,} \!\!= \dot{\mathbf{J}}_1 \mathbf{V}_{c\,} \!\!= \mathbf{0}$. Consequently, $\dot{\mathbf{v}}_1$ is independent of the ocean current velocity.
+Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}_1 \stackedocean \!\!= \dot{\mathbf{J}}_1 \stackedocean \!\!= \mathbf{0}$. Consequently, $\dot{\mathbf{v}}_1$ is independent of the ocean current velocity.
 
 \subsubsection{Formation-Keeping Task}
 The formation-keeping task moves the vehicles into a predefined formation in the formation-centered frame. The task variable is given by
@@ -206,8 +204,8 @@ The desired values are
 The Jacobian is given by 
 \begin{equation}
     \mathbf{J}_2 = \left(\begin{bmatrix}
-        \mathbb{I}_{n-1} & \mathbf{0}_{n-1, 1}
-    \end{bmatrix} - \frac{\mathbf{1}_{n-1, n}}{N}\right)\otimes \mathbb{I}_3.
+        \mathbf{I}_{n-1} & \mathbf{0}_{n-1}
+    \end{bmatrix} - \frac{\mathbf{1}_{(n-1) \times n}}{N}\right)\otimes \mathbf{I}_3.
 \end{equation}
 Because $\dot{\mathbf{J}}_2 = \mathbf{0}$, the \gls{soclik} equation reduces to
 \begin{equation}\label{eq:formation_keeping_controller}
@@ -250,7 +248,7 @@ is a normalization term.
 Since the second-order \gls{nsb} algorithm requires the desired acceleration, we need to find the time-derivative of the line-of-sight velocity \eqref{eq:desired_LOS}
 \begin{equation}\label{eq:desired_LOS_derivative}
 \begin{split}
-        \dot{\mathbf{v}}_{LOS,d} &= \dot{\mathbf{R}}_p\left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D} \\&+ \mathbf{R}_p \left[ \dot{\Delta}(\mathbf{p}_b^p, \dot{\mathbf{p}}_b^p), -\dot{y}_b^p, -\dot{z}_b^p \right]\T \frac{U_{LOS}}{D}\\ &- \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D^2}\dot{D}.
+        \dot{\mathbf{v}}_{LOS,d} &= \dot{\mathbf{R}}_p\left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D} \\ & \quad + \mathbf{R}_p \left[ \dot{\Delta}(\mathbf{p}_b^p, \dot{\mathbf{p}}_b^p), -\dot{y}_b^p, -\dot{z}_b^p \right]\T \frac{U_{LOS}}{D}\\ & \quad - \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D^2}\dot{D}.
     \end{split}
 \end{equation}
 
@@ -276,27 +274,27 @@ where $\mathbf{v}_b = \tfrac{1}{N} \sum_{i=1}^N \mathbf{v}_i$.
      \Tilde{\mathbf{v}}_{\rm LOS} &= \mathbf{v}_b + \ocean - \mathbf{v}_{LOS,d}.
  \end{align}
 \end{subequations}
-The dynamics of these variables are
+The time-derivatives of these variables are
 \begin{equation}
     \begin{bmatrix}
-        \dot{\Tilde{\mathbf{p}}} \\ \dot{\Tilde{\mathbf{v}}}
+        \dot{\Tilde{\mathbf{p}}}_{\rm LOS} \\ \dot{\Tilde{\mathbf{v}}}_{\rm LOS}
     \end{bmatrix} 
     = 
     \mat{M}_{\rm LOS}
     \begin{bmatrix}
-        \Tilde{\mathbf{p}} \\ \Tilde{\mathbf{v}}
+        \Tilde{\mathbf{p}}_{\rm LOS} \\ \Tilde{\mathbf{v}}_{\rm LOS}
     \end{bmatrix}, 
     \qquad
     \mat{M}_{\rm LOS}
     =
     \begin{bmatrix}
-        \mathbf{0} & \mathbb{I}\\
+        \mathbf{O} & \mathbf{I}\\
         -\mathbf{\Lambda}_{i,3} & -\mathbf{\Lambda}_{p,3}
     \end{bmatrix}
     \label{eq:LOS_integral_errors_dynamics}
 \end{equation}
 The matrices $\mathbf{\Lambda}_{i,3}$ and $\mathbf{\Lambda}_{p,3}$ are positive definite by design.
-Consequently, the matrix $\mat{M}_{rm LOS}$ is Hurwitz, and $\left[\Tilde{\mathbf{p}}_{\rm LOS}\T, \Tilde{\mathbf{v}}_{\rm LOS}\T\right] = \mat{0}\T$ is a \glspl{ges} equilibrium of \eqref{eq:LOS_integral_errors_dynamics}.
+Consequently, the matrix $\mat{M}_{\rm LOS}$ is Hurwitz, and $\left[\Tilde{\mathbf{p}}_{\rm LOS}\T, \Tilde{\mathbf{v}}_{\rm LOS}\T\right] = \mat{0}\T$ is a \glspl{ges} equilibrium of \eqref{eq:LOS_integral_errors_dynamics}.
 From \eqref{eq:LOS_integral_errors}, we conclude that if $\Tilde{\mathbf{v}}_{\rm LOS}$ exponentially converges to zero, then $\mathbf{v}_b$ exponentially converges to $\mathbf{v}_{LOS,d}-\ocean$.
 \end{proof}
 
@@ -315,33 +313,33 @@ In Section~\ref{sec:NSB_R_path_stability}, we showed that the \gls{los} guidance
 \subsection{Obstacle avoidance}\label{sec:obstacle_avoidance}
 We implement an obstacle avoidance method that enables the fleet to avoid external obstacles while keeping the formation. This approach mitigates the issue of vehicles straying out of communication range while evading obstacles. We modify the collision cones method from Chapter~\ref{chap:NSB_R} to be compatible with double integrator dynamics and focus on obstacle avoidance in the $xy$-plane.
 
-We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_o-x_b, y_o-y_b]\T$, $\mathbf{v}_{rel} = [\dot{x}_{LOS,d}-\dot{x}_o, \dot{y}_{LOS,d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{LOS,d},  \ddot{y}_{LOS,d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.
+We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_b-x_o, y_b-y_o]\T$, $\mathbf{v}_{rel} = [\dot{x}_{LOS,d}-\dot{x}_o, \dot{y}_{LOS,d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{LOS,d},  \ddot{y}_{LOS,d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.
 
 Obstacle avoidance is guaranteed if we ensure that
 \begin{equation}
-    ||\mathbf{p}_{rel}|| \geq r_o + r_f
+    \|\mathbf{p}_{rel}\| \geq r_o + r_f
     \label{eq:obstacle_avoidance_condition}
 \end{equation}
 throughout the avoidance maneuver (see Section~\ref{sec:NSB_R_OA}).
 A conflict between the \glspl{auv} and the obstacle arises if $\mathbf{v}_{rel}$ lies in the collision cone, \emph{i.e.,} if
 \begin{equation}
-    |\angle (\mathbf{p}_{rel}, \mathbf{v}_{rel})| \leq \alpha ,\quad \alpha = \sin^{-1}\bigl(\frac{r_o+r_f}{||\mathbf{p}_{rel}||}\bigr).
+    |\angle (-\mathbf{p}_{rel}, \mathbf{v}_{rel})| \leq \alpha ,\quad \alpha = \arcsin\left(\frac{r_o+r_f}{\|\mathbf{p}_{rel}\|}\right).
     \label{eq:collision-conflict}
 \end{equation}
 The obstacle avoidance task is activated if the cone angle satisfies $\alpha > \alpha_{\min}$. 
 When the task is active, the $x$- and $y$-components of  $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$  given by \eqref{eq:desired_LOS} and \eqref{eq:desired_LOS_derivative} are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$, given by
 \begin{align}
-    \mathbf{v}_{OA,d} &= ||\mathbf{v}_{rel}|| \left[\cos{(\psi_{OA})}, \sin{(\psi_{OA})}\right]\T \!+\! \left[\dot{x}_o, \dot{y}_o \right]\T,\label{eq:v_OA}\\
+    \mathbf{v}_{OA,d} &= \|\mathbf{v}_{rel}\| \left[\cos{(\psi_{OA})}, \sin{(\psi_{OA})}\right]\T \!+\! \left[\dot{x}_o, \dot{y}_o \right]\T,\label{eq:v_OA}\\
     \begin{split}\label{eq:v_OA_dot}
-    \dot{\mathbf{v}}_{OA,d} &= \dot{||\mathbf{v}_{rel}||}\left[ \cos{(\psi_{OA})}, \sin{(\psi_{OA})}\right]\T \\&+ \!||\mathbf{v}_{rel}||\!\left[ -\sin{(\psi_{OA})}\dot{\psi}_{OA}, \cos{(\psi_{OA})} \dot{\psi}_{OA}\right]\!\T\!,
+    \dot{\mathbf{v}}_{OA,d} &= \left(\scale[1]{\frac{\rm d}{{\rm d}t}}\|\mathbf{v}_{rel}\|\right)\left[ \cos{(\psi_{OA})}, \sin{(\psi_{OA})}\right]\T \\ & \quad + \!\|\mathbf{v}_{rel}\|\!\left[ -\sin{(\psi_{OA})}\dot{\psi}_{OA}, \cos{(\psi_{OA})} \dot{\psi}_{OA}\right]\!\T\!,
     \end{split}
 \end{align}
 where
 \begin{align}
-    \psi_{OA} &= \mathrm{atan}_2 \left(y_o-y_b, x_o-x_b\right) \pm \alpha,\\
-    %\dot{\psi}_{OA} &= \frac{(x_o-x_b)(\dot{y}_o-\dot{y}_b) - (y_o-y_b)(\dot{x}_o-\dot{x}_b)}{||\mathbf{p}_{rel}||^2} \pm \dot{\alpha}\\
-    \dot{\psi}_{OA} &= \frac{\mathrm{det}\bigl([\mathbf{p}_{rel}\; \dot{\mathbf{p}}_{rel}]\bigr)}{||\mathbf{p}_{rel}||^2} \pm \dot{\alpha},\\
-    \dot{\alpha} &= \frac{r_o+r_f}{||\mathbf{p}_{rel}||^2\sqrt{||\mathbf{p}_{rel}||^2-(r_o+r_f)^2}}\mathbf{p}_{rel}\T \dot{\mathbf{p}}_{rel},
+    \psi_{OA} &= \mathrm{arctan}_2 \left(y_o-y_b, x_o-x_b\right) \pm \alpha,\\
+    %\dot{\psi}_{OA} &= \frac{(x_o-x_b)(\dot{y}_o-\dot{y}_b) - (y_o-y_b)(\dot{x}_o-\dot{x}_b)}{\|\mathbf{p}_{rel}\|^2} \pm \dot{\alpha}\\
+    \dot{\psi}_{OA} &= \frac{\mathrm{det}\bigl([\mathbf{p}_{rel}\; \dot{\mathbf{p}}_{rel}]\bigr)}{\|\mathbf{p}_{rel}\|^2} \pm \dot{\alpha},\\
+    \dot{\alpha} &= \frac{r_o+r_f}{\|\mathbf{p}_{rel}\|^2\sqrt{\|\mathbf{p}_{rel}\|^2-(r_o+r_f)^2}}\mathbf{p}_{rel}\T \dot{\mathbf{p}}_{rel},
 \end{align}
  before entering into \eqref{eq:los_integral_state} and \eqref{eq:LOS_controller}.
  
@@ -368,24 +366,24 @@ The closed-loop dynamics of the formation-task error $\Tilde{\bm{\sigma}}_2$ und
 \end{equation}
 
 \begin{theorem}
-Let $\mathbf{\Lambda}_{p,2}, \, \mathbf{\Lambda}_{d,2}$ be two symmetric positive definite matrices so that the product $\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}$ is symmetric positive definite. Then, $\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T = \mathbf{0}$ is a \acrfullpl{ugas} equilibrium of the closed-loop system \eqref{eq:task_2_dynamics}.
+Let $\mathbf{\Lambda}_{p,2}, \, \mathbf{\Lambda}_{d,2}$ be two symmetric positive definite matrices so that the product $\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}$ is symmetric positive definite. Then, the point $\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr] = \mathbf{0}\T$ is a \acrfullpl{ugas} equilibrium of the closed-loop system \eqref{eq:task_2_dynamics}.
 \end{theorem}
 
 \begin{proof}
     Consider the Lyapunov function
     \begin{equation}
-    \begin{split}
-  V(\Tilde{\bm{\sigma}}_2, \dot{\Tilde{\bm{\sigma}}}_2) \!=\! v_{2,\max}\log\left(\cosh{\|\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\|}\right)\\+ \frac{1}{2}\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2}\dot{\Tilde{\bm{\sigma}}}_2.
-  \end{split}
+    %\begin{split}
+  V(\Tilde{\bm{\sigma}}_2, \dot{\Tilde{\bm{\sigma}}}_2) \!=\! v_{2,\max}\log\left(\cosh{\|\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\|}\right) + \frac{1}{2}\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2}\dot{\Tilde{\bm{\sigma}}}_2.
+  %\end{split}
 \end{equation}
 Inserting for \eqref{eq:task_2_dynamics}, the time-derivative is given by
-\begin{equation}
-\begin{split}
-    \dot{V} =\, & v_{2,\max}\mathrm{sat}\left(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\right)\T \mathbf{\Lambda}_{p,2} \dot{\Tilde{\bm{\sigma}}}_2 \\&-
-    \dot{\Tilde{\bm{\sigma}}}_2\T \mathbf{\Lambda}_{p,2}\left(v_{2,\max}\mathrm{sat}\left(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\right) + \mathbf{\Lambda}_{d,2}\dot{\Tilde{\bm{\sigma}}}_2)\right),\\
-    =\,&-\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}\dot{\Tilde{\bm{\sigma}}}_2.
-    \end{split}
-\end{equation}
+\begin{align}
+%\begin{split}
+    \dot{V} &= v_{2,\max}\mathrm{sat}\left(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\right)\T \mathbf{\Lambda}_{p,2} \dot{\Tilde{\bm{\sigma}}}_2 
+                -\dot{\Tilde{\bm{\sigma}}}_2\T \mathbf{\Lambda}_{p,2}\left(v_{2,\max}\mathrm{sat}\left(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\right) + \mathbf{\Lambda}_{d,2}\dot{\Tilde{\bm{\sigma}}}_2\right), \nonumber \\
+    &= -\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}\dot{\Tilde{\bm{\sigma}}}_2.
+%\end{split}
+\end{align}
 Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \in \mathbb{R}^{6(n-1)} | \dot{V} = 0\}$. Because of the dynamics \eqref{eq:task_2_dynamics}, no other solution can stay identically in $S$, other than the trivial solution $\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \equiv \mathbf{0}$. Thus, the origin is globally asymptotically stable according to \cite[Corollary 4.2]{khalil_nonlinear_2002}. Furthermore, because \eqref{eq:task_2_dynamics} is time-invariant, the equilibrium is \glspl{ugas}.
 \end{proof}
 
@@ -398,19 +396,18 @@ Let $\Tilde{\mathbf{p}}$ and $\Tilde{\mathbf{v}}$ be given by \eqref{eq:LOS_inte
 we get the following error system
 \begin{subequations}
 \begin{align}
-\begin{split}\label{eq:velocity_perturbation_dynamics}
+    \begin{split}\label{eq:velocity_perturbation_dynamics}
         \dot{\Tilde{\mathbf{p}}} &= \Tilde{\mathbf{v}},\\
         \dot{\Tilde{\mathbf{v}}} &= -\mathbf{\Lambda}_{p,3} \Tilde{\mathbf{v}} - \mathbf{\Lambda}_{i,3}\Tilde{\mathbf{p}},
-        \end{split}\\
+    \end{split} \\
         \begin{split}
-            \dot{\mathbf{p}}_b^p &= f(\cdot) + g(\cdot) \Tilde{\mathbf{v}},\\
-            &= \mathbf{R}_p\T(\mathbf{v}_b \!+\! \ocean\!-\!\dot{\mathbf{p}}_p) +  \bigl(\mathbf{S}(\omega_p \dot{s})\bigr)\T\mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),\\
+            \dot{\mathbf{p}}_b^p &= \mathbf{R}_p\T(\mathbf{v}_b \!+\! \ocean\!-\!\dot{\mathbf{p}}_p) +  \bigl(\mathbf{S}(\omega_p \dot{s})\bigr)\T\mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),\\
             &= \mathbf{R}_p\T(\mathbf{v}_{LOS,d} -\dot{\mathbf{p}}_p) - \mathbf{S}(\omega_p \dot{s})\mathbf{p}_b^p +\mathbf{R}_p\T\Tilde{\mathbf{v}}.\label{eq:path_error_dynamics}
         \end{split} 
 \end{align}
 \end{subequations}
 \begin{theorem}\label{theorem:path_error}
-    Let $\bm{\Lambda}_{p,3}$, $\bm{\Lambda}_{i,3}$ be positive definite matrices. Then, $[\Tilde{\mathbf{p}}\T,\, \Tilde{\mathbf{v}}\T, \,(\mathbf{p}_b^p)\T]\T = \mathbf{0}$ is a \glspl{usges} of the system \eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics}.    
+    Let $\bm{\Lambda}_{p,3}$, $\bm{\Lambda}_{i,3}$ be positive definite matrices. Then, the point $\left[\Tilde{\mathbf{p}}\T,\, \Tilde{\mathbf{v}}\T, \,(\mathbf{p}_b^p)\T\right] = \mathbf{0}\T$ is a \glspl{usges} equilibrium of the system \eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics}.    
 \end{theorem}
 
 
@@ -419,13 +416,104 @@ we get the following error system
 \begin{equation}
     V(\mathbf{p}_b^p) = \frac{1}{2}\left(\mathbf{p}_b^p\right)\T\mathbf{p}_b^p.
 \end{equation}
-Therefore, if the two assumptions of Proposition~\ref{prop:background_cascade} hold, the origin of the cascade is \glspl{usges}.
+Therefore, if the two assumptions of Proposition~\ref{prop:background_cascade} (\cite[Proposition 9]{pettersen_lyapunov_2017}) hold, the origin of the cascade is \glspl{usges}.
 
-Because $\|\partial V/\partial \mathbf{p}_b^p\| = \|\mathbf{p}_b^p\|$, the first assumption holds with $c_1 = 2, \, c_2 = \eta$ for any $\eta \in \mathbb{R}_{\geq 0}$.
+Because $\|\partial V/\partial \mathbf{p}_b^p\| = \|\mathbf{p}_b^p\|$, the first assumption \eqref{eq:background_USGES_cascade_assumption_1} is satisfied with $c_1 = 2, \, c_2 = \eta$ for any $\eta \in \mathbb{R}_{\geq 0}$.
 
 %In the second assumption, $\|g(\cdot)\| = \|\mathbf{R}_p\T\| = 1$, and 
-The second assumption is satisfied with $\alpha_1(\|\Tilde{\mathbf{v}}\|) = 1, \alpha_2(\|\Tilde{\mathbf{v}}\|) = 0$, because $\|g(\cdot)\| = \|\mathbf{R}_p\T\| = 1$. As a result, all assumptions of \cite[Proposition 9]{pettersen_lyapunov_2017} are satisfied, and the origin of the closed-loop path-following system~\eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics} is \glspl{usges}.
+The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds with $\alpha_1(\|\Tilde{\mathbf{v}}\|) = 1, \alpha_2(\|\Tilde{\mathbf{v}}\|) = 0$, because $\|g(\cdot)\| = \|\mathbf{R}_p\T\| = 1$. As a result, all assumptions of \cite[Proposition 9]{pettersen_lyapunov_2017} are satisfied, and the origin of the closed-loop path-following system~\eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics} is \glspl{usges}.
 \end{proof}
 
 
 \subsubsection{Boundedness of Internal States}
+Let $\mathbf{p}_{{\rm d}, i} = \mathbf{p}_p(s) + \mathbf{R}_p\mathbf{p}_{f, i}^f$ denote the desired position of vehicle $i$. Note that because the path function is $\mathcal{C}^{\infty}$ and thanks to the choice of the path parameter update law \eqref{eq:path_update}, the time-derivative of $\mathbf{p}_{{\rm d}, i}$ is bounded.
+In the previous section, we proved the stability of the external dynamics.
+Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\mathbf{p}_{{\rm d}, i}$, and the relative hand velocity of vehicle $i$, $\mat{x}_{2, i}$, converges to $\dot{\mathbf{p}}_{{\rm d}, i} - \ocean$.
+
+\begin{prop}
+    \label{prop:angular_velocities}
+    Let us define $\bs{\xi}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, n$ in accordance with \eqref{eq:handpos_def_a_bounds}.
+    The internal dynamics of the vehicles are ultimately bounded if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$.
+\end{prop}
+
+\begin{proof}
+    In the previous sections, we showed that in the nominal case, the external dynamics are \glspl{ugas}.
+    Moreover, for a given set of initial conditions, the control input $\bs{\mu}$ defined in \eqref{eq:NSB_double} is bounded.
+    Consequently, if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the angular rate dynamics are ultimately bounded.
+\end{proof}
+
+\subsection{Simulation results}\label{sec:simulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+To validate the theoretical results, we perform simulations where the proposed algorithm is applied to a fleet of three \acrfullpl{lauv} \cite{sousa_LAUV_2012}. In the simulated scenario, the barycenter should follow a spiral path while avoiding collision with a stationary cylindrical-shaped obstacle with radius $\SI{10}{\meter}$, located at $[x_o,y_o] = [100,-10]$. All position variables are here given in meters. The spiral is given by
+\begin{equation}
+    \mathbf{p}_p(s) = \mathbf{p}_{p,0} + \bigl[s, -40 \cos(\tfrac{\pi}{100} s), 20 \sin(\tfrac{\pi}{100} s)\bigr]\T,
+\end{equation}
+where \begin{equation}
+    \mathbf{p}_{p,0} = \bigl[ 0, -40, 35 \bigr]\T.
+\end{equation}
+The barycenter relative formation is given by
+\begin{equation}
+    \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
+\end{equation}
+and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$ both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $\mathbf{r}_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
+\begin{equation}
+    \ocean = \begin{bmatrix}
+        0 & 0.25 & 0.05
+    \end{bmatrix}\T \,\mathrm{m/s}.
+\end{equation}
+
+\pgfplotsset{table/search path={figures/handpos_nsb/data}}
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+       \includegraphics[width=.75\linewidth]{figures/handpos_nsb/3d_plot_alternative_view.pdf}
+       \caption{The trajectory of the vehicles. The markers represent the vehicle positions every 50 seconds.}
+       \label{fig:3d_plot}
+   \end{subfigure}
+    \begin{subfigure}[t]{.48\textwidth}
+    \centering
+    \def\figurewidth{.75\linewidth}
+    \def\figureheight{2.5cm}
+    \input{figures/handpos_nsb/angular_velocities.tex}
+    \vspace*{-6.7mm}
+    \caption{The angular velocities of the vehicles. }
+    \label{fig:angular_velocities}
+    \end{subfigure}
+    \begin{subfigure}[t]{.48\textwidth}
+    \centering
+    \def\figurewidth{.75\linewidth}
+    \def\figureheight{2.5cm}
+    \input{figures/handpos_nsb/formation_keeping_error.tex}
+    \vspace*{-6.7mm}
+    \caption{The formation keeping errors. }
+    \label{fig:formation_keeping_error}
+    \end{subfigure}
+    \begin{subfigure}[t]{.48\textwidth}
+    \centering
+    \def\figurewidth{.75\linewidth}
+    \def\figureheight{2.5cm}
+    \input{figures/handpos_nsb/collision_avoidance.tex}
+    \vspace*{-1.8mm}
+    \caption{The minimum inter-vehicle and vehicle to obstacle distance.}
+    \label{fig:collision_avoidance}
+    \end{subfigure}
+    \begin{subfigure}[t]{.48\textwidth}
+    \centering
+    \def\figurewidth{.75\linewidth}
+    \def\figureheight{2.5cm}
+    \input{figures/handpos_nsb/path_following_error.tex}
+    \vspace*{-6.7mm}
+    \caption{The barycenter path-following error.}
+    \label{fig:path_following_error}
+    \end{subfigure}
+    \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:case_study}. The full, dashed, and dotted lines correspond to the three different vehicles. The green and red rectangles represent when obstacle avoidance and inter-vehicle COLAV is active.}
+    \label{fig:sim_results}
+\end{figure}
+
+The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.
+
+\section{Conclusions and future work}\label{sec:conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this chapter, we proposed an extended \gls{nsb} method for double-integrator systems. The method was proved to provide \acrlongpl{ges} task error dynamics. The method was demonstrated in a case study of formation path-following with underactuated \glspl{auv}. We defined the second-order kinematic tasks for collision avoidance, formation-keeping, and path-following. To force a bounded velocity, we introduced a saturation term to the formation-keeping acceleration. The closed-loop formation-error system with the reformulated formation-keeping acceleration was proved to be \glspl{ugas}, and the closed-loop path-following system was proved to be \glspl{usges}. Simulation results demonstrate the effectiveness of our approach. Possible future work includes verifying the presented results through experiments.

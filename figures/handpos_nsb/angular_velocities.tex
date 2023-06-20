@@ -1,0 +1,61 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0,
+xmax=350,
+xlabel style={font=\color{white!15!black}},
+xlabel={$t$ [s]},
+ymin=-0.2,
+ymax=0.25,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={Angular rate [rad/s]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2mm},
+title={Angular velocities},
+axis background/.style={fill=white},
+legend style={legend cell align=left, align=left, draw=white!15!black, font=\small},
+legend columns=3
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{underactuated_dynamics-1.tsv};
+\addlegendentry{$p$}
+
+\addplot [color=mycolor1, line width=1.0pt, dashed, forget plot]
+  table[]{underactuated_dynamics-2.tsv};
+\addplot [color=mycolor1, line width=1.0pt, dotted, forget plot]
+  table[]{underactuated_dynamics-3.tsv};
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{underactuated_dynamics-4.tsv};
+\addlegendentry{$q$}
+
+\addplot [color=mycolor2, line width=1.0pt, dashed, forget plot]
+  table[]{underactuated_dynamics-5.tsv};
+\addplot [color=mycolor2, line width=1.0pt, dotted, forget plot]
+  table[]{underactuated_dynamics-6.tsv};
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{underactuated_dynamics-7.tsv};
+\addlegendentry{$r$}
+
+\addplot [color=mycolor3, line width=1.0pt, dashed, forget plot]
+  table[]{underactuated_dynamics-8.tsv};
+\addplot [color=mycolor3, line width=1.0pt, dotted, forget plot]
+  table[]{underactuated_dynamics-9.tsv};
+
+\addplot[area legend, dashed, draw=black, fill=green, fill opacity=0.15, forget plot]
+table[] {underactuated_dynamics-10.tsv}--cycle;
+\end{axis}
+
+\end{tikzpicture}%

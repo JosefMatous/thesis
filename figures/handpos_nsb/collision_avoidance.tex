@@ -1,0 +1,46 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0,
+xmax=350,
+xlabel style={font=\color{white!15!black}},
+xlabel={$t$ [s]},
+ymin=0,
+ymax=25,
+ylabel style={font=\color{white!15!black}, yshift=-2mm},
+ylabel={Distance [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2mm},
+title={Smallest distances},
+legend style={at={(0.99,0.02)}, inner sep=1.5pt, anchor=south east, legend cell align=left, align=left, draw=white!15!black, legend columns=2,font=\scriptsize}
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{smallest-distances-1.tsv};
+\addlegendentry{Inter-vehicle}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{smallest-distances-2.tsv};
+\addlegendentry{Obstacle}
+
+\addplot [color=black, dashed, line width=1.0pt]
+  table[]{smallest-distances-3.tsv};
+\addlegendentry{$d_{\rm COLAV}$}
+
+
+\addplot[area legend, dashed, draw=black, fill=white!50!red, fill opacity=0.25, forget plot]
+table[] {smallest-distances-4.tsv}--cycle;
+\end{axis}
+
+\end{tikzpicture}%
