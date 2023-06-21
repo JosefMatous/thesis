@@ -135,7 +135,7 @@
 
 %% CLASS FILE LOADING
 
-\LoadClass[b5paper,11pt,openright,\paging]{report}
+\LoadClass[b5paper,10pt,openright,\paging]{report}
 
 %% PACKAGE LOADING
 
@@ -192,7 +192,7 @@
 %% CUSTOMISATION
 
 % Page geometry and spacing (same for even and odd pages)
-\geometry{inner=3cm, outer=2cm, top=2.5cm, bottom=2.7cm}
+\geometry{inner=3cm, outer=2cm, top=2.5cm, bottom=2.75cm}
 %\frenchspacing
 
 % Roman page numbers from the beginning of the document
@@ -423,3 +423,17 @@
 	}
 	\end{titlepage}
 }
+
+% Adjust font sizes
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont\LARGE\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\huge}
+\titlespacing*{\chapter}
+  {0pt}{50pt}{30pt}
+
+\titleformat{\section}
+    {\normalfont\fontsize{13}{15}\bfseries}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+    {\normalfont\fontsize{11}{15}\bfseries}{\thesubsection}{1em}{}

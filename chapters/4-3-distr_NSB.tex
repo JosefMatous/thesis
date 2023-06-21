@@ -238,7 +238,7 @@ Consequently, the barycenter and path parameter estimate errors, $\widetilde{\ma
     \Tilde{s}_{i} &= s_i - s. \label{eq:distr_NSB_consensus_errors}
 \end{align}
 
-\subsection{Closed-loop dynamics}
+\subsection{Closed-loop Dynamics}
 In this section, we derive closed-loop equations for the error variables.
 
 First, let us investigate the closed-loop properties of the path-following error.
@@ -561,7 +561,7 @@ Secondly, in real-life situations, the continuous-time consensus algorithm \eqre
 In fact, the limited bandwidth of underwater communication methods causes a significant delay and long periods between transmissions.
 In this section, we introduce the model of underactuated \glspl{auv} and propose solutions to the two aforementioned problems.
 
-\subsection{AUV model}
+\subsection{AUV Model}
 Let $\mat{p}_i \in \mathbb{R}^3$ denote the position of vehicle $i$.
 Let $\mat{R}_i \in SO(3)$ be a rotation matrix that describes the orientation.
 The kinematics of the vehicle are \cite{fossen_handbook_2011}
@@ -581,7 +581,7 @@ The vehicle dynamics can then be expressed as
 \end{equation}
 where $f$ is a function representing the closed-loop dynamics, and $\mat{R}_{d,i}$ and $u_{d, i}$ are the desired orientation and surge velocity, respectively.
 
-\subsection{Handling the underactuated dynamics}
+\subsection{Handling the Underactuated Dynamics}
 In this section, we propose a method for choosing the desired surge velocity and orientation in order to handle the underactuated dynamics.
 
 First, let us discuss the method for choosing the desired surge velocity.
@@ -786,7 +786,7 @@ In this context, the two algorithms present a trade-off between packet size and 
 In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two \glspl{lauv} as in \figref{fig:distr_NSB_LAUV}.
 
-\begin{figure}[tb]
+\begin{figure}[b]
     \centering
     \includegraphics[width = 0.6\columnwidth]{figures/distr_NSB/LAUV-Roald}
     \caption{Photo of one of the two \glspl{lauv} used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}

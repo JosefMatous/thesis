@@ -256,7 +256,7 @@ where $v_i$ and $w_i$ are the sway and heave velocities, and $\gamma_i$ and $\ch
     \end{align}
 \end{subequations}
 
-\subsection{Path Parametrization}
+\subsection{Path Parameter Update Law}
 \label{sec:nsb_5dof_path_parameter}
 Inspired by \cite{belleter_2019_observer}, we use the update law of the path variable $s$ to get desirable behavior of the along-track error ($x_b^p$).
 
@@ -304,7 +304,7 @@ To stabilize the along-track error dynamics, we choose the following path variab
 \end{equation}
 where $k_{s} > 0$ is a constant.
 
-\section{Closed-Loop Analysis}
+\section{Closed-loop Analysis}
 \label{sec:nsb_5dof_path_stability}
 In this section, we investigate the closed-loop stability of the path following task.
 We define two error states, $\tilde{\mat{X}}_1$ and $\tilde{\mat{X}}_2$, as
@@ -564,7 +564,35 @@ Specifically, the desired positions of the three vehicles are
     \mathbf{p}_{f,3}^f &= \begin{bmatrix} 0 \\ 0 \\ -10\end{bmatrix}.
 \end{align}
 
-\begin{table}[htb]
+The gains of the low-level control systems \eqref{eq:nsb_5dof_t_u},\eqref{eq:nsb_5dof_t_q},\eqref{eq:nsb_5dof_t_r} are chosen such that the settling time is approximately 10 seconds.
+The gains of the pitch and yaw PD controllers are chosen such that the closed-loop system is critically damped.
+
+The results of the numerical simulation are shown in Figures \ref{fig:nsb_5dof_results} and \ref{fig:nsb_5dof_trajectory}.
+The vehicles start in an inverted triangular formation.
+The COLAV task is briefly activated, and the distance between the vehicles drops to approximately 8 meters during the transient.
+Eventually, the vehicles resolve the situation and continue to converge to the desired path and formation.
+
+Note that while the COLAV task is active, the formation-keeping error is diverging.
+After resolving the situation, the formation-keeping error converges to zero exponentially.
+The rate of convergence is given by the formation-keeping gain $\bs{\Lambda}_2$.
+
+The path-following error seems to converge linearly at first, and then exponentially as the error gets smaller.
+This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
+The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
+The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
+
+\section{Conclusions and Future Work}
+\label{sec:nsb_5dof_conclusion}
+
+\begin{figure}[t]
+    \centering
+    \def\svgwidth{.8\textwidth}
+    \import{figures/nsb_5dof}{trajectory_3d.pdf_tex}
+    \caption{3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 25, 50, \ldots, 150$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
+    \label{fig:nsb_5dof_trajectory}
+\end{figure}
+
+\begin{table}[b]
     \centering
     \begin{tabular}[t]{r|l}
         {\bf Parameter} & {\bf Value} \\ \hline
@@ -594,34 +622,6 @@ Specifically, the desired positions of the three vehicles are
     \caption{Simulation parameters}
     \label{tab:nsb_5dof_params}
 \end{table}
-
-The gains of the low-level control systems \eqref{eq:nsb_5dof_t_u},\eqref{eq:nsb_5dof_t_q},\eqref{eq:nsb_5dof_t_r} are chosen such that the settling time is approximately 10 seconds.
-The gains of the pitch and yaw PD controllers are chosen such that the closed-loop system is critically damped.
-
-The results of the numerical simulation are shown in Figures \ref{fig:nsb_5dof_results} and \ref{fig:nsb_5dof_trajectory}.
-The vehicles start in an inverted triangular formation.
-The COLAV task is briefly activated, and the distance between the vehicles drops to approximately 8 meters during the transient.
-Eventually, the vehicles resolve the situation and continue to converge to the desired path and formation.
-
-Note that while the COLAV task is active, the formation-keeping error is diverging.
-After resolving the situation, the formation-keeping error converges to zero exponentially.
-The rate of convergence is given by the formation-keeping gain $\bs{\Lambda}_2$.
-
-The path-following error seems to converge linearly at first, and then exponentially as the error gets smaller.
-This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
-The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
-The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
-
-\begin{figure}[t]
-    \centering
-    \def\svgwidth{.8\textwidth}
-    \import{figures/nsb_5dof}{trajectory_3d.pdf_tex}
-    \caption{3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 25, 50, \ldots, 150$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
-    \label{fig:nsb_5dof_trajectory}
-\end{figure}
-
-\section{Conclusions and future work}
-\label{sec:nsb_5dof_conclusion}
 
 %\addtolength{\textheight}{-5cm}
 

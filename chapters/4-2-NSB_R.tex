@@ -124,7 +124,7 @@ Since the \gls{nsb} algorithm outputs inertial velocity references, we also need
 In this section, we first present the \gls{nsb} algorithm and the associated tasks.
 We then present in Section~\ref{sec:NSB_R_references} a strategy for converting inertial velocity references to surge/orientation ones.
 
-\subsection{NSB algorithm}
+\subsection{NSB Algorithm}
 \label{sec:NSB_R_NSB}
 
 Similarly to the previous chapter, we define three tasks: \gls{colav}, formation-keeping, and path-following.
@@ -139,7 +139,7 @@ These velocities are combined using the recursive \gls{nsb} algorithm \eqref{eq:
     \ivel_{\rm NSB} = \ivel_1 + \mat{N}_1\left(\ivel_2 + \mat{N}_2\ivel_3\right). \label{eq:NSB_R_NSB_with_COLAV}
 \end{equation}
 
-\subsection{Inter-vehicle collision avoidance}
+\subsection{Inter-vehicle Collision Avoidance}
 \label{sec:NSB_R_COLAV}
 
 Let {$d_{\rm COLAV}$} be the \emph{activation distance}, \emph{i.e.,} the distance at which the vehicles need to start performing the evasive maneuvers.
@@ -167,7 +167,7 @@ Similarly to the previous chapter, this task does not guarantee robust collision
 During the transients, the relative distance may become smaller than $d_{\rm COLAV}$.
 Therefore, to ensure collision avoidance, $d_{\rm COLAV}$ should be chosen as $d_{\rm min} + d_{\rm sec}$, where $d_{\rm min}$ is the minimum safe distance between the vehicles, and $d_{\rm sec}$ is an additional security distance.
 
-\subsection{Formation keeping}
+\subsection{Formation Keeping}
 \label{sec:NSB_R_formation}
 The formation-keeping task variable is defined as
 \begin{align}
@@ -193,7 +193,7 @@ where $\ivels_{2, \max}$ is a positive constant, and $\rm sat$ is a saturation f
 \end{equation}
 The use of a saturation function guarantees some bounds on the \gls{nsb} velocity, as we will explain in Section~\ref{sec:NSB_R_references}.
 
-\subsection{Path following}
+\subsection{Path Following}
 \label{sec:NSB_R_LOS}
 
 To solve the path-following, we employ the coupled \gls{los} guidance algorithm \eqref{eq:background_los_coupled}.
@@ -228,7 +228,7 @@ where $k_{s}$ is a positive gain.
 % Damiano: maybe we should also say something along "other choices could have been possible, e.g., by taking inspiration from X Y Z, but our experience seems to indicate that the final performance is not too much affected by this choice"? 
 
 
-\subsection{Obstacle avoidance and depth limiting}
+\subsection{Obstacle Avoidance and Depth Limiting}
 \label{sec:NSB_R_OA}
 
 Obstacle avoidance is typically implemented individually for each vehicle \cite{antonelli_2006_kinematic}.
@@ -280,7 +280,7 @@ More precisely, let
     \label{eq:NSB_R_v_rel}
 \end{equation}
 denote the relative line-of-sight velocity ($\ivels_{x, {\rm LOS}}$ and $\ivels_{y, {\rm LOS}}$ are the components of $\ivel_{\rm LOS}$).
-As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the \glspl{auv} and obstacle arises if 
+As shown in~\figref{fig:NSB_R_collision_cone}, a conflict between the \glspl{auv} and the obstacle arises if the relative velocity lies in the so-called \emph{collision cone}, \emph{i.e.}, if
 \begin{align}
     \abs{\angle\left(\mat{p}_{\rm rel}, -\ivel_{\rm rel}\right)} &\leq \alpha, &
     \alpha &= \sin^{-1}\left(\frac{r_o+r_f}{\norm{\mat{p}_{\rm rel}}}\right),
@@ -323,7 +323,7 @@ We then propose to replace the $z$-component of the LOS velocity with a depth-li
 where $\ivels_z$ is a positive constant.
 
 
-\subsection{Surge and orientation references}
+\subsection{Surge and Orientation References}
 \label{sec:NSB_R_references}
 
 Since the \gls{nsb} algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation references.
@@ -456,7 +456,7 @@ We also note that there exists a subspace of angular velocities that satisfy \eq
 This differs from 3\gls{dof} \cite{eek_formation_2021,arrichiello_formation_2006} and 5\gls{dof} \cite{matouvs_formation_2022} models, for which only one solution exists.
 
 
-\section{Closed-Loop Analysis}
+\section{Closed-loop Analysis}
 \label{sec:NSB_R_path_stability}
 
 In this section, we analyze the closed-loop behavior of the system.

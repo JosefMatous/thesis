@@ -28,9 +28,9 @@ With regards to the stability analysis, differing from most of the existing work
 The remainder of the chapter is organized as follows.
 In Section \ref{sec:preliminaries} we present the model of the multi-agent system and the problem formulation. For clarity of exposition, in Section~\ref{sec:ctrl} we present the control design when considering only the hard constraints, followed by the stability analysis. Then, in Section~\ref{sec:soft} we present the control design adding the soft constraints. Finally, simulation results and conclusions are presented in Sections~\ref{sec:simulations} and \ref{sec:conclusions}, respectively.
 
-\section{Model and problem formulation}\label{sec:preliminaries}
+\section{Model and Problem Formulation}\label{sec:preliminaries}
 
-\subsection{Model of the marine vehicle}
+\subsection{Model of the Marine Vehicle}
 
 We consider underactuated \glspl{auv} with six \acrfullpl{dof}, and apply the hand position transformation from Chapter~\ref{chap:handpos_definition}.
 Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the transformed system are
@@ -44,7 +44,7 @@ Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the tra
     \end{align} \label{eq:handpos_tracking_hand_position_dynamics}
 \end{subequations}
 
-\subsection{Problem statement}
+\subsection{Problem Statement}
 
 We consider a multi-agent system composed of $N$ marine vehicles modeled by \eqref{eq:handpos_tracking_hand_position_dynamics}.
 The states of the vehicles are denoted by double subscripts (\emph{e.g.,} the hand position of vehicle $i$ is $\mat{x}_{1, i}$).
@@ -157,7 +157,7 @@ More precisely, we consider the following problem.
 Assume, in addition, that the agents are subject to the hard inter-agent output constraints given by the set defined in \eqref{eq:setDk} and the soft constraints given by \eqref{eq:setC}.
 Under these conditions, find distributed controllers $bs{\mu}_i$, $i\leq N$, that asymptotically stabilize the origin of \eqref{n216} and render the sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant, \emph{i.e.}, $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ ($u_{r, i}(t_0)\in\mathcal{C}_i$) implies that $\mat{z}_{1, k}(t)\in \mathcal{D}_k$ ($u_{r, i}(t)\in\mathcal{C}_i$), $\forall k\leq M$ ($\forall i\leq N$) and $\forall t\geq t_0$.
 
-\section{Control design for tracking under proximity and safety constraints}
+\section{Control Design for Tracking under Proximity and Safety Constraints}
 \label{sec:ctrl}
 
 For clarity of exposition, in this section we begin by presenting the control design considering \emph{only} the hard constraints, i.e. connectivity maintenance and collision avoidance. The inclusion of the soft constraints is addressed in Section~\ref{sec:soft}.
@@ -165,7 +165,7 @@ For clarity of exposition, in this section we begin by presenting the control de
 We will show how the tracking-in-formation problem, with the previously formulated inter-agent constraints, can be solved following a backstepping approach which is well adapted to the normal form of the external dynamics \eqref{n216}. We start by defining a virtual control law for \eqref{n217-t}-\eqref{n217} with $\mat{z}_{2, o}$ and $\mat{z}_{2, t}$ as inputs. 
 In order to account for the output constraints, a good choice of control design for the virtual inputs consists in using the gradient of a \acrfull{blf} \cite{tee_barrier_2009}.
 
-\subsection{On barrier Lyapunov functions}
+\subsection{On Barrier Lyapunov Functions}
 
 \Glspl{blf} are reminiscent of Lyapunov functions in that they are positive definite, but their domain is restricted by design to open subsets of the Euclidean space and they grow unbounded as their argument approaches the boundary of their domain.
 We define them as follows, \emph{c.f.,} \cite{tee_barrier_2009}.
@@ -221,7 +221,7 @@ Then, $W$ satisfies
 \end{equation}
 where $a_{1}, a_2 > 0$ and $\dst{\tilde{\mat{z}}_{1}}{\mathcal{W}} = \min \big\{\norm{\tilde{\mat{z}}_{1}}, \norm{\tilde{\mat{z}}_{1} - \tilde{\mat{z}}_{1}^*}\big\}$.
 
-\subsection{Control design for systems over directed graphs}
+\subsection{Control Design for Systems over Directed Graphs}
 
 Let us define the so-called in-incidence matrix $\mat{E}_\odot \in \mathbb{R}^{N\times M}$, whose elements are defined as follows: $\left[\mat{E}_\odot\right]_{i, k} = -1$ if $i$ is the terminal node of edge $e_k$ and $\left[\mat{E}_\odot\right]_{ik} = 0$ otherwise. Then, in the edge-agreement framework, the virtual controllers are given by
 \begin{equation}\label{n284}\begin{aligned}[b]
@@ -283,7 +283,7 @@ The signal $\bs{\mu}^*(t)\T=\left[\bs{\mu}_1^*(t)\;\cdots\;\bs{\mu}_N^*(t)\right
 \end{equation}
 where $f_{u, i}^*$ is an additional bounded control input that will be used to deal with the soft constraints, \emph{c.f.,} Section~\ref{sec:soft}. 
 
-\subsection{Closed-loop analysis}
+\subsection{Closed-loop Analysis}
 
 First, let us define $\bs{\varsigma}_1\T = \left[\tilde{\mat{z}}_{1, o}\T\;\;\tilde{\mat{z}}_{1, t}\T\right]$, and $\bs{\varsigma}_2\T=\left[\tilde{\mat{z}}_{2, o}\T\;\;\tilde{\mat{z}}_{2, t}\T\right]$.
 We note that the control goal defined in \eqref{n194} is equivalent to $\lim\limits_{t \rightarrow \infty} \bs{\varsigma}_1 = \mat{0}$, $\lim\limits_{t \rightarrow \infty} \bs{\varsigma}_2 = \mat{0}$.
@@ -408,13 +408,13 @@ The first part of the main result is stated as follows:
 	\end{equation}	
 	Therefore, from \eqref{629} and \eqref{n790}, we conclude that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, the trajectories $\bs{\varsigma}(t)$ of the external dynamics converge to the origin exponentially.
 
-	The ultimate boundedness of the internal dynamics can be proven using Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
+	The ultimate boundedness of the internal dynamics can then be proven using Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
 	We showed that for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, there exist small positive constants $\underline\epsilon(\bs{\varsigma}(t_0))$ and $\overline\epsilon(\bs{\varsigma}(t_0))$ such that $\tilde{\mat{z}}_{1, k}(t)\in\mathcal{\tilde D}_{\epsilon k}$, with $\mathcal{\tilde D}_{\epsilon k}$ defined in \eqref{n800}.
 	Consequently, for almost all initial conditions $\bs{\varsigma}(t_0)\in\mathbb{D}$, the input $\bs{\mu}$ defined in \eqref{n338} is bounded.
 	Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
-\section{Control design for tracking with hard and soft constraints}
+\section{Control Design for Tracking with Hard and Soft Constraints}
 \label{sec:soft}
 
 In this section we build on the results of Section~\ref{sec:ctrl} to include the soft constraints defined in \eqref{eq:soft} that act on the surge velocity of the marine vehicles.
@@ -490,7 +490,7 @@ Then, the second part of our main result is stated as follows:
 	\leq& -\kappa_u\abs{\nabla U_i(t,u_{r, i})}^2+\lambda_\rho.
 	\end{aligned}\end{equation}
 	
-	From \eqref{681}-\eqref{687} we conclude that for $u_{r, i}\in\mathcal{C}_i$, the barrier function $U_i(t,u_{r, i})$ is bounded along the trajectories. Therefore, akin to the forward invariance of $\mathcal{\tilde D}$ established in the proof of Proposition~\ref{thm:USV}, it is straightforward to show forward invariance of $\mathcal{C}_i$.
+	From \eqref{681}-\eqref{687} we conclude that for $u_{r, i}\in\mathcal{C}_i$, the function $U_i(t,u_{r, i})$ is bounded along the trajectories. Therefore, akin to the forward invariance of $\mathcal{\tilde D}$ established in the proof of Proposition~\ref{thm:USV}, it is straightforward to show forward invariance of $\mathcal{C}_i$.
 	Hence, there exists a constant $\bar{f}^*$ such that $\abs{f_{u, i}(t)}\leq\bar{f}^*$ for all $t\geq t_0$.
 
 	Note that the additional input $f_{u, i}^*$ does not affect the internal dynamics. Hence, the analysis of the internal dynamics presented in the proof of Proposition~\ref{thm:USV} still holds under the action of $f_{u, i}^*$.	
@@ -507,7 +507,7 @@ The \acrfull{dune} is a software platform designed to run on autonomous underwat
 
 The simulation case consists in the tracking-in-formation problem for six \glspl{auv} subject to hard (proximity and collision-avoidance) and soft (positive surge velocity) constraints.
 It is only assumed that the vehicles are interconnected at the initial time, so the controller must preserve such connectivity.
-We consider that the agents interact over a directed spanning tree illustrated in Fig.~\ref{fig:topo} and that only the agent labeled ``1" has knowledge of the (relative) state of the target (labeled ``0").
+We consider that the agents interact over a directed spanning tree illustrated in Fig.~\ref{fig:topo} and that only the agent labeled 1 has knowledge of the (relative) state of the target (labeled 0).
 
 \begin{figure}[!htb]
 	\centering
@@ -534,10 +534,13 @@ We consider that the agents interact over a directed spanning tree illustrated i
 	\path[myarrow_dir] (n0) edge node [yshift=5.4pt, xshift=0pt]{$e_0$} (n1);
 	
 	\end{tikzpicture}
+	\vspace*{-3mm}
 	\renewcommand{\baselinestretch}{0.45}\caption{Interaction topology: directed spanning tree. \label{fig:topo}} \renewcommand{\baselinestretch}{1}
 \end{figure}
 
-\subsection{MATLAB example}
+\vspace*{-3mm}
+
+\subsection{MATLAB Example}
 \pgfplotsset{table/search path={figures/handpos_tracking/data}}
 \input{figures/handpos_tracking/figure_sim.tex}
 
@@ -558,14 +561,8 @@ The trajectory of the virtual target is
 \begin{equation}
 	\mat{x}_{1, o} = \mat{p}_0 \inlinevector{a \cos(\omega_o t), b \sin(\omega_o t), c \sin(\omega_o t)^2},
 \end{equation}
-where
-\begin{align*}
-	\mat{p}_0 &= \inlinevector{0, 0, 0}, &
-	a &= 50, &
-	b &= 30, &
-	c &= 5, &
-	\omega_o &= \frac{\pi}{150}.
-\end{align*}
+where $\mat{p}_0 = \mat{0}$, $a = 50$, $b = 30$, $c = 5$, and $\omega_o = \frac{\pi}{150}$.
+
 The maximal and minimal distance parameters are $\Delta_k=\SI{50}{\meter}$ and $\delta_k=\SI{5}{\meter}$.
 The hand position point is chosen at $l=\SI{5}{\meter}$, and the control gains are set to $c_1=0.1$, $c_2=0.5$, $\gamma=0.25$, $c_v=0.2$, $\kappa_u=0.1$, $\kappa_\rho=4$, and $\sigma=0.3$.
 Furthermore, in order to avoid discontinuities in the control, the non-smooth ${\rm sign}(s)$ function in \eqref{n338} and \eqref{631} is replaced by the smooth approximation $\tanh\left(c_a\, s\right)$, with $c_a = 10^3$.

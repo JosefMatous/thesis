@@ -19,7 +19,7 @@ This section presents control-oriented models of \acrfullpl{asv} and \acrfullpl{
 The presented models are similar to those used in \cite{borhaug_straight_2007} and \cite{fredriksen_global_2006}.
 The models are based on the matrix-vector models of marine vehicles \cite{fossen_handbook_2011} and some simplifying assumptions.
 
-\subsection{State variables and degrees of freedom}
+\subsection{State Variables and Degrees of Freedom}
 Marine vehicles are typically modeled as rigid bodies.
 A rigid body moving in three-dimensional space has six \glspl{dof}, three for position and three for orientation.
 
@@ -178,7 +178,7 @@ The gravity and buoyancy vector is given by \cite{fossen_handbook_2011}
 \end{equation}
 where $W \in \mathbb{R}_{> 0}$ is the gravitational force, $B \in \mathbb{R}_{> 0}$ is the buoyant force, $\mat{r}_g$ is the position of the center of gravity, $\mat{r}_b$ is the position of the center of buoyancy, and $\mat{e}_3 = \inlinevector{0, 0, 1}$.
 
-\subsection{Control-oriented model of underactuated \glspl{auv}}
+\subsection{Control-oriented Model of Underactuated \glspl{auv}}
 \label{sec:model_control_oriented}
 Before deriving the control-oriented model, we need to present the assumptions that allow us to simplify the matrix-vector model in \eqref{eq:background_nu_dot_relative}.
 
@@ -297,7 +297,7 @@ Consequently, we can treat $t_u, t_p, t_q, t_r$ as the new inputs to the system.
 \end{align}
 where $z_{gb}$ is the distance between the centers of gravity and buoyancy.
 
-\subsection{The component form}
+\subsection{The Component Form}
 \label{sec:model_component}
 In this section, we express the matrix-vector model \eqref{eq:background_nu_dot_relative} in a \emph{component form} by writing out the equations of motion for the individual state variables.
 The purpose of this model is to gain a better understanding of the \gls{auv} dynamics, which allows us to design low-level controllers and analyze their closed-loop behavior.
@@ -315,12 +315,13 @@ Then, the model in the component form is given by
     \end{align}
     \label{eq:background_component_form}
 \end{subequations}
+
 The expressions for $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
 Note that $\dot{u}_r$, $\dot{p}$, $\dot{q}$, and $\dot{r}$ depend on the control inputs.
 Consequently, it is possible to stabilize these states using output feedback linearization.
-The states $v$ and $w$ represent the \emph{underactuated} dynamics of the vehicle, as they cannot be controlled directly.
-The terms $Y_v$ and $Y_w$ represent hydrodynamic damping.
-Because the hydrodynamic damping is dissipative, $Y_v$ and $Y_w$ are negative.
+The states $v$ and $w$ are commonly referred to as the \emph{underactuated} dynamics of the vehicle, as these states cannot be controlled directly.
+The terms $Y_v$ and $Y_w$ represent the effects of hydrodynamic damping.
+Because hydrodynamic damping is dissipative, the terms $Y_v$ and $Y_w$ are negative.
 The term $G$ represents the effects of gravity and buoyancy on the heave velocity.
 The remaining terms represent the Coriolis and centripetal forces.
 

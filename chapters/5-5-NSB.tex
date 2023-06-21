@@ -116,7 +116,7 @@ The following sections present a case study of the proposed second-order \gls{ns
 
 The vehicle model under the hand position controller is presented in Section \ref{sec:vehicle_model} and the formation path following problem is formulated in Section~\ref{sec:formation_path_following}. The NSB tasks are detailed in Section \ref{sec:NSB_case_study}, Section \ref{sec:obstacle_avoidance} details the obstacle avoidance method, Section \ref{sec:closed_loop} analyzes the stability properites, and Section \ref{sec:simulation} presents a simulation study.
 
-\subsection{AUV model}\label{sec:vehicle_model}
+\subsection{AUV Model}\label{sec:vehicle_model}
 We consider a 6\gls{dof} model of an \gls{auv} exposed to an unknown constant irrotational ocean current, and apply the 3D hand position transform from Chapter~\ref{chap:handpos_definition}.
 Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the transformed dynamics of the \gls{auv} are
 \begin{subequations}\label{eq:linearized_system}
@@ -192,7 +192,7 @@ The resulting \gls{soclik} equation for the task is
 with $\dot{\bm{\sigma}}_{1\,} \!\!= \mathbf{J}_1 (\mathbf{v}\! + \!\stackedocean)$. %We note that because of the symmetry of the task and the structure of the task Jacobian, the constant ocean currents will cancel out in $\dot{\mathbf{v}}_1$ under the assumption that it is equal for all vehicles.
 Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}_1 \stackedocean \!\!= \dot{\mathbf{J}}_1 \stackedocean \!\!= \mathbf{0}$. Consequently, $\dot{\mathbf{v}}_1$ is independent of the ocean current velocity.
 
-\subsubsection{Formation-Keeping Task}
+\subsubsection{Formation-keeping task}
 The formation-keeping task moves the vehicles into a predefined formation in the formation-centered frame. The task variable is given by
 \begin{equation}
     \bm{\sigma}_2 = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,n-1}\T\right]\T, \quad \bm{\sigma}_{2,i}  = \mathbf{p}_i - \mathbf{p}_b.
@@ -228,7 +228,7 @@ where $v_{2_{\max}}$ is a positive constant and $\mathrm{sat}$ is a saturation f
 With the saturated task acceleration, we further require that the product of the gain matrices $\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}$ is symmetric positive definite.
 Similarly to the inter-vehicle collision avoidance task, this task is independent of the ocean current.% because it concerns the relative movement of the vehicles in relation to each other.
 
-\subsubsection{Path Following Task}
+\subsubsection{Path-following task}
 The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a constant, desired path-following speed $U_{LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
 
 We apply the coupled \acrfull{los} guidance algorithm defined in Section~\ref{sec:background_LOS}, and modify it to work with double-integrator systems. We denote the components of the path following error $\mathbf{p}_b^p$ as $x_b^p$, $y_b^p$, and $z_b^p$. Similarly to Chapter~\ref{chap:NSB_R}, we let $\Delta(\mathbf{p}_b^p)$ be the error-dependent look-ahead distance of the \gls{los} guidance law given by
@@ -310,7 +310,7 @@ Similarly to Chapter~\ref{chap:NSB_R}, the update of the path-parameter $s$ is u
 In Section~\ref{sec:NSB_R_path_stability}, we showed that the \gls{los} guidance law \eqref{eq:desired_LOS} guarantees \acrfull{usges} of the path-following task.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Obstacle avoidance}\label{sec:obstacle_avoidance}
+\subsection{Obstacle Avoidance}\label{sec:obstacle_avoidance}
 We implement an obstacle avoidance method that enables the fleet to avoid external obstacles while keeping the formation. This approach mitigates the issue of vehicles straying out of communication range while evading obstacles. We modify the collision cones method from Chapter~\ref{chap:NSB_R} to be compatible with double integrator dynamics and focus on obstacle avoidance in the $xy$-plane.
 
 We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_b-x_o, y_b-y_o]\T$, $\mathbf{v}_{rel} = [\dot{x}_{LOS,d}-\dot{x}_o, \dot{y}_{LOS,d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{LOS,d},  \ddot{y}_{LOS,d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.
@@ -323,7 +323,7 @@ Obstacle avoidance is guaranteed if we ensure that
 throughout the avoidance maneuver (see Section~\ref{sec:NSB_R_OA}).
 A conflict between the \glspl{auv} and the obstacle arises if $\mathbf{v}_{rel}$ lies in the collision cone, \emph{i.e.,} if
 \begin{equation}
-    |\angle (-\mathbf{p}_{rel}, \mathbf{v}_{rel})| \leq \alpha ,\quad \alpha = \arcsin\left(\frac{r_o+r_f}{\|\mathbf{p}_{rel}\|}\right).
+    |\angle (\mathbf{p}_{rel}, -\mathbf{v}_{rel})| \leq \alpha ,\quad \alpha = \arcsin\left(\frac{r_o+r_f}{\|\mathbf{p}_{rel}\|}\right).
     \label{eq:collision-conflict}
 \end{equation}
 The obstacle avoidance task is activated if the cone angle satisfies $\alpha > \alpha_{\min}$. 
@@ -344,7 +344,7 @@ where
  before entering into \eqref{eq:los_integral_state} and \eqref{eq:LOS_controller}.
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Closed-Loop Analysis}\label{sec:closed_loop}
+\subsection{Closed-loop Analysis}\label{sec:closed_loop}
 In this section, we analyze the closed-loop stability of the external states and the boundedness of the internal states. We assume that the inter-vehicle collision avoidance task is inactive for the analysis. As discussed in Section~\ref{sec:background_formation_path_following}, the path-following and formation-keeping tasks are orthogonal. Therefore, the null-space projection $\mathbf{N}_2$ from the formation-keeping task will not affect the path-following acceleration $\mathbf{v}_3$
 \begin{equation}\label{eq:commanded_acceleration_inactive_colav}
     \dot{\mathbf{v}} = \dot{\mathbf{v}}_2 + \dot{\mathbf{v}}_3.
@@ -359,7 +359,7 @@ the closed-loop properties of each task can be analyzed independently.
 
 % Prove external state stability
 %\subsubsection{Stability of the Formation-Keeping Task}
-\subsubsection{Stability of the Formation-Keeping Task}
+\subsubsection{Stability of the formation-keeping task}
 The closed-loop dynamics of the formation-task error $\Tilde{\bm{\sigma}}_2$ under the saturated formation-keeping acceleration, \eqref{eq:saturated_formation_keeping}, are given by the system
 \begin{equation}\label{eq:task_2_dynamics}
     \ddot{\Tilde{\bm{\sigma}}}_2 = - v_{2_{\max}}\mathrm{sat}\bigl(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_2\bigr) - \mathbf{\Lambda}_{d,2} \dot{\Tilde{\bm{\sigma}}}_2.
@@ -388,7 +388,7 @@ Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\
 \end{proof}
 
 
-\subsubsection{Stability of the Path-Following Task}
+\subsubsection{Stability of the path-following task}
 Let $\Tilde{\mathbf{p}}$ and $\Tilde{\mathbf{v}}$ be given by \eqref{eq:LOS_integral_errors}. Using the definition
 \begin{equation}
     \mathbf{p}_b^p = \mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),
@@ -425,7 +425,7 @@ The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds wit
 \end{proof}
 
 
-\subsubsection{Boundedness of Internal States}
+\subsubsection{Boundedness of internal states}
 Let $\mathbf{p}_{{\rm d}, i} = \mathbf{p}_p(s) + \mathbf{R}_p\mathbf{p}_{f, i}^f$ denote the desired position of vehicle $i$. Note that because the path function is $\mathcal{C}^{\infty}$ and thanks to the choice of the path parameter update law \eqref{eq:path_update}, the time-derivative of $\mathbf{p}_{{\rm d}, i}$ is bounded.
 In the previous section, we proved the stability of the external dynamics.
 Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\mathbf{p}_{{\rm d}, i}$, and the relative hand velocity of vehicle $i$, $\mat{x}_{2, i}$, converges to $\dot{\mathbf{p}}_{{\rm d}, i} - \ocean$.
@@ -442,7 +442,7 @@ Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\
     Consequently, if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the angular rate dynamics are ultimately bounded.
 \end{proof}
 
-\subsection{Simulation results}\label{sec:simulation}
+\subsection{Simulation Results}\label{sec:simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 To validate the theoretical results, we perform simulations where the proposed algorithm is applied to a fleet of three \acrfullpl{lauv} \cite{sousa_LAUV_2012}. In the simulated scenario, the barycenter should follow a spiral path while avoiding collision with a stationary cylindrical-shaped obstacle with radius $\SI{10}{\meter}$, located at $[x_o,y_o] = [100,-10]$. All position variables are here given in meters. The spiral is given by
 \begin{equation}
@@ -513,7 +513,7 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
 
 The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.
 
-\section{Conclusions and future work}\label{sec:conclusion}
+\section{Conclusions and Future Work}\label{sec:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this chapter, we proposed an extended \gls{nsb} method for double-integrator systems. The method was proved to provide \acrlongpl{ges} task error dynamics. The method was demonstrated in a case study of formation path-following with underactuated \glspl{auv}. We defined the second-order kinematic tasks for collision avoidance, formation-keeping, and path-following. To force a bounded velocity, we introduced a saturation term to the formation-keeping acceleration. The closed-loop formation-error system with the reformulated formation-keeping acceleration was proved to be \glspl{ugas}, and the closed-loop path-following system was proved to be \glspl{usges}. Simulation results demonstrate the effectiveness of our approach. Possible future work includes verifying the presented results through experiments.

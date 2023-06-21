@@ -324,6 +324,73 @@ The function that maps the inputs to the generalized forces is \vspace{-2mm}
 \end{equation}
 where $L_x^i$ and $L_y^i$ is the position of the $i^{\rm th}$ thruster, relative to the center of mass.
 
+\pgfplotsset{table/search path={figures/ccta/data}}
+\begin{figure*}[!ht]
+    \centering
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_orig.pdf}
+        \input{figures/ccta/milliAmpere_orig.tex}
+        \vspace{-0.5em}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four \emph{milliAmpere} vessels}
+        %\vspace*{1em}
+    \end{subfigure}
+    \vspace{-1em}
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_orig.pdf}
+        \input{figures/ccta/drillship_orig.tex}
+        \vspace{-2em}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four drillships}
+    \end{subfigure}
+    \caption{Simulations of the control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation}}
+    \label{fig:ccta_orig}
+\end{figure*}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified.pdf}
+        \input{figures/ccta/milliAmpere_modified.tex}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels}
+        \vspace*{1em}
+    \end{subfigure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified.pdf}
+        \input{figures/ccta/drillship_modified.tex}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships}
+    \end{subfigure}
+    \caption{Simulations of the modified control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}}
+    \label{fig:ccta_modified}
+\end{figure}
+
+\begin{table}[p]
+    \centering
+    \begin{tabular}{c|cc}
+        {\bf Parameter} & {\bf \emph{milliAmpere}} & {\bf drillship} \\ \hline
+        %$\bs{\Omega}_{bw}$ & $\diag{(0.1,\,0.1,\,0.5)}$ & $\diag{(0.1,\,0.1,\,0.5)}$ \\
+        $\bs{\Omega}_{bw}$ & \multicolumn{2}{c}{$\diag{(0.1,\,0.1,\,0.5)}$} \\
+        %$\mathbf{Z}$ & $\diag{(0.95,\,0.95,\,0.97)}$ & $\diag{(0.95,\,0.95,\,0.97)}$ \\
+        $\mathbf{Z}$ & \multicolumn{2}{c}{$\diag{(0.95,\,0.95,\,0.97)}$} \\
+        $\mathbf{Q}$ & $\diag{(1,1,0.7)}$ & $\diag{(1,1,1.13)}$ \\
+        %$\mathbf{R}_{\rm abs}$ & $\begin{bmatrix} \mathbf{I}_{2 \times 2} & \\ & \mathbf{0}_{2 \times 2} \end{bmatrix}$ & $\begin{bmatrix} \mathbf{I}_{6 \times 6} & \\ & \mathbf{0}_{6 \times 6} \end{bmatrix}$ \\
+        $r_{\rm abs}$ & $1$ & $1$ \\
+        %$\mathbf{R}_{\rm rel}$ & $\begin{bmatrix} \mathbf{0}_{2 \times 2} & \\ & 100\mathbf{I}_{2 \times 2} \end{bmatrix}$ & $\begin{bmatrix} \mathbf{0}_{6 \times 6} & \\ & \mathbf{I}_{6 \times 6} \end{bmatrix}$ \\
+        $r_{\rm rel}$ & $100$ & $1$ \\
+        $d_{\min} \, [{\rm m}]$ & $15$ & $2.5$ \\
+        $k_v \, [{\rm s}]$ & $15$ & $15$ \\
+        $\gamma(h)$ & $0.1\,h$ & $0.1\,h$ \\
+        $f_{\min} \, [{\rm N}]$ & $-350$ & $-0.8$ \\
+        $f_{\max} \, [{\rm N}]$ & $500$ & $1.5$ \\
+        $\Delta f_{\max} \, [{\rm N}]$ & $350$ & $0.5$ \\
+        $\Delta \alpha_{\max} \, [{\rm rad}]$ & $\frac{\pi}{8}$ & $\frac{\pi}{8}$
+    \end{tabular}
+    \caption{Simulation parameters. Parameters $\bs{\Omega}_{bw}$ and $\bs{Z}$ are identical for both scenarios, $\diag{(.)}$ is a diagonal matrix}
+    \label{tab:ccta_params}
+\end{table}
+
 For the higher-level controller that provides the desired forces, we use a nonlinear PID controller \cite{fossen_handbook_2011}.
 The nonlinear PID is an output-linearizing controller that transforms the nonlinear dynamical equations from \eqref{eq:ccta_matrix_model} to
 \begin{equation}
@@ -360,45 +427,28 @@ The rate constraints are identical for all thrusters and symmetric, \emph{i.e.,}
 \end{align}
 where $\Delta f_{\max}$ and $\Delta \alpha_{\max}$ are the force and azimuth rate constraints, respectively, and $\mathbf{1}_k$ is a vector of ones.
 
-\begin{table}[t]
+\begin{figure}[t]
     \centering
-    \begin{tabular}{cc|rrr}
-        \multirow{2}{*}{\textbf{Vessel}} & \multirow{2}{*}{\textbf{Scenario}} & \multicolumn{3}{|c}{\textbf{Thruster utilization [\%]}} \\
-        & & \textbf{Maximum} & \textbf{Minimum} & \textbf{Mean} \\ \hline
-        \multirow{2}{*}{\textbf{milliAmpere}} & \textbf{basic} & $2.074$ & $1.550$ & $1.822$ \\
-        & \textbf{modified} & $0.838$ & $0.835$ & $0.837$ \\
-        \multirow{2}{*}{\textbf{drillship}} & \textbf{basic} & $100.000$ & $1.282$ & $51.496$ \\
-        & \textbf{modified} & $6.161$ & $0.259$ & $3.816$ 
-    \end{tabular}
-    \caption{Steady-state thruster utilization of the \emph{basic} algorithm \eqref{eq:ccta_combined_avoidance_allocation} and the \emph{modified} algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}.}
-    \label{tab:thruster_utilization}
-    \vspace{-5mm}
-\end{table}
-
-\begin{table}[b]
-    \centering
-    \begin{tabular}{c|cc}
-        {\bf Parameter} & {\bf \emph{milliAmpere}} & {\bf drillship} \\ \hline
-        %$\bs{\Omega}_{bw}$ & $\diag{(0.1,\,0.1,\,0.5)}$ & $\diag{(0.1,\,0.1,\,0.5)}$ \\
-        $\bs{\Omega}_{bw}$ & \multicolumn{2}{c}{$\diag{(0.1,\,0.1,\,0.5)}$} \\
-        %$\mathbf{Z}$ & $\diag{(0.95,\,0.95,\,0.97)}$ & $\diag{(0.95,\,0.95,\,0.97)}$ \\
-        $\mathbf{Z}$ & \multicolumn{2}{c}{$\diag{(0.95,\,0.95,\,0.97)}$} \\
-        $\mathbf{Q}$ & $\diag{(1,1,0.7)}$ & $\diag{(1,1,1.13)}$ \\
-        %$\mathbf{R}_{\rm abs}$ & $\begin{bmatrix} \mathbf{I}_{2 \times 2} & \\ & \mathbf{0}_{2 \times 2} \end{bmatrix}$ & $\begin{bmatrix} \mathbf{I}_{6 \times 6} & \\ & \mathbf{0}_{6 \times 6} \end{bmatrix}$ \\
-        $r_{\rm abs}$ & $1$ & $1$ \\
-        %$\mathbf{R}_{\rm rel}$ & $\begin{bmatrix} \mathbf{0}_{2 \times 2} & \\ & 100\mathbf{I}_{2 \times 2} \end{bmatrix}$ & $\begin{bmatrix} \mathbf{0}_{6 \times 6} & \\ & \mathbf{I}_{6 \times 6} \end{bmatrix}$ \\
-        $r_{\rm rel}$ & $100$ & $1$ \\
-        $d_{\min} \, [{\rm m}]$ & $15$ & $2.5$ \\
-        $k_v \, [{\rm s}]$ & $15$ & $15$ \\
-        $\gamma(h)$ & $0.1\,h$ & $0.1\,h$ \\
-        $f_{\min} \, [{\rm N}]$ & $-350$ & $-0.8$ \\
-        $f_{\max} \, [{\rm N}]$ & $500$ & $1.5$ \\
-        $\Delta f_{\max} \, [{\rm N}]$ & $350$ & $0.5$ \\
-        $\Delta \alpha_{\max} \, [{\rm rad}]$ & $\frac{\pi}{8}$ & $\frac{\pi}{8}$
-    \end{tabular}
-    \caption{Simulation parameters. Parameters $\bs{\Omega}_{bw}$ and $\bs{Z}$ are identical for both scenarios, $\diag{(.)}$ is a diagonal matrix}
-    \label{tab:ccta_params}
-\end{table}
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified_uncontrolled.pdf}
+        \input{figures/ccta/milliAmpere_modified_uncontrolled.tex}
+        \vspace{-6mm}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels with one uncontrolled vessel}
+        \vspace{0em}
+    \end{subfigure}
+    \begin{subfigure}{\linewidth}
+        \centering
+        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified_uncontrolled.pdf}
+        \input{figures/ccta/drillship_modified_uncontrolled.tex}
+        \vspace{-6mm}
+        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships with one uncontrolled vessel}
+        \label{fig:ccta_drillship_unc}
+        \vspace{-1.5mm}
+    \end{subfigure}
+    \caption{Simulations of the modified control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} with one uncontrolled vessel (plotted in black)}
+    \label{fig:ccta_uncontrolled}
+\end{figure}
 
 The results of the simulations are shown in Figures \ref{fig:ccta_orig}, \ref{fig:ccta_modified}, and \ref{fig:ccta_uncontrolled}.
 Figure \ref{fig:ccta_orig} shows the results of algorithm \eqref{eq:ccta_combined_avoidance_allocation}.
@@ -419,74 +469,24 @@ When it comes to the choice of the coefficient $k_v$, introduced in \eqref{eq:cc
 Intuitively, increasing $k_v$ increases the size of the ``unsafe'' region where the barrier function is negative, causing the system to react sooner in situations where two vehicles are on collision course.
 Conversely, increasing the slope of $\gamma$ decreases the size of the region where the constraint \eqref{eq:ccta_combined_avoidance_allocation_constraint} is active, causing the system to react later.
 
-\pgfplotsset{table/search path={figures/ccta/data}}
-\begin{figure*}[t]
-    \centering
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_orig.pdf}
-        \input{figures/ccta/milliAmpere_orig.tex}
-        \vspace{-0.5em}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four \emph{milliAmpere} vessels}
-        %\vspace*{1em}
-    \end{subfigure}
-    \vspace{-1em}
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/drillship_orig.pdf}
-        \input{figures/ccta/drillship_orig.tex}
-        \vspace{-2em}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation} on four drillships}
-    \end{subfigure}
-    \caption{Simulations of the control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation}}
-    \label{fig:ccta_orig}
-\end{figure*}
-
-\begin{figure*}[t]
-    \centering
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified.pdf}
-        \input{figures/ccta/milliAmpere_modified.tex}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels}
-        \vspace*{1em}
-    \end{subfigure}
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified.pdf}
-        \input{figures/ccta/drillship_modified.tex}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships}
-    \end{subfigure}
-    \caption{Simulations of the modified control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}}
-    \label{fig:ccta_modified}
-\end{figure*}
-
-\begin{figure*}[t]
-    \centering
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/milliAmpere_modified_uncontrolled.pdf}
-        \input{figures/ccta/milliAmpere_modified_uncontrolled.tex}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four \emph{milliAmpere} vessels with one uncontrolled vessel}
-        \vspace{0em}
-    \end{subfigure}
-    \begin{subfigure}{\linewidth}
-        \centering
-        %\includegraphics[width = \textwidth]{figures/ccta/drillship_modified_uncontrolled.pdf}
-        \input{figures/ccta/drillship_modified_uncontrolled.tex}
-        \caption{Algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} on four drillships with one uncontrolled vessel}
-        \label{fig:ccta_drillship_unc}
-        \vspace{-1.5mm}
-    \end{subfigure}
-    \caption{Simulations of the modified control allocation algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified} with one uncontrolled vessel (plotted in black)}
-    \label{fig:ccta_uncontrolled}
-    \vspace{-6mm}
-\end{figure*}
-
 \section{Conclusions}
 \label{sec:ccta_conclusion}
 In this chapter, we have proposed a method for integrating a \gls{colav} scheme into control allocation through control barrier functions.
 We have demonstrated its effectiveness on two models of ASVs, where it significantly improved the safety.
 The proposed method can be readily implemented on vehicles that already use optimization-based control allocation by simply including the constraints given by the control barrier functions in the optimization.
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{cc|rrr}
+        \multirow{2}{*}{\textbf{Vessel}} & \multirow{2}{*}{\textbf{Scenario}} & \multicolumn{3}{|c}{\textbf{Thruster utilization [\%]}} \\
+        & & \textbf{Maximum} & \textbf{Minimum} & \textbf{Mean} \\ \hline
+        \multirow{2}{*}{\textbf{milliAmpere}} & \textbf{basic} & $2.074$ & $1.550$ & $1.822$ \\
+        & \textbf{modified} & $0.838$ & $0.835$ & $0.837$ \\
+        \multirow{2}{*}{\textbf{drillship}} & \textbf{basic} & $100.000$ & $1.282$ & $51.496$ \\
+        & \textbf{modified} & $6.161$ & $0.259$ & $3.816$ 
+    \end{tabular}
+    \caption{Steady-state thruster utilization of the \emph{basic} algorithm \eqref{eq:ccta_combined_avoidance_allocation} and the \emph{modified} algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}.}
+    \label{tab:thruster_utilization}
+\end{table}
 
 Finding a systematic method for choosing the parameter values that guarantee safety for a given vehicle model is a topic for future work.

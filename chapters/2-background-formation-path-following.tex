@@ -5,7 +5,7 @@ This section formally defines the formation path-following problem.
 Throughout the section, we consider a fleet of $N$ vehicles.
 Let $\mat{p}_1, \ldots, \mat{p}_N$ denote the positions of the vehicles.
 
-\subsection{The path-following problem}
+\subsection{The Path-following Problem}
 To formulate the path-following problem, we first need to define the \emph{barycenter} of the fleet.
 The barycenter, $\mat{p}_b$, is given by the mean position of the vehicles, \emph{i.e.,}
 \begin{equation}
@@ -15,7 +15,7 @@ The barycenter, $\mat{p}_b$, is given by the mean position of the vehicles, \emp
 
 To solve the path-following problem, we need to control the vehicles such that the barycenter coincides with the desired path.
 Let $\mat{p}_p(s)$ be the parametrization of the desired path.
-Then, the goal of path-following is to control the vehicles such that
+Then, the goal of path following is to control the vehicles such that
 \begin{equation}
     \mat{p}_b \rightarrow \mat{p}_p(s).
 \end{equation}
@@ -39,18 +39,18 @@ The goal of trajectory tracking is to control the vehicles such that the barycen
 Note that the desired trajectory is a function of time.
 Consequently, in trajectory tracking, the desired position of the barycenter for a given time $t$ is fixed.
 In path following, the desired position of the barycenter depends on the path parameter $s$.
-The path parameter can be treated as an additional degree of freedom when designing the path-following controller.
+The path parameter can thus be treated as an additional degree of freedom when designing the path-following controller.
 
-\subsection{The formation-keeping problem}
+\subsection{The Formation-keeping Problem}
 \label{sec:background_formation_keeping}
 The \emph{formation} is defined by the relative positions of the vehicles.
 Let
 \begin{equation}
-    \mat{p}_{{\rm rel}, i} = \mat{p} - \mat{p}_b,
+    \mat{p}_{{\rm rel}, i} = \mat{p}_i - \mat{p}_b,
     \label{eq:background_p_rel}
 \end{equation}
-denote the relative position of vehicle $i$.
-The goal of formation-keeping is to control the vehicles such that
+denote the position of vehicle $i$, relative to the barycenter.
+The goal of formation keeping is to control the vehicles such that
 \begin{align}
     &\mat{p}_{{\rm rel}, i} \rightarrow \mat{p}_{f, i}, &
     & \forall i = 1, \ldots, N,
@@ -61,7 +61,7 @@ From \eqref{eq:background_p_b} and \eqref{eq:background_p_rel}, the sum of the r
 \begin{equation}
     \sum_{i=1}^N \mat{p}_{{\rm rel}, i} = \sum_{i=1}^N \left(\mat{p}_i - \frac{1}{N}\sum_{j=1}^N \mat{p}_j \right) = \mat{0}.
 \end{equation}
-Consequently, to make the formation-keeping problem feasible, the vectors $\mat{p}_{f, 1}, \ldots, \mat{p}_{f, N}$ must be chosen such that
+Consequently, to make the formation-keeping problem feasible, $\mat{p}_{f, 1}, \ldots, \mat{p}_{f, N}$ must be chosen such that
 \begin{equation}
     \sum_{i=1}^N \mat{p}_{f, i} = \mat{0}.
 \end{equation}
@@ -100,7 +100,7 @@ where $\mat{p}_{f, i}^f$ is a constant vector.
 \end{figure}
 
 An example of a static and a dynamic formation is shown in \figref{fig:background_formation}.
-In both cases, the barycenter should follow a sine-wave path that can be parametrized, \emph{e.g.,} by
+In both cases, the barycenter should follow a sine-wave path parametrized by
 \begin{equation}
     \mat{p}_p(s) = \inlinevector{s, 2 \sin\left(\frac{\pi}{8} s\right)}.
 \end{equation}

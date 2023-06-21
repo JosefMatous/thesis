@@ -43,7 +43,7 @@ Then, we define the objective of formation path-following and pose it as an opti
 
 
 
-\subsection{Vehicle model}
+\subsection{Vehicle Model}
 \label{ssec:MPC_vehicle-model}
 
 
@@ -103,7 +103,7 @@ In other words, we assume that there exists a multidimensional polynomial functi
 
 
 
-\subsection{Formation path-following problem}
+\subsection{Formation Path-following Problem}
 \label{ssec:MPC_formation-path-following}
 
 
@@ -146,7 +146,7 @@ The equivalence above implies that the path parameter $s(t)$ should thus be chos
 
 
 
-\subsection{A centralized solution to the formation path-following problem}
+\subsection{A Centralized Solution}
 \label{ssec:MPC_centralized}
 
 
@@ -194,7 +194,7 @@ with $T$ being the prediction horizon, $\bm{Q}_{\mat{p}}$ and $Q_s$ positive wei
 \begin{enumerate}[label=C\arabic*]
     \item the implicit constraint on the inputs and states, \emph{i.e.}, $$\mat{h} \left( \mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T],$$
     \label{constraint:io}
-    \item the constraint on the initial condition of the state of the system, i.e., $\bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t)$,
+    \item the constraint on the initial condition of the state of the system, i.e., $$\bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t),$$
     \item the constraint on the initial condition of the path of the agents, \emph{i.e.}, $s(t)$. In other words, $s(t)$ is not a decision variable, while $s(t+\tau)$ for any $\tau > 0$ is.
     \label{constraint:initial-condition}
 \end{enumerate}
@@ -202,7 +202,7 @@ We note that the variational problem above may not be solvable using off-the-she
 
 
 
-\subsection{A distributed solution to the formation path-following Problem}
+\subsection{A Distributed Solution}
 
 
 
@@ -232,7 +232,7 @@ Before doing this rewriting, we note that it is possible to make \eqref{eq:MPC_o
 
 
 
-\section{A Distributed Spline-Based MPC Approach to the Formation Path-Following Problem}
+\section{A Distributed Spline-Based MPC Solution}
 \label{sec:MPC_spline-based-MPC}
 
 
@@ -243,7 +243,7 @@ For the sake of readability, we will use the convention for which sans-serif fon
 
 
 
-\subsection{Spline parametrization}
+\subsection{Spline Parametrization}
 \label{ssec:MPC_spline_param}
 
 
@@ -309,7 +309,7 @@ We do this by extrapolating the previous results over the new horizon (see \figr
 
 
 
-\subsection{ADMM algorithm}
+\subsection{ADMM}
 
 
 
@@ -483,7 +483,7 @@ We only show the first 75 seconds since the errors converge to zero afterwards.
 % Specifically, we show the deviation of individual path parameters from their mean value, \emph{i.e.,} $s_i - 1/N\sum_{j=1}^N s_j$.
 
 
-\subsection{Differential drive robots}
+\subsection{Differential Drive Robots}
 \begin{figure}[b]
     \centering
     \begin{subfigure}[t]{0.35\textwidth}

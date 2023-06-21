@@ -12,7 +12,7 @@ where $\mat{p} \in \mathbb{R}^n$ are the generalized coordinates, and $\ivel \in
 In \gls{nsb} algorithms, the desired behavior of the system is divided into several tasks.
 Let there be $M$ tasks arranged by priority in descending order (\emph{i.e.,} task 1 has the highest priority, task $M$ has the lowest priority).
 Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_M$ denote the so-called \emph{task variables}.
-Each variable is a function of the system coordinates, \emph{i.e.,}
+Each variable is a function of the system coordinates
 \begin{align}
     \bs{\sigma}_i &= f_i(\mat{p}), &
     f_i &: \mathbb{R}^n \mapsto \mathbb{R}^{m_i},
@@ -72,7 +72,7 @@ Then, the control input $\ivel$ is given by
 The advantages and disadvantages of both approaches are discussed in \cite{antonelli_stability_2008}.
 In this thesis, we will mostly use the first variant.
 
-\subsection{Independence and orthogonality}
+\subsection{Independence and Orthogonality}
 \label{sec:background_NSB_independence}
 The concepts of independence and orthogonality are important when analyzing the interactions between the tasks.
 Specifically, these concepts determine whether the tasks can be executed simultaneously, and how the null-space projector affects the lower-priority tasks.
@@ -85,13 +85,13 @@ These tasks are independent if
     \label{eq:background_independence_pseudo}
 \end{equation}
 Antonelli \emph{et al.} \cite{antonelli_stability_2008} remark that the pseudoinverse and the transpose of the task Jacobian share the same span.
-Consequently, the condition in \eqref{eq:background_independence_pseudo} is equivalent to
+Consequently, \eqref{eq:background_independence_pseudo} is equivalent to
 \begin{equation}
     {\rank} \left(\mat{J}_i\T\right) + {\rank} \left(\mat{J}_j\T\right) = {\rm rank} \left(\left[ \mat{J}_i\T,\, \mat{J}_j\T \right]\right).
     \label{eq:background_independence}
 \end{equation}
 
-Two tasks are \emph{orthogonal} if the subspaces spanned by these tasks are orthogonal, \emph{i.e.,} if
+Two tasks are \emph{orthogonal} if the subspaces spanned by their Jacobians tasks are orthogonal, \emph{i.e.,} if
 \begin{equation}
     \mat{J}_i \, \mat{J}_j^{\dagger} = \mat{O}_{n_i \times n_j}.
 \end{equation}
@@ -108,7 +108,7 @@ The control input produced by combining these two tasks is
 We have thus shown that if two consecutive tasks are independent and orthogonal, they can be executed simultaneously.
 Moreover, the null-space projector does not affect the lower-priority task.
 
-\subsection{\gls{nsb} algorithm for the formation path-following problem}
+\subsection{\gls{nsb} Algorithm for the Formation Path-following Problem}
 \label{sec:background_nsb_formation_path_following}
 In the remainder of this section, we demonstrate how the \gls{nsb} algorithm can be used to solve the formation path-following problem.
 A similar scheme was proposed in \cite{arrichiello_formation_2006} for static formations, in \cite{antonelli_2006_kinematic,antonelli_stability_2008} for circular formations, and in \cite{eek_formation_2021} for dynamic formations.
@@ -142,7 +142,7 @@ where $\mat{p}_b = \frac{1}{N}\sum\limits_{i=1}^N \mat{p}_i$ is the barycenter o
                 \vdots & & \ddots & & \vdots \\
                 -\frac{1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3 & \cdots & \frac{N-1}{N} \mat{I}_3 & -\frac{1}{N} \mat{I}_3
             \end{bmatrix} \\[6pt]
-            &= \left[\mat{I}_{3(N-1)},\, \mat{O}_{3(N-1) \times 3}\right] - \frac{1}{N} \mat{1}_{(N-1) \times N} \otimes \mat{I}_3.
+            &= \Bigl(\left[\mat{I}_{N-1},\, \mat{0}_{N-1}\right] - \frac{1}{N} \mat{1}_{(N-1) \times N} \Bigr) \otimes \mat{I}_3.
         \end{split}
         \label{eq:background_NSB_formation_jacobian}
     \end{equation}
@@ -156,7 +156,7 @@ The desired value of the formation-keeping task variable is
 \end{align}
 where $\mat{p}_{f, i}$ is the desired position of vehicle $i$ within the formation (see Section~\ref{sec:background_formation_path_following}).
 
-The formation-keeping control input $\ivel_1$ is then given by
+The formation-keeping control input $\ivel_1$ can then be found, \emph{e.g.}, using the \gls{clik} equation \eqref{eq:background_CLIK}
 \begin{equation}
     \ivel_1 = \mat{J}_1^{\dagger} \left(\dot{\bs{\sigma}}_{d, 1} - \bs{\Lambda}_1 (\bs{\sigma}_1 - \bs{\sigma}_{d, 1})\right),
     \label{eq:background_NSB_formation_velocity}
