@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{356.28521536bp}%
+    \setlength{\unitlength}{295.35231463bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,26 +50,22 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.56710613)%
+  \begin{picture}(1,0.68410342)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{sim_trajectory.pdf}}%
-    \put(0.37384538,0.52204844){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textbf{Trajectory}\end{tabular}}}}%
-    \put(0.64527711,0.07108935){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 20$\end{tabular}}}}%
-    \put(0.7433882,0.06784928){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 40$\end{tabular}}}}%
-    \put(0.41967164,0.07790011){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -20$\end{tabular}}}}%
-    \put(0.32707924,0.08077481){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -40$\end{tabular}}}}%
-    \put(0.22527465,0.08453708){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -60$\end{tabular}}}}%
-    \put(0.12617147,0.08646614){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -80$\end{tabular}}}}%
-    \put(0.80633948,0.16250198){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -50$\end{tabular}}}}%
-    \put(0.8438467,0.35435675){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 50$\end{tabular}}}}%
-    \put(0.55609497,0.07713291){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
-    \put(0.82339798,0.25721234){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
-    \put(0.93462259,0.20414799){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$ [m]\end{tabular}}}}}%
-    \put(0.3848682,0.02546243){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y$ [m]\end{tabular}}}}%
-    \put(0.05880187,0.13774517){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$z$ [m]\end{tabular}}}}}%
-    \put(0.08863347,0.19635216){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 10$\end{tabular}}}}%
-    \put(0.08890013,0.15238105){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 20$\end{tabular}}}}%
-    \put(0.10673443,0.23533427){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
+    \put(0.42574886,0.63990744){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textbf{Trajectory}\end{tabular}}}}%
+    \put(0.35761163,0.07724008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -50$\end{tabular}}}}%
+    \put(0.08484342,0.35948344){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -50$\end{tabular}}}}%
+    \put(0.79191233,0.09726896){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 50$\end{tabular}}}}%
+    \put(0.14831908,0.23991668){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
+    \put(0.05294785,0.4825022){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle -100$\end{tabular}}}}%
+    \put(0.14667302,0.11772121){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 50$\end{tabular}}}}%
+    \put(0.59050588,0.08630181){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
+    \put(0.59158226,0.04604804){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$ [m]\end{tabular}}}}%
+    \put(0.08889156,0.16659525){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y$ [m]\end{tabular}}}}}%
+    \put(0.09045572,0.53276367){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$z$ [m]\end{tabular}}}}}%
+    \put(0.10876173,0.53340384){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 20$\end{tabular}}}}%
+    \put(0.12588222,0.60225653){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\scriptstyle 0$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

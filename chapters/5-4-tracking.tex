@@ -14,7 +14,7 @@ In order to successfully carry out the tracking-in-formation mission in the fram
 For instance, in order to guarantee the safety of the system and the success of the mission, the vehicles must guarantee the maintenance of a safe distance between them. Moreover, due to the use of onboard sensors and the challenges posed by the underwater environment, the vehicles need to keep a sufficiently close distance to guarantee the reliability of the communication and the connectivity of the multi-agent system.
 Furthermore, in special cases when the vehicles use optical sensors or communications, the followers are limited by \gls{fov} constraints.
 
-nder the control designs proposed in the literature, in many instances, in order to guarantee the satisfaction of the inter-agent constraints, the vehicles are forced to move backwards, oftentimes during a prolonged period of time and at relatively high  speeds (for backwards motion of a marine vehicle). 
+Under the control designs proposed in the literature, in many instances, in order to guarantee the satisfaction of the inter-agent constraints, the vehicles are forced to move backwards, oftentimes during a prolonged period of time and at relatively high  speeds (for backwards motion of a marine vehicle). 
 However, although marine vehicles are able to move backwards, they are not well-suited to do so due to their shapes and their propulsion system. 
 This issue, however, has not been addressed in the literature of multi-\gls{auv} systems.
 
@@ -506,10 +506,12 @@ The \acrfull{dune} is a software platform designed to run on autonomous underwat
 %\textcolor{red}{Could you also add/modify this last sentence on DUNE?}
 
 The simulation case consists in the tracking-in-formation problem for six \glspl{auv} subject to hard (proximity and collision-avoidance) and soft (positive surge velocity) constraints.
-It is only assumed that the vehicles are interconnected at the initial time, so the controller must preserve such connectivity.
-We consider that the agents interact over a directed spanning tree illustrated in Fig.~\ref{fig:topo} and that only the agent labeled 1 has knowledge of the (relative) state of the target (labeled 0).
+We assume that the vehicles are interconnected at the initial time and that the controller must preserve this connectivity.
+We further assume that the \glspl{auv} interact over a directed spanning tree illustrated in \figref{fig:topo} and that only \gls{auv} 1 has knowledge of the (relative) state of the target (labeled 0).
 
-\begin{figure}[!htb]
+\begin{figure}[b]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
 	\centering
 	\begin{tikzpicture}[auto, scale=0.85]%, node distance=34mm, thick]
 	\small
@@ -534,11 +536,20 @@ We consider that the agents interact over a directed spanning tree illustrated i
 	\path[myarrow_dir] (n0) edge node [yshift=5.4pt, xshift=0pt]{$e_0$} (n1);
 	
 	\end{tikzpicture}
+	\vspace{5mm}
+	\caption{Interaction topology. \label{fig:topo}}
 	\vspace*{-3mm}
-	\renewcommand{\baselinestretch}{0.45}\caption{Interaction topology: directed spanning tree. \label{fig:topo}} \renewcommand{\baselinestretch}{1}
+	\end{subfigure}
+	\hspace*{0.05\textwidth}
+	\begin{subfigure}{0.45\textwidth}
+		\def\svgwidth{\textwidth}
+		\import{figures/handpos_tracking}{formation.pdf_tex}
+		\vspace*{-6mm}
+		\caption{Desired formation shape. \label{fig:handpos_formation}}
+		\vspace*{-3mm}
+	\end{subfigure}
+	\caption{Illustrations of the simulated example.}
 \end{figure}
-
-\vspace*{-3mm}
 
 \subsection{MATLAB Example}
 \pgfplotsset{table/search path={figures/handpos_tracking/data}}
@@ -546,7 +557,7 @@ We consider that the agents interact over a directed spanning tree illustrated i
 
 Here we simulate six \acrfullpl{lauv}.
 The ocean current velocity is set to $\ocean= \left[0.05\;\;-0.08\;\;-0.03\right]\T$.
-The desired formation corresponds to an octahedron, analogous to the one shown in Section~\ref{sec:MPC_case_study_AUV}.
+The desired formation is illustrated in \figref{fig:handpos_formation}.
 The desired relative positions $\mat{z}_{1, k}^d$ are given by
 \begin{equation}
 	\begin{bmatrix}
@@ -554,14 +565,14 @@ The desired relative positions $\mat{z}_{1, k}^d$ are given by
 	\end{bmatrix}
 	=
 	\begin{bmatrix}
-		15 & 15 & 15 & 0 & 15\\ -10 & 10 & 0 & 10 & 10\\ 0 & 0 & -10 & 10 & 0
+		20 & 10 & 10 & 10 & 10\\ 0 & 15 & -15 & 15 & -15\\ 0 & -5 & -5 & -5 & -5
 	\end{bmatrix}
 \end{equation}
 The trajectory of the virtual target is
 \begin{equation}
-	\mat{x}_{1, o} = \mat{p}_0 \inlinevector{a \cos(\omega_o t), b \sin(\omega_o t), c \sin(\omega_o t)^2},
+	\mat{x}_{1, o} = \inlinevector{a \cos(\omega_o t), b \sin(\omega_o t), c \sin(\omega_o t)^2},
 \end{equation}
-where $\mat{p}_0 = \mat{0}$, $a = 50$, $b = 30$, $c = 5$, and $\omega_o = \frac{\pi}{150}$.
+where $a = 60$, $b = 40$, $c = 10$, and $\omega_o = \frac{\pi}{150}$.
 
 The maximal and minimal distance parameters are $\Delta_k=\SI{50}{\meter}$ and $\delta_k=\SI{5}{\meter}$.
 The hand position point is chosen at $l=\SI{5}{\meter}$, and the control gains are set to $c_1=0.1$, $c_2=0.5$, $\gamma=0.25$, $c_v=0.2$, $\kappa_u=0.1$, $\kappa_\rho=4$, and $\sigma=0.3$.
@@ -571,23 +582,27 @@ Furthermore, in order to avoid discontinuities in the control, the non-smooth ${
 Specifically, \figref{fig:handpos_tracking_trajectory} shows the 3D trajectories of the \glspl{auv}.
 We can see that the vehicles successfully reach the desired formation while following the target, as is also evidenced from the formation and tracking errors in \figref{fig:handpos_tracking_formation_errors} and the velocity errors in \figref{fig:handpos_tracking_velocity_errors}.
 Furthermore, note that the hard connectivity and collision-avoidance constraints, shown as dashed black lines in \figref{fig:handpos_tracking_distances}, are always respected.
-On the other hand, the surge velocities in \figref{fig:handpos_tracking_surge} are kept as non-negative as possible as long as the soft constraints do not interfere with the hard constraints.
+The soft constraints are satisfied as well, and the surge velocities are kept non-negative, as shown in \figref{fig:handpos_tracking_surge}.
 %To see this more clearly, Fig.~\ref{fig:ur} shows the surge velocities for an identical simulation scenario, except for the soft-constraint requirement on the velocities. It is clear by comparing with Fig.~\ref{fig:ur2}, that without the proposed strategy, the surge velocities would take greater negative values.
 
 \subsection{DUNE simulations}
+\input{figures/handpos_tracking/figure_hifi.tex}
 
 Here, we simulate a formation of six \glspl{lauv} using \gls{dune}.
 The parameters of the simulation are chosen identically to the MATLAB example.
 
-% Figs.~\ref{fig:hifi_path}-\ref{fig:hifi_ur2} present the results of the simulation.
-% As shown in Fig.~\ref{fig:hifi_path}, the AUVs manage to reach the desired formation. However, the transient behavior is different from the one under the ideal conditions of the MATLAB simulation.
-% The main reason behind these differences is that in the DUNE simulation, the yaw moment of the rudder depends on the speed of the vehicle.
-% Consequently, the AUVs cannot turn if their speed is low.
-% Furthermore, the formation and velocity errors in Figs.~\ref{fig:hifi_z1kt}-\ref{fig:hifi_z2k} do not converge to zero but rather to a small area around zero.
-% These nonzero steady-state errors are caused by two factors: the uncertainty of the navigation system, and the delay in the actuators.
-% The vehicles still manage to respect the hard connectivity and collision-avoidance constraints, shown as dashed red lines in Fig.~\ref{fig:hifi_z1k}.
-% The surge velocities in Fig.~\ref{fig:hifi_ur2} are mostly non-negative, excluding AUV 4.
-% For comparison, the surge velocities shown in Fig.~\ref{fig:hifi_ur} result from a simulation without the soft-constraint requirement, and it is clear that in contrast to Fig.~\ref{fig:hifi_ur2}, in this case the velocities of vehicles 3 and 5 also become negative around 100s.
+\figref{fig:handpos_tracking_hifi} presents the results of the simulation.
+Specifically, \figref{fig:handpos_tracking_hifi_trajectory} shows the 3D trajectories of the \glspl{auv}.
+We can see that the vehicles manage to reach the desired formation. However, the transient behavior is different from the one under the ideal conditions of the MATLAB simulation.
+One reason behind these differences is that in the DUNE simulation, the torque produced by the fins depends on the speed of the vehicle.
+Consequently, the \glspl{auv} cannot turn if their speed is too low.
+In addition, the surge thrust of the \glspl{auv} is limited.
+Consequently, the \glspl{auv} can only reach a surge velocity of $\SI{1.8}{\meter\per\second}$, as shown in \figref{fig:handpos_tracking_hifi_surge}.
+Unlike the MATLAB simulations, the soft constraints cannot always be satisfied, and the surge velocities of \glspl{auv} 2 and 5 briefly drop below zero.
+Having a negative surge velocity is necessary to satisfy the hard connectivity and collision-avoidance constraints shown as dashed black lines in \figref{fig:handpos_tracking_hifi_distances}.
+The formation-tracking errors and the velocity errors are shown in Figures~\ref{fig:handpos_tracking_hifi_formation_errors} and \ref{fig:handpos_tracking_hifi_velocity_errors}, respectively.
+We can see that these errros do not converge to zero but rather to a small area around zero.
+These nonzero steady-state errors are caused by two factors: the uncertainty of the navigation system, and the delay in the actuators.
 
 \section{Conclusions}\label{sec:conclusions}
 

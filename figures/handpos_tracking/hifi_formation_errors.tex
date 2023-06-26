@@ -1,0 +1,61 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.24220,0.15040,0.66030}%
+\definecolor{mycolor2}{rgb}{0.27800,0.35560,0.97770}%
+\definecolor{mycolor3}{rgb}{0.15400,0.59020,0.92180}%
+\definecolor{mycolor4}{rgb}{0.07040,0.74570,0.72580}%
+\definecolor{mycolor5}{rgb}{0.50440,0.79930,0.34800}%
+\definecolor{mycolor6}{rgb}{0.98710,0.73475,0.24375}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.8\textwidth,
+height=20mm,
+scale only axis,
+xmin=0,
+xmax=300,
+xlabel style={font=\color{white!15!black}, yshift=1.5mm},
+xlabel={$t$ [s]},
+ymin=-1,
+ymax=110,
+ylabel style={font=\color{white!15!black}, yshift=-1.5mm},
+ylabel={$\|\tilde{\mat{z}}_{1, k}\|$ [m]},
+axis background/.style={fill=white},
+title style={font=\bfseries, yshift=-2mm},
+title={Formation tracking errors},
+legend style={legend cell align=left, align=left, draw=white!15!black},
+legend columns=2,
+xmajorgrids,
+ymajorgrids
+]
+\addplot [color=mycolor1, line width=1.0pt]
+  table[]{hifi_formation_errors-1.tsv};
+\addlegendentry{$\text{e}_\text{1}$}
+
+\addplot [color=mycolor2, line width=1.0pt]
+  table[]{hifi_formation_errors-2.tsv};
+\addlegendentry{$\text{e}_\text{2}$}
+
+\addplot [color=mycolor3, line width=1.0pt]
+  table[]{hifi_formation_errors-3.tsv};
+\addlegendentry{$\text{e}_\text{3}$}
+
+\addplot [color=mycolor4, line width=1.0pt]
+  table[]{hifi_formation_errors-4.tsv};
+\addlegendentry{$\text{e}_\text{4}$}
+
+\addplot [color=mycolor5, line width=1.0pt]
+  table[]{hifi_formation_errors-5.tsv};
+\addlegendentry{$\text{e}_\text{5}$}
+
+\addplot [color=mycolor6, line width=1.0pt]
+  table[]{hifi_formation_errors-6.tsv};
+\addlegendentry{$\text{e}_\text{0}$}
+
+\end{axis}
+\end{tikzpicture}%

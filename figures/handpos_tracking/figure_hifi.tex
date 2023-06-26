@@ -1,0 +1,42 @@
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \def\svgwidth{\textwidth}
+        \import{figures/handpos_tracking}{hifi_trajectory.pdf_tex}
+        \vspace*{-6mm}
+        \caption{The 3D trajectory of the \glspl{auv}. The black line represents the virtual target.}
+        \label{fig:handpos_tracking_hifi_trajectory}
+    \end{subfigure}  
+    \begin{subfigure}{0.47\textwidth}
+        \hspace*{-2mm}
+        \input{figures/handpos_tracking/hifi_formation_errors.tex}
+        \vspace*{-6mm}
+        \caption{Norms of the formation-keeping errors, $\tilde{\mat{z}}_{1, k}$, and the tracking error, $\tilde{\mat{z}}_{1, o}$.}
+        \label{fig:handpos_tracking_hifi_formation_errors}
+    \end{subfigure}
+    \begin{subfigure}{0.47\textwidth}
+        \hspace*{1mm}
+        \input{figures/handpos_tracking/hifi_velocity_errors.tex}
+        \vspace*{-6mm}
+        \caption{Norms of the velocity errors $\mat{z}_{2, k}$ and $\mat{z}_{2, o}$.}
+        \label{fig:handpos_tracking_hifi_velocity_errors}
+    \end{subfigure}
+    \begin{subfigure}{0.47\textwidth}
+        \hspace*{-2mm}
+        \input{figures/handpos_tracking/hifi_distances.tex}
+        \vspace*{-6mm}
+        \caption{Inter-vehicle distances $\norm{\mat{z}_{1, k}}$. The dashed lines represent the limits $\delta_k$ and $\Delta_k$.}
+        \label{fig:handpos_tracking_hifi_distances}
+    \end{subfigure}
+    \begin{subfigure}{0.47\textwidth}
+        \vspace*{-40mm}
+        \hspace*{-2mm}
+        \input{figures/handpos_tracking/hifi_surge.tex}
+        \vspace*{-6mm}
+        \caption{Surge velocities of the \glspl{auv}.}
+        \label{fig:handpos_tracking_hifi_surge}
+    \end{subfigure}
+    \caption{Results of numerical simulations in \gls{dune}.}
+    \label{fig:handpos_tracking_hifi}
+\end{figure}
