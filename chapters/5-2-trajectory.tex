@@ -61,7 +61,7 @@ and choose the following PID controller
 \end{equation}
 is Hurwitz.
 
-\subsection{Closed-loop analysis}
+\subsection{Closed-Loop analysis}
 In this section, we investigate the closed-loop dynamics of the system \eqref{eq:handpos_def_hand_position_dynamics} with the control law \eqref{eq:handpos_trajectory_external_controller}.
 We begin by defining an additional change of coordinates:
 \begin{subequations}
@@ -100,7 +100,7 @@ Differentiating \eqref{eq:handpos_trajectory_hand_transform_CL} with respect to 
     Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
-\subsection{Straight-line Trajectory Tracking}
+\subsection{Straight-Line Trajectory Tracking}
 \label{sec:handpos_trajectory_straight_line_trajectory}
 In this section, we will focus on the special case when $\bs{\xi}_{2, d}$ is constant, and the vehicle is thus tracking a straight line.
 The purpose of this section is to demonstrate that in this special case, we can prove that both the external and internal dynamics are exponentially stable.
@@ -375,7 +375,7 @@ The motivation behind this update scheme is to allow the path to parameter ``slo
     \label{fig:handpos_trajectory_path}
 \end{figure}
 
-\subsection{Closed-loop Analysis}
+\subsection{Closed-Loop Analysis}
 Here we investigate the properties of the closed-loop system.
 Similarly to Section~\ref{sec:handpos_trajectory_trajectory_tracking}, we define the following change of coordinates
 \begin{subequations}
@@ -449,7 +449,7 @@ Let $\varrho$ denote the ratio between the smallest eigenvalue of $\mat{Q}$ and 
     Therefore, if $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the internal dynamics are ultimately bounded.
 \end{proof}
 
-\subsection{Straight-line Path Following}
+\subsection{Straight-Line Path Following}
 \label{sec:handpos_trajectory_straight_line_path}
 In this section, we propose a path following controller for straight-line paths.
 Similarly to Section~\ref{sec:handpos_trajectory_straight_line_trajectory}, we can prove the exponential stability of the whole closed-loop system.
@@ -640,7 +640,7 @@ The main difference between the proposed controllers is that in path following, 
 In \cite{aguiar_trajectory_tracking_2007}, it is argued that the control signals of path following controllers are smoother and have a lower peak value than in the case of trajectory tracking controllers.
 This fact is confirmed by the simulations, as the peak value of the control input $\bs{\mu}$ is $\SI{0.1}{\meter\per\second\squared}$ lower, and the surge velocity $u_r$ is $\SI{0.2}{\meter\per\second}$ lower in the path following simulation.
 
-\subsection{Straight-line Path Following}
+\subsection{Straight-Line Path Following}
 \label{sec:handpos_trajectory_simulation_waypoints}
 
 \begin{figure}[tb]

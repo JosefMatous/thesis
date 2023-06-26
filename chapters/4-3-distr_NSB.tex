@@ -212,7 +212,7 @@ We note that if the barycenter estimates are accurate, the formation radius is g
 Equations \eqref{eq:distr_NSB_r_f+1} and \eqref{eq:distr_NSB_r_f+2} represent a max-consensus scheme, ensuring that the values of $r_{f, i}$ are always greater than or equal to $\max_i \widehat{r}_{f, i}$.
 The continuous-time update law \eqref{eq:distr_NSB_r_f_dot} allows the values of $r_{f, i}$ to converge to $\max_i \widehat{r}_{f, i}$.
 
-\section{Closed-loop Analysis}
+\section{Closed-Loop Analysis}
 \label{sec:distr_NSB_closed_loop}
 In this section, we define the error variables and investigate their closed-loop behavior.
 In the subsequent proofs, we consider the \emph{nominal} case without obstacle avoidance.
@@ -238,7 +238,7 @@ Consequently, the barycenter and path parameter estimate errors, $\widetilde{\ma
     \Tilde{s}_{i} &= s_i - s. \label{eq:distr_NSB_consensus_errors}
 \end{align}
 
-\subsection{Closed-loop Dynamics}
+\subsection{Closed-Loop Dynamics}
 In this section, we derive closed-loop equations for the error variables.
 
 First, let us investigate the closed-loop properties of the path-following error.
@@ -730,7 +730,7 @@ The adjacency matrix of the communication graph is
     \end{bmatrix}.
 \end{equation}
 
-\subsection{Continuous-time Consensus}
+\subsection{Continuous-Time Consensus}
 \pgfplotsset{table/search path={figures/distr_NSB/data}}
 \input{figures/distr_NSB/figure_simulation.tex}
 
@@ -747,7 +747,7 @@ Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and
 
 Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
 
-\subsection{Event-triggered Consensus}
+\subsection{Event-Triggered Consensus}
 
 In this section, we test the event-triggered scheme proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 We choose the mixing gains $a_p = a_s = 0.4$, and the penalty gains: $b_p = 10^{-4}, b_s = 4$.

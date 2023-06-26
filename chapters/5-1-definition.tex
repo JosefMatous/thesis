@@ -186,7 +186,7 @@ This procedure transforms the system \eqref{eq:handpos_def_ode_velocities} into 
 \noindent where $\Bar{\mat{L}} = \inlinevector{1/h, 0, 0}$.
 Note that \eqref{eq:handpos_def_x_1_dot_transformed} and \eqref{eq:handpos_def_x_2_dot_transformed} form a double integrator with a constant disturbance caused by the ocean current.
 
-\subsection{Hand Position-based Controller}
+\subsection{Hand Position-Based Controller}
 In this section, we present some necessary assumtpions about the hand position-based controller.
 We assume that the goal of the control algorithm is to track a desired trajectory.
 Although this assumption seems restrictive, we will demonstrate that many controllers fall into this category.
@@ -216,7 +216,7 @@ The dynamics of these error states are given by
     The hand position-based controller is designed such that the norm of the control input $\bs{\mu}$ is finite and the origin $\left[\tilde{\bs{\xi}}_1, \tilde{\bs{\xi}}_2\right] = \mat{0}\T$ is a \acrfullpl{ugas} equilibrium of \eqref{eq:handpos_def_hand_transform_CL_dynamics}.
 \end{asm}
 
-\section{Closed-loop Analysis}
+\section{Closed-Loop Analysis}
 \label{sec:handpos_def_closed_loop_analysis}
 
 In this section, we analyze the closed-loop behavior of the orientation and the angular rates.
