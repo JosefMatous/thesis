@@ -1,26 +1,118 @@
-\section{Previous Research}
+\section{Literature Review and Motivation}
 
-\subsection{Collision Avoidance for Autonomous Vehicles}
-Autonomous vehicles are being increasingly used in cluttered and unpredictable environments where considerations to other vehicles and obstacles need to be made. 
-Therefore, the control system of autonomous vehicles should include some form of collision avoidance (COLAV).
+In this section, we present a general introduction to the problems studied in the thesis, as well as an overview of the existing literature.
 
-Reviews of various COLAV concepts are presented in \cite{statheros_autonomous_2008,tam_review_2009,hoy_algorithms_2015}.
-In general, algorithms for COLAV can be split into two categories: motion planning and reactive algorithms.
+\subsection{Autonomous Marine Vehicles}
 
-Motion planning algorithms include, among others, various types of path planning algorithms \cite{wang_ship_2017,kuwata_safe_2014,lazarowska_ships_2015}, the dynamic window algorithm \cite{fox_dynamic_1997}, and model predictive control (MPC).
-MPC can be used both for a single vehicle \cite{hagen_mpc-based_2018,sun_collision_2018} and for multi-agent systems in a distributed form \cite{kuriki_formation_2015,dai_distributed_2017}.
-%Some motion planing algorithms also include consideration of relevant traffic protocols that apply in the given domain.
+In this section, we briefly introduce the three main types of autonomous marine vehicles and their use.
+Autonomous marine vehicles are being increasingly used in a variety of applications such as transportation \cite{pi_transportation_2021,brekke_milliampere_2022}, inspection, maintenance and repair \cite{palomer_inspection_2019,mcleod_inspection_repair_maintenance_2010}, mapping of underwater structures, \emph{e.g.,} shipwrecks \cite{bingham_shipwreck_2010}, and various oceanographic and environmental missions such as tracking of oil spills \cite{petillo_plume_tracking_2012} and harmful algal blooms \cite{robbins_harmful_algae_2006}.
+These vehicles often operate in environments that are inaccessible or dangerous to humans, such as the deep sea or the Arctic.
 
-Reactive algorithms for COLAV include, among others, virtual potential fields \cite{roussos_3d_2008}, geometric guidance \cite{mujumdar_reactive_2011}, and control barrier functions (CBFs) \cite{squires_constructive_2018,igarashi_collision_2018,romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014}.
+Autonomous marine vehicles can be generally split into three categories: \glspl{asv}, \glspl{rov}, and \glspl{auv}.
+\Glspl{asv} are also referred to as \emph{autonomous ships}, since their design is commonly based on surface vessels such as kayaks \cite{kimball_jetkayak_2014}, catamarans \cite{choi_asv_2020,zolich_catamaran_2022}, and miniature ferries \cite{brekke_milliampere_2022}. ASVs are used in scientific missions as well as transportation.
+\Glspl{rov}, also referred to as \emph{underwater drones}, are small, box-shaped vehicles with thrusters.
+\Glspl{rov} are typically \emph{fully actuated}, meaning that the configuration of thrusters allows the vehicle to move and rotate in any direction.
+\Glspl{rov} are designed for low speeds, often less than $1.5$ meters per second, and due to the high power demands of the thrusters, the vehicles can only operate for a few hours \cite{bluerov2}.
+Consequently, \glspl{rov} are used for short-term inspection, maintenance and repair missions.
+
+\Glspl{auv} are torpedo-shaped vehicles with a propeller that provides forward (surge) thrust, and fins that provide torque.
+The configuration of actuators means that \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
+Compared to \glspl{rov}, \glspl{auv} can reach higher speeds and operate longer \cite{sousa_LAUV_2012,purcell_remus_2000}, making them suitable for long-term oceanographic missions.
+This thesis is mostly focused on developing control algorithms for \glspl{auv}.
+
+\subsection{Control Problems for AUVs}
+
+This section presents the various control problems for \glspl{auv} studied in this thesis.
+
+\subsubsection{The trajectory-tracking and path-following problems}
+
+Arguably, the trajectory-tracking and path-following problems are the most interesting and significant ones.
+Many high-level mission planners assume that the vehicle is able to follow a given path or trajectory.
+
+To solve the trajectory tracking problem, numerous methods based on backstepping \cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001}, sliding-mode control \cite{elmokadem_trajectory-tracking-SMC_2016}, \glspl{clf} \cite{aguiar_trajectory-tracking-CLF_2007}, and \gls{mpc} \cite{abdelaal_trajectory-tracking-MPC_2015} have been proposed. 
+
+To solve the path following problem, most controllers utilize \gls{los} guidance.
+In \cite{caharija_path-following-ILOS_2016}, an integral \gls{los} guidance scheme is used to counteract the sea loads, \cite{xiang_path-following-robust_2017} combines \gls{los} guidance with an adaptively tuned PID controller, and \cite{miao_path-following-curvilinear_2017} uses \gls{los} with active disturbance rejection control.
+
+\subsubsection{The formation path-following problem}
+
+%\Glspl{auv} are being increasingly used in a number of applications such as transportation \cite{conti_manipulation_2015}, oceanography \cite{edgar_oceanography_2001,faria_oceanography_2014}, and ocean energy industry-related tasks \cite{albiez_flatfish_2015,lizunkova_AUVwelding_2009}.
+In many applications, it is often advantageous to perform the tasks with a group of cooperating \glspl{auv}.
+Compared to a single vehicle, a group of \glspl{auv} can cover a larger area (\emph{e.g.,} in inspection and oceanographic tasks).
+A group is also more flexible, able to reconfigure if the parameters of the mission change, and able to complete the task even if one or more \glspl{auv} fail.
+Many of the aforementioned applications can be formulated as a formation path-following problem, \emph{i.e.,} a problem of steering a group of \glspl{auv} along a predefined path in a given formation.
+
+As presented in \cite{das_cooperative_2016}, there exists a plethora of formation path-following methods, most of them based on two concepts: coordinated path-following \cite{borhaug_2006_formation,praveen_cooperative_2018} and leader-follower \cite{rongxin_2010_leader,soorki_2011_robust}.
+In the \emph{coordinated path-following} approach, each vehicle follows a predefined path separately.
+Formation is then achieved by coordinating the motion of the vehicles along these paths.
+In this approach, the formation-keeping error (\emph{i.e.,} the difference between the actual and desired relative position of the vehicles) may initially grow as the vehicles converge to their predefined paths.
+In the \emph{leader-follower} approach, one leading vehicle tracks the given path while the followers adjust their speed and position to obtain the desired formation shape, relative to the leader.
+
+Both the coordinate path-following and the leader-follower methods can be solved using \acrlong{mpc} \cite{wang_path_2021,kanjanawanishkul_distributed_2008}.
+\Gls{mpc} is a model-based optimal control method that allows us to enforce constraints on the inputs and satates of the vehicles.
+However, most \gls{mpc} methods are based on sampling.
+Consequently, any constraints on the inputs or states can only be enforced at discrete time-instances.
+In other words, we have no control over the behavior of the system between the samples.
+We can mitigate this issue by decreasing the sampling time.
+However, by decreasing the sampling time, we increase the number of optimized variables, thus increasing the computational requirements.
+
+In recent years, researchers have focused on computationally tractable \gls{mpc} schemes.
+One possibility of reducing the computational requirements is to parametrize the vehicles' trajectories using splines.
+A spline-based path-planning \gls{mpc} algorithm for first-order nonholonomic vehicles was proposed \cite{saska_2016_predictive}.
+The algorithm solves the point-to-point formation tracking problem with static obstacles.
+Another spline-based \gls{mpc} algorithm was proposed in \cite{van_parys_2017_DMPC}.
+This algorithm is applicable to a wider range of systems compared to \cite{saska_2016_predictive}, and it has been demonstrated on point-to-point and trajectory-tracking problems.
+
+Another method that can be applied to the formation path-following problem is the so-called \gls{nsb} algorithm \cite{antonelli_experiments_2009,arrichiello_formation_2006,pang_2019_formation,eek_formation_2021}.
+In the \gls{nsb} framework, the control objective is expressed using multiple tasks.
+By combining several simple tasks, the vehicles can exhibit the desired complex behavior.
+In the literature, there are many examples of \gls{nsb} algorithms applied to kinematic vehicles \cite{antonelli_experiments_2009} and marine vehicles moving in the 
+horizontal plane \cite{arrichiello_formation_2006,pang_2019_formation,eek_formation_2021}.
+
+However, the standard \gls{nsb} algorithm is centralized, meaning that in a real-life application, there must be a central node that communicates and coordinates with all the vehicles.
+While underwater, the \glspl{auv} typically communicate via acoustic modems.
+These modems have low bandwidth and significant delays, making them unsuitable for real-time control.
+A distributed \gls{nsb} algorithm was proposed in \cite{ahmad_multirobot_2014}.
+In this algorithm, the group of vehicles is split into smaller, fully connected subgroups.
+Each subgroup performs the standard, centralized \gls{nsb} algorithm.
+Consequently, there is still a need for fast and reliable communications.
+Furthermore, the proposed method is limited to static formations.
+A similar scheme was proposed in \cite{tan_coordinated_2022}, where a group of heterogenous surface vehicles is split into homogenous subgroups.
+Each subgroup has one leading vehicle that exchanges information with the leaders of other subgroups.
+This scheme still requires fast and reliable communications, both within the subgroups and between the leaders.
+Furthermore, the proposed scheme is vulnerable to failures of the leading vehicles.
+
+\subsection{Safety Constraints}
+
+This section presents the various constraints that need to be considered when deploying autonomous vehicles.
+
+\subsubsection{Collision avoidance}
+Autonomous vehicles are often used in cluttered and unpredictable environments where considerations to other vehicles and obstacles need to be made. 
+Therefore, the control system of autonomous vehicles should include some form of \gls{colav}.
+
+Reviews of various \gls{colav} concepts are presented in \cite{statheros_autonomous_2008,tam_review_2009,hoy_algorithms_2015}.
+In general, algorithms for \gls{colav} can be split into two categories: motion planning and reactive algorithms.
+
+Motion planning algorithms include, among others, various types of path planning algorithms \cite{wang_ship_2017,kuwata_safe_2014,chiang_colreg-rrt_2018,lazarowska_ships_2015}, the dynamic window algorithm \cite{fox_dynamic_1997}, and \gls{mpc}.
+\gls{mpc} can be used both for a single vehicle \cite{hagen_mpc-based_2018,sun_collision_2018} and for multi-agent systems in a distributed form \cite{kuriki_formation_2015,dai_distributed_2017}.
+Some motion planing algorithms also include consideration of relevant traffic protocols that apply in the given domain, \emph{e.g.,} the regulations for marine vehicles known as COLREGs \cite{wang_ship_2017,kuwata_safe_2014,chiang_colreg-rrt_2018}.
+
+Reactive algorithms for \gls{colav} include, among others, virtual potential fields \cite{roussos_3d_2008}, geometric guidance \cite{mujumdar_reactive_2011}, and \glspl{cbf} \cite{squires_constructive_2018,igarashi_collision_2018,romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014}.
 Reactive algorithms are often used together with motion planning algorithms in a hybrid controller.
 In such a controller, the reactive algorithm ensures the safety of the vehicle in unexpected situations.
 Such an algorithm is proposed in \cite{hedjar_automatic_2019}, where a collision-free velocity reference is obtained through numerical optimization.
-The proposed algorithm is designed specifically for autonomous surface vehicles (ASVs).
+%The proposed algorithm is designed specifically for \glspl{asv}.
 
-CBFs offer a COLAV method that is applicable for a wide range of systems \cite{ames_control_2019}.
-In the literature, there are typically two ways in which CBFs are applied for COLAV.
-They are either applied to a simplified model of the vehicle (\emph{e.g.,} a unicycle model \cite{squires_constructive_2018,igarashi_collision_2018}) to provide safe velocity references, or they are used together with control Lyapunov functions (CLFs) \cite{romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014} on the complete model.
+\Glspl{cbf} offer a \gls{colav} method that is applicable for a wide range of systems \cite{ames_control_2019}.
+In the literature, there are typically two ways in which \glspl{cbf} are applied for \gls{colav}.
+They are either applied to a simplified model of the vehicle (\emph{e.g.,} a unicycle model \cite{squires_constructive_2018,igarashi_collision_2018}) to provide safe velocity references, or they are used together with \glspl{clf} \cite{romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014} on the complete model.
 
-Reactive COLAV methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
+Reactive \gls{colav} methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
 Consequently, these methods may output reference signals that the underlying controllers cannot track.
-To mitigate this, reactive COLAV methods should be included into the lowest-possible control level.
+To mitigate this, reactive \gls{colav} methods should be included into the lowest-possible control level.
+
+\subsubsection{Connectivity maintenance}
+In addition to \gls{colav}, autonomous vehicles often need to maintain a sufficiently close distance to each other to guarantee the reliability of the communication and the connectivity of the multi-agent system.
+In special cases when the vehicles use optical sensors or communications, the vehicles are also limited by \gls{fov} constraints.
+
+Many works in the literature address the coordination problem of multiple marine vehicles under such inter-agent constraints. In \cite{gan2014online,gomes2018MPC} planning-based methods are developed to generate trajectories that satisfy the constraints. However, planning algorithms usually require \emph{a priori} knowledge of the environment, which might be unrealistic in highly dynamical environments, such as under water. Reactive algorithms are based, \emph{e.g.}, on artificial potential fields \cite{jia2007formation,brinon2010contraction} and \glspl{blf} \cite{gao2019velocity-free,naderolasli2023platoon}.
