@@ -1,4 +1,5 @@
 \section{Literature Review and Motivation}
+\label{sec:introduction_literature}
 
 In this section, we present a general introduction to the problems studied in the thesis, as well as an overview of the existing literature.
 
@@ -24,7 +25,7 @@ This thesis is mostly focused on developing control algorithms for \glspl{auv}.
 
 This section presents the various control problems for \glspl{auv} studied in this thesis.
 
-\subsubsection{The trajectory-tracking and path-following problems}
+\subsubsection{The Trajectory-Tracking and Path-Following Problems}
 
 Arguably, the trajectory-tracking and path-following problems are the most interesting and significant ones.
 Many high-level mission planners assume that the vehicle is able to follow a given path or trajectory.
@@ -34,7 +35,7 @@ To solve the trajectory tracking problem, numerous methods based on backstepping
 To solve the path following problem, most controllers utilize \gls{los} guidance.
 In \cite{caharija_path-following-ILOS_2016}, an integral \gls{los} guidance scheme is used to counteract the sea loads, \cite{xiang_path-following-robust_2017} combines \gls{los} guidance with an adaptively tuned PID controller, and \cite{miao_path-following-curvilinear_2017} uses \gls{los} with active disturbance rejection control.
 
-\subsubsection{The formation path-following problem}
+\subsubsection{The Formation Path-Following Problem}
 
 %\Glspl{auv} are being increasingly used in a number of applications such as transportation \cite{conti_manipulation_2015}, oceanography \cite{edgar_oceanography_2001,faria_oceanography_2014}, and ocean energy industry-related tasks \cite{albiez_flatfish_2015,lizunkova_AUVwelding_2009}.
 In many applications, it is often advantageous to perform the tasks with a group of cooperating \glspl{auv}.
@@ -75,18 +76,18 @@ These modems have low bandwidth and significant delays, making them unsuitable f
 A distributed \gls{nsb} algorithm was proposed in \cite{ahmad_multirobot_2014}.
 In this algorithm, the group of vehicles is split into smaller, fully connected subgroups.
 Each subgroup performs the standard, centralized \gls{nsb} algorithm.
-Consequently, there is still a need for fast and reliable communications.
-Furthermore, the proposed method is limited to static formations.
+%Consequently, there is still a need for fast and reliable communications.
+The proposed method is limited to static formations.
 A similar scheme was proposed in \cite{tan_coordinated_2022}, where a group of heterogenous surface vehicles is split into homogenous subgroups.
 Each subgroup has one leading vehicle that exchanges information with the leaders of other subgroups.
-This scheme still requires fast and reliable communications, both within the subgroups and between the leaders.
-Furthermore, the proposed scheme is vulnerable to failures of the leading vehicles.
+%This scheme still requires fast and reliable communications, both within the subgroups and between the leaders.
+%Furthermore, the proposed scheme is vulnerable to failures of the leading vehicles.
 
 \subsection{Safety Constraints}
 
 This section presents the various constraints that need to be considered when deploying autonomous vehicles.
 
-\subsubsection{Collision avoidance}
+\subsubsection{Collision Avoidance}
 Autonomous vehicles are often used in cluttered and unpredictable environments where considerations to other vehicles and obstacles need to be made. 
 Therefore, the control system of autonomous vehicles should include some form of \gls{colav}.
 
@@ -111,7 +112,7 @@ Reactive \gls{colav} methods that work with a simplified model do not take into 
 Consequently, these methods may output reference signals that the underlying controllers cannot track.
 To mitigate this, reactive \gls{colav} methods should be included into the lowest-possible control level.
 
-\subsubsection{Connectivity maintenance}
+\subsubsection{Connectivity Maintenance}
 In addition to \gls{colav}, autonomous vehicles often need to maintain a sufficiently close distance to each other to guarantee the reliability of the communication and the connectivity of the multi-agent system.
 In special cases when the vehicles use optical sensors or communications, the vehicles are also limited by \gls{fov} constraints.
 

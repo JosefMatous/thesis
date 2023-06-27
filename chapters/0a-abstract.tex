@@ -1,4 +1,63 @@
 \chapter*{Summary}
 
-\Glspl{auv} are being increasingly used in a variety of applications.
-In many applications, the \glspl{auv} should follow a predefined path in a given formation.
+This thesis investigates various control algorithms for marine vehicles.
+Most of the algorithms proposed in the thesis address the formation path-following problem for a fleet of underactuated \acrlongpl{auv}, although other types of vehicles, such as \acrlongpl{asv} and differential drive robots, and other types of control problems, such as collision avoidance, trajectory tracking, and path following, are also considered.
+The thesis is divided into three parts.
+
+In the first part, we develop a collision avoidance algorithm for overactuated vehicles.
+The vehicles must reach a desired position while maintaining some minimum safety distance from each other.
+To solve this problem, we propose an optimization-based control allocation scheme augmented with \acrlongpl{cbf}.
+Control allocation is a collection of methods for finding an actuator configuration that satisfies a given goal (\emph{e.g.}, reaching a desired position).
+\Acrlongpl{cbf} allows us to enforce constraints on dynamical systems (\emph{e.g.}, keeping a minimum safety distance).
+By combining control allocation with \acrlongpl{cbf}, we can create a controller that satisfies a given goal while avoiding collisions.
+The proposed controller is tested in numerical simulations on two types of \acrlongpl{asv}: the milliAmpere ferry, and the Inocean Cat I drillship.
+
+The second part deals with the formation path-following problem.
+We solve the problem using the \acrlong{nsb} method.
+This method allows us to decompose the problem into several tasks.
+Then, by combining these tasks in a hierarchic manner, we can achieve the desired behavior.
+To solve the formation path-following problem, we define three tasks: collision avoidance, formation keeping, and path following.
+In this thesis, we propose three \acrlong{nsb} algorithms for the formation path-following problem.
+
+The first algorithm uses a model of an \acrlong{auv} with five \acrlongpl{dof}.
+Using Lyapunov analysis, we show that the path-following task is \acrlongpl{usges}.
+Numerical simulations then validate this result.
+
+The second algorithm uses a six degree-of-freedom model.
+Compared to the previous method, this algorithm does not suffer from numerical singularities.
+This algorithm also contains additional tasks, namely obstacle avoidance and depth limiting.
+Moreover, we prove that both the path-following and the formation-keeping tasks are \acrlongpl{usges}.
+These theoretical results are then validated in numerical simulations.
+
+One common issue of both \acrlong{nsb} algorithms is that they are centralized.
+In many applications, centralized algorithms are difficult to implement, as they require one central node or agent that can communicate and coordinate with other agents in real time.
+To solve this issue, the third algorithm combines a \acrlong{nsb} algorithm with consensus, resulting in a fully distributed controller.
+We propose two types of consensus algorithm.
+First, we propose a continuous-time consensus algorithm and prove its stability using Lyapunov analysis.
+Then, we present a modified discrete-time version of the algorithm based on event-triggered control.
+The effectiveness of both the continuous- and discrete-time algorithms is demonstrated in numerical simulations.
+Furthermore, the discrete-time version is also tested in field experiments.
+
+The third part of the thesis extends the hand position approach to underactuated underwater vehicles moving in three dimensions.
+Hand position is a point located a given distance in front of the neutral point along the $x$-axis of the vehicle.
+By treating this point as the new output of the system, we can use input-output feedback linearization to transform the underactuated highly nonlinear vehicle model into a system with linear external dynamics and nonlinear internal dynamics.
+We analyze the closed-loop behavior of a generic hand position-based controller and present four applications of the hand position approach.
+
+First, we use this approach to solve the trajectory-tracking and path-following problems.
+We propose simple PID-based controllers to solve these problems and show that using these controllers renders the external states \acrlongpl{ges}, while the internal states remain bounded.
+The theoretical results are validated in numerical simulations as well as field experiments.
+
+Next, we present a spline-based \acrlong{mpc} method for solving the formation path-following problem.
+The proposed method is not restricted to the hand position approach only.
+In fact, the method is applicable to any vehicle with a differentially flat model.
+To demonstrate this, we present two case studies: underwater vehicles with the hand position controller, and differential drive robots.
+
+Next, we use the hand position concept to solve the tracking-in-formation problem for a fleet of \acrlongpl{auv}.
+The proposed method combines consensus with \acrlongpl{blf}, allowing the fleet to reach the desired formation while avoiding collisions and maintaining connectivity.
+We show that the closed-loop system is almost-everywhere uniformly asymptotically stable and that the output error dynamics converge to the origin exponentially fast, while satisfying the constraints.
+The theoretical results are verified in numerical simulations.
+
+Finally, we combine the hand position approach with \acrlong{nsb} control.
+Specifically, we extend the \acrlong{nsb} algorithm, which was originally developed for first-order kinematic systems, to second-order systems.
+Similarly to our previous work, we then design the path-following, formation-keeping, and collision-avoidance tasks, so that the fleet can follow a given path in a formation while avoiding collisions.
+We prove the stability of the control scheme using Lyapunov analysis and verify its effectiveness in simulations. 

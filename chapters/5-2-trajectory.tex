@@ -1,31 +1,14 @@
 \chapter{Trajectory Tracking and Path Following using the Hand Position Concept}
 \label{chap:handpos_trajectory}
 
-\newcommand{\citeexistingmethods}{\cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001,elmokadem_trajectory-tracking-SMC_2016,aguiar_trajectory-tracking-CLF_2007,abdelaal_trajectory-tracking-MPC_2015,caharija_path-following-ILOS_2016,xiang_path-following-robust_2017,miao_path-following-curvilinear_2017,borhaug_straight_2007}}
-
-This chapter presents hand position-based trajectory tracking and path following controllers for underactuated underwater vehicles.
+This chapter presents hand position-based trajectory-tracking and path-following controllers for underactuated underwater vehicles.
 Using Lyapunov analysis, we show that the proposed controllers exponentially track the desired trajectory or path, while the angular velocities of the vehicle remain bounded.
 The theoretical results are verified both in numerical simulations and experiments.
 The contents of this chapter are based on \cite{matous_trajectory_2023}.
 
-\section{Introduction}
-
-The ability to track a given trajectory or path is vital to the function of \acrfullpl{auv}.
-Many high-level mission planners rely on accurate trajectory tracking or path following \cite{mcgann_trex_2007}.
-To solve the trajectory tracking problem, numerous methods based on backstepping \cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001}, sliding-mode control \cite{elmokadem_trajectory-tracking-SMC_2016}, control Lyapunov functions \cite{aguiar_trajectory-tracking-CLF_2007}, and model predictive control \cite{abdelaal_trajectory-tracking-MPC_2015} have been proposed.    
-To solve the path following problem, most controllers utilize \acrfull{los} guidance.
-In \cite{caharija_path-following-ILOS_2016}, an integral line of sight guidance scheme is used to counteract the sea loads, \cite{xiang_path-following-robust_2017} combines LOS guidance with an adaptively tuned PID controller, \cite{miao_path-following-curvilinear_2017} uses LOS with active disturbance rejection control, and \cite{borhaug_straight_2007} uses LOS guidance and consensus to control a formation of AUVs.
-
-In the trajectory tracking and path following schemes presented in \citeexistingmethods, the goal is to control either the center of mass or the \emph{neutral point} (also referred to as the \emph{pivot point} \cite{paliotta_trajectory_2019}) of the vehicle.
-The neutral point is a location on the $x$-axis (the stern-bow axis) of the vehicle such that, if chosen as the origin of the vehicle's body-fixed coordinate frame, the lateral motion of the vehicle is not affected by its control inputs.
-In this work, we propose to instead use the \emph{hand position} concept to control the AUV.
-The advantages of using the hand position as the output were discussed in the previous chapter.
-This chapter extends the trajectory-tracking and path-following controllers proposed in \cite{paliotta_trajectory_2019} to three dimensions.
-
-The remainder of the chapter is organized as follows.
+The chapter is organized as follows.
 Sections~\ref{sec:handpos_trajectory_trajectory_tracking} and \ref{sec:handpos_trajectory_path_following} present and analyze the trajectory-tracking and the path-following controller, respectively.
-Sections~\ref{sec:handpos_trajectory_simulations} and \ref{sec:handpos_trajectory_experiments} show the results of numerical simulations and experiments, respectively.
-Finally, Section~\ref{sec:handpos_trajectory_conclusions} presents some concluding remarks.
+Finally, Sections~\ref{sec:handpos_trajectory_simulations} and \ref{sec:handpos_trajectory_experiments} show the results of numerical simulations and experiments, respectively.
 
 \section{Trajectory Tracking}
 \label{sec:handpos_trajectory_trajectory_tracking}
@@ -742,10 +725,3 @@ The sudden increase in cross-track errors is caused by the switching logic expla
 The errors then exponentially converge to within 0.2 meters of zero, which is approximately the measurement noise of the navigation system.
 In addition to measurement noise, the control system is also subject to disturbances caused by the sea loads, and perturbations caused by modeling errors.
 However, the experiments confirm that the integral state and the overall exponential stability of the controller provide some robustness to these effects.
-
-\section{Conclusions}
-\label{sec:handpos_trajectory_conclusions}
-In this chapter, we showed how the hand position transformation combined with a simple PID-based controller can be used to solve both the trajectory-tracking and path-following control problems.
-Using Lyapunov analysis, we proved the exponential stability of the external dynamics.
-Moreover, in the special case of straight-line trajectories and paths, we could modify the controllers and prove the exponential stability of the total system.
-The proposed controllers were tested both in numerical simulations and experiments.

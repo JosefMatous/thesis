@@ -8,32 +8,10 @@ The proposed approach is applicable to all vehicles that can be modeled as diffe
 In this chapter, we present numerical simulations with \acrlongpl{auv} and differential drive robots.
 The contents of this chapter are based on \cite{matous_MPC_2022}.
 
-\section{Introduction}
-    
-As mentioned in Chapter~\ref{chap:introduction}, the formation path-following problem is commonly solved using two types of methods: leader-follower and coordinated path-following.
-Both methods can be implemented using \acrfull{mpc} \cite{wang_path_2021,kanjanawanishkul_distributed_2008}.
-These \gls{mpc} schemes are based on sampling (\emph{i.e.,} discretizing the dynamics of the vehicles).
-Consequently, any constraints on trajectories or states can only be enforced at discrete time-instances.
-In other words, we have no control over the behavior of the system between the samples.
-We can mitigate this issue by decreasing the sampling time.
-However, by decreasing the sampling time, we increase the number of optimized variables, thus increasing the computational and communication requirements.
-
-In recent years, researchers have focused on computationally tractable \gls{mpc} schemes.
-One possibility of reducing the computational requirements is to parametrize the vehicles' trajectories using splines.
-\cite{saska_2016_predictive} have proposed a spline-based path planning \gls{mpc} algorithm for first-order nonholonomic vehicles.
-The algorithm solves the point-to-point formation tracking problem with static obstacles.
-Another spline-based \gls{mpc} algorithm has been proposed by \cite{van_parys_2017_DMPC}.
-This algorithm is applicable to a wider range of systems compared to \cite{saska_2016_predictive}, and it has been demonstrated on point-to-point and trajectory tracking problems.
-However, there is, to the best of our knowledge, no reported work on how to apply spline-based \gls{mpc} to the coordinated path-following problem.
-
-The goal of this chapter is thus to propose a spline-based \gls{mpc} strategy for the coordinated path-following problem, test its suitability for the purpose, and understand which trade-offs characterize this scheme. As we explain in the next section, spline-based \gls{mpc} imposes some assumptions on the structure of the model of the vehicles.    
-The spline-based \gls{mpc} scheme can thus be seen as a trade-off between lower computational requirements and more restrictive assumptions on the model.
-
-The remainder of the chapter is organized as follows.
+The chapter is organized as follows.
 In Section~\ref{sec:MPC_problem-description}, we present the general assumptions on the model of the vehicles and formally define the formation path-following problem.
 In Section~\ref{sec:MPC_spline-based-MPC}, we propose the distributed spline-based \gls{mpc} scheme.
-Section~\ref{sec:MPC_case_studies} presents two case studies.
-Finally, Section~\ref{sec:MPC_conclusion} gives some concluding remarks.
+Finally, Section~\ref{sec:MPC_case_studies} presents two numerical case studies.
 
 \section{Problem Description}
 \label{sec:MPC_problem-description}
@@ -607,9 +585,6 @@ The \gls{mpc} and \gls{admm} parameters are shown in Table~\ref{tab:MPC_unicycle
 The results of numerical simulations are shown in \figref{fig:MPC_unicycle_simulations}.
 Due to the numerical inaccuracies caused by \eqref{eq:MPC_unicycle_transform} and arising primarily from the multiplication and division of splines, the \gls{mpc} time-step $\Delta T$ must be shorter than in the previous case-study.
 
-\section{Conclusions}
-\label{sec:MPC_conclusion}
-
 \begin{table}[t]
     \begin{center}
     \captionsetup{width=.9\textwidth}
@@ -652,15 +627,3 @@ Due to the numerical inaccuracies caused by \eqref{eq:MPC_unicycle_transform} an
     \end{subtable}
     \end{center}
 \end{table}
-
-
-In this chapter, we have proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.
-We have shown that using splines makes the distributed control problem computationally tractable.
-Compared to collocation, the spline parametrization allows us to represent a longer prediction horizon using fewer variables.    
-This is also beneficial for the communication, and thus makes it easier to do distributed control in environments where the communication bandwidth is limited (\emph{e.g.,} underwater).
-
-One might argue that restricting the output to splines limits the subspace of feasible trajectories.
-However, simulation results show that cubic splines provide a good approximation of many curves.
-Another limiting factor is the need for differential flatness.
-However, it is often possible to simplify the structure of the model to guarantee differential flatness.        
-The proposed spline-based \gls{mpc} scheme can thus be seen as a trade-off between lower computational requirements and more restrictive assumptions on the model.

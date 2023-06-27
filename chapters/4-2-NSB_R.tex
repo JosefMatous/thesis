@@ -9,24 +9,11 @@ Using the results of cascaded systems theory, we prove that the closed-loop syst
 We use numerical simulations to validate the results.
 The contents of this chapter are based on \cite{matous_singularity_2023}.
 
-\section{Introduction}
-
-This chapter aims to extend the \gls{nsb} algorithm presented in the previous chapter.
-The previous work uses a 5\gls{dof} \gls{auv} model, considers only inter-vehicle collision avoidance, and proves only the stability of the path-following algorithm.
-Furthermore, the orientation of the 5\gls{dof} model was expressed using Euler angles, which causes singularities for a pitch angle of $\pm90$ degrees.
-This work applies the \gls{nsb} algorithm to a full 6\gls{dof} model, uses rotation matrices to describe the attitude of the vehicles to avoid singularities, modifies and extends the tasks, and proves the stability of the combined path-following and formation-keeping tasks.
-We also add a scheme that keeps the vehicles within a given range of depths to stay within the operation limits.
-As opposed to the previous work, we do not limit the analysis to a specific low-level attitude controller.
-Consequently, the new algorithm can be integrated into existing on-board controllers.
-Assuming that the existing low-level controller allows exponential tracking, we use results from cascaded systems theory~\cite{pettersen_lyapunov_2017} to prove that the closed-loop system composed by the \gls{nsb} algorithm and the low-level controller is \acrfullpl{usges}.
-We verify the results in numerical simulations.
-
-The remainder of the chapter is organized as follows.
+The chapter is organized as follows.
 Section~\ref{sec:NSB_R_problem} introduces the model of the \glspl{auv} and defines the formation path-following problem.
 Section~\ref{sec:NSB_R_control} describes the proposed modified \gls{nsb} algorithm.
 The stability of the closed-loop system is proven in Section~\ref{sec:NSB_R_path_stability}.
-Section~\ref{sec:NSB_R_simulation} presents the results of the numerical simulations.
-Finally, Section~\ref{sec:NSB_R_conclusion} presents some concluding remarks.
+Finally, Section~\ref{sec:NSB_R_simulation} presents the results of the numerical simulations.
 
 \section{Problem Definition}
 \label{sec:NSB_R_problem}
@@ -850,12 +837,3 @@ In fact, our solution appears to be overly conservative.
 We can see that the velocities change abruptly when the collision avoidance or depth limiting tasks are active, as the vehicles switch to a different behavior.
 However, the velocities still remain bounded during the whole simulation.
 The peak in sway velocities at $t = \SI{180}{\second}$ coincides with the sharpest turn (\emph{i.e.,} the largest $\bs{\omega}_p(s)$) of the desired path.
-
-
-\section{Conclusions and Future Work}
-\label{sec:NSB_R_conclusion}
-
-This chapter extends a formation path-following \gls{nsb} algorithm to underactuated 6\gls{dof}  vehicles while adding obstacle avoidance and depth-limiting capabilities. 
-Both the path-following and formation-keeping parts are proven to be stable.     
-In the proofs, we assume that the avoidance and depth-limiting tasks are not active.
-An analysis of the closed-loop system with active avoidance and depth-limiting tasks is left for future work.

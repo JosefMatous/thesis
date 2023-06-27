@@ -200,16 +200,16 @@
 \setcounter{page}{1}
 
 % Add item number to \fullcite command
-\DeclareCiteCommand{\fullcite}
-  {\usebibmacro{prenote}}
-   {{\printtext[labelnumberwidth]{% New
-        \printfield{prefixnumber}% New
-        \printfield{labelnumber}}} % New
-  \usedriver
-     {\DeclareNameAlias{sortname}{default}}
-     {\thefield{entrytype}}}
-  {\multicitedelim}
-  {\usebibmacro{postnote}}
+% \DeclareCiteCommand{\fullcite}
+%   {\usebibmacro{prenote}}
+%    {{\printtext[labelnumberwidth]{% New
+%         \printfield{prefixnumber}% New
+%         \printfield{labelnumber}}} % New
+%   \usedriver
+%      {\DeclareNameAlias{sortname}{default}}
+%      {\thefield{entrytype}}}
+%   {\multicitedelim}
+%   {\usebibmacro{postnote}}
 
 % Switch to Arabic page numbering at the beginning of the first numbered chapter
 \newif\iffirstchapter
@@ -232,7 +232,8 @@
 }
 
 % Dotted line and tighter vertical spacing for chapters in the table of contents
-\def\l@chapter#1#2{\@dottedtocline{1}{0em}{1.5em}{\bf #1}{\bf #2}}
+%\def\l@chapter#1#2{\@dottedtocline{1}{0em}{2em}{\bf #1}{\bf #2}}
+%\def\l@part#1#2{\@dottedtocline{1}{0em}{3em}{\large \bf #1}{\large \bf #2}}
 
 % Only show parts, chapters, and sections in the table of contents
 \setcounter{tocdepth}{1}

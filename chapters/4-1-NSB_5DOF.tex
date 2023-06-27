@@ -14,20 +14,11 @@ We investigate the dynamics of the path-following error using cascaded systems t
 We validate the theoretical results through numerical simulations.
 The contents of this chapter are based on \cite{matouvs_formation_2022}.
 
-\section{Introduction}
-
-The work presented in this chapter extends the results of \cite{eek_formation_2021}, where a \acrfull{nsb} algorithm is used to guide two surface vessels moving in the horizontal plane.
-Specifically, we propose an algorithm that works with an arbitrary number of \acrfullpl{auv} with five \acrfullpl{dof} moving in 3D.
-Similarly to \cite{eek_formation_2021}, we solve the path-following task using \acrfull{los} guidance.
-Using the cascaded systems theory results of \cite{pettersen_lyapunov_2017}, we prove that the closed-loop system consisting of a decoupled \gls{los} guidance law, combined with surge, pitch, and yaw autopilots based on \cite{moe_LOS_2016}, is \acrfullpl{usges} and \acrfullpl{ugas}.
-The theoretical results are verified through numerical simulations.
-
-The remainder of the chapter is organized as follows.
+The chapter is organized as follows.
 Section \ref{sec:nsb_5dof_model} defines the formation path-following problem that is addressed in this chapter.
 In Section \ref{sec:nsb_5dof_control}, we describe the control system.
 The stability of the control system is proven in Section \ref{sec:nsb_5dof_path_stability}.
-Section \ref{sec:nsb_5dof_simulations} contains the results of a numerical simulation.
-Finally, Section \ref{sec:nsb_5dof_conclusion} contains some concluding remarks.
+Finally, Section \ref{sec:nsb_5dof_simulations} contains the results of a numerical simulation.
 
 \section{Problem Definition}
 \label{sec:nsb_5dof_model}
@@ -581,9 +572,6 @@ This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \em
 The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
 The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
 
-\section{Conclusions and Future Work}
-\label{sec:nsb_5dof_conclusion}
-
 \begin{figure}[t]
     \centering
     \def\svgwidth{.8\textwidth}
@@ -624,12 +612,3 @@ The rate of convergence of the along-track error ($x_b^p$) is given by the path 
 \end{table}
 
 %\addtolength{\textheight}{-5cm}
-
-In this paper, we proposed a formation path-following method for an arbitrary number of \glspl{auv}, proved the stability of the path following part, and verified its effectiveness in simulations.
-
-Because the proposed algorithm is centralized, our method can only be used in scenarios where all the vehicles can communicate with each other.
-A decentralized version of the algorithm is a topic for future work.
-
-In the simulations, the formation-keeping error shows exponential convergence to zero.
-However, the stability of the formation-keeping task has not been theoretically proven.
-Proving the stability of this task is another potential topic for future work.

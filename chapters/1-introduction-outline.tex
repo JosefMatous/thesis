@@ -1,2 +1,148 @@
 \section{Outline and Contributions}
 
+\subsubsection{Chapter~\ref{chap:collision_avoidance}: \nameref{chap:collision_avoidance}}
+
+This chapter differs from the rest of the thesis in the considered vehicle model.
+In this chapter, we consider overactuated vehicles, \emph{i.e.,} vehicles with more actuators than \acrfullpl{dof}.
+As mentioned in Section~\ref{sec:introduction_literature}, reactive collision avoidance should be included into the lowest-possible control level.
+Overactuated vehicles often use control allocation in their lowest-level controller \cite{johansen_control_2013}.
+Most control allocation methods are based on numerical optimization \cite{oppenheimer_control_2006,harkegard_dynamic_2004,johansen_constrained_2004} which makes them ideal for augmenting with \acrfullpl{cbf}.
+
+The main contribution of Chapter~\ref{chap:collision_avoidance} is a reactive \acrfull{colav} algorithm that is included at the lowest level in the control pipeline, \emph{i.e.} in the control allocation, to ensure the safety of the vehicle regarding collision avoidance.
+Since it is included at the lowest-possible control level, it also ensures the ``baseline'' safety of any other higher level (long term/deliberate) planners of the vehicle guidance, navigation and control system.
+The algorithm can easily be implemented on vehicles that apply a numerical optimization-based method to control allocation.
+Moreover, the algorithm does not rely on any communication between the vehicles; the only required information is the position and velocity of other vehicles.
+The chapter extends the results in \cite{thyri_reactive_2020}, which only considers \acrfullpl{asv} and simple encounters between one \gls{asv} and a vessel moving at a constant course and speed, making the method applicable to a wider range of vehicles and scenarios with multiple autonomous vehicles.
+
+\subsection{Part~\ref{part:NSB}: \nameref{part:NSB}}
+
+This section investigates the use of the \acrlong{nsb} algorithm for solving the formation path-following problem on a fleet of underactuated \glspl{auv}.
+
+\subsubsection{Chapter~\ref{chap:5dof_nsb}: \nameref{chap:5dof_nsb}}
+
+As mentioned in Section~\ref{sec:introduction_literature}, the \gls{nsb} algorithm has been applied to kinematic vehicles (\emph{i.e.,} vehicles with single-integrator dynamics), as well as \glspl{asv} and \glspl{auv} moving in the horizontal plane.
+Chapter~\ref{chap:5dof_nsb} applies the \gls{nsb} algorithm to \glspl{auv} moving in three dimensions.
+
+Specifically, the chapter extends the results of \cite{eek_formation_2021}, where an \gls{nsb} algorithm is used to guide two \glspl{asv}, by proposing an algorithm that works with an arbitrary number of \glspl{auv} with five \glspl{dof} moving in 3D.
+We solve the formation path-following problem by defining three tasks: collision avoidance, formation keeping, and path following.
+The tasks are combined using the \gls{nsb} algorithm to achieve the desired behavior.
+Similarly to \cite{eek_formation_2021}, we solve the path-following task using \gls{los} guidance.
+Using the cascaded systems theory results of \cite{pettersen_lyapunov_2017}, we prove that the closed-loop system consisting of a 3D \gls{los} guidance law, combined with surge, pitch, and yaw autopilots based on \cite{moe_LOS_2016}, is \glspl{usges} and \glspl{ugas}.
+The theoretical results are verified through numerical simulations.
+
+\subsubsection{Chapter~\ref{chap:NSB_R}: \nameref{chap:NSB_R}}
+
+This chapter further extends the \gls{nsb} algorithm proposed in Chapter~\ref{chap:5dof_nsb}.
+The algorithm in Chapter~\ref{chap:5dof_nsb} uses a 5\gls{dof} \gls{auv} model, considers only inter-vehicle collision avoidance, and proves only the stability of the path-following task.
+Furthermore, the orientation of the 5\gls{dof} model was expressed using Euler angles, which causes singularities for a pitch angle of $\pm90$ degrees.
+
+This work applies the \gls{nsb} algorithm to a full 6\gls{dof} model, uses rotation matrices to describe the attitude of the vehicles to avoid singularities, modifies and extends the tasks, and proves the stability of the combined path-following and formation-keeping tasks.
+We also add a scheme that keeps the vehicles within a given range of depths to stay within the operation limits.
+As opposed to the previous work, we do not limit the analysis to a specific low-level attitude controller.
+Consequently, the new algorithm can be integrated into existing on-board controllers.
+Assuming that the existing low-level controller allows exponential tracking, we use results from cascaded systems theory~\cite{pettersen_lyapunov_2017} to prove that the closed-loop system composed by the \gls{nsb} algorithm and the low-level controller is \acrfullpl{usges}.
+We verify the results in numerical simulations.
+
+\subsubsection{Chapter~\ref{chap:distr_NSB}: \nameref{chap:distr_NSB}}
+
+The algorithms presented in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R} are centralized, making them difficult to use in real-life applications.
+As mentioned in Section~\ref{sec:introduction_literature}, there are distributed \gls{nsb} algorithms \cite{ahmad_multirobot_2014,tan_coordinated_2022}.
+However, these algorithms work by dividing the fleet into smaller, fully connected subgroups, or by using leading vehicles.
+In both approaches, there is still a requirement for fast and reliable communications within the subgroups and between the leaders.
+Furthermore, the leader-follower scheme is vulnerable to failures of the leading vehicles.
+
+Chapter~\ref{chap:distr_NSB} presents an approach that is fully distributed, so that the fleet does not need to decompose into subgroups nor requires leading vehicles.
+To do so, the proposed algorithm combines the centralized schemes presented in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R} with a consensus algorithm.
+Specifically, we first propose a continuous-time consensus algorithm and prove its stability using Lyapunov analysis.
+Then, we present a modified discrete-time version of the algorithm based on event-triggered control.
+The effectiveness of both the continuous- and discrete-time algorithms is demonstrated in numerical simulation.
+Furthermore, the discrete-time version is also tested in field experiments.
+
+\subsection{Part~\ref{part:hand_position}: \nameref{part:hand_position}}
+
+In this part, we define the hand position concept for 6\gls{dof} underactuated \glspl{auv}, and present some applications.
+
+\subsubsection{Chapter~\ref{chap:handpos_definition}: \nameref{chap:handpos_definition}}
+
+This thesis studies slender torpedo-shaped \acrfullpl{auv} with a propeller that provides forward (surge) thrust, and fins that provide torque.
+The configuration of actuators means that \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
+In this chapter, we propose to use the \emph{hand position} concept to control the AUV.
+The hand position is a point located a given distance in front of the neutral point along the vehicle's $x$-axis (see \figref{fig:handpos_def_motivation}b for an illustration).
+The concept was first introduced in \cite{pomet_hand-position_1992} to stabilize nonholonomic vehicles with unicycle dynamics.
+Later, it was applied to control formations of unicycles \cite{lawton_hand-position-formation_2003}.
+The concept was then extended to marine vehicles moving in the horizontal plane \cite{paliotta_trajectory_2019}, and two- and three-dimensional Euler-Lagrange-like systems \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021}.
+
+\begin{figure}[b]
+    \centering
+    \def\svgwidth{0.65\textwidth}
+    \import{figures/handpos_def}{motivation.pdf_tex}
+    \caption{Illustration of (a) the traditional controllers, and (b) the proposed hand position-based controller. The dashed line represents the body-fixed $x$-axis.}
+    \label{fig:handpos_def_motivation}
+\end{figure}
+
+There are two main advantages to using the hand position concept.
+The first advantage stems from the applications of AUVs.
+The aim of many scientific missions is to scan a given area using a sensor attached to the AUV.
+Since the position of the sensor typically does not coincide with the neutral point, there may be a significant offset between the sensor and the desired trajectory, caused by the sea loads (see \figref{fig:handpos_def_motivation}a).
+In some cases, the hand position can be chosen such that it coincides with the position of the sensor, allowing to scan the area more accurately.
+The second advantage is that if we choose the hand position as the output of our system, it is possible to transform the nonlinear underactuated vehicle model to a double integrator, using output feedback linearization.
+This allows us to apply advanced control strategies, \emph{e.g.,} various consensus algorithms \cite{cai_hand-position-rigidity-planar_2015,li_hand-position-rigidity-3d_2021,lawton_hand-position-formation_2003,restrepo_formation_2022} that cannot be directly used on nonholonomic or underactuated vehicles.
+
+Note that the three-dimensional Euler-Lagrange-like system used in \cite{li_hand-position-rigidity-3d_2021} does not accurately represent AUVs, since it does not consider the Coriolis and centripetal effects or the restoring forces (gravity and buoyancy).
+Furthermore, the model in \cite{li_hand-position-rigidity-3d_2021} has five \acrfullpl{dof}: three position coordinates, pitch angle, and yaw angle.
+The use of Euler angles inherently introduces singularities into the system.
+
+The goal of this chapter is thus to further extend the hand position concept to AUVs moving in three dimensions.
+We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
+Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal states, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
+
+\subsubsection{Chapter~\ref{chap:handpos_trajectory}: \nameref{chap:handpos_trajectory}}
+
+In this chapter, we use the hand position concept to solve the trajectory-tracking and path-following problems.
+Specifically, we show that these two problems can be solved using the hand position transformation and a simple PID controller.
+We analyze the closed-loop behavior of the system and prove that the proposed controllers exponentially track the desired trajectory or path, while the angular velocities of the vehicle remain bounded.
+Moreover, we prove that in the special case when the desired trajectory or path is a straight line, the whole closed-loop system is exponentially stable.
+The theoretical results are verified both in numerical simulations and experiments.
+
+\subsubsection{Chapter~\ref{chap:handpos_MPC}: \nameref{chap:handpos_MPC}}
+
+In this chapter, we employ the spline-based \gls{mpc} presented in \cite{saska_2016_predictive,van_parys_2017_DMPC} to solve the formation path-following problem.
+The proposed scheme is applicable to a wide range of vehicles.
+The only restriction is that the model of the vehicle must be differentially flat.
+The spline-based \gls{mpc} scheme can thus be seen as a trade-off between lower computational requirements and more restrictive assumptions on the model.
+
+We present the results of two numerical case studies.
+The first case study considers a fleet of \glspl{auv}.
+To make the \gls{auv} model differentially flat, we employ the hand position transformation.
+The second case study considers a group of differential drive robots modeled as first-order unicycles.
+
+\subsubsection{Chapter~\ref{chap:handpos_tracking}: \nameref{chap:handpos_tracking}}
+
+This chapter investigates the tracking-in-formation problem for a fleet of \glspl{auv}.
+This problem is similar to the formation path-following problem, except that the fleet should track a desired trajectory instead of following a desired path.
+We assume that the \glspl{auv} communicate over a directed topology and are subject to the \gls{colav} and connectivity constraints discussed in Section~\ref{sec:introduction_literature}.
+
+Under the control designs proposed in the literature, in many instances, in order to guarantee the satisfaction of the inter-agent constraints, the vehicles are forced to move backwards, oftentimes during a prolonged period of time and at relatively high speeds (for backwards motion of a marine vehicle). 
+However, although marine vehicles are able to move backwards, they are not well-suited to do so due to their shapes and their propulsion system. 
+This issue, however, has not been addressed in the literature of multi-\gls{auv} systems.
+
+In Chapter~\ref{chap:handpos_tracking}, we propose a distributed control law that solves the tracking-in-formation problem for multiple marine vehicles interacting over a directed communication graph and that guarantees, simultaneously, connectivity preservation and inter-agent collision avoidance.
+Moreover, we address the issue of backwards motion by imposing a non-negativity constraint on the surge velocity of the vehicles.
+More precisely, on one hand we encode via \glspl{blf} the proximity and safety constraints as \emph{hard constraints} that need to be always satisfied.
+On the other hand, we encode the non-negativity of the surge velocity as a \emph{soft constraint}, so that it is imposed on the vehicles as long as it does not interfere with the hard constraints, in which case it is dynamically relaxed.
+The proposed controller is based on the hand-position-based input-output feedback linearization method presented in Chapter~\ref{chap:handpos_definition} and on the so-called \emph{edge-agreement} representation of multi-agent systems \cite{mesbahi_graph_2010}, in which the relative states of the connected agents are used instead of the absolute ones, making it well adapted to practical applications where, usually, only relative measurements are available.
+With regards to the stability analysis, differing from most of the existing works in the literature, where only non-uniform convergence to the formation and to the target vehicle is guaranteed, we establish \emph{almost-everywhere} uniform asymptotic stability of the tracking-in-formation objective and we show that the output error dynamics converge to the origin exponentially fast, while satisfying the constraints.
+
+\subsubsection{Chapter~\ref{chap:handpos_NSB}: \nameref{chap:handpos_NSB}}
+
+This chapter presents an extended \acrfull{nsb} algorithm for vehicles with second-order dynamics.
+The \gls{nsb} algorithm, as presented in the existing literature, is developed for kinematic single-integrator systems \cite{arrichiello_formation_2006,matous_singularity_2023,eek_formation_2021}.
+Although existing \gls{nsb} methods are developed for first-order systems, \gls{auv} dynamics are inherently second-order. Therefore, any first-order solution is necessarily perturbed by the dynamics of the maneuvering controller.
+In Chapter~\ref{chap:handpos_NSB}, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common, due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Compared to the existing methods, our formulation handles the second-order dynamics directly in the task space as interpretable spring-damper systems.
+
+We apply the proposed \gls{nsb} method to a fleet of \glspl{auv}.
+To make the proposed method applicable to \glspl{auv}, we use the hand position transformation.
+Subsequently, through the design of specific path-following, formation-keeping, and collision-avoidance tasks, we can control the fleet to follow a given path in a formation while avoiding collisions both within the fleet and with external obstacles. 
+We prove the stability of the control scheme using Lyapunov analysis and verify its effectiveness in simulations. 
+Because our reformulated \gls{nsb} method works directly with the second-order system, there is no need to transform desired velocities or accelerations into surge and orientation references, as has been done in previous works.
+This reduces one level of complexity in the controller design.

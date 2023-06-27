@@ -9,13 +9,7 @@ The behavioral controller implements a hierarchy of path-following, formation-ke
 The closed-loop system is proven \acrlongpl{ugas}, and the proposed method is validated through numerical simulations.
 The contents of this chapter are based on \cite{lie_formation_2023}.
 
-\section{Introduction}
-
-The \gls{nsb} algorithm, as presented in the existing literature, is developed for kinematic single-integrator systems \cite{arrichiello_formation_2006,matous_singularity_2023,eek_formation_2021}. In this work, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common,  due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Although existing \gls{nsb} methods are developed for first-order systems, \gls{auv} dynamics are inherently second-order. Therefore, any first-order solution is necessarily perturbed by the dynamics of the maneuvering controller. In contrast, our formulation handles the second-order dynamics directly in the task space as interpretable spring-damper systems.
-
-We apply the proposed \gls{nsb} method to a fleet of \glspl{auv}. \Glspl{auv} are underactuated systems with inherently nonlinear dynamics. What enables us to still use the proposed \gls{nsb} method, developed for vehicles with linear double integrator dynamics, is the use of the hand position input-output linearization method presented in Chapter~\ref{chap:handpos_definition}. Subsequently, through the design of specific path-following, formation-keeping, and collision-avoidance tasks, the fleet is controlled to follow a preplanned path in formation while avoiding collisions both within the fleet and with external obstacles. The stability of the system is proved, and its effectiveness is verified in simulation. Because our reformulated NSB method works directly with the second-order system given by the hand position controller, there is no need to transform desired velocities or accelerations into surge and orientation references, as has been done in previous works. This reduces one level of complexity in the controller design.
-
-This chapter is organized as follows. Section \ref{sec:NSB} presents the extended \gls{nsb} algorithm which is applicable for general double-integrator systems. Section \ref{sec:case_study} presents a case study of this \gls{nsb} algorithm applied to a fleet of \glspl{auv}. Section \ref{sec:conclusion} presents some concluding remarks.
+This chapter is organized as follows. Section \ref{sec:NSB} presents the extended \gls{nsb} algorithm which is applicable for general double-integrator systems. Section \ref{sec:case_study} presents a case study of this \gls{nsb} algorithm applied to a fleet of \glspl{auv}.
 
 \section{The NSB Algorithm for Double Integrators}\label{sec:NSB}
 The \gls{nsb} method enables the creation of multiple tasks in a hierarchical manner, ensuring that low-priority tasks do not interfere with high-priority ones. In this section, we extend this method to second-order systems with double integrator dynamics.
@@ -154,7 +148,7 @@ The objective is to control the vehicles so that
 
 We let the control system consist of three tasks in decreasing order of priority: inter-vehicle collision avoidance, formation keeping, and path following. The following sections will detail the chosen task variables and \gls{soclik} solution for each task.
 
-\subsubsection{Inter-vehicle collision avoidance}
+\subsubsection{Inter-Vehicle Collision Avoidance}
 
 The highest priority task is inter-vehicle \acrfull{colav}. The task variable is given by a stacked vector $\bm{\sigma}_1 = [\sigma_{1,1}\T, \ldots, \sigma_{1,l}\T]\T$ of relative distances between vehicles closer than the activation distance $d_{COLAV}$:
 \begin{equation}
@@ -192,7 +186,7 @@ The resulting \gls{soclik} equation for the task is
 with $\dot{\bm{\sigma}}_{1\,} \!\!= \mathbf{J}_1 (\mathbf{v}\! + \!\stackedocean)$. %We note that because of the symmetry of the task and the structure of the task Jacobian, the constant ocean currents will cancel out in $\dot{\mathbf{v}}_1$ under the assumption that it is equal for all vehicles.
 Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}_1 \stackedocean \!\!= \dot{\mathbf{J}}_1 \stackedocean \!\!= \mathbf{0}$. Consequently, $\dot{\mathbf{v}}_1$ is independent of the ocean current velocity.
 
-\subsubsection{Formation-keeping task}
+\subsubsection{Formation-Keeping Task}
 The formation-keeping task moves the vehicles into a predefined formation in the formation-centered frame. The task variable is given by
 \begin{equation}
     \bm{\sigma}_2 = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,n-1}\T\right]\T, \quad \bm{\sigma}_{2,i}  = \mathbf{p}_i - \mathbf{p}_b.
@@ -228,7 +222,7 @@ where $v_{2_{\max}}$ is a positive constant and $\mathrm{sat}$ is a saturation f
 With the saturated task acceleration, we further require that the product of the gain matrices $\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}$ is symmetric positive definite.
 Similarly to the inter-vehicle collision avoidance task, this task is independent of the ocean current.% because it concerns the relative movement of the vehicles in relation to each other.
 
-\subsubsection{Path-following task}
+\subsubsection{Path-Following Task}
 The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a constant, desired path-following speed $U_{LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
 
 We apply the coupled \acrfull{los} guidance algorithm defined in Section~\ref{sec:background_LOS}, and modify it to work with double-integrator systems. We denote the components of the path following error $\mathbf{p}_b^p$ as $x_b^p$, $y_b^p$, and $z_b^p$. Similarly to Chapter~\ref{chap:NSB_R}, we let $\Delta(\mathbf{p}_b^p)$ be the error-dependent look-ahead distance of the \gls{los} guidance law given by
@@ -358,8 +352,7 @@ the closed-loop properties of each task can be analyzed independently.
 
 
 % Prove external state stability
-%\subsubsection{Stability of the Formation-Keeping Task}
-\subsubsection{Stability of the formation-keeping task}
+\subsubsection{Stability of the Formation-Keeping Task}
 The closed-loop dynamics of the formation-task error $\Tilde{\bm{\sigma}}_2$ under the saturated formation-keeping acceleration, \eqref{eq:saturated_formation_keeping}, are given by the system
 \begin{equation}\label{eq:task_2_dynamics}
     \ddot{\Tilde{\bm{\sigma}}}_2 = - v_{2_{\max}}\mathrm{sat}\bigl(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_2\bigr) - \mathbf{\Lambda}_{d,2} \dot{\Tilde{\bm{\sigma}}}_2.
@@ -388,7 +381,7 @@ Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\
 \end{proof}
 
 
-\subsubsection{Stability of the path-following task}
+\subsubsection{Stability of the Path-Following Task}
 Let $\Tilde{\mathbf{p}}$ and $\Tilde{\mathbf{v}}$ be given by \eqref{eq:LOS_integral_errors}. Using the definition
 \begin{equation}
     \mathbf{p}_b^p = \mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),
@@ -425,7 +418,7 @@ The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds wit
 \end{proof}
 
 
-\subsubsection{Boundedness of internal states}
+\subsubsection{Boundedness of Internal States}
 Let $\mathbf{p}_{{\rm d}, i} = \mathbf{p}_p(s) + \mathbf{R}_p\mathbf{p}_{f, i}^f$ denote the desired position of vehicle $i$. Note that because the path function is $\mathcal{C}^{\infty}$ and thanks to the choice of the path parameter update law \eqref{eq:path_update}, the time-derivative of $\mathbf{p}_{{\rm d}, i}$ is bounded.
 In the previous section, we proved the stability of the external dynamics.
 Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\mathbf{p}_{{\rm d}, i}$, and the relative hand velocity of vehicle $i$, $\mat{x}_{2, i}$, converges to $\dot{\mathbf{p}}_{{\rm d}, i} - \ocean$.
@@ -512,8 +505,3 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
 \end{figure}
 
 The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.
-
-\section{Conclusions and Future Work}\label{sec:conclusion}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-In this chapter, we proposed an extended \gls{nsb} method for double-integrator systems. The method was proved to provide \acrlongpl{ges} task error dynamics. The method was demonstrated in a case study of formation path-following with underactuated \glspl{auv}. We defined the second-order kinematic tasks for collision avoidance, formation-keeping, and path-following. To force a bounded velocity, we introduced a saturation term to the formation-keeping acceleration. The closed-loop formation-error system with the reformulated formation-keeping acceleration was proved to be \glspl{ugas}, and the closed-loop path-following system was proved to be \glspl{usges}. Simulation results demonstrate the effectiveness of our approach. Possible future work includes verifying the presented results through experiments.

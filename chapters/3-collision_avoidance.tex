@@ -8,13 +8,19 @@ We demonstrate the effectiveness of this method through numerical simulations of
 The proposed method can be readily implemented on vehicles that already use an optimization-based control allocation method.
 The contents of this chapter are based on \cite{matous_unifying_2021}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
-%Overactuated vehicles, \emph{i.e.,} vehicles with more actuators than degrees of freedom (DOFs), often use control allocation in their lowest-level controller \cite{johansen_control_2013}.
+The chapter is organized as follows.
+Section \ref{sec:ccta_model} defines the notation and describes the model of the vehicle.
+The proposed control allocation method and \glspl{cbf} are introduced in Sections \ref{sec:ccta_alloc} and \ref{sec:ccta_CBF}.
+%Section \ref{sec:ccta_alloc} introduces control allocation and Section \ref{sec:ccta_CBF} introduces CBFs.
+Section \ref{sec:ccta_optimization} describes the resulting combined \gls{colav} and control allocation optimization problem.
+Finally, Section \ref{sec:ccta_simulations} presents the results of numerical simulations using models of \glspl{asv}.
+
+\section{Vehicle Model}
+\label{sec:ccta_model}
+
 In this chapter, we consider overactuated vehicles, \emph{i.e.,} vehicles with more actuators than \acrfullpl{dof}, with a control system consisting of blocks shown in Figure \ref{fig:ccta_diagram}.
 The control system contains a long-term, deliberate planner, a high-level controller that outputs desired forces and torques ($\bs{\tau}_d$), and a control allocation block.
 The goal of control allocation is to find actuator control inputs ($\mathbf{u}$) that generate the desired forces and torques.
-Most control allocation methods are based on numerical optimization \cite{oppenheimer_control_2006,harkegard_dynamic_2004,johansen_constrained_2004} which makes them ideal for augmenting with \acrfullpl{cbf}.
 
 \begin{figure}[t]
     \centering
@@ -24,23 +30,6 @@ Most control allocation methods are based on numerical optimization \cite{oppenh
     \caption{Control system of overactuated vehicles considered in this chapter}
     \label{fig:ccta_diagram}
 \end{figure}
-
-The main contribution of this chapter is a reactive \acrfull{colav} algorithm that is included at the lowest level in the control pipeline, \emph{i.e.} in the control allocation, to ensure the safety of the vehicle regarding collision avoidance.
-Since it is included at the lowest-possible control level, it also ensures the ``baseline'' safety of any other higher level (long term/deliberate) planners of the vehicle guidance, navigation and control system.
-The algorithm can easily be implemented on vehicles that apply a numerical optimization-based method to control allocation.
-Moreover, the algorithm does not rely on any communication between the vehicles; the only required information is the position and velocity of other vehicles.
-The chapter extends the results in \cite{thyri_reactive_2020}, which only considers \acrfullpl{asv} and simple encounters between one \gls{asv} and a vessel moving at a constant course and speed, making the method applicable to a wider range of vehicles and scenarios with multiple autonomous vehicles.
-
-The remainder of the chapter is organized as follows.
-Section \ref{sec:ccta_model} defines the notation and describes the model of the vehicle.
-The proposed control allocation method and \glspl{cbf} are introduced in Sections \ref{sec:ccta_alloc} and \ref{sec:ccta_CBF}.
-%Section \ref{sec:ccta_alloc} introduces control allocation and Section \ref{sec:ccta_CBF} introduces CBFs.
-Section \ref{sec:ccta_optimization} describes the resulting combined \gls{colav} and control allocation optimization problem.
-Section \ref{sec:ccta_simulations} presents the results of numerical simulations using models of \glspl{asv}.
-Finally, Section \ref{sec:ccta_conclusion} contains some concluding remarks.
-
-\section{Vehicle Model}
-\label{sec:ccta_model}
 
 \subsection{Notation}
 \label{sec:ccta_notation}
@@ -469,12 +458,6 @@ When it comes to the choice of the coefficient $k_v$, introduced in \eqref{eq:cc
 Intuitively, increasing $k_v$ increases the size of the ``unsafe'' region where the barrier function is negative, causing the system to react sooner in situations where two vehicles are on collision course.
 Conversely, increasing the slope of $\gamma$ decreases the size of the region where the constraint \eqref{eq:ccta_combined_avoidance_allocation_constraint} is active, causing the system to react later.
 
-\section{Conclusions}
-\label{sec:ccta_conclusion}
-In this chapter, we have proposed a method for integrating a \gls{colav} scheme into control allocation through control barrier functions.
-We have demonstrated its effectiveness on two models of ASVs, where it significantly improved the safety.
-The proposed method can be readily implemented on vehicles that already use optimization-based control allocation by simply including the constraints given by the control barrier functions in the optimization.
-
 \begin{table}[t]
     \centering
     \begin{tabular}{cc|rrr}
@@ -488,5 +471,3 @@ The proposed method can be readily implemented on vehicles that already use opti
     \caption{Steady-state thruster utilization of the \emph{basic} algorithm \eqref{eq:ccta_combined_avoidance_allocation} and the \emph{modified} algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}.}
     \label{tab:thruster_utilization}
 \end{table}
-
-Finding a systematic method for choosing the parameter values that guarantee safety for a given vehicle model is a topic for future work.

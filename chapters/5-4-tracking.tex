@@ -8,25 +8,8 @@ We establish \emph{almost-everywhere} uniform asymptotic stability of the output
 Numerical and high-fidelity simulations are provided to illustrate the effectiveness of our approach.
 The contents of this chapter are based on \cite{restrepo_formation_2022,restrepo_tracking_2023}, with proofs extended from 2D to 3D.
 
-\section{Introduction}
-
-In order to successfully carry out the tracking-in-formation mission in the framework of multi-agent systems of autonomous vehicles, some practical challenges need to be addressed.
-For instance, in order to guarantee the safety of the system and the success of the mission, the vehicles must guarantee the maintenance of a safe distance between them. Moreover, due to the use of onboard sensors and the challenges posed by the underwater environment, the vehicles need to keep a sufficiently close distance to guarantee the reliability of the communication and the connectivity of the multi-agent system.
-Furthermore, in special cases when the vehicles use optical sensors or communications, the followers are limited by \gls{fov} constraints.
-
-Under the control designs proposed in the literature, in many instances, in order to guarantee the satisfaction of the inter-agent constraints, the vehicles are forced to move backwards, oftentimes during a prolonged period of time and at relatively high  speeds (for backwards motion of a marine vehicle). 
-However, although marine vehicles are able to move backwards, they are not well-suited to do so due to their shapes and their propulsion system. 
-This issue, however, has not been addressed in the literature of multi-\gls{auv} systems.
-
-In this chapter, we propose a distributed control law that solves the tracking-in-formation problem for multiple marine vehicles interacting over a directed communication graph and that guarantees, simultaneously, connectivity preservation and inter-agent collision avoidance.
-Moreover, we address the issue of backwards motion by imposing a non-negativity constraint on the surge velocity of the vehicles.
-More precisely, on one hand we encode via \glspl{blf} the proximity and safety constraints as \emph{hard constraints} that need to be always satisfied.
-On the other hand, we encode the non-negativity of the surge velocity as a \emph{soft constraint}, so that it is imposed on the vehicles as long as it does not interfere with the hard constraints, in which case it is dynamically relaxed.
-The proposed controller is based on the hand-position-based input-output feedback linearization method presented in Chapter~\ref{chap:handpos_definition} and on the so-called \emph{edge-agreement} representation of multi-agent systems \cite{mesbahi_graph_2010}, in which the relative states of the connected agents are used instead of the absolute ones, making it well adapted to practical applications where, usually, only relative measurements are available.
-With regards to the stability analysis, differing from most of the existing works in the literature, where only non-uniform convergence to the formation and to the target vehicle is guaranteed, we establish \emph{almost-everywhere} uniform asymptotic stability of the tracking-in-formation objective and we show that the output error dynamics converge to the origin exponentially fast, while satisfying the constraints.
-
-The remainder of the chapter is organized as follows.
-In Section \ref{sec:preliminaries} we present the model of the multi-agent system and the problem formulation. For clarity of exposition, in Section~\ref{sec:ctrl} we present the control design when considering only the hard constraints, followed by the stability analysis. Then, in Section~\ref{sec:soft} we present the control design adding the soft constraints. Finally, simulation results and conclusions are presented in Sections~\ref{sec:simulations} and \ref{sec:conclusions}, respectively.
+The chapter is organized as follows.
+In Section \ref{sec:preliminaries} we present the model of the multi-agent system and the problem formulation. For clarity of exposition, in Section~\ref{sec:ctrl} we present the control design when considering only the hard constraints, followed by the stability analysis. Then, in Section~\ref{sec:soft} we present the control design adding the soft constraints. Finally, the results of numerical simulations are presented in Section~\ref{sec:simulations}.
 
 \section{Model and Problem Formulation}\label{sec:preliminaries}
 
@@ -603,10 +586,3 @@ Having a negative surge velocity is necessary to satisfy the hard connectivity a
 The formation-tracking errors and the velocity errors are shown in Figures~\ref{fig:handpos_tracking_hifi_formation_errors} and \ref{fig:handpos_tracking_hifi_velocity_errors}, respectively.
 We can see that these errros do not converge to zero but rather to a small area around zero.
 These nonzero steady-state errors are caused by two factors: the uncertainty of the navigation system, and the delay in the actuators.
-
-\section{Conclusions}\label{sec:conclusions}
-
-In this chapter, we addressed the tracking-in-formation control problem of cooperative autonomous underwater vehicles interacting over directed graphs and under \emph{hard} inter-agent constraints (proximity and collision avoidance) and \emph{soft} constraints (positive surge velocity). 
-We proposed a distributed control law that solves this problem and that guarantees, simultaneously, connectivity preservation and inter-agent collision avoidance.
-With respect to the stability analysis, it is important to emphasize that, beyond mere convergence properties as usually established in the literature of multi-agent systems, we establish almost-everywhere uniform asymptotic stability with exponential convergence of the tracking errors. 
-Current research focuses on validating the results experimentally.

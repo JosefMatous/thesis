@@ -11,9 +11,9 @@ This thesis presents and studies control algorithms for autonomous marine vehicl
 The thesis is mainly focused on formation path-following control of underactuated \acrfullpl{auv}, although some chapters also consider \acrfullpl{asv} and additional control problems, such as reactive collision avoidance, path following, and trajectory tracking.
 The thesis is divided into three parts:
 \begin{itemize}
-    \item unifying reactive collision avoidance and control allocation,
-    \item formation path-following using the null-space-behavioral algorithm,
-    \item the hand position concept and its applications.
+    \item unifying reactive collision avoidance and control allocation (Chapter~\ref{chap:collision_avoidance}),
+    \item formation path-following using the null-space-behavioral algorithm (Chapters~\ref{chap:5dof_nsb}--\ref{chap:distr_NSB}),
+    \item the hand position concept and its applications (Chapters~\ref{chap:handpos_definition}--\ref{chap:handpos_NSB}).
 \end{itemize}
 This chapter presents the motivation and the contributions of the thesis.
 
@@ -22,40 +22,26 @@ This chapter presents the motivation and the contributions of the thesis.
 \input{chapters/1-introduction-outline.tex}
 
 \section{Publications}
+\newcommand{\tablecite}[1]{\cite{#1} & \fullcite{#1}.}
 
-\subsubsection{Conference publications}
-\noindent \hspace*{1em} \fullcite{matous_unifying_2021}.
+\subsubsection{Conference Publications}
+\begin{tabularx}{\textwidth}{rX}
+    \tablecite{matous_unifying_2021} \\
+    \tablecite{matouvs_formation_2022} \\
+    \tablecite{matouvs_formation_2022} \\
+    \tablecite{matous_singularity_2023} \\
+    \tablecite{matous_MPC_2022} \\
+    \tablecite{restrepo_formation_2022}
+\end{tabularx}
 
-\vspace*{0.5em}
+\subsubsection{Journal Submissions}
+\begin{tabularx}{\textwidth}{rX}
+    \tablecite{matous_distributed_2023} \\
+    \tablecite{matous_trajectory_2023} \\
+    \tablecite{restrepo_tracking_2023}
+\end{tabularx}
 
-\noindent \hspace*{1em} \fullcite{matouvs_formation_2022}.
-
-\vspace*{0.5em}
-
-\noindent \hspace*{1em}\fullcite{matous_singularity_2023}.
-
-\vspace*{0.5em}
-
-\noindent \hspace*{1em}\fullcite{matous_MPC_2022}.
-
-\vspace*{0.5em}
-
-\noindent \hspace*{1em}\fullcite{restrepo_formation_2022}.
-
-\subsubsection{Journal submissions}
-
-\noindent \hspace*{1em}\fullcite{matous_distributed_2023}.
-
-\vspace*{0.5em}
-
-\noindent \hspace*{1em}\fullcite{matous_trajectory_2023}.
-
-\vspace*{0.5em}
-
-\noindent \hspace*{1em}\fullcite{restrepo_tracking_2023}.
-
-\subsubsection{Conference submissions}
-
-\noindent \hspace*{1em}\fullcite{lie_formation_2023}.
-
-\vspace*{0.5em}
+\subsubsection{Conference Submissions}
+\begin{tabularx}{\textwidth}{rX}
+    \tablecite{lie_formation_2023}
+\end{tabularx}

@@ -10,37 +10,12 @@ The effectiveness of both the continuous-time and the discrete-time algorithm is
 Furthermore, the discrete-time version is tested in field experiments.  
 The contents of this chaper are based on \cite{matous_singularity_2023}.
 
-\section{Introduction}
-
-In Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}, we presented \gls{nsb} algorithms that solve the formation path following problem.
-However, the presented algorithms are centralized, meaning that to use these methods in a real-life application, there must be a central node that communicates and coordinates with all the vehicles.
-While underwater, the \glspl{auv} typically communicate via acoustic modems.
-These modems have low bandwidth and significant delays, making them unsuitable for real-time control.
-
-A distributed \gls{nsb} algorithm was proposed in \cite{ahmad_multirobot_2014}.
-In this algorithm, the group of vehicles is split into smaller, fully connected subgroups.
-Each subgroup performs the standard, centralized \gls{nsb} algorithm.
-Consequently, there is still a need for fast and reliable communications.
-Furthermore, the proposed method is limited to static formations.
-A similar scheme was proposed in \cite{tan_coordinated_2022}, where a group of heterogenous surface vehicles is split into homogenous subgroups.
-Each subgroup has one leading vehicle that exchanges information with the leaders of other subgroups.
-This scheme still requires fast and reliable communications, both within the subgroups and between the leaders.
-Furthermore, the proposed scheme is vulnerable to failures of the leading vehicles.
-
-This chapter presents an approach that is fully distributed, so that the fleet does not need to decompose into subgroups nor requires leading vehicles.
-To do so, the proposed algorithm combines the centralized schemes presented in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R} with a consensus algorithm.
-Specifically, we first propose a continuous-time consensus algorithm and prove its stability using Lyapunov analysis.
-Then, we present a modified discrete-time version of the algorithm based on event-triggered control.
-The effectiveness of both the continuous- and discrete-time algorithms is demonstrated in numerical simulation.
-Furthermore, the discrete-time version is also tested in field experiments.% To summarize, we propose and validate an overall fully distributed approach that is suitable for underactuated vehicles and 3D navigation (and thus both for surface and underwater vehicles).
-
-The remainder of the chapter is organized as follows.
+The chapter is organized as follows.
 Section~\ref{sec:distr_NSB_problem} defines the formation path following problem.
 Section~\ref{sec:distr_NSB_NSB} presents the centralized \gls{nsb} algorithm.
 In Section~\ref{sec:distr_NSB_distributed_NSB}, we present the continuous-time distributed \gls{nsb} algorithm, and in Section~\ref{sec:distr_NSB_closed_loop}, we analyze its closed-loop behavior.
 Section~\ref{sec:distr_NSB_AUV} discusses how to apply the proposed algorithm to underactuated \glspl{auv} and proposes the discrete-time modification.
-Sections~\ref{sec:distr_NSB_simulations} and \ref{sec:distr_NSB_experiments} present the results of numerical simulations and experiments, respectively.
-Finally, Section~\ref{sec:distr_NSB_conclusion} contains some concluding remarks.
+Finally, Sections~\ref{sec:distr_NSB_simulations} and \ref{sec:distr_NSB_experiments} present the results of numerical simulations and experiments, respectively.
 
 \section{Problem Definition}
 \label{sec:distr_NSB_problem}
@@ -841,18 +816,3 @@ As shown in \figref{fig:distr_NSB_experiment_obstacle_distance}, the distance be
 Note that the formation radius errors are connected to the barycenter estimates.
 A wrong barycenter estimate may lead to both overestimation and underestimation of the formation radius.
 Despite these uncertainties, the \glspl{auv} still manage to perform all control goals safely.
-
-\section{Conclusions and Future Work}
-\label{sec:distr_NSB_conclusion}
-%    In this paper, we proposed a distributed formation path-following method for fleets of underactuated underwater vehicles.
-%    To achieve the control goals, the method combines null space-based behavioral control with consensus.
-In this paper, we discussed how it is possible to combine null space-based behavioral control with consensus, and in this way enable fleets of underactuated underwater vehicles to perform formation path-following in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways, using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for field implementations).
-Using Lyapunov analysis, we have shown that in the special case of straight-line paths, the continuous-time version achieves uniform semiglobal exponential stability.
-The discrete-time version is based on event-triggered paradigms, so to account for practical limitations in the way agents exchange information.
-Both versions are then verified in numerical simulations.
-Comparing the discrete-time version to a similar cooperative path following algorithm presented in \cite{praveen_cooperative_2018}, we found 
-that the proposed algorithm requires fewer transmissions between the vehicles, while having similar steady-state error.
-Finally, we demonstrated the real-life effectiveness of the the discrete-time algorithm in field experiments with a fleet of light autonomous underwater vehicles.
-
-Future work includes extending the stability proofs to the more general case of curved paths and more complex vehicle dynamics, as well as investigating the effects of the event-triggered scheme on the performance of the algorithm.
-In addition, we plan to perform additional experiments with more vehicles and underwater communications.
