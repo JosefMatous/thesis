@@ -277,7 +277,7 @@ This optimization problem is then solved in discrete time-steps.
 Similarly to collocation-based \gls{mpc}, we can use the results from the previous time-step to ``warm-start'' the optimization problem.
 We do this by extrapolating the previous results over the new horizon (see \figref{fig:MPC_warm_start}).
 
-\begin{figure}[!htbp]
+\begin{figure}[t]
     \centering
     \input{figures/handpos_MPC/warm_start.tex}
     
@@ -585,7 +585,7 @@ The \gls{mpc} and \gls{admm} parameters are shown in Table~\ref{tab:MPC_unicycle
 The results of numerical simulations are shown in \figref{fig:MPC_unicycle_simulations}.
 Due to the numerical inaccuracies caused by \eqref{eq:MPC_unicycle_transform} and arising primarily from the multiplication and division of splines, the \gls{mpc} time-step $\Delta T$ must be shorter than in the previous case-study.
 
-\begin{table}[t]
+\begin{table}[p]
     \begin{center}
     \captionsetup{width=.9\textwidth}
     \caption{Simulation parameters} \label{tab:handpos_MPC_params}

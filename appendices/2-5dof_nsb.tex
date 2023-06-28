@@ -361,7 +361,7 @@ We take the Lyapunov function candidate $V_w$ from \eqref{eq:nsb_5dof_V_w} and s
     \dot{V}_w(w_i) = X_w\left(u_{d,i}, u_c\right)\,q_{d,i}\,w_i + Y_w\left(u_{d,i}, u_c\right)\,\left(w_i - w_c\right)\,w_i + G(\theta_i)\,w_i. \label{eq:nsb_5dof_V_w_dot}
 \end{equation}
 Next, we find an upper bound on $q_{d,i}\,w_i$.
-We substitute from \eqref{eq:nsb_5dof_q_d}, set $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ and collect all terms that grow linearly with $w_i$ to obtain the following expression
+We substitute from \eqref{eq:nsb_5dof_q_d}, set $\left[\!\tilde{\mat{X}}_1\T\!, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ and collect all terms that grow linearly with $w_i$ to obtain the following expression
 \begin{align}
     \scale[1]{q_{d,i}\,w_i}\, &\scale[1]{= w_i\left(1 + \frac{\Delta(\mat{p}_b^p)\,x_b^p}{\Delta(\mat{p}_b^p)^2 + \left(x_b^p\right)^2}\right) \kappa(\xi) \frac{1}{n} \sum\limits_{j=1}^n U_j\,\Omega_x(\gamma_j, \theta_p, \chi_j, \psi_p)} \\
     & \quad \scale[1]{+ u_{d,i}\frac{Y_w(u_{d,i}, u_c)}{u_{d,i}^2 + w_i^2}w_i^2 + F_w(u_{d,i}, u_c, w_c, w_i, q_i),}

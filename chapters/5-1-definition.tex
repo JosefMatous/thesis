@@ -16,11 +16,15 @@ Section~\ref{sec:handpos_def_model} presents the \gls{auv} model.
 Section~\ref{sec:handpos_def_hand_position} defines the hand position transformation and presents the necessary assumptions about the generic hand position-based controller.
 The closed-loop system is then analyzed in Section~\ref{sec:handpos_def_closed_loop_analysis}.
 
+\vspace*{-0.3em}
+
 \section{AUV Model}
 \label{sec:handpos_def_model}
 
+\vspace*{-0.3em}
+
 We consider an underactuated \gls{auv} with dynamics described using the 6\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
-The \gls{auv} model is given by the following equations
+The \gls{auv} model is given by the following equations \vspace*{-0.7em}
 \begin{subequations}
     \begin{align}
         \dot{\mat{p}} &= \mat{R}\bvel_r + \ocean, \\
@@ -28,8 +32,11 @@ The \gls{auv} model is given by the following equations
         \mat{M}\dot{\vel}_r + \mat{C}(\vel_r)\vel_r + \mat{D}\vel_r + \mat{g}(\mat{R}) &= \mat{B}\mat{f}, \label{eq:handpos_def_zeta_dot_matrix}
     \end{align}
 \end{subequations}
-In the remainder of this section, we introduce some necessary assumptions about the \gls{auv} and rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in a more compact form.
-To do so, let us first decompose $\mat{M}$, $\mat{M}^{-1}$, $\mat{C}(\vel_r)$, and $\mat{D}$ into 3-by-3 blocks
+
+\vspace*{-0.5em}
+
+\noindent In the remainder of this section, we introduce some necessary assumptions about the \gls{auv} and rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in a more compact form.
+To do so, let us first decompose $\mat{M}$, $\mat{M}^{-1}$, $\mat{C}(\vel_r)$, and $\mat{D}$ into 3-by-3 blocks \vspace*{-0.2em}
 \begin{subequations}
 \begin{align}
     \mat{M}\! &=\! \begin{bmatrix}
@@ -72,7 +79,7 @@ Assumption~\ref{asm:nogravity} can thus be used if $\theta$ remains small.
     This does not mean that we transform our model to Euler angles, these expressions are only used for illustration.
 \end{rmk*}
 
-\noindent We can then rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in the following compact form
+\noindent We can then rewrite \eqref{eq:handpos_def_zeta_dot_matrix} in the following compact form \vspace*{-0.3em}
 \begin{subequations}
     \begin{align}
         \dot{\bvel}_r &= \inlinevector{f_u, 0, 0} - \mathcal{D}_{\bvel}(\vel_r) - \mathcal{C}_{\bvel}(\vel_r), \\
@@ -80,7 +87,13 @@ Assumption~\ref{asm:nogravity} can thus be used if $\theta$ remains small.
     \end{align}
     \label{eq:handpos_def_ode_velocities}
 \end{subequations}
-where
+
+\vspace*{-1.6em}
+
+\noindent where
+
+\vspace*{-1.7em}
+
 \begin{subequations}
     \begin{align}
         \mathcal{D}_{\bvel} &= \left(\mat{M}_{11}^{\prime}\mat{D}_{11} + \mat{M}_{12}^{\prime}\mat{D}_{21}\right)\bvel_r + \left(\mat{M}_{12}^{\prime}\mat{D}_{22} + \mat{M}_{11}^{\prime}\mat{D}_{12}\right)\bs{\omega}, \\
@@ -90,21 +103,28 @@ where
     \end{align} \label{eq:handpos_def_ode_components}
 \end{subequations}
 
+\vspace*{-1.7em}
+
 \section{Hand Position}
 \label{sec:handpos_def_hand_position}
+\vspace*{-0.3em}
+
 In this section, we present the hand position transformation for the 3D case.
 The procedure is inspired by the 2D transformation in \cite{paliotta_trajectory_2019}.
-We begin with the following change of coordinates:
+We begin with the following change of coordinates: \vspace*{-0.5em}
 \begin{subequations}
     \begin{align}
         \mat{x}_1 &= \mat{p} + \mat{R}\mat{L}, \label{eq:handpos_def_hand_position} \\
         \mat{x}_2 &= \mat{R}\bvel_r + \mat{R}\left(\bs{\omega} \times \mat{L}\right),
     \end{align} \label{eq:handpos_def_hand_transform_initial}
 \end{subequations}
-where $\mat{L} = \inlinevector{h, 0, 0}$, where $h > 0$ is the \emph{hand length}.
+
+\vspace*{-1.5em}
+
+\noindent where $\mat{L} = \inlinevector{h, 0, 0}$, where $h > 0$ is the \emph{hand length}.
 
 We will treat $\mat{x}_1$ as the output of our system, and perform an output feedback linearization.
-Differentiating \eqref{eq:handpos_def_hand_transform_initial} with respect to time yields:
+Differentiating \eqref{eq:handpos_def_hand_transform_initial} with respect to time yields: \vspace*{-0.3em}
 \begin{subequations}
     \begin{align}
         \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \\
@@ -112,7 +132,8 @@ Differentiating \eqref{eq:handpos_def_hand_transform_initial} with respect to ti
         & \qquad + \mat{L} \times \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right) \Big). \nonumber
     \end{align}
 \end{subequations}
-Note that $\dot{\mat{x}}_2$ does not depend on the roll torque $f_p$.
+
+\noindent Note that $\dot{\mat{x}}_2$ does not depend on the roll torque $f_p$.
 We can therefore use $f_p$ to stabilize the roll dynamics by canceling the Coriolis effect:
 \begin{align}
     f_p &= \mat{e}_1\T \mathcal{C}_{\bs{\omega}}(\vel), \label{eq:handpos_def_roll_torque}

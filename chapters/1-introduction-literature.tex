@@ -27,12 +27,12 @@ This section presents the various control problems for \glspl{auv} studied in th
 
 \subsubsection{The Trajectory-Tracking and Path-Following Problems}
 
-Arguably, the trajectory-tracking and path-following problems are the most interesting and significant ones.
-Many high-level mission planners assume that the vehicle is able to follow a given path or trajectory.
+Arguably, the trajectory-tracking and path-following problems are the most interesting and significant ones,
+since many high-level mission planners assume that the vehicle is able to follow a given path or trajectory.
 
-To solve the trajectory tracking problem, numerous methods based on backstepping \cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001}, sliding-mode control \cite{elmokadem_trajectory-tracking-SMC_2016}, \glspl{clf} \cite{aguiar_trajectory-tracking-CLF_2007}, and \gls{mpc} \cite{abdelaal_trajectory-tracking-MPC_2015} have been proposed. 
+To solve the trajectory-tracking problem, numerous methods based on backstepping \cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001}, sliding-mode control \cite{elmokadem_trajectory-tracking-SMC_2016}, \glspl{clf} \cite{aguiar_trajectory-tracking-CLF_2007}, and \gls{mpc} \cite{abdelaal_trajectory-tracking-MPC_2015} have been proposed. 
 
-To solve the path following problem, most controllers utilize \gls{los} guidance.
+To solve the path-following problem, most controllers utilize \gls{los} guidance.
 In \cite{caharija_path-following-ILOS_2016}, an integral \gls{los} guidance scheme is used to counteract the sea loads, \cite{xiang_path-following-robust_2017} combines \gls{los} guidance with an adaptively tuned PID controller, and \cite{miao_path-following-curvilinear_2017} uses \gls{los} with active disturbance rejection control.
 
 \subsubsection{The Formation Path-Following Problem}
@@ -49,10 +49,10 @@ Formation is then achieved by coordinating the motion of the vehicles along thes
 In this approach, the formation-keeping error (\emph{i.e.,} the difference between the actual and desired relative position of the vehicles) may initially grow as the vehicles converge to their predefined paths.
 In the \emph{leader-follower} approach, one leading vehicle tracks the given path while the followers adjust their speed and position to obtain the desired formation shape, relative to the leader.
 
-Both the coordinate path-following and the leader-follower methods can be solved using \acrlong{mpc} \cite{wang_path_2021,kanjanawanishkul_distributed_2008}.
-\Gls{mpc} is a model-based optimal control method that allows us to enforce constraints on the inputs and satates of the vehicles.
+Both the coordinated path-following and the leader-follower method can be solved using \acrlong{mpc} \cite{wang_path_2021,kanjanawanishkul_distributed_2008}.
+\Gls{mpc} is a model-based optimal control method that allows us to enforce constraints on the inputs and states of the vehicles.
 However, most \gls{mpc} methods are based on sampling.
-Consequently, any constraints on the inputs or states can only be enforced at discrete time-instances.
+Consequently, any constraints on the inputs or states can only be enforced at discrete-time instances.
 In other words, we have no control over the behavior of the system between the samples.
 We can mitigate this issue by decreasing the sampling time.
 However, by decreasing the sampling time, we increase the number of optimized variables, thus increasing the computational requirements.
@@ -96,7 +96,7 @@ In general, algorithms for \gls{colav} can be split into two categories: motion 
 
 Motion planning algorithms include, among others, various types of path planning algorithms \cite{wang_ship_2017,kuwata_safe_2014,chiang_colreg-rrt_2018,lazarowska_ships_2015}, the dynamic window algorithm \cite{fox_dynamic_1997}, and \gls{mpc}.
 \gls{mpc} can be used both for a single vehicle \cite{hagen_mpc-based_2018,sun_collision_2018} and for multi-agent systems in a distributed form \cite{kuriki_formation_2015,dai_distributed_2017}.
-Some motion planing algorithms also include consideration of relevant traffic protocols that apply in the given domain, \emph{e.g.,} the regulations for marine vehicles known as COLREGs \cite{wang_ship_2017,kuwata_safe_2014,chiang_colreg-rrt_2018}.
+Some motion planning algorithms also include consideration of relevant traffic protocols that apply in the given domain, \emph{e.g.,} the regulations for marine vehicles known as COLREGs \cite{wang_ship_2017,kuwata_safe_2014,chiang_colreg-rrt_2018}.
 
 Reactive algorithms for \gls{colav} include, among others, virtual potential fields \cite{roussos_3d_2008}, geometric guidance \cite{mujumdar_reactive_2011}, and \glspl{cbf} \cite{squires_constructive_2018,igarashi_collision_2018,romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014}.
 Reactive algorithms are often used together with motion planning algorithms in a hybrid controller.
@@ -104,13 +104,13 @@ In such a controller, the reactive algorithm ensures the safety of the vehicle i
 Such an algorithm is proposed in \cite{hedjar_automatic_2019}, where a collision-free velocity reference is obtained through numerical optimization.
 %The proposed algorithm is designed specifically for \glspl{asv}.
 
-\Glspl{cbf} offer a \gls{colav} method that is applicable for a wide range of systems \cite{ames_control_2019}.
+\Glspl{cbf} offer a \gls{colav} method that is applicable to a wide range of systems \cite{ames_control_2019}.
 In the literature, there are typically two ways in which \glspl{cbf} are applied for \gls{colav}.
 They are either applied to a simplified model of the vehicle (\emph{e.g.,} a unicycle model \cite{squires_constructive_2018,igarashi_collision_2018}) to provide safe velocity references, or they are used together with \glspl{clf} \cite{romdlony_stabilization_2016,basso_safety-critical_2020,ames_control_2014} on the complete model.
 
 Reactive \gls{colav} methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
 Consequently, these methods may output reference signals that the underlying controllers cannot track.
-To mitigate this, reactive \gls{colav} methods should be included into the lowest-possible control level.
+To mitigate this, reactive \gls{colav} methods should be included in the lowest-possible control level.
 
 \subsubsection{Connectivity Maintenance}
 In addition to \gls{colav}, autonomous vehicles often need to maintain a sufficiently close distance to each other to guarantee the reliability of the communication and the connectivity of the multi-agent system.

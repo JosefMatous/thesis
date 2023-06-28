@@ -437,23 +437,6 @@ Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\
 
 \subsection{Simulation Results}\label{sec:simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-To validate the theoretical results, we perform simulations where the proposed algorithm is applied to a fleet of three \acrfullpl{lauv} \cite{sousa_LAUV_2012}. In the simulated scenario, the barycenter should follow a spiral path while avoiding collision with a stationary cylindrical-shaped obstacle with radius $\SI{10}{\meter}$, located at $[x_o,y_o] = [100,-10]$. All position variables are here given in meters. The spiral is given by
-\begin{equation}
-    \mathbf{p}_p(s) = \mathbf{p}_{p,0} + \bigl[s, -40 \cos(\tfrac{\pi}{100} s), 20 \sin(\tfrac{\pi}{100} s)\bigr]\T,
-\end{equation}
-where \begin{equation}
-    \mathbf{p}_{p,0} = \bigl[ 0, -40, 35 \bigr]\T.
-\end{equation}
-The barycenter relative formation is given by
-\begin{equation}
-    \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
-\end{equation}
-and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$ both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $\mathbf{r}_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
-\begin{equation}
-    \ocean = \begin{bmatrix}
-        0 & 0.25 & 0.05
-    \end{bmatrix}\T \,\mathrm{m/s}.
-\end{equation}
 
 \pgfplotsset{table/search path={figures/handpos_nsb/data}}
 \begin{figure}[p]
@@ -469,7 +452,7 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
     \def\figurewidth{.75\linewidth}
     \def\figureheight{2.5cm}
     \input{figures/handpos_nsb/angular_velocities.tex}
-    \vspace*{-6.7mm}
+    \vspace*{-1.7mm}
     \caption{The angular velocities of the vehicles. }
     \label{fig:angular_velocities}
     \end{subfigure}
@@ -478,7 +461,7 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
     \def\figurewidth{.75\linewidth}
     \def\figureheight{2.5cm}
     \input{figures/handpos_nsb/formation_keeping_error.tex}
-    \vspace*{-6.7mm}
+    \vspace*{-1.7mm}
     \caption{The formation keeping errors. }
     \label{fig:formation_keeping_error}
     \end{subfigure}
@@ -496,12 +479,30 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
     \def\figurewidth{.75\linewidth}
     \def\figureheight{2.5cm}
     \input{figures/handpos_nsb/path_following_error.tex}
-    \vspace*{-6.7mm}
+    \vspace*{-1.7mm}
     \caption{The barycenter path-following error.}
     \label{fig:path_following_error}
     \end{subfigure}
     \caption{Simulation results of the path-following algorithm proposed in Section~\ref{sec:case_study}. The full, dashed, and dotted lines correspond to the three different vehicles. The green and red rectangles represent when obstacle avoidance and inter-vehicle COLAV is active.}
     \label{fig:sim_results}
 \end{figure}
+
+To validate the theoretical results, we perform simulations where the proposed algorithm is applied to a fleet of three \acrfullpl{lauv} \cite{sousa_LAUV_2012}. In the simulated scenario, the barycenter should follow a spiral path while avoiding collision with a stationary cylindrical-shaped obstacle with radius $\SI{10}{\meter}$, located at $[x_o,y_o] = [100,-10]$. All position variables are here given in meters. The spiral is given by
+\begin{equation}
+    \mathbf{p}_p(s) = \mathbf{p}_{p,0} + \bigl[s, -40 \cos(\tfrac{\pi}{100} s), 20 \sin(\tfrac{\pi}{100} s)\bigr]\T,
+\end{equation}
+where \begin{equation}
+    \mathbf{p}_{p,0} = \bigl[ 0, -40, 35 \bigr]\T.
+\end{equation}
+The barycenter relative formation is given by
+\begin{equation}
+    \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
+\end{equation}
+and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$ both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $\mathbf{r}_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
+\begin{equation}
+    \ocean = \begin{bmatrix}
+        0 & 0.25 & 0.05
+    \end{bmatrix}\T \,\mathrm{m/s}.
+\end{equation}
 
 The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.

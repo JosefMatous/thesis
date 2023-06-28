@@ -1,4 +1,4 @@
-\chapter{Tracking Control of AUVs Under Hard and Soft Constraints}
+\chapter{Control of AUVs Under Hard and Soft Constraints}
 \label{chap:handpos_tracking}
 
 This chapter investigates the tracking-in-formation problem for a group of underactuated autonomous marine vehicles interconnected over a directed topology.
@@ -6,17 +6,24 @@ The agents are subject to \emph{hard} inter-agent constraints, \emph{i.e.,} conn
 The control approach is based on two concepts: the 3D hand position output linearization presented in Chapter~\ref{chap:handpos_definition}, and the edge-based framework for multi-agent consensus under constraints.
 We establish \emph{almost-everywhere} uniform asymptotic stability of the output dynamics with guaranteed respect of the constraints.
 Numerical and high-fidelity simulations are provided to illustrate the effectiveness of our approach.
-The contents of this chapter are based on \cite{restrepo_formation_2022,restrepo_tracking_2023}, with proofs extended from 2D to 3D.
+The contents of this chapter are based on \cite{restrepo_formation_2022,restrepo_tracking_2023}.
 
 The chapter is organized as follows.
 In Section \ref{sec:preliminaries} we present the model of the multi-agent system and the problem formulation. For clarity of exposition, in Section~\ref{sec:ctrl} we present the control design when considering only the hard constraints, followed by the stability analysis. Then, in Section~\ref{sec:soft} we present the control design adding the soft constraints. Finally, the results of numerical simulations are presented in Section~\ref{sec:simulations}.
 
+\vspace*{-1em}
+
 \section{Model and Problem Formulation}\label{sec:preliminaries}
+
+\vspace*{-0.5em}
 
 \subsection{Model of the Marine Vehicle}
 
-We consider underactuated \glspl{auv} with six \acrfullpl{dof}, and apply the hand position transformation from Chapter~\ref{chap:handpos_definition}.
+We consider underactuated 6\gls{dof} \glspl{auv}, and apply the hand position transformation from Chapter~\ref{chap:handpos_definition}.
 Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the transformed system are
+
+\vspace*{-1.7em}
+
 \begin{subequations}
     \begin{align}
         \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \label{eq:handpos_tracking_x_1_dot_transformed}\\
@@ -178,7 +185,7 @@ B_k(\mat{z}_{1, k}) =&\;
 \kappa_{1, k} = \frac{\delta_k^2}{\norm{\mat{z}_{1, k}^d}^2(\norm{\mat{z}_{1, k}^d}^2-\delta_k^2)},\quad \kappa_{2, k}=\frac{1}{\Delta_k^2-\norm{\mat{z}_{1, k}^d}^2}.
 \end{equation*}
 
-Note that $B_k$ is a non-negative function that satisfies: ${B}_k(\mat{z}_{1, k}^d) = 0$, $\nabla{B}_k(\mat{z}_{1, k}^d) = \mat{0}$, and ${B}_k(\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d)\rightarrow\infty$ as either $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\Delta_k$ or $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\delta_k$.
+Note that $B_k$ is a non-negative function that satisfies: ${B}_k(\mat{z}_{1, k}^d)\! =\! 0$, $\nabla\!{B}_k(\mat{z}_{1, k}^d)\! =\! \mat{0}$, and ${B}_k(\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d)\rightarrow\infty$ as either $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\Delta_k$ or $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\delta_k$.
 Therefore, the candidate \gls{blf} \eqref{317} satisfies: $W_k(\tilde{\mat{z}}_{1, k})\rightarrow\infty$ as either $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\Delta_k$ or $\norm{\tilde{\mat{z}}_{1, k}+\mat{z}_{1, k}^d}\rightarrow\delta_k$.
 
 \begin{rmk}\label{rmk:V:equilibria}
@@ -433,7 +440,7 @@ Initially, we set $\rho_i(t_0)=0$.
 \begin{rmk}
 	The definition of \eqref{631} is loosely inspired by the framework developed in \cite{mehdifar2022funnel} to deal with hard and soft constraints in the setting of prescribed-performance control of single-agent systems.
 	The signal $\rho_i(t)$ adjusts the soft constraints whenever the hard constraints become conflicting. 
-	Note that when $\abs{F_{u}+f_{u, i}}\leq \sigma$ for a given $\sigma$, it means that the edges connected to vehicle $i$ are far from the border of the set $\tilde{\mathcal{D}}_k$, since under the barrier-function-based law \eqref{n338} the controller $f_{u, i}$ grows unbounded as $\mat{z}_{1, k}\rightarrow\partial\tilde{\mathcal{D}}_k$ for any $k\leq M$.
+	Note that when the term $\abs{F_{u}+f_{u, i}}$ is less than or eaual to a given positive constant $\sigma$, it means that the edges connected to vehicle $i$ are far from the border of the set $\tilde{\mathcal{D}}_k$, since under the barrier-function-based law \eqref{n338} the controller $f_{u, i}$ grows unbounded as $\mat{z}_{1, k}\rightarrow\partial\tilde{\mathcal{D}}_k$ for any $k\leq M$.
 	In this case, the second term on the right-hand side of \eqref{631} is equal to zero. Hence, assuming that in an interval $t\in[t_0,t_0+T]$, $\abs{F_{u}+f_{u, i}}\leq \sigma$, then \eqref{eq:soft}, with $\rho(t)=0$, corresponds to a positive-velocity constraint.
 	Conversely, when $\abs{F_{u}+f_{u, i}}>\sigma$, the right-hand side of \eqref{631} becomes positive and $\rho_i$ grows. Hence, $u_{r, i}$ may take negative values, \emph{i.e.,} $u_{r, i}>-\rho_i(t)$, avoiding possible conflicts between the constraints. Then, as the vehicles move away from the border of the set $\tilde{\mathcal{D}}_k$, $\abs{F_{u}+f_{u, i}}\leq\sigma$ again and $\rho_i(t)\rightarrow0$ exponentially fast, recovering the non-negativity constraint.
 \end{rmk}

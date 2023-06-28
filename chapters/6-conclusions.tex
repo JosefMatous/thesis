@@ -1,4 +1,4 @@
-\chapter{Concluding Remarks and Future Work}
+\chapter{Conclusions and Future Work}
 \label{part:conclusions}
 
 \setlength{\epigraphwidth}{0.46\textwidth}
@@ -45,14 +45,14 @@ An analysis of the closed-loop system with active avoidance and depth-limiting t
 
 \subsubsection{Chapter~\ref{chap:distr_NSB}: \nameref{chap:distr_NSB}}
 
-In Chapter~\ref{chap:distr_NSB}, we discussed to combine \acrlong{nsb} control with consensus, and in this way solve the formation path-following problem in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways, using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for real-life implementations).
+In Chapter~\ref{chap:distr_NSB}, we discussed how to combine \acrlong{nsb} control with consensus, and in this way solve the formation path-following problem in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways, using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for real-life implementations).
 Using Lyapunov analysis, we have shown that in the special case of straight-line paths, the continuous-time version achieves uniform semiglobal exponential stability.
 The discrete-time version is based on event-triggered paradigms, so to account for practical limitations in the way agents exchange information.
 
 Both versions are then verified in simulations.
-Comparing the discrete-time version to a similar cooperative path following algorithm presented in \cite{praveen_cooperative_2018}, we found 
+Comparing the discrete-time version to a similar cooperative path-following algorithm presented in \cite{praveen_cooperative_2018}, we found 
 that the proposed algorithm requires fewer transmissions between the vehicles, while having similar steady-state error.
-Finally, we demonstrated the real-life effectiveness of the the discrete-time algorithm in field experiments with a fleet of light autonomous underwater vehicles.
+Finally, we demonstrated the real-life effectiveness of the discrete-time algorithm in field experiments with a fleet of light autonomous underwater vehicles.
 
 Future work includes extending the stability proofs to the more general case of curved paths and more complex vehicle dynamics, as well as investigating the effects of the event-triggered scheme on the performance of the algorithm.
 In addition, we plan to perform additional experiments with more vehicles and underwater communications.
@@ -65,7 +65,7 @@ In this part, we extended the hand position concept to underactuated \glspl{auv}
 
 In this section, we extended the hand position concept to 6\gls{dof} underactuated underwater vehicles.
 By choosing the hand position as the output of our system, we could apply output feedback linearization to simplify the underactuated 6\gls{dof} vehicle dynamics to a double integrator without introducing any singularities.
-Then, we introduced the sufficient conditions under which the internal states are ultimately bounded.
+Then, we introduced sufficient conditions under which the internal states are ultimately bounded.
 
 As mentioned in the Introduction, the hand position concept and its ability to transform a nonlinear underactuated model to a double integrator without singularities present an opportunity to utilize numerous control strategies that could otherwise not be used on nonholonomic or underactuated vehicles.
 Examples of such controllers were presented in Chapters~\ref{chap:handpos_trajectory}--\ref{chap:handpos_NSB}.

@@ -758,15 +758,11 @@ In this context, the two algorithms present a trade-off between packet size and 
 
 \section{Experiments}
 \label{sec:distr_NSB_experiments}
+
+\input{figures/distr_NSB/figure_experiment_nominal.tex}
+
 In this section, we present the results of field experiments we designed and executed to verify the effectiveness of the event-triggered distributed \gls{nsb} algorithm proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 The experiments were conducted in the fjord of Trondheim, Norway, near the Trondheim Biological Station, using two \glspl{lauv} as in \figref{fig:distr_NSB_LAUV}.
-
-\begin{figure}[b]
-    \centering
-    \includegraphics[width = 0.6\columnwidth]{figures/distr_NSB/LAUV-Roald}
-    \caption{Photo of one of the two \glspl{lauv} used in the reported field experiments, courtesy of \url{www.ntnu.edu/aur-lab/}.}
-    \label{fig:distr_NSB_LAUV}
-\end{figure}
 
 To guarantee stable communications and accurate navigation, the vehicles were operating at the surface and communicating over WiFi.
 The algorithm was implemented in C++, using the Unified Navigation Environment (DUNE) \cite{dune}.
@@ -788,7 +784,6 @@ The obstacle was placed at $\mat{p}_o = \inlinevector{0, 80}$.
 The remaining parameters were identical to the simulations.
 
 \subsection{Nominal Scenario}
-\input{figures/distr_NSB/figure_experiment_nominal.tex}
 
 The results are shown in \figref{fig:distr_NSB_experiment_nominal}.
 \figref{fig:distr_NSB_experiment_nominal_trajectory} shows the trajectories of the \glspl{auv}, as estimated by their onboard navigation system.

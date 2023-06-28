@@ -726,10 +726,11 @@ For the simulation parameters, we choose the velocity of the ocean current to be
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=.75\textwidth]{figures/nsb_R/trajectory.png}
-    \vspace{-4mm}
+    \includegraphics[width=.65\textwidth]{figures/nsb_R/trajectory.png}
+    \vspace{-2mm}
     \caption{The 3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 50, \ldots, 250$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
     \label{fig:NSB_R_trajectory}
+    \vspace*{-4mm}
 \end{figure}
 
 \pgfplotsset{table/search path={figures/nsb_R/data}}
@@ -738,7 +739,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
     \begin{subfigure}[t]{0.475\textwidth}
         \centering
         \input{figures/nsb_R/colav.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The smallest inter-vehicle and vehicle-to-obstacle distance.}
         \label{fig:NSB_R_distances}
         \vspace{-1mm}
@@ -748,7 +749,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
         \centering
         \hspace*{-1em}
         \input{figures/nsb_R/depth.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The smallest and largest vehicle depth.}
         \label{fig:NSB_R_depth}
         \vspace{-1mm}
@@ -756,7 +757,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
     \begin{subfigure}[t]{0.475\textwidth}
         \centering
         \input{figures/nsb_R/path_error.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The path-following error. The green rectangle represents the time when obstacle avoidance is active. The red rectangle represents the time when depth limiting is active.}
         \label{fig:NSB_R_path_following_error}
         \vspace{-1mm}
@@ -766,7 +767,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
         \centering
         \hspace*{-1.1em}
         \input{figures/nsb_R/formation_error.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The formation-keeping error. The full, dashed, and dotted lines correspond to vehicles 1, 2, and 3, respectively. The blue rectangle represents the time when inter-agent \gls{colav} is active.}
         \label{fig:NSB_R_formation_keeping_error}
         \vspace{-1mm}
@@ -774,7 +775,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
     \begin{subfigure}[t]{0.475\textwidth}
         \centering
         \input{figures/nsb_R/surge.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The surge velocities of the vehicles. The grey rectangle represents the time when any avoidance task is active.}
         \label{fig:NSB_R_surge}
         \vspace{-2.5mm}
@@ -784,7 +785,7 @@ For the simulation parameters, we choose the velocity of the ocean current to be
         \centering
         \hspace*{-1.3em}
         \input{figures/nsb_R/swayheave.tex}
-        \vspace{-8mm}
+        \vspace{-4mm}
         \caption{The sway and heave velocities. The full, dashed, and dotted lines correspond to vehicles 1, 2, and 3, respectively.}
         \label{fig:NSB_R_sway_heave}
         \vspace{-2.5mm}

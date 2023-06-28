@@ -44,7 +44,7 @@ and choose the following PID controller
 \end{equation}
 is Hurwitz.
 
-\subsection{Closed-Loop analysis}
+\subsection{Closed-Loop Analysis}
 In this section, we investigate the closed-loop dynamics of the system \eqref{eq:handpos_def_hand_position_dynamics} with the control law \eqref{eq:handpos_trajectory_external_controller}.
 We begin by defining an additional change of coordinates:
 \begin{subequations}
@@ -56,8 +56,12 @@ We begin by defining an additional change of coordinates:
 \end{subequations}
 This change is necessary to transform the equilibrium of the closed-loop system to the origin, as the error states $\tilde{\mat{x}}_2$ and $\tilde{\mat{x}}_I$ defined in \eqref{eq:handpos_trajectory_external_controller} do not converge to zero.
 
-For convenience, we will also define a concatenated state vector $\bs{\Xi}\T = \left[{\tilde{\bs{\xi}}}_I\T, {\tilde{\bs{\xi}}}_1\T, {\tilde{\bs{\xi}}}_2\T\right]$.
-Differentiating \eqref{eq:handpos_trajectory_hand_transform_CL} with respect to time and substituting the external dynamics \eqref{eq:handpos_def_x_1_dot_transformed}--\eqref{eq:handpos_def_x_2_dot_transformed} and the control law \eqref{eq:handpos_trajectory_external_controller}, we get
+For convenience, we will also define a concatenated state vector
+\begin{equation}
+    \bs{\Xi}\T = \left[{\tilde{\bs{\xi}}}_I\T, {\tilde{\bs{\xi}}}_1\T, {\tilde{\bs{\xi}}}_2\T\right].
+    \label{eq:handpos_trajectory_XI}
+\end{equation}
+Differentiating \eqref{eq:handpos_trajectory_XI} with respect to time and substituting the external dynamics \eqref{eq:handpos_def_x_1_dot_transformed}--\eqref{eq:handpos_def_x_2_dot_transformed} and the control law \eqref{eq:handpos_trajectory_external_controller}, we get
 \begin{equation}
     \dot{\bs{\Xi}} = \mat{H}_{\xi} \bs{\Xi}. \label{eq:handpos_trajectory_external_dynamics}
 \end{equation}
@@ -385,7 +389,7 @@ Let $\varrho$ denote the ratio between the smallest eigenvalue of $\mat{Q}$ and 
     \begin{equation}
         \varrho > 2\left(1 + k_d\right)\varepsilon k_{\sigma} U_d.
     \end{equation}
-    Consequently, $\mat{x}_1$, $\mat{x}_2$, and $\tilde{\mat{x}}_I$ exponentially converge to $\bs{\xi}_{1, d}$, $\bs{\xi}_{2, d}^{*} - \ocean$, and $k_d/k_I\,\ocean$, respectively, and $\dot{s}$ converges to $U_d$.
+    Consequently, $\mat{x}_1$, $\mat{x}_2$, and $\tilde{\mat{x}}_I$ exponentially converge to $\bs{\xi}_{1, d}$, $\bs{\xi}_{2, d}^{*} - \ocean$, and $k_d/k_I\ocean$, respectively, and $\dot{s}$ converges to $U_d$.
 
     Moreover, let us define 
     \begin{equation}
