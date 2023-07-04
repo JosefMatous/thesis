@@ -84,17 +84,17 @@ Therefore, for every point $\mat{p}_p(s)$ on the path, there exists a path-tange
 The path-following error $\mat{p}_b^p$ is given by the position of the barycenter in the path-tangential coordinate frame 
 \begin{align}
     \mat{p}_b^p &= \mat{R}_p\T \, \big(\mat{p}_b - \mat{p}_p(s)\big), &
-    \mat{p}_b &= \frac{1}{n} \sum_{i=1}^n \mat{p}_i.
+    \mat{p}_b &= \frac{1}{N} \sum_{i=1}^N \mat{p}_i.
     \label{eq:NSB_R_barycenter}
 \end{align}
 The goal of path following is to control the vehicles so that $\mat{p}_b^p \rightarrow \mat{0}_3$.
 
 The vehicles should converge to a dynamic formation that rotates with the desired path (see Section~\ref{sec:background_formation_keeping} for details).
-Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that represent the desired formation.
+Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that represent the desired formation.
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f + \mat{p}_b, &
-    i &\in \left\{1, \ldots, n \right\}.
+    i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
 \section{The Proposed Algorithm}
@@ -118,7 +118,7 @@ Similarly to the previous chapter, we define three tasks: \gls{colav}, formation
 Each task will be described in detail in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}.
 As we will explain in Section \ref{sec:NSB_R_OA}, obstacle avoidance and depth limiting will not be defined as separate tasks but rather achieved through a modification to the path-following task.
 Let us denote the variables associated with the \gls{colav}, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
-Define the so-called \emph{task variables} as $\bs{\sigma}_i = \bs{f}_i\left(\mat{p}_1, \ldots, \mat{p}_n\right), i \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,i}, i \in \left\{1,2,3\right\}$.
+Define the so-called \emph{task variables} as $\bs{\sigma}_i = \bs{f}_i\left(\mat{p}_1, \ldots, \mat{p}_N\right), i \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,i}, i \in \left\{1,2,3\right\}$.
 
 Furthermore, let $\ivel_i, i \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
 These velocities are combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
@@ -134,7 +134,7 @@ The task variable is given by a vector of relative distances between the vehicle
 \begin{align}
         \bs{\sigma}_1 &= \big[\norm{\mat{p}_i - \mat{p}_j}\big], &
         \begin{split} 
-            \forall &i,j\in\{1,\ldots,n\}, j > i, \\
+            \forall &i,j\in\{1,\ldots,N\}, j > i, \\
             &\norm{\mat{p}_i - \mat{p}_j} < d_{\rm COLAV}.
         \end{split}
 \end{align}
@@ -158,12 +158,12 @@ Therefore, to ensure collision avoidance, $d_{\rm COLAV}$ should be chosen as $d
 \label{sec:NSB_R_formation}
 The formation-keeping task variable is defined as
 \begin{align}
-    \bs{\sigma}_2 &= \inlinevector{\bs{\sigma}_{2,1}, \ldots, \bs{\sigma}_{2,n-1}}, \label{eq:NSB_R_sigma_2} &
+    \bs{\sigma}_2 &= \inlinevector{\bs{\sigma}_{2,1}, \ldots, \bs{\sigma}_{2,N-1}}, \label{eq:NSB_R_sigma_2} &
     \bs{\sigma}_{2,i} &= \mat{p}_i - \mat{p}_b,
 \end{align}
 and its desired values are 
 \begin{equation}
-    \bs{\sigma}_{d,2} = \inlinevector{\mat{R}_p\,\mat{p}_{f,1}^f, \ldots, \mat{R}_p\,\mat{p}_{f,n-1}^f}  .
+    \bs{\sigma}_{d,2} = \inlinevector{\mat{R}_p\,\mat{p}_{f,1}^f, \ldots, \mat{R}_p\,\mat{p}_{f,N-1}^f}  .
     \label{eq:NSB_R_sigma_d_2}
 \end{equation}
 %Similarly to \gls{colav}, we use the CLIK equation~\eqref{eq:NSB_R_CLIK} to obtain the formation-keeping velocity.
@@ -226,7 +226,7 @@ Let $\mat{p}_o = \inlinevector{x_o, y_o, z_o}$ be the position of the obstacle a
 Note that $r_o$ must be chosen sufficiently large to cover the size of both the obstacle and the \gls{auv}. %(and relative uncertainties).
 Furthermore, let us define the formation radius
 $
-    r_f = \max_{i \in \{1, \ldots, n\}} \norm{\inlinevector{x_b-x_i, y_b-y_i}}
+    r_f = \max_{i \in \{1, \ldots, N\}} \norm{\inlinevector{x_b-x_i, y_b-y_i}}
 $
 and the relative position $\mat{p}_{\rm rel} = \inlinevector{x_b - x_o, y_b - y_o}$. As illustrated in \figref{fig:NSB_R_obstacle_radius}, obstacle avoidance is ensured if 
 \begin{equation}
@@ -302,8 +302,8 @@ We assume the limits to be wide enough to accommodate the formation.
 We then propose to replace the $z$-component of the LOS velocity with a depth-limiting velocity $\ivels_{z, {\rm lim}}$ given by 
 \begin{equation}
     \ivels_{z, {\rm lim}} = \begin{cases}
-        \ivels_z, & \text{if } \min_{i \in \{1, \ldots, n\}} z_i \leq z_{\min}, \\
-        -\ivels_z, & \text{if } \max_{i \in \{1, \ldots, n\}} z_i \geq z_{\max}, \\
+        \ivels_z, & \text{if } \min_{i \in \{1, \ldots, N\}} z_i \leq z_{\min}, \\
+        -\ivels_z, & \text{if } \max_{i \in \{1, \ldots, N\}} z_i \geq z_{\max}, \\
         \ivels_{z, {\rm LOS}}, & \text{otherwise},
     \end{cases}
 \end{equation}
@@ -356,7 +356,7 @@ Substituting task velocity definitions \eqref{eq:NSB_R_v_form} and \eqref{eq:NSB
 \end{equation}
 where 
 \begin{equation}
-    \inlinevector{\ivel_{2, 1}, \ldots, \ivel_{2, n}} = 
+    \inlinevector{\ivel_{2, 1}\T, \ldots, \ivel_{2, N}\T} = 
     - \ivels_{2, \max}\,{\rm sat}\left(\mat{J}_2^{\dagger}\bs{\Lambda}_2 \widetilde{\bs{\sigma}}_2\right). \label{eq:NSB_R_v_form_components}
 \end{equation}
 Let $\bs{\omega}_p(s)$ be a vector such that 
@@ -383,7 +383,7 @@ Assuming that $k_{\rm NSB} < 1$, we can satisfy \eqref{eq:NSB_R_NSB_speed_condit
 However, the $\max$ function would introduce switching behavior.
 To avoid this, we approximate the former with 
 \begin{equation}
-    U_{\rm LOS} = \frac{\ivels_{2, \max} + \sqrt{\sum_{i=1}^n \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}.
+    U_{\rm LOS} = \frac{\ivels_{2, \max} + \sqrt{\sum_{i=1}^N \left(v_i^2 + w_i^2\right) + u_{\min}^2}}{1 - k_{\rm NSB}}.
     \label{eq:NSB_R_U_LOS}
 \end{equation}
 
@@ -454,14 +454,14 @@ Let us define the combined formation-keeping and path-following error as
 \end{equation}
 and the combined low-level controller error as
 \begin{equation}
-    \widetilde{\mat{X}} = \inlinevector{\widetilde{\mat{X}}_1, \ldots, \widetilde{\mat{X}}_n}.
+    \widetilde{\mat{X}} = \inlinevector{\widetilde{\mat{X}}_1, \ldots, \widetilde{\mat{X}}_N}.
 \end{equation}
 First, let us investigate the closed-loop dynamics of $\widetilde{\bs{\sigma}}$.
 Differentiating \eqref{eq:NSB_R_sigma_2}, \eqref{eq:NSB_R_sigma_d_2}, and \eqref{eq:NSB_R_barycenter} with respect to time yields 
 \begin{subequations}
 \begin{align}
-    \dot{\widetilde{\bs{\sigma}}}_2 &= \mat{J}_2\dot{\mat{p}} - \dot{\bs{\sigma}}_{d, 2}, \qquad \dot{\mat{p}} = \inlinevector{\dot{\mat{p}}_1, \ldots, \dot{\mat{p}}_n} \\
-    \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\frac{1}{n}\sum_{i=1}^n\dot{\mat{p}}_i - \dot{\mat{p}}_p\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p.
+    \dot{\widetilde{\bs{\sigma}}}_2 &= \mat{J}_2\dot{\mat{p}} - \dot{\bs{\sigma}}_{d, 2}, \qquad \dot{\mat{p}} = \inlinevector{\dot{\mat{p}}_1, \ldots, \dot{\mat{p}}_N} \\
+    \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\frac{1}{N}\sum_{i=1}^N\dot{\mat{p}}_i - \dot{\mat{p}}_p\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p.
 \end{align} \label{eq:NSB_R_dot_sigma_tilde}
 \end{subequations}
 From \eqref{eq:NSB_R_p_dot} and \eqref{eq:NSB_R_low_level_error} it follows that $\dot{\mat{p}}_i$ is given by 
@@ -498,20 +498,20 @@ and substituting \eqref{eq:NSB_R_g_i} and \eqref{eq:NSB_R_p_dot_closed_loop_2} i
 \begin{subequations}
     \begin{align}
         \dot{\widetilde{\bs{\sigma}}}_2 &= \mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}
-                                        +\mat{J}_2\mat{G}, \qquad \mat{G} = \inlinevector{\mat{g}_1, \ldots, \mat{g}_n} \\
-        \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\!\frac{1}{n}\sum_{i=1}^n\left(\ivel_{{\rm NSB}, i} + \mat{g}_i\right) - \dot{\mat{p}}_{\mathrlap{p}}\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p \mathrlap{.}
+                                        +\mat{J}_2\mat{G}, \qquad \mat{G} = \inlinevector{\mat{g}_1, \ldots, \mat{g}_N} \\
+        \dot{\mat{p}}_b^p &= \mat{R}_p\T\left(\!\frac{1}{N}\sum_{i=1}^N\left(\ivel_{{\rm NSB}, i} + \mat{g}_i\right) - \dot{\mat{p}}_{\mathrlap{p}}\right) - \mat{S}\big(\bs{\omega}_p\dot{s}\big)\mat{p}_b^p \mathrlap{.}
     \end{align} \label{eq:NSB_R_outer_loop}
 \end{subequations}
 Now, to account for the underactuated dynamics, we define a vector of concatenated sway and heave velocities as 
 \begin{align}
-    \bvel_u &= \inlinevector{v_1, w_1, \ldots, v_n, w_n}, &
-    \bvel_{u, c} &= \mat{1}_n \otimes \inlinevector{v_c, w_c}.
+    \bvel_u &= \inlinevector{v_1, w_1, \ldots, v_N, w_N}, &
+    \bvel_{u, c} &= \mat{1}_N \otimes \inlinevector{v_c, w_c}.
 \end{align}
 The underactuated dynamics can then be written as
 \begin{equation}
     \dot{\bvel}_u = \mat{X}\bs{\Omega} + \mat{Y}\left(\bvel_u - \bvel_{u, c}\right) + \dot{\bvel}_{u, c}, \label{eq:NSB_R_underactuated_dynamics_closed_loop}
 \end{equation}
-where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $\mat{X}$ and $\mat{Y}$ are block diagonal matrices consisting of blocks $\mat{X}_1, \ldots, \mat{X}$ and $\mat{Y}_1, \ldots, \mat{Y}_n$, that are given by 
+where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_N}$, and $\mat{X}$ and $\mat{Y}$ are block diagonal matrices consisting of blocks $\mat{X}_1, \ldots, \mat{X}_N$ and $\mat{Y}_1, \ldots, \mat{Y}_N$, that are given by 
 \begin{align}
     \mat{X}_i &= 
     \begin{bmatrix}
@@ -543,14 +543,14 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
         %\begin{split}
             \dot{V}\! = \widetilde{\bs{\sigma}}_2\T\!\left(\mat{J}_2\ivel_{\rm NSB} - \dot{\bs{\sigma}}_{d, 2}\right)
             - \left(\mat{p}_b^p\right)\T\!\mat{S}\!\left(\bs{\omega}_p\dot{s}\right)\!\mat{p}_b^p 
-            + \left(\mat{p}_b^p\right)\T\!\mat{R}_p\T\bigg(\frac{1}{n}\sum_{i=1}^n\ivel_{{\rm NSB}, i} - \dot{p}_p\!\bigg) .
+            + \left(\mat{p}_b^p\right)\T\!\mat{R}_p\T\bigg(\frac{1}{N}\sum_{i=1}^N\ivel_{{\rm NSB}, i} - \dot{p}_p\!\bigg) .
         %\end{split} 
         \label{eq:NSB_R_Lyapunov_analysis_step1}
     \end{equation}
     Due to the properties of the \gls{nsb} tasks defined in Sections \ref{sec:NSB_R_formation} and \ref{sec:NSB_R_LOS}, the following identities hold: 
     \begin{align}
         \mat{J}_2\ivel_{\rm NSB} &= \mat{J}_2\ivel_2, &
-        \sum_{i=1}^n \ivel_{{\rm NSB}, i} &= \ivel_{\rm LOS}.
+        \sum_{i=1}^N \ivel_{{\rm NSB}, i} &= \ivel_{\rm LOS}.
     \end{align}
     By definition (see Section \ref{sec:NSB_R_objectives}), $\mat{R}_p$ must satisfy 
     \begin{align}
@@ -622,8 +622,8 @@ where $\bs{\Omega} = \inlinevector{\bs{\omega}_1, \ldots, \bs{\omega}_n}$, and $
     \end{equation}
     Therefore, \eqref{eq:background_USGES_cascade_assumption_2} can be satisfied by 
     \begin{align}
-        \alpha_1(r) &= \sum_{i=1}^n \alpha_{1,i}(r), &
-        \alpha_2(r) &= \sum_{i=1}^n \alpha_{2,i}(r),
+        \alpha_1(r) &= \sum_{i=1}^N \alpha_{1,i}(r), &
+        \alpha_2(r) &= \sum_{i=1}^N \alpha_{2,i}(r),
     \end{align}
     and consequently all assumptions of \cite[Proposition~9]{pettersen_lyapunov_2017} are satisfied. To summarize, the origin of the closed-loop system is \glspl{usges}.
 

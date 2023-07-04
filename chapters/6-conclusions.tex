@@ -10,7 +10,9 @@
 }
 
 In this thesis, we presented and analyzed multiple control algorithms.
-The majority of these algorithms solve the formation path-following problem of underactuated \acrfullpl{auv}.
+In Chapter~\ref{chap:collision_avoidance}, we proposed a method that unifies reactive collision avoidance and control allocation.
+Then, in Part~\ref{part:NSB} (Chapters~\ref{chap:5dof_nsb}--\ref{chap:distr_NSB}), we presented three different types of \acrlong{nsb} algorithms.
+Finally, in Part~\ref{part:hand_position} (Chapters~\ref{chap:handpos_definition}--\ref{chap:handpos_NSB}), we introduced the hand position concept to underactuated underwater vehicles and presented four applications.
 We conclude the thesis by presenting some remarks for each chapter and suggestions for future work.
 
 \subsubsection{Chapter~\ref{chap:collision_avoidance}: \nameref{chap:collision_avoidance}}
@@ -20,10 +22,6 @@ The proposed method can be readily implemented on vehicles that already use opti
 
 We note that the performance of the proposed scheme depends on the choice of the parameters, such as the class-$\mathcal{K}_{\infty}$ function $\gamma$, and the weight matrices $\mat{Q}$, $\mat{R}_{\rm abs}$, and $\mat{R}_{\rm rel}$.
 Finding a systematic method for choosing the parameter values that guarantee safety for a given vehicle model is a topic for future work.
-
-\subsection*{Part~\ref{part:NSB}: \nameref{part:NSB}}
-
-In this part, we proposed three \gls{nsb} algorithms for solving the formation path-following problem.
 
 \subsubsection{Chapter~\ref{chap:5dof_nsb}: \nameref{chap:5dof_nsb}}
 
@@ -56,10 +54,6 @@ Finally, we demonstrated the real-life effectiveness of the discrete-time algori
 
 Future work includes extending the stability proofs to the more general case of curved paths and more complex vehicle dynamics, as well as investigating the effects of the event-triggered scheme on the performance of the algorithm.
 In addition, we plan to perform additional experiments with more vehicles and underwater communications.
-
-\subsection*{Part~\ref{part:hand_position}: \nameref{part:hand_position}}
-
-In this part, we extended the hand position concept to underactuated \glspl{auv} and presented multiple applications of this concept.
 
 \subsubsection{Chapter~\ref{chap:handpos_definition}: \nameref{chap:handpos_definition}}
 

@@ -35,19 +35,19 @@ The pose ($\pose_i$) and velocities ($\vel_i$) of the $i^{\rm th}$ \gls{auv} are
 The roll dynamics are disregarded as the roll motion is assumed to be small and self-stabilizing by the vehicle design.
 Let $\ocean \in \mathbb{R}^3$ be the velocity of an unknown, constant and irrotational ocean current.
 
-Recalling \eqref{eq:background_component_form_5DOF}, the dynamics of the $i^{\rm th}$ \gls{auv} are
+Recalling \eqref{eq:background_component_form_5DOF}, the dynamics of the \glspl{auv} are
 \begin{subequations}
     \begin{align}
-        \scale[0.93]{\dot{x}} &= \scale[0.93]{u\,\cos\left(\psi \right)\,\cos\left(\theta \right)-v\,\sin\left(\psi \right)+w\,\cos\left(\psi \right)\,\sin\left(\theta \right),} \\
-        \scale[0.93]{\dot{y}} &= \scale[0.93]{u\,\cos\left(\theta \right)\,\sin\left(\psi \right)+v\,\cos\left(\psi \right)+w\,\sin\left(\psi \right)\,\sin\left(\theta \right),} \\
-        \scale[0.93]{\dot{z}} &= \scale[0.93]{-u\,\sin\left(\theta \right)+w\,\cos\left(\theta \right),} \\
-        \scale[0.93]{\dot{\theta}} &= \scale[0.93]{q,} \label{eq:nsb_5dof_theta_dot} \\
-        \scale[0.93]{\dot{\psi}} &= \scale[0.93]{\frac{1}{\cos\left(\theta \right)}\,r,} \label{eq:nsb_5dof_psi_dot} \\
-        \scale[0.93]{\dot{u}} &= \scale[0.93]{f_u + F_u(u, v, w, q, r) + \bs{\phi}_u(u, v, w, q, r, \theta, \psi)\T\,\ocean,} \label{eq:nsb_5dof_u_dot} \\
-        \scale[0.93]{\dot{v}} &= \scale[0.93]{X_v(u, u_c)\,r + Y_v(u, u_c)\,v_r,} \\
-        \scale[0.93]{\dot{w}} &= \scale[0.93]{X_w(u, u_c)\,q + Y_w(u, u_c)\,w_r + G(\theta),} \\
-        \scale[0.93]{\dot{q}} &= \scale[0.93]{t_q + F_q(u, w, q, \theta) + \bs{\phi}_q(u, w, q, \theta, \psi)\T\,\mathbb{V}_c,} \label{eq:nsb_5dof_q_dot} \\
-        \scale[0.93]{\dot{r}} &= \scale[0.93]{t_r + F_r(u, v, r) + \bs{\phi}_r(u, v, r, \theta, \psi)\T\,\mathbb{V}_c.} \label{eq:nsb_5dof_r_dot} 
+        \dot{x} &= u\cos\left(\psi \right)\cos\left(\theta \right)-v\sin\left(\psi \right)+w\cos\left(\psi \right)\sin\left(\theta \right), \\
+        \dot{y} &= u\cos\left(\theta \right)\sin\left(\psi \right)+v\cos\left(\psi \right)+w\sin\left(\psi \right)\sin\left(\theta \right), \\
+        \dot{z} &= -u\sin\left(\theta \right)+w\cos\left(\theta \right), \\
+        \dot{\theta} &= q, \label{eq:nsb_5dof_theta_dot} \\
+        \dot{\psi} &= \frac{1}{\cos\left(\theta \right)}r, \label{eq:nsb_5dof_psi_dot} \\
+        \dot{u} &= f_{u} + F_u(u, v, w, q, r) + \bs{\phi}_u(u, v, w, q, r, \theta, \psi)\T\ocean, \label{eq:nsb_5dof_u_dot} \\
+        \dot{v} &= X_v(u, u_{c})r + Y_v(u, u_{c})v_{r}, \\
+        \dot{w} &= X_w(u, u_{c})q + Y_w(u, u_{c})w_{r} + G(\theta), \\
+        \dot{q} &= t_{q} + F_q(u, w, q, \theta) + \bs{\phi}_q(u, w, q, \theta, \psi)\T\mathbb{V}_c, \label{eq:nsb_5dof_q_dot} \\
+        \dot{r} &= t_{r} + F_r(u, v, r) + \bs{\phi}_r(u, v, r, \theta, \psi)\T\mathbb{V}_c. \label{eq:nsb_5dof_r_dot} 
     \end{align} \label{eq:nsb_5dof_components}
 \end{subequations}
 
@@ -65,7 +65,7 @@ The path-following error $\mat{p}_b^p$ is given by the position of the barycente
 \end{equation}
 where
 \begin{align}
-    \mat{p}_b &= \frac{1}{n} \sum_{i=1}^n \mat{p}_i, & 
+    \mat{p}_b &= \frac{1}{N} \sum_{i=1}^N \mat{p}_i, & 
     \mat{p}_i &= \left[x_i, y_i, z_i\right]\T.
 \end{align}
 
@@ -74,7 +74,7 @@ Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that repr
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f + \mat{p}_b, &
-    i &\in \left\{1, \ldots, n \right\}.
+    i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
 \section{Control System}
@@ -142,7 +142,7 @@ where $k_{\psi}$, $k_r$, $k_d$ and $c_r$ are positive gains.
 \subsection{NSB Tasks}
 \label{sec:nsb_5dof_NSB}
 Let us denote the variables associated with the \gls{colav}, formation keeping, and path following tasks by lower indices $1$, $2$, and $3$, respectively.
-Each task produces a vector of desired velocities, $\ivel_{d,i} \in \mathbb{R}^{3N},\, i\in\{1,2,3\}$.
+Each task produces a vector of desired velocities, $\ivel_{d,1}, \ivel_{d,2}, \ivel_{d,3} \in \mathbb{R}^{3N}$.
 
 First, let us consider the \gls{colav} task.
 Let {$d_{\rm COLAV}$} be the \emph{activation distance}, \emph{i.e.,} the distance at which the vehicles need to start performing the evasive maneuvers.
@@ -150,7 +150,7 @@ The task variable is then given by a vector of relative distances between the ve
 \begin{align}
         \bs{\sigma}_1 &= \big[\norm{\mat{p}_i - \mat{p}_j}\big]\T, &
         \begin{split} 
-            \forall &i,j\in\{1,\ldots,n\}, j > i, \\
+            \forall &i,j\in\{1,\ldots,N\}, j > i, \\
             &\norm{\mat{p}_i - \mat{p}_j} < d_{\rm COLAV}.
         \end{split}
 \end{align}
@@ -171,7 +171,7 @@ Therefore, to ensure collision avoidance, $d_{\rm COLAV}$ shuld be chosen as $d_
 The formation-keeping and path-following tasks are defined identically as in Section~\ref{sec:background_nsb_formation_path_following}.
 The task variable of the formation-keeping task is
 \begin{align}
-    \bs{\sigma}_2 &= \left[\bs{\sigma}_{2,1}\T, \ldots, \bs{\sigma}_{2,n-1}\T\right]\T, \label{eq:nsb_5dof_sigma_2} &
+    \bs{\sigma}_2 &= \left[\bs{\sigma}_{2,1}\T, \ldots, \bs{\sigma}_{2,N-1}\T\right]\T, \label{eq:nsb_5dof_sigma_2} &
     \bs{\sigma}_{2,i} &= \mat{p}_i - \mat{p}_b,
 \end{align}
 and its desired values are
@@ -179,7 +179,7 @@ and its desired values are
     \bs{\sigma}_{d,2} = \begin{bmatrix}
         \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,1}^p \\
         \vdots \\
-        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,n-1}^p
+        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^p
     \end{bmatrix}. \label{eq:nsb_5dof_sigma_d_2}
 \end{equation}
 The desired velocity of the formation keeping task is given by
@@ -198,7 +198,7 @@ Inspired by \cite{belleter_2019_observer}, we employ a time-varying error-depend
 where $\Delta_0 > 0$ is a constant.
 The desired velocity of the path-following task is then given by
 \begin{equation}
-    \ivel_{d, 3} = \mat{1}_n \otimes \ivel_{\rm LOS},
+    \ivel_{d, 3} = \mat{1}_N \otimes \ivel_{\rm LOS},
 \end{equation}
 where
 \begin{align}
@@ -268,11 +268,11 @@ Differentiating \eqref{eq:nsb_5dof_barycenter} with respect to time and substitu
 \begin{subequations}
     \begin{align}
         \begin{split}
-            \dot{x}_b^p &= \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) \\
+            \dot{x}_b^p &= \frac{1}{N}\sum_{i=1}^N U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) \\
             &\quad - \scale{\norm{\frac{\partial \mat{p}_p(s)}{\partial s}}}\dot{s} + \omega_zy_b^p - \omega_yz_b^p,
         \end{split} \label{eq:nsb_5dof_x_pb} \\
-        \dot{y}_b^p &= \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_y\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + \omega_xz_b^p - \omega_zx_b^p, \label{eq:nsb_5dof_y_pb} \\
-        \dot{z}_b^p &= \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_z\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + \omega_yx_b^p - \omega_xy_b^p, \label{eq:nsb_5dof_z_pb}
+        \dot{y}_b^p &= \frac{1}{N}\sum_{i=1}^N U_i\,\Omega_y\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + \omega_xz_b^p - \omega_zx_b^p, \label{eq:nsb_5dof_y_pb} \\
+        \dot{z}_b^p &= \frac{1}{N}\sum_{i=1}^N U_i\,\Omega_z\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + \omega_yx_b^p - \omega_xy_b^p, \label{eq:nsb_5dof_z_pb}
     \end{align} \label{eq:nsb_5dof_barycenter_kinematics}
 \end{subequations}
 where
@@ -290,7 +290,7 @@ where
 \end{subequations}
 To stabilize the along-track error dynamics, we choose the following path variable update 
 \begin{equation}
-    \dot{s} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \left( \frac{1}{n}\sum_{i=1}^n U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + k_{s}\,\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}}\right),
+    \dot{s} = \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} \left( \frac{1}{N}\sum_{i=1}^N U_i\,\Omega_x\left(\gamma_i, \theta_p, \chi_i, \psi_p\right) + k_{s}\,\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}}\right),
     \label{eq:nsb_5dof_path_update}
 \end{equation}
 where $k_{s} > 0$ is a constant.
@@ -301,7 +301,7 @@ In this section, we investigate the closed-loop stability of the path following 
 We define two error states, $\tilde{\mat{X}}_1$ and $\tilde{\mat{X}}_2$, as
 \begin{align}
     \tilde{\mat{X}}_1 &= \left[x_b^p, y_b^p, z_b^p\right]\T, && \\
-    \tilde{\mat{X}}_2 &= \left[\tilde{\mat{X}}_{2,1}\T, \ldots, \tilde{\mat{X}}_{2,n}\T\right]\T, &
+    \tilde{\mat{X}}_2 &= \left[\tilde{\mat{X}}_{2,1}\T, \ldots, \tilde{\mat{X}}_{2,N}\T\right]\T, &
     \tilde{\mat{X}}_{2,i} &= \left[\tilde{u}_i, s_{q,i}, \tilde{\theta}_i, s_{r,i}, \tilde{\psi}_i\right]\T,
 \end{align}
 
@@ -310,14 +310,14 @@ Now, we can take the barycenter kinematics from \eqref{eq:nsb_5dof_barycenter_ki
     \begin{align}
         &\dot{x}_b^p = -k_{s}\frac{x_b^p}{\sqrt{1+\left(x_b^p\right)^2}} + \omega_zy_b^p - \omega_yz_b^p, \label{eq:nsb_5dof_x_pb_CL} \\
         &\begin{aligned}
-            \dot{y}_b^p &= - \frac{1}{n}\sum_{i=1}^n U_{d,i}{\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} + \omega_xz_b^p - \omega_zx_b^p \\
-            & \quad + G_y\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\psi}_1, \ldots, \tilde{\psi}_n, \gamma_1, \ldots, \gamma_n, \\
-            & \qquad\qquad u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p\big),
+            \dot{y}_b^p &= - \frac{1}{N}\sum_{i=1}^N U_{d,i}{\frac{\cos\left(\gamma_{\rm LOS}\right)y_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}} + \omega_xz_b^p - \omega_zx_b^p \\
+            & \quad + G_y\big(\tilde{u}_1, \ldots, \tilde{u}_N, \tilde{\psi}_1, \ldots, \tilde{\psi}_N, \gamma_1, \ldots, \gamma_N, \\
+            & \qquad\qquad u_{d,1}, \ldots, u_{d,N}, v_1, \ldots, v_N, w_1, \ldots, w_N, \mat{p}_b^p, \psi_p\big),
         \end{aligned} \\
         &\begin{aligned}
-            \dot{z}_b^p &= \frac{1}{n} \sum_{i=1}^n U_{d,i}\frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}} + \omega_yx_b^p - \omega_xy_b^p \\
-            & \quad + G_z\big(\tilde{u}_1, \ldots, \tilde{u}_n, \tilde{\theta}_1, \ldots, \tilde{\theta}_n, \gamma_1, \ldots, \gamma_n, \chi_1, \ldots, \chi_n, \\
-            & \qquad \qquad\, u_{d,1}, \ldots, u_{d,n}, v_1, \ldots, v_n, w_1, \ldots, w_n, \mat{p}_b^p, \psi_p, \theta_p\big).
+            \dot{z}_b^p &= \frac{1}{N} \sum_{i=1}^N U_{d,i}\frac{z_b^p}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}} + \omega_yx_b^p - \omega_xy_b^p \\
+            & \quad + G_z\big(\tilde{u}_1, \ldots, \tilde{u}_N, \tilde{\theta}_1, \ldots, \tilde{\theta}_N, \gamma_1, \ldots, \gamma_N, \chi_1, \ldots, \chi_N, \\
+            & \qquad \qquad\, u_{d,1}, \ldots, u_{d,N}, v_1, \ldots, v_N, w_1, \ldots, w_N, \mat{p}_b^p, \psi_p, \theta_p\big).
         \end{aligned} \label{eq:nsb_5dof_z_pb_CL}
     \end{align} \label{eq:nsb_5dof_nominal}
 \end{subequations}
@@ -390,8 +390,8 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     \label{lemma_2}
     The underactuated sway and heave dynamics are bounded near the manifold $\left[\tilde{\mat{X}}_1\T, \tilde{\mat{X}}_2\T\right] = \mat{0}\T$ if $Y_v(u, u_c) < 0$, $Y_w(u, u_c) < 0$ and the curvature of the path satisfies
     \begin{align}
-        \abs{\kappa(s)} &< \frac{n}{2}\abs{\frac{Y_w(u, u_c)}{X_w(u, u_c)}}, &
-        \abs{\iota(s)} &< \frac{n}{2}\abs{\frac{Y_v(u, u_c)}{X_v(u, u_c)}}, \label{eq:nsb_5dof_curvature_limit}
+        \abs{\kappa(s)} &< \frac{N}{2}\abs{\frac{Y_w(u, u_c)}{X_w(u, u_c)}}, &
+        \abs{\iota(s)} &< \frac{N}{2}\abs{\frac{Y_v(u, u_c)}{X_v(u, u_c)}}, \label{eq:nsb_5dof_curvature_limit}
     \end{align}
     for all $u > 0$ and $u_c \in [-\norm{\ocean}, \norm{\ocean}]$.
 \end{lemma}
@@ -403,8 +403,8 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     Consider the derivatives of the Lyapunov function candidates $V_v, V_w$ from \eqref{eq:nsb_5dof_underactuated_LFC}.
     Substituting $\tilde{\mat{X}}_1 = \mat{0}, \tilde{\mat{X}}_2 = \mat{0}$, we get the following inequalities
     \begin{align} 
-            \dot{V}_v(v_i) &\leq \left(X_v\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\iota(\xi)} + Y_v\left(u_{d,i}, u_c\right)\right)v_i^2 + F_v(v_i), \\
-            \dot{V}_w(w_i) &\leq \left(X_w\left(u_{d,i}, u_c\right)\frac{2}{n}\abs{\kappa(\xi)} + Y_w\left(u_{d,i}, u_c\right)\right)w_i^2 + F_w(w_i),
+            \dot{V}_v(v_i) &\leq \left(X_v\left(u_{d,i}, u_c\right)\frac{2}{N}\abs{\iota(\xi)} + Y_v\left(u_{d,i}, u_c\right)\right)v_i^2 + F_v(v_i), \\
+            \dot{V}_w(w_i) &\leq \left(X_w\left(u_{d,i}, u_c\right)\frac{2}{N}\abs{\kappa(\xi)} + Y_w\left(u_{d,i}, u_c\right)\right)w_i^2 + F_w(w_i),
     \end{align}
 
     \noindent where $F_v$ and $F_w$ grow at most linearly with $v_i$ and $w_i$, respectively.
@@ -416,7 +416,7 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     \label{lemma_3}
     The underactuated sway and heave dynamics are bounded near the manifold $\tilde{\mat{X}}_2 = \mat{0}$, independently of $\tilde{\mat{X}}_1$ if the assumptions in Lemma~\ref{lemma_2} are satisfied and the constant term $\Delta_0$ in the lookahead distance \eqref{eq:nsb_5dof_delta} is chosen so that
     \begin{equation}
-        \Delta_0 > \max\left\{\frac{3}{n\abs{\frac{Y_v\left(u, u_c\right)}{X_v\left(u, u_c\right)}} - 2\abs{\iota(s)}}, \frac{3}{n\abs{\frac{Y_w\left(u, u_c\right)}{X_w\left(u, u_c\right)}} - 2\abs{\kappa(s)}}\right\},
+        \Delta_0 > \max\left\{\frac{3}{N\abs{\frac{Y_v\left(u, u_c\right)}{X_v\left(u, u_c\right)}} - 2\abs{\iota(s)}}, \frac{3}{N\abs{\frac{Y_w\left(u, u_c\right)}{X_w\left(u, u_c\right)}} - 2\abs{\kappa(s)}}\right\},
         \label{eq:nsb_5dof_lookahead_limit}
     \end{equation}
     for all $u > 0$ and $u_c \in [-\norm{\ocean}, \norm{\ocean}]$.
@@ -429,8 +429,8 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     Once again, we consider the derivatives of the Lyapunov function candidates {$V_v, V_w$} from \eqref{eq:nsb_5dof_underactuated_LFC}.
     Substituting $\tilde{\mat{X}}_2 = \mat{0}$, we get the following inequalities
     \begin{align} 
-            \dot{V}_v(v_i) &\leq \!\Bigg(\!X_{v\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\iota(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_v\left(u_{d,i}, u_c\right)\!\Bigg)v_i^2 + F_v(v_i), \\
-            \dot{V}_w(w_i) &\leq \!\Bigg(\!X_{w\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{n}\abs{\kappa(\xi)} + \frac{3}{n\,\Delta(\mat{p}_b^p)}\right) + Y_w\left(u_{d,i}, u_c\right)\!\Bigg)w_i^2 + F_w(w_i),
+            \dot{V}_v(v_i) &\leq \!\Bigg(\!X_{v\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{N}\abs{\iota(\xi)} + \frac{3}{N\,\Delta(\mat{p}_b^p)}\right) + Y_v\left(u_{d,i}, u_c\right)\!\Bigg)v_i^2 + F_v(v_i), \\
+            \dot{V}_w(w_i) &\leq \!\Bigg(\!X_{w\!}\left(u_{d,i}, u_c\right)\left(\frac{2}{N}\abs{\kappa(\xi)} + \frac{3}{N\,\Delta(\mat{p}_b^p)}\right) + Y_w\left(u_{d,i}, u_c\right)\!\Bigg)w_i^2 + F_w(w_i),
     \end{align}\vspace{-3mm}
 
     \noindent where $F_v$ and $F_w$ grow at most linearly with $v_i$ and $w_i$, respectively.
@@ -475,9 +475,9 @@ whose derivative along the trajectories of \eqref{eq:nsb_5dof_nominal} is
     \begin{align}
         \dot{V}(\tilde{\mat{X}}_1) &= - \tilde{\mat{X}}_1\T\,\mat{Q}\,\tilde{\mat{X}}_1, &
         \mat{Q} &= {\rm diag}(q_1, q_2, q_3), \\
-        q_1 &= \scale[1]{\frac{k_{s}}{\sqrt{1+\left(x_b^p\right)^2}}}, &
-        q_2 &= \scale[1]{{\frac{\frac{1}{n}\sum_{i=1}^n U_{d,i}\cos\left(\gamma_{\rm LOS}\right)}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}}}, \\
-        &&q_3 &= \scale[1]{\frac{\frac{1}{n} \sum_{i=1}^n U_{d,i}}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}}. 
+        q_1 &= {\frac{k_{s}}{\sqrt{1+\left(x_b^p\right)^2}}}, &
+        q_2 &= {{\frac{\frac{1}{N}\sum_{i=1}^N U_{d,i}\cos\left(\gamma_{\rm LOS}\right)}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(y_b^p\right)^2}}}}, \\
+        &&q_3 &= {\frac{\frac{1}{N} \sum_{i=1}^N U_{d,i}}{\sqrt{\Delta\left(\mat{p}_b^p\right)^2 + \left(z_b^p\right)^2}}}. 
     \end{align}
 \end{subequations}
 Note that $\mat{Q}$ is positive definite, and the nominal system is thus UGAS.
@@ -485,7 +485,7 @@ Furthermore, note that the following inequality
 \begin{subequations}
     \begin{align}
         \dot{V}(\tilde{\mat{X}}_1) &\leq - q_{\rm min} \norm{\tilde{\mat{X}}_1}^2, \\
-        q_{\rm min} &= \scale[1]{\min \left\{ \frac{k_{s}}{\sqrt{1+r^2}}, \frac{\frac{1}{n} \sum_{i=1}^n U_{d,i}\cos\left(\gamma_{\rm LOS}\right)}{\sqrt{\Delta_0^2 + 4r^2}} \right\}},
+        q_{\rm min} &= {\min \left\{ \frac{k_{s}}{\sqrt{1+r^2}}, \frac{\frac{1}{N} \sum_{i=1}^N U_{d,i}\cos\left(\gamma_{\rm LOS}\right)}{\sqrt{\Delta_0^2 + 4r^2}} \right\}},
     \end{align}
 \end{subequations}
 holds $\forall \tilde{\mat{X}}_1 \in \mathcal{B}_r$.

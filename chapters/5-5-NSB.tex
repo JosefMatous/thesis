@@ -21,7 +21,7 @@ This modified \gls{nsb} algorithm provides the acceleration input $\bm{\mu}$ to 
     \end{align}
 \end{subequations}
 
-For each task, we design a task variable $\bm{\sigma}_i \in \mathbb{R}^m_i$ as a function of $\mathbf{p}$
+For each task, we design a task variable $\bm{\sigma}_i \in \mathbb{R}^{m_i}$ as a function of $\mathbf{p}$
 \begin{equation}
     \bm{\sigma}_i = \mathbf{f}_i(\mathbf{p}).
 \end{equation}
@@ -126,7 +126,7 @@ Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the transformed dynamic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Formation Path Following}\label{sec:formation_path_following}
 The formation path-following problem considered in this chapter is analogous to the one defined in Section~\ref{sec:background_formation_path_following}.
-We consider a fleet of $n$ \glspl{auv} and define the stacked position and velocity vectors $\mathbf{p} = [\mathbf{x}_{1,1}\T, \, \ldots,\, \mathbf{x}_{1,n}\T]\T$ and $\mathbf{v} = [\mathbf{x}_{2,1}\T, \, \ldots,\, \mathbf{x}_{2,n}\T]\T$, respectively. We also define the stacked ocean current vector $\stackedocean = \mathbf{1}_{n} \otimes \ocean$. In the following sections, we denote the hand position of a single \gls{auv} by $\mathbf{p}_i = \mathbf{x}_{1,i}$ and its velocity relative to the ocean current by $\mathbf{v}_i = \mathbf{x}_{2,i}$.
+We consider a fleet of $N$ \glspl{auv} and define the stacked position and velocity vectors $\mathbf{p} = [\mathbf{x}_{1,1}\T, \, \ldots,\, \mathbf{x}_{1,N}\T]\T$ and $\mathbf{v} = [\mathbf{x}_{2,1}\T, \, \ldots,\, \mathbf{x}_{2,N}\T]\T$, respectively. We also define the stacked ocean current vector $\stackedocean = \mathbf{1}_{N} \otimes \ocean$. In the following sections, we denote the hand position of a single \gls{auv} by $\mathbf{p}_i = \mathbf{x}_{1,i}$ and its velocity relative to the ocean current by $\mathbf{v}_i = \mathbf{x}_{2,i}$.
 
 The desired path is parametrized by a smooth function $\mathbf{p}_p : \mathbb{R} \mapsto \mathbb{R}^3$ that is assumed to be $\mathcal{C}^\infty$ and regular.
 For every point $\mathbf{p}_p(s)$, there exists a path-tangential coordinate-frame with a corresponding rotation matrix $\mathbf{R}_p$ (see Section~\ref{sec:background_paths}). 
@@ -137,11 +137,11 @@ The path-following error $\mathbf{p}_b^p$ is defined in terms of the barycenter 
 The goal of path following is to control the vehicles so that $\mat{p}_b^p \rightarrow \mat{0}_3$.
 
 The vehicles should converge to a dynamic formation that rotates with the desired path (see Section~\ref{sec:background_formation_keeping} for details).
-Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that represent the desired formation.
+Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that represent the desired formation.
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p \mat{p}_{f,i}^f + \mat{p}_b, &
-    i &\in \left\{1, \ldots, n \right\}.
+    i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
 \subsection{NSB Controller}\label{sec:NSB_case_study}
@@ -153,7 +153,7 @@ We let the control system consist of three tasks in decreasing order of priority
 The highest priority task is inter-vehicle \acrfull{colav}. The task variable is given by a stacked vector $\bm{\sigma}_1 = [\sigma_{1,1}\T, \ldots, \sigma_{1,l}\T]\T$ of relative distances between vehicles closer than the activation distance $d_{COLAV}$:
 \begin{equation}
 \begin{split}
-    \sigma_{1,k} = \|\mathbf{p}_i - \mathbf{p}_j\|, \quad &\forall i,j \in {1, \ldots, n}: j > i,\\
+    \sigma_{1,k} = \|\mathbf{p}_i - \mathbf{p}_j\|, \quad &\forall i,j \in \{1, \ldots, N\}: j > i,\\
     &\|\mathbf{p}_i - \mathbf{p}_j\| < d_{COLAV}.
     \end{split}
 \end{equation}
@@ -189,17 +189,17 @@ Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}
 \subsubsection{Formation-Keeping Task}
 The formation-keeping task moves the vehicles into a predefined formation in the formation-centered frame. The task variable is given by
 \begin{equation}
-    \bm{\sigma}_2 = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,n-1}\T\right]\T, \quad \bm{\sigma}_{2,i}  = \mathbf{p}_i - \mathbf{p}_b.
+    \bm{\sigma}_2 = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,N-1}\T\right]\T, \quad \bm{\sigma}_{2,i}  = \mathbf{p}_i - \mathbf{p}_b.
 \end{equation}
 The desired values are
 \begin{equation}
-    \bm{\sigma}_{d,2} = [\bigl(\mathbf{R}_p \mathbf{p}_{f,1}^f\bigr)\T, ..., \bigl(\mathbf{R}_p \mathbf{p}_{f,n-1}^f\bigr) \T] \T.
+    \bm{\sigma}_{d,2} = [\bigl(\mathbf{R}_p \mathbf{p}_{f,1}^f\bigr)\T, ..., \bigl(\mathbf{R}_p \mathbf{p}_{f,N-1}^f\bigr) \T] \T.
 \end{equation}
 The Jacobian is given by 
 \begin{equation}
     \mathbf{J}_2 = \left(\begin{bmatrix}
-        \mathbf{I}_{n-1} & \mathbf{0}_{n-1}
-    \end{bmatrix} - \frac{\mathbf{1}_{(n-1) \times n}}{N}\right)\otimes \mathbf{I}_3.
+        \mathbf{I}_{N-1} & \mathbf{0}_{N-1}
+    \end{bmatrix} - \frac{\mathbf{1}_{(N-1) \times N}}{N}\right)\otimes \mathbf{I}_3.
 \end{equation}
 Because $\dot{\mathbf{J}}_2 = \mathbf{0}$, the \gls{soclik} equation reduces to
 \begin{equation}\label{eq:formation_keeping_controller}
@@ -294,7 +294,7 @@ From \eqref{eq:LOS_integral_errors}, we conclude that if $\Tilde{\mathbf{v}}_{\r
 
 The desired acceleration of the path-following task is then given by
 \begin{equation}
-    \dot{\mathbf{v}}_3 = \mathbf{1}_{n} \otimes \dot{\mathbf{v}}_{LOS}.
+    \dot{\mathbf{v}}_3 = \mathbf{1}_{N} \otimes \dot{\mathbf{v}}_{LOS}.
 \end{equation}
 
 Similarly to Chapter~\ref{chap:NSB_R}, the update of the path-parameter $s$ is used as an extra degree of freedom to stability of the along-track error
@@ -346,7 +346,7 @@ In this section, we analyze the closed-loop stability of the external states and
 Furthermore, because of the following independence relations
 \begin{align}
     \ddot{\bm{\sigma}}_2 &= \mathbf{J}_2\dot{\mathbf{v}}_2 + \mathbf{J}_2\dot{\mathbf{v}}_3 = \mathbf{J}_2\dot{\mathbf{v}}_2,\\
-    \dot{\mathbf{v}}_b &= \frac{1}{n}\sum_{i=1}^n (\dot{\mathbf{v}}_2 + \dot{\mathbf{v}}_3) = \frac{1}{n}\sum_{i=1}^n \dot{\mathbf{v}}_3,
+    \dot{\mathbf{v}}_b &= \frac{1}{N}\sum_{i=1}^N (\dot{\mathbf{v}}_2 + \dot{\mathbf{v}}_3) = \frac{1}{N}\sum_{i=1}^N \dot{\mathbf{v}}_3,
 \end{align}
 the closed-loop properties of each task can be analyzed independently.
 
@@ -377,7 +377,7 @@ Inserting for \eqref{eq:task_2_dynamics}, the time-derivative is given by
     &= -\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2} \mathbf{\Lambda}_{d,2}\dot{\Tilde{\bm{\sigma}}}_2.
 %\end{split}
 \end{align}
-Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \in \mathbb{R}^{6(n-1)} | \dot{V} = 0\}$. Because of the dynamics \eqref{eq:task_2_dynamics}, no other solution can stay identically in $S$, other than the trivial solution $\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \equiv \mathbf{0}$. Thus, the origin is globally asymptotically stable according to \cite[Corollary 4.2]{khalil_nonlinear_2002}. Furthermore, because \eqref{eq:task_2_dynamics} is time-invariant, the equilibrium is \glspl{ugas}.
+Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \in \mathbb{R}^{6(N-1)} | \dot{V} = 0\}$. Because of the dynamics \eqref{eq:task_2_dynamics}, no other solution can stay identically in $S$, other than the trivial solution $\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\T \equiv \mathbf{0}$. Thus, the origin is globally asymptotically stable according to \cite[Corollary 4.2]{khalil_nonlinear_2002}. Furthermore, because \eqref{eq:task_2_dynamics} is time-invariant, the equilibrium is \glspl{ugas}.
 \end{proof}
 
 
@@ -425,14 +425,14 @@ Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\
 
 \begin{prop}
     \label{prop:angular_velocities}
-    Let us define $\bs{\xi}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, n$ in accordance with \eqref{eq:handpos_def_a_bounds}.
+    Let us define $\bs{\xi}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, N$ in accordance with \eqref{eq:handpos_def_a_bounds}.
     The internal dynamics of the vehicles are ultimately bounded if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$.
 \end{prop}
 
 \begin{proof}
     In the previous sections, we showed that in the nominal case, the external dynamics are \glspl{ugas}.
     Moreover, for a given set of initial conditions, the control input $\bs{\mu}$ defined in \eqref{eq:NSB_double} is bounded.
-    Consequently, if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the angular rate dynamics are ultimately bounded.
+    Consequently, if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, N\}$, then all assumptions of Lemma~\ref{lemma:handpos_def_ultimate_boundedness} are satisfied, and the angular rate dynamics are ultimately bounded.
 \end{proof}
 
 \subsection{Simulation Results}\label{sec:simulation}

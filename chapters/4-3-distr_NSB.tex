@@ -37,13 +37,13 @@ Consequently, for any point $\mat{p}_p(s)$, there exists a path-tangential coord
 The path-following error $\mat{p}_b^p$ is given by the position of the barycenter in the path-tangential coordinate frame 
 \begin{align}
     \mat{p}_b^p &= \mat{R}_p\T \, \big(\mat{p}_b - \mat{p}_p(s)\big), &
-    \mat{p}_b &= \frac{1}{n} \sum_{i=1}^n \mat{p}_i.
+    \mat{p}_b &= \frac{1}{N} \sum_{i=1}^N \mat{p}_i.
     \label{eq:distr_NSB_barycenter}
 \end{align}
 The goal of path following is to control the vehicles so that $\mat{p}_b^p \rightarrow \mat{0}_3$.
 
 The vehicles should converge to a dynamic formation that rotates with the desired path (see Section~\ref{sec:background_formation_keeping} for details).
-Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that represent the desired formation.
+Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that represent the desired formation.
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f + \mat{p}_b, &
