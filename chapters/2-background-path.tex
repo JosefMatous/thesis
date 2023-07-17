@@ -82,7 +82,7 @@ where
     \label{eq:background_path_tangential_3D}
 \end{align}
 An illustration is shown in \figref{fig:background_path}.
-Note that the yaw angle $\psi_{p}(s)$ is not defined if the path-tangential vector is aligned with the $z$-axis (\emph{i.e.,} if both $\partial x_p(s) / \partial s$ and $\partial y_p(s) / \partial s$ are zero).
+Note that the yaw angle $\psi_{p}(s)$ is not defined if the desired path is vertical (\emph{i.e.,} if $\theta_p(s) = \pm \frac{\pi}{2}$).
 However, we also note that most commercial \glspl{auv} can only reach a limited range of pitch angles, making them unable to move vertically.
 Consequently, we should avoid designing vertical paths, where the singularities of Euler angles become an issue.
 
@@ -107,6 +107,7 @@ In the two-dimensional case, the curvature, $\kappa(s)$, is defined as
 In the three-dimensional case, the curvature is not defined as a scalar, but rather as a vector $\bs{\omega}_p(s) \in \mathbb{R}^3$ such that
 \begin{equation}
     \frac{\partial \mat{R}_p(s)}{\partial s} = \mat{R}_p(s) \mat{S}\left(\bs{\omega}_p(s)\right).
+    \label{eq:background_omega_p}
 \end{equation}
 If the rotation matrix $\mat{R}_p(s)$ was chosen according to \eqref{eq:background_R_p_zero_roll}, then we can also define curvature in pitch and yaw, $\kappa(s)$ and $\iota(s)$, as
 \begin{align}

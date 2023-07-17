@@ -153,7 +153,7 @@ Thanks to \eqref{eq:MPC_phi_q}, we can express $\widetilde{\mat{q}}_i(t)$ in ter
 and thus solve the problem by optimizing $\mat{y}_i(t)$ and $s(t)$.
 
 The problem should be cast in a receding horizon fashion to reject potential disturbances as the mission proceeds.     
-We thus propose to formulate the \emph{centralized} problem of optimizing a part of the trajectory, i.e., $\mat{y}_i(t:t+T)$, \ldots, $s(t:t+T)$, as that of optimizing the constrained problem
+We thus propose to formulate the \emph{centralized} problem of optimizing a part of the trajectory, i.e., $\{\mat{y}_i(t:t+T)\}$, $s(t:t+T)$, as that of solving the following constrained problem
 %
 \begin{equation}
     \begin{split}

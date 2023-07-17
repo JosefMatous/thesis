@@ -8,7 +8,7 @@ The contents of this chapter are based on \cite{matous_trajectory_2023}.
 
 The chapter is organized as follows.
 Sections~\ref{sec:handpos_trajectory_trajectory_tracking} and \ref{sec:handpos_trajectory_path_following} present and analyze the trajectory-tracking and the path-following controller, respectively.
-Finally, Sections~\ref{sec:handpos_trajectory_simulations} and \ref{sec:handpos_trajectory_experiments} show the results of numerical simulations and experiments, respectively.
+Sections~\ref{sec:handpos_trajectory_simulations} and \ref{sec:handpos_trajectory_experiments} show the results of numerical simulations and experiments, respectively.
 
 \section{Trajectory Tracking}
 \label{sec:handpos_trajectory_trajectory_tracking}
@@ -319,7 +319,7 @@ The components of $\mat{J}_{\bs{\xi}_2}$, $\mat{J}_{\bs{\omega}}$, and $\mat{J}_
 
 \section{Path Following}
 \label{sec:handpos_trajectory_path_following}
-In this section, we present a path following controller based on the hand position concept.
+In this section, we present a path-following controller based on the hand position concept.
 Let $s$ be the path parameter, $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^{3}$ the parametrization of the desired path, and $U_d > 0$ the desired path following speed.
 We assume that $\mat{p}_p$ is $\mathcal{C}^2$ and parametrized by the arc length (see Section~\ref{sec:background_paths}).
 Let us define the following three functions
@@ -334,7 +334,7 @@ The goal of the path following is to control the vehicle and continuously update
     \lim_{t \rightarrow \infty} \dot{s}(t) &= U_d. \label{eq:handpos_trajectory_control_goal_path}
 \end{align}
 
-To solve the path following problem, we define the following error states
+To solve the path-following problem, we define the following error states
 \begin{subequations}
     \begin{align}
         \tilde{\mat{x}}_1 &= \mat{x}_1 - \bs{\xi}_{1, d}, \\
@@ -588,7 +588,7 @@ In this test, the vehicle should track a figure eight trajectory
 \begin{equation}
     \bs{\xi}_{1, d}(t) = \inlinevector{50\cos\left(\frac{\pi}{200}t\right), 25\sin\left(\frac{2\pi}{200}t\right), 15\cos\left(\frac{2\pi}{200}t\right)}\!\!.
 \end{equation}
-We use the trajectory tracking controller proposed in Section~\ref{sec:handpos_trajectory_trajectory_tracking}.
+We use the trajectory-tracking controller proposed in Section~\ref{sec:handpos_trajectory_trajectory_tracking}.
 The PID gains are chosen such that $\mat{H}_{\xi}$ is Hurwitz, guaranteeing the stability of the external dynamics.
 The value of $\Bar{\alpha}_y = \Bar{\alpha}_z$ for the chosen parameters is $0.05$, guaranteeing the boundedness of the internal dynamics by Proposition~\ref{prop:handpos_trajectory_trajectory_tracking}.
 
@@ -602,14 +602,14 @@ However, after the external dynamics have converged, the angular velocities rema
 \subsection{Path Following}
 \input{figures/handpos_trajectory/fig_path.tex}
 
-In this test, we have chosen a path with the same shape as in the trajectory tracking test.
+In this test, we have chosen a path with the same shape as in the trajectory-tracking test.
 The path parametrization is given by
 \begin{equation}
     \mat{p}_p(s) = \inlinevector{50\cos\left(\gamma(s)\right), 25\sin\left(2\gamma(s)\right), 15\cos\left(2\gamma(s)\right)}\!,
 \end{equation}
 where $\gamma: \mathbb{R} \mapsto \mathbb{R}$ is a function chosen such that $\mat{p}_p(s)$ is a parametrization by arc length (see Section~\ref{sec:background_paths}).
 
-We use the path following controller proposed in Section~\ref{sec:handpos_trajectory_path_following}.
+We use the path-following controller proposed in Section~\ref{sec:handpos_trajectory_path_following}.
 The gains of the path parameter update law are chosen as $\varepsilon = 0.5$, and $k_{\sigma} = 0.1$.
 The value of $\Bar{\alpha}_y = \Bar{\alpha}_z$ for the chosen parameters is $0.02$, guaranteeing the boundedness of the internal dynamics by Proposition~\ref{prop:handpos_trajectory_path_following}.
 

@@ -118,7 +118,7 @@ The goal of our control allocation scheme is to find optimal inputs $\mathbf{u}^
     \mathbf{u}^* = \argmin_{\mathbf{u}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}) - \bs{\tau}_d \right\|^2.
 \end{equation}
 
-Using the approximation \eqref{eq:ccta_forces_approximation}, we can formulate the control allocation problem as a \acrfull{qp} 
+Using the approximation \eqref{eq:ccta_forces_approximation}, we can formulate the control allocation problem as a \gls{qp} 
 \begin{align}
     \mathbf{u}^* &= \mathbf{u}_0 + \Delta\mathbf{u}^*, \\
     \Delta\mathbf{u}^* &= \argmin_{\Delta\mathbf{u}\in\mathbb{R}^{K}}\,\left\| b(\mathbf{u}_{0}) + \mathbf{B}(\mathbf{u}_{0})\,\Delta\mathbf{u} - \bs{\tau}_{d} \right\|^2.
@@ -176,7 +176,7 @@ where $d_{\min}$ is a minimum safe distance, and $k_v$ is a coefficient that pen
 To use $h_{ij}$ as a control barrier function, we need to calculate its time-derivative.
 Differentiating \eqref{eq:ccta_CBF} with respect to time yields
 \begin{equation}
-    \frac{\rm d}{{\rm d}t}h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) = \frac{\rm d}{{\rm d}t}\|\mathbf{p}_{ij}\| + k_v\,\frac{\rm d_2}{{\rm d}t_2}\|\mathbf{p}_{ij}\|.
+    \frac{\rm d}{{\rm d}t}h_{ij}(\mathbf{x}_{i}, \mathbf{x}_{j}) = \frac{\rm d}{{\rm d}t}\|\mathbf{p}_{ij}\| + k_v\,\frac{\rm d^2}{{\rm d}t^2}\|\mathbf{p}_{ij}\|.
 \end{equation}
 
 %Note that the norm $\|\mathbf{p}_{ij}\|$ can be defined as
@@ -287,10 +287,11 @@ Note that both \eqref{eq:ccta_combined_avoidance_allocation} and \eqref{eq:ccta_
 When choosing the weight matrices, we first note that the vector $\bs{\tau}$ contains both forces and torques.
 The matrix $\mathbf{Q}$ should penalize them differently.
 In the simulations in Section~\ref{sec:ccta_simulations}, we choose
+\vspace{-1mm}
 \begin{equation}
    \mathbf{Q} = \diag{(1,1,\frac{1}{L^2})},
 \end{equation}
-where $\diag(.)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.
+where $\diag(\cdot)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.
 
 \section{Simulations}
 \label{sec:ccta_simulations}
@@ -300,14 +301,14 @@ Each vessel starts in the corner of a square and is guided towards a reference l
 We tested the proposed algorithms on two models of ASVs --- the \emph{milliAmpere} ferry \cite{pedersen_optimization_2019} and the $1:90$ scaled model of the Inocean Cat I drillship \cite{bjorno_thruster-assisted_2016} --- using Simulink.
 Both vessels are equipped with azimuth thrusters; the \emph{milliAmpere} has two and the drillship has six.
 Each thruster is parametrized by two values: its thrust force and its azimuth.
-The input vector for these vessels is defined as \vspace{-2mm}
+The input vector for these vessels is defined as \vspace{-1mm}
 \begin{equation}
     \mathbf{u} = \left[ f_1 ,\, \ldots ,\, f_k ,\, \alpha_1 ,\, \ldots ,\, \alpha_k \right]^{\rm T},
 \end{equation}
 where $f_i$ is the thrust force and $\alpha_i$ is the azimuth angle of the $i^{\rm th}$ thruster, and $k$ is the number of thrusters.
 %
 Both ASV models have 3DOFs, \emph{i.e.,} the North-East position and the yaw angle.
-The function that maps the inputs to the generalized forces is \vspace{-2mm}
+The function that maps the inputs to the generalized forces is \vspace{-1mm}
 \begin{equation}
     \scale[0.93]{b(\mathbf{u}) = \sum_{i=1}^k f_i \left[ \cos\alpha_i, \sin\alpha_i, L_x^i\,\sin\alpha_i - L_y^i\,\cos\alpha_i \right]^{\rm T},}
 \end{equation}
@@ -382,12 +383,14 @@ where $L_x^i$ and $L_y^i$ is the position of the $i^{\rm th}$ thruster, relative
 
 For the higher-level controller that provides the desired forces, we use a nonlinear PID controller \cite{fossen_handbook_2011}.
 The nonlinear PID is an output-linearizing controller that transforms the nonlinear dynamical equations from \eqref{eq:ccta_matrix_model} to
+\vspace{-1mm}
 \begin{equation}
     \ddot{\pose} + 2\,\bs{\Omega}_n\,\mathbf{Z}\,\dot{\pose} + \bs{\Omega}_n^2\,\pose = 0,
 \end{equation}
 where $\mathbf{Z}$ is the diagonal relative damping matrix, and $\bs{\Omega}_n$ is the diagonal natural frequency matrix.
 Both matrices are tuning parameters.
 For convenience, we express $\bs{\Omega}_n$ in terms of a bandwidth matrix $\bs{\Omega}_{bw}$
+\vspace{-1mm}
 \begin{equation}
     \bs{\Omega}_n = \bs{\Omega}_{bw} \, \left(\sqrt{\mathbf{I} - 2\,\mathbf{Z}^2 + \sqrt{4\,\mathbf{Z}^4 - 4\,\mathbf{Z}^2 + 2\,\mathbf{I}}}\right)^{-1},
 \end{equation}

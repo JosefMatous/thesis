@@ -39,7 +39,7 @@ The algorithm in Chapter~\ref{chap:5dof_nsb} uses a 5\gls{dof} \gls{auv} model, 
 Furthermore, the orientation of the 5\gls{dof} model was expressed using Euler angles, which causes singularities for a pitch angle of $\pm90$ degrees.
 
 This work applies the \gls{nsb} algorithm to a full 6\gls{dof} model, uses rotation matrices to describe the attitude of the vehicles to avoid singularities, modifies and extends the tasks, and proves the stability of the combined path-following and formation-keeping tasks.
-We also add a scheme that keeps the vehicles within a given range of depths to stay within the operation limits.
+We also add a scheme for obstacle avoidance and a scheme that keeps the vehicles within a given range of depths.
 As opposed to the previous work, we do not limit the analysis to a specific low-level attitude controller.
 Consequently, the new algorithm can be integrated into existing on-board controllers.
 Assuming that the existing low-level controller allows exponential tracking, we use results from cascaded systems theory~\cite{pettersen_lyapunov_2017} to prove that the closed-loop system composed by the \gls{nsb} algorithm and the low-level controller is \acrfullpl{usges}.

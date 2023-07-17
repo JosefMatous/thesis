@@ -36,6 +36,7 @@ Recalling \eqref{eq:background_nu_dot_relative}, the dynamics of the \glspl{auv}
 \end{align} \label{eq:NSB_R_matrix_vector_model}
 \end{subequations}
 
+Unlike the previous chapter, here we do not design a specific low-level controller.
 The aim of this chapter is to demonstrate that the proposed formation path-following algorithm can be readily implemented on vehicles with existing low-level controllers.
 Consequently, the choice of a low-level velocity and attitude controller is not discussed in this chapter.
 However, there are some assumptions about the low-level controller.
@@ -49,14 +50,14 @@ However, there are some assumptions about the low-level controller.
         \widetilde{\mat{X}} &= \inlinevector{u - u_d, {\rm logm}\bigl(\widetilde{\mat{R}}\bigr), \bs{\omega} - \widetilde{\mat{R}}\T\bs{\omega}_d}, &
         \widetilde{\mat{R}} &= \mat{R}_d\T\mat{R}, \label{eq:NSB_R_low_level_error}
     \end{align}
-    where ${\rm logm} : SO(3) \mapsto \mathbb{R}^3$ is the matrix logarithm \cite{iserles_lie_2000}.
+    where ${\rm logm} : SO(3) \mapsto \ball[3]{\pi}$ is the matrix logarithm \cite{iserles_lie_2000}.
     Note that by Assumption~\ref{asm:actuators}, $\widetilde{\mat{X}}$ is controllable through the input $\mat{f}$.
     Consider the closed-loop system 
     \begin{equation}
         \dot{\widetilde{\mat{X}}} = F \left( \widetilde{\mat{X}}, v, w, \ocean \right), \label{eq:NSB_R_low_level_closed_loop}
     \end{equation}
     consisting of \eqref{eq:NSB_R_R_dot}, \eqref{eq:NSB_R_nu_dot}, and the low-level controller.
-    We assume that $\widetilde{\mat{X}} = \mat{0}$ is a \acrfull{ges} equilibrium of \eqref{eq:NSB_R_low_level_closed_loop}.
+    We assume that $\widetilde{\mat{X}} = \mat{0}$ is a \acrfullpl{ges} equilibrium of \eqref{eq:NSB_R_low_level_closed_loop}.
 \end{asm}
 
 An example of a global exponential attitude tracking controller can be found, \emph{e.g.,} in \cite{lee_global_2015}.
@@ -79,7 +80,8 @@ Similarly to the previous chapter, the goal is to control a fleet of $N$ \glspl{
 
 The prescribed path is parametrized by a smooth function $\mat{p}_p: \mathbb{R} \mapsto \mathbb{R}^3$.
 We assume that the function is $\mathcal{C}^{\infty}$ and regular.
-Therefore, for every point $\mat{p}_p(s)$ on the path, there exists a path-tangential coordinate frame and a corresponding rotation matrix $\mat{R}_p$ (see Section~\ref{sec:background_paths}).
+Therefore, for every point $\mat{p}_p(s)$ on the path, there exists a path-tangential coordinate frame and a corresponding rotation matrix $\mat{R}_p(s)$ (see Section~\ref{sec:background_paths}).
+Moreover, we assume that the curvature vector $\bs{\omega}_p(s)$ exists and is continuously differentiable.
 
 The path-following error $\mat{p}_b^p$ is given by the position of the barycenter in the path-tangential coordinate frame 
 \begin{align}
@@ -191,7 +193,7 @@ Inspired by \cite{belleter_2019_observer}, we choose an error-dependent lookahea
     \label{eq:NSB_R_delta}
 \end{equation}
 where $\Delta_0$ is a positive constant.
-The LOS velocity then is 
+The LOS velocity is then given by
 \begin{equation}
     \ivel_{\rm LOS} = \frac{U_{\rm LOS}}{D} \, \mat{R}_p\inlinevector{\Delta\left(\mat{p}_b^p\right), -y_b^p, -z_b^p},
     \label{eq:NSB_R_v_LOS}
@@ -328,14 +330,12 @@ Because the formation-keeping and the path-following task are independent and or
 
 
 \noindent Let $\ivel_{{\rm NSB}, i}$ denote the desired velocity of vehicle $i$.    
-To achieve the desired behavior, the surge reference $u_{d, i}$ must satisfy 
+To achieve the desired behavior, the surge reference $u_{d, i}$ should be chosen such that
 \begin{equation}
-    u_{d, i} = \sqrt{\norm{\ivel_{{\rm NSB}, i}}^2 - v_i^2 - w_i^2},
+    \norm{\inlinevector{u_{d, i}, v_i, w_i}} = \norm{\ivel_{{\rm NSB}, i}},
     \label{eq:NSB_R_surge_reference}
 \end{equation}
-
-
-\noindent However, \eqref{eq:NSB_R_surge_reference} can only be satisfied if 
+However, since we cannot directly control the sway and heave velocities, \eqref{eq:NSB_R_surge_reference} can only be satisfied if 
 \begin{equation}
     \norm{\ivel_{{\rm NSB}, i}}^2 \geq v_i^2 + w_i^2.
 \end{equation}
@@ -345,7 +345,7 @@ In addition, \glspl{auv} typically need to maintain a minimum surge velocity to 
     \label{eq:NSB_R_NSB_speed_condition}
 \end{equation}
 where $u_{\min} > 0$.
-This inequality can be satisfied by choosing a time-varying path-following speed $U_{\rm LOS}$.
+We will show that this inequality can be satisfied by choosing a time-varying path-following speed $U_{\rm LOS}$.
 
 
 
@@ -359,11 +359,11 @@ where
     \inlinevector{\ivel_{2, 1}\T, \ldots, \ivel_{2, N}\T} = 
     - \ivels_{2, \max}\,{\rm sat}\left(\mat{J}_2^{\dagger}\bs{\Lambda}_2 \widetilde{\bs{\sigma}}_2\right). \label{eq:NSB_R_v_form_components}
 \end{equation}
-Let $\bs{\omega}_p(s)$ be a vector such that 
+From \eqref{eq:background_omega_p}, the time-derivative of $\mat{R}_p(s)$ is given by
 \begin{equation}
     \dot{\mat{R}}_p(s) = \mat{R}_p(s)\,\mat{S}\bigl(\bs{\omega}_p(s)\bigr)\,\dot{s}. \label{eq:NSB_R_R_p_dot}
 \end{equation}
-\eqref{eq:NSB_R_path_update} implies the following upper bound 
+From \eqref{eq:NSB_R_path_update}, we get the following upper bound on $\dot{s}$
 \begin{equation}
     \abs{\dot{s}} \leq \norm{\frac{\partial \mat{p}_p(s)}{\partial s}}^{-1} U_{\rm LOS} \left(1 + k_{s}\right). \label{eq:NSB_R_path_update_bound}
 \end{equation}

@@ -1,9 +1,9 @@
 \chapter{A Distributed NSB Algorithm for Formation Path Following}
 \label{chap:distr_NSB}
 
-This chapter presents a distributed null-space-based behavioral algorithm for the formation path-following problem of vehicles moving in three dimensions.
+This chapter presents a distributed \acrlong{nsb} algorithm for the formation path-following problem of vehicles moving in three dimensions.
 The algorithm is applied to fleets of underactuated autonomous underwater vehicles.
-The algorithm combines null-space-based control with consensus methods.
+The algorithm combines \acrlong{nsb} control with consensus methods.
 First, we present a continuous-time version of the algorithm and prove its stability using Lyapunov analysis.
 Then, we present a discrete-time event-triggered version that, compared to similar formation path-following methods, can achieve the same steady state-error performance with fewer inter-vehicle transmissions.
 The effectiveness of both the continuous-time and the discrete-time algorithm is verified in numerical simulations.
@@ -119,8 +119,8 @@ and $k_s$ is a positive gain.
 \section{Distributed NSB Algorithm}
 \label{sec:distr_NSB_distributed_NSB}
 Now, let us discuss how to make the algorithm presented in the previous section distributed.
-To perform the \gls{nsb} algorithm in a distributed manner, the vehicles should not need to know the exact positions of each other.
-Instead, they should estimate the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
+To perform the \gls{nsb} algorithm in a distributed manner, the vehicles do not need to know the exact positions of each other.
+They only need to know the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
 
 Let $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$ denote vehicle $i$'s estimates of the barycenter, formation radius, and path parameter, respectively.
 The vehicle can then calculate its \gls{los} velocity as
@@ -206,6 +206,7 @@ For formation-keeping, we define $\widetilde{\bs{\sigma}}_1, \ldots, \widetilde{
     \widetilde{\bs{\sigma}}_i = \mat{p}_i - \mat{p}_b - \mat{R}_p \mat{p}_{f, i}^f.
     \label{eq:distr_NSB_formation_errors}
 \end{equation}    
+
 The ``true value'' of the path parameter, $s$, is given by the mean of $s_i$, \emph{i.e.,} $s = \frac{1}{N} \sum_{i=1}^N s_i$.
 Consequently, the barycenter and path parameter estimate errors, $\widetilde{\mat{p}}_{b, i}$ and $\Tilde{s}_{i}$, are given by
 \begin{align}
@@ -515,6 +516,7 @@ Finally, let us analyze the subsystem \eqref{eq:distr_NSB_p_b_CL}.
         \norm{\mat{h}} &\leq \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right) \norm{\widetilde{\mat{P}}_b} + U_d k_s \norm{\widetilde{\mat{S}}} \nonumber \\
         &\leq \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right) \norm{\left[\widetilde{\mat{P}}_b\T, \widetilde{\mat{S}}\T\right]}.
     \end{align}
+    
     Consequently, the second assumption in \cite[Proposition 9]{pettersen_lyapunov_2017} is satisfied with $\alpha_1 = \left(2\frac{U_d}{\Delta} + k_f + U_d k_s\right)$, $\alpha_2 = 0$, and the subsystem is thus \glspl{usges}.
 \end{proof}
 

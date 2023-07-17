@@ -223,13 +223,13 @@ With the saturated task acceleration, we further require that the product of the
 Similarly to the inter-vehicle collision avoidance task, this task is independent of the ocean current.% because it concerns the relative movement of the vehicles in relation to each other.
 
 \subsubsection{Path-Following Task}
-The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a constant, desired path-following speed $U_{LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
+The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a desired constant path-following speed $U_{LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
 
 We apply the coupled \acrfull{los} guidance algorithm defined in Section~\ref{sec:background_LOS}, and modify it to work with double-integrator systems. We denote the components of the path following error $\mathbf{p}_b^p$ as $x_b^p$, $y_b^p$, and $z_b^p$. Similarly to Chapter~\ref{chap:NSB_R}, we let $\Delta(\mathbf{p}_b^p)$ be the error-dependent look-ahead distance of the \gls{los} guidance law given by
 \begin{equation}
     \Delta(\mathbf{p}_b^p) = \sqrt{\Delta_0^2 + (x_b^p)^2 + (y_b^p)^2 + (z_b^p)^2},
 \end{equation}
-where $\Delta_0$ is a positive constant. The \gls{los} velocity is then
+where $\Delta_0$ is a positive constant. The \gls{los} velocity is then given by
 \begin{equation}\label{eq:desired_LOS}
     \mathbf{v}_{LOS, d} = \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D},
 \end{equation}
@@ -304,7 +304,7 @@ Similarly to Chapter~\ref{chap:NSB_R}, the update of the path-parameter $s$ is u
 In Section~\ref{sec:NSB_R_path_stability}, we showed that the \gls{los} guidance law \eqref{eq:desired_LOS} guarantees \acrfull{usges} of the path-following task.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Obstacle Avoidance}\label{sec:obstacle_avoidance}
+\subsubsection{Obstacle Avoidance}\label{sec:obstacle_avoidance}
 We implement an obstacle avoidance method that enables the fleet to avoid external obstacles while keeping the formation. This approach mitigates the issue of vehicles straying out of communication range while evading obstacles. We modify the collision cones method from Chapter~\ref{chap:NSB_R} to be compatible with double integrator dynamics and focus on obstacle avoidance in the $xy$-plane.
 
 We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_b-x_o, y_b-y_o]\T$, $\mathbf{v}_{rel} = [\dot{x}_{LOS,d}-\dot{x}_o, \dot{y}_{LOS,d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{LOS,d},  \ddot{y}_{LOS,d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.

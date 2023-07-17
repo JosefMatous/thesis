@@ -27,10 +27,10 @@ In this section, we briefly present the \gls{auv} model and the formation path-f
 \subsection{Vehicle Model}
 We consider a fleet of $N$ underactuated \glspl{auv}.
 The dynamics are described using the 5\gls{dof} control-oriented model from Section~\ref{sec:model_control_oriented}.
-The pose ($\pose_i$) and velocities ($\vel_i$) of the $i^{\rm th}$ \gls{auv} are defined as
+The pose ($\pose$) and velocities ($\vel$) of the \glspl{auv} are defined as
 \begin{align}
-    \pose_i &= \left[x_i, y_i, z_i, \theta_i, \psi_i\right]\T, &
-    \vel_i &= \left[u_i, v_i, w_i, q_i, r_i\right]\T.
+    \pose &= \left[x, y, z, \theta, \psi\right]\T, &
+    \vel &= \left[u, v, w, q, r\right]\T.
 \end{align}
 The roll dynamics are disregarded as the roll motion is assumed to be small and self-stabilizing by the vehicle design.
 Let $\ocean \in \mathbb{R}^3$ be the velocity of an unknown, constant and irrotational ocean current.
@@ -89,7 +89,7 @@ Finally, in Section~\ref{sec:nsb_5dof_path_parameter}, we demonstrate how to use
 \subsection{Attitude Control System}
 \label{sec:nsb_5dof_ACS}
 This system controls the surge velocity, pitch, and yaw via the corresponding accelerations.
-The system is based on the autopilots in \cite{moe_LOS_2016}, but extended to five \glspl{dof}.
+The system is based on the autopilots in \cite{moe_LOS_2016}, but extended to five \acrlongpl{dof}.
 
 Let $u_d$ be the desired surge velocity and $\dot{u}_d$ its derivative.
 Let $\oceanhat$ be the estimate of the ocean current.
@@ -129,7 +129,7 @@ Similarly to the pitch controller, we introduce the following transformation
     s_r = \dot{\tilde{\psi}} + \lambda_r\,\tilde{\psi} = \frac{r}{\cos\theta} - \dot{\psi}_d + \lambda_r\,\tilde{\psi},
 \end{equation}
 where $\lambda_r$ is a positive constant.
-The yaw controller is analogous to the pitch controller introduced in the previous section
+The yaw controller is analogous to the pitch controller introduced previously
 \begin{align}        
     \begin{split}
         \scale[0.95]{t_r} &\scale[0.95]{= - F_r(\cdot) - \bs{\phi}_r(\cdot)\T\,\hat{\mathbb{V}}_r - r\,\tan(\theta)\dot{\theta}} \\
