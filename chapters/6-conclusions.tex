@@ -36,18 +36,18 @@ A modified version of the algorithm with provable stability of the formation-kee
 
 \subsubsection{Chapter~\ref{chap:NSB_R}: \nameref{chap:NSB_R}}
 
-This chapter extends the formation path-following \gls{nsb} algorithm to underactuated 6\gls{dof} vehicles while adding obstacle avoidance and depth-limiting capabilities. 
-Both the path-following and formation-keeping parts are proven to be stable.     
-In the proofs, we assume that the avoidance and depth-limiting tasks are not active.
+This chapter extended the formation path-following \gls{nsb} algorithm to underactuated 6\gls{dof} vehicles while adding obstacle avoidance and depth-limiting capabilities. 
+Both the path-following and formation-keeping parts were proven to be stable.     
+In the proofs, we assumed that the avoidance and depth-limiting tasks are not active.
 An analysis of the closed-loop system with active avoidance and depth-limiting tasks is left for future work.
 
 \subsubsection{Chapter~\ref{chap:distr_NSB}: \nameref{chap:distr_NSB}}
 
-In Chapter~\ref{chap:distr_NSB}, we discussed how to combine \acrlong{nsb} control with consensus, and in this way solve the formation path-following problem in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways, using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for real-life implementations).
-Using Lyapunov analysis, we have shown that in the special case of straight-line paths, the continuous-time version achieves uniform semiglobal exponential stability.
-The discrete-time version is based on event-triggered paradigms, so to account for practical limitations in the way agents exchange information.
+In Chapter~\ref{chap:distr_NSB}, we discussed how to combine \acrlong{nsb} control with consensus, and in this way solve the formation path-following problem in a fully distributed fashion. We also found that it is possible to implement this concept in two different ways; using a continuous-time consensus algorithm, or a discrete-time one (the latter being more suitable for real-life implementations).
+Using Lyapunov analysis, we showed that in the special case of straight-line paths, the continuous-time version achieves uniform semiglobal exponential stability.
+The discrete-time version is based on event-triggered paradigms, to account for practical limitations in the way agents exchange information.
 
-Both versions are then verified in simulations.
+Both versions were then verified in simulations.
 Comparing the discrete-time version to a similar cooperative path-following algorithm presented in \cite{praveen_cooperative_2018}, we found 
 that the proposed algorithm requires fewer transmissions between the vehicles, while having similar steady-state error.
 Finally, we demonstrated the real-life effectiveness of the discrete-time algorithm in field experiments with a fleet of light autonomous underwater vehicles.
@@ -59,7 +59,7 @@ In addition, we plan to perform additional experiments with more vehicles and un
 
 In this section, we extended the hand position concept to 6\gls{dof} underactuated underwater vehicles.
 By choosing the hand position as the output of our system, we could apply output feedback linearization to simplify the underactuated 6\gls{dof} vehicle dynamics to a double integrator without introducing any singularities.
-Then, we introduced sufficient conditions under which the internal states are ultimately bounded.
+Then, we derived sufficient conditions under which the internal states are ultimately bounded.
 
 As mentioned in the Introduction, the hand position concept and its ability to transform a nonlinear underactuated model to a double integrator without singularities present an opportunity to utilize numerous control strategies that could otherwise not be used on nonholonomic or underactuated vehicles.
 Examples of such controllers were presented in Chapters~\ref{chap:handpos_trajectory}--\ref{chap:handpos_NSB}.
@@ -73,8 +73,8 @@ The proposed controllers were tested both in numerical simulations and experimen
 
 \subsubsection{Chapter~\ref{chap:handpos_MPC}: \nameref{chap:handpos_MPC}}
 
-In this chapter, we have proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.
-We have shown that using splines makes the distributed control problem computationally tractable.
+In this chapter, we proposed a distributed spline-based \gls{mpc} scheme for the formation path-following problem.
+We showed that using splines makes the distributed control problem computationally tractable.
 Compared to collocation, the spline parametrization allows us to represent a longer prediction horizon using fewer variables.    
 This is also beneficial for the communication, and thus makes it easier to do distributed control in environments where the communication bandwidth is limited (\emph{e.g.,} underwater).
 
@@ -93,4 +93,7 @@ Current research focuses on validating the results experimentally.
 
 \subsubsection{Chapter~\ref{chap:handpos_NSB}: \nameref{chap:handpos_NSB}}
 
-In this chapter, we proposed an extended \gls{nsb} method for double-integrator systems. The method was proved to provide \acrlongpl{ges} task error dynamics. The method was demonstrated in a case study of formation path-following with underactuated \glspl{auv}. We defined the second-order kinematic tasks for collision avoidance, formation-keeping, and path-following. To force a bounded velocity, we introduced a saturation term to the formation-keeping acceleration. The closed-loop formation-error system with the reformulated formation-keeping acceleration was proved to be \acrlongpl{ugas}, and the closed-loop path-following system was proved to be \acrlongpl{usges}. Simulation results demonstrate the effectiveness of our approach. Possible future work includes verifying the presented results through experiments.
+In this chapter, we proposed an extended \gls{nsb} method for double-integrator systems. The method was proved to provide \acrlongpl{ges} task error dynamics. The method was demonstrated in a case study of formation path-following with underactuated \glspl{auv}. We defined the second-order kinematic tasks for collision avoidance, formation-keeping, and path-following. 
+Compared to the methods proposed in Chapters~\ref{chap:5dof_nsb}--\ref{chap:distr_NSB} where the \gls{nsb} algorithm is perturbed by the low-level controller, the second-order \gls{nsb} method handles vehicle dynamics directly in the task space. The closed-loop behavior of the task variables can be interpreted as a mass-spring-damper system. Consequently, the control gains can be chosen such that the closed-loop system is critically damped.
+
+To guarantee a bounded velocity, we introduced a saturation term to the formation-keeping acceleration. The closed-loop formation-error system with the reformulated formation-keeping acceleration was proved to be \acrlongpl{ugas}, and the closed-loop path-following system was proved to be \acrlongpl{usges}. Simulation results demonstrate the effectiveness of our approach. Possible future work includes verifying the presented results through experiments.

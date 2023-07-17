@@ -3,23 +3,23 @@
 
 In this section, we present a general introduction to the problems studied in the thesis, as well as an overview of the existing literature.
 
-\subsection{Autonomous Marine Vehicles}
+\subsection{Marine Robots}
 
-In this section, we briefly introduce the three main types of autonomous marine vehicles and their use.
-Autonomous marine vehicles are being increasingly used in a variety of applications such as transportation \cite{pi_transportation_2021,brekke_milliampere_2022}, inspection, maintenance and repair \cite{palomer_inspection_2019,mcleod_inspection_repair_maintenance_2010}, mapping of underwater structures, \emph{e.g.,} shipwrecks \cite{bingham_shipwreck_2010}, and various oceanographic and environmental missions such as tracking of oil spills \cite{petillo_plume_tracking_2012} and harmful algal blooms \cite{robbins_harmful_algae_2006}.
+In this section, we briefly introduce the three main types of marine robots and their use.
+Unmanned marine vehicles are being increasingly used in a variety of applications such as transportation \cite{pi_transportation_2021,brekke_milliampere_2022}, inspection, maintenance and repair \cite{palomer_inspection_2019,mcleod_inspection_repair_maintenance_2010}, mapping of underwater structures, \emph{e.g.,} shipwrecks \cite{bingham_shipwreck_2010}, and various oceanographic and environmental missions such as tracking of oil spills \cite{petillo_plume_tracking_2012} and harmful algal blooms \cite{robbins_harmful_algae_2006}.
 These vehicles often operate in environments that are inaccessible or dangerous to humans, such as the deep sea or the Arctic.
 
-Autonomous marine vehicles can be generally split into three categories: \glspl{asv}, \glspl{rov}, and \glspl{auv}.
-\Glspl{asv} are also referred to as \emph{autonomous ships}, since their design is commonly based on surface vessels such as kayaks \cite{kimball_jetkayak_2014}, catamarans \cite{choi_asv_2020,zolich_catamaran_2022}, and miniature ferries \cite{brekke_milliampere_2022}. ASVs are used in scientific missions as well as transportation.
+Marine robots can generally be split into three categories: \glspl{asv}, \glspl{rov}, and \glspl{auv}.
+\Glspl{asv} are also referred to as \emph{autonomous ships}, since their design is commonly based on surface vessels such as kayaks \cite{kimball_jetkayak_2014}, catamarans \cite{choi_asv_2020,zolich_catamaran_2022}, and miniature ferries \cite{brekke_milliampere_2022}. \Glspl{asv} are used in scientific missions as well as transportation.
 \Glspl{rov}, also referred to as \emph{underwater drones}, are small, box-shaped vehicles with thrusters.
 \Glspl{rov} are typically \emph{fully actuated}, meaning that the configuration of thrusters allows the vehicle to move and rotate in any direction.
 \Glspl{rov} are designed for low speeds, often less than $1.5$ meters per second, and due to the high power demands of the thrusters, the vehicles can only operate for a few hours \cite{bluerov2}.
 Consequently, \glspl{rov} are used for short-term inspection, maintenance and repair missions.
 
-\Glspl{auv} are torpedo-shaped vehicles with a propeller that provides forward (surge) thrust, and fins that provide torque.
-The configuration of actuators means that \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
+This thesis is mostly focused on torpedo-shaped \glspl{auv} with a propeller that provides forward (surge) thrust, and fins that provide torque.
+The configuration of actuators means that these \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
 Compared to \glspl{rov}, \glspl{auv} can reach higher speeds and operate longer \cite{sousa_LAUV_2012,purcell_remus_2000}, making them suitable for long-term oceanographic missions.
-This thesis is mostly focused on developing control algorithms for \glspl{auv}.
+%This thesis is mostly focused on developing control algorithms for \glspl{auv}.
 
 \subsection{Control Problems for AUVs}
 
@@ -38,7 +38,7 @@ In \cite{caharija_path-following-ILOS_2016}, an integral \gls{los} guidance sche
 \subsubsection{The Formation Path-Following Problem}
 
 %\Glspl{auv} are being increasingly used in a number of applications such as transportation \cite{conti_manipulation_2015}, oceanography \cite{edgar_oceanography_2001,faria_oceanography_2014}, and ocean energy industry-related tasks \cite{albiez_flatfish_2015,lizunkova_AUVwelding_2009}.
-In many applications, it is often advantageous to perform the tasks with a group of cooperating \glspl{auv}.
+In many applications, it is advantageous to perform the tasks with a group of cooperating \glspl{auv}.
 Compared to a single vehicle, a group of \glspl{auv} can cover a larger area (\emph{e.g.,} in inspection and oceanographic tasks).
 A group is also more flexible, able to reconfigure if the parameters of the mission change, and able to complete the task even if one or more \glspl{auv} fail.
 Many of the aforementioned applications can be formulated as a formation path-following problem, \emph{i.e.,} a problem of steering a group of \glspl{auv} along a predefined path in a given formation.
@@ -110,7 +110,7 @@ They are either applied to a simplified model of the vehicle (\emph{e.g.,} a uni
 
 Reactive \gls{colav} methods that work with a simplified model do not take into account the physical limitations of the vehicle, such as acceleration or actuator constraints.
 Consequently, these methods may output reference signals that the underlying controllers cannot track.
-To mitigate this, reactive \gls{colav} methods should be included in the lowest-possible control level.
+To mitigate this, reactive \gls{colav} methods should be included at the lowest-possible control level.
 
 \subsubsection{Connectivity Maintenance}
 In addition to \gls{colav}, autonomous vehicles often need to maintain a sufficiently close distance to each other to guarantee the reliability of the communication and the connectivity of the multi-agent system.

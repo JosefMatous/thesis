@@ -6,7 +6,7 @@
 
 This chapter differs from the rest of the thesis in the considered vehicle model.
 In this chapter, we consider overactuated vehicles, \emph{i.e.,} vehicles with more actuators than \acrfullpl{dof}.
-As mentioned in Section~\ref{sec:introduction_literature}, reactive collision avoidance should be included in the lowest-possible control level.
+As mentioned in Section~\ref{sec:introduction_literature}, reactive collision avoidance should be included at the lowest-possible control level.
 Overactuated vehicles often use control allocation in their lowest-level controller \cite{johansen_control_2013}.
 Most control allocation methods are based on numerical optimization \cite{oppenheimer_control_2006,harkegard_dynamic_2004,johansen_constrained_2004} which makes them ideal for augmenting with \acrfullpl{cbf}.
 
@@ -68,7 +68,10 @@ Furthermore, the discrete-time version is also tested in field experiments.
 
 This thesis studies slender torpedo-shaped \acrfullpl{auv} with a propeller that provides forward (surge) thrust, and fins that provide torque.
 The configuration of actuators means that \glspl{auv} are \emph{underactuated}, as we cannot directly control the lateral (sway and heave) velocities.
-In this chapter, we propose to use the \emph{hand position} concept to control the AUV.
+Most control algorithms use the so-called \emph{neutral point} of the vehicle as the output of the system (see \figref{fig:handpos_def_motivation}a).
+The neutral point is a location on the $x$-axis (the stern-bow axis) of the vehicle such that, if chosen as the origin of the vehicle's body-fixed coordinate frame, the lateral motion of the vehicle is not affected by its control inputs.
+Due to the underactuated nature of the \gls{auv}, controlling the neutral point requires specialized algorithms, such as \acrlong{los} guidance \cite{caharija_path-following-ILOS_2016,xiang_path-following-robust_2017,miao_path-following-curvilinear_2017,borhaug_straight_2007}.
+In this chapter, we propose to use the \emph{hand position} concept to control the \gls{auv}.
 The hand position is a point located a given distance in front of the neutral point along the vehicle's $x$-axis (see \figref{fig:handpos_def_motivation}b for an illustration).
 The concept was first introduced in \cite{pomet_hand-position_1992} to stabilize nonholonomic vehicles with unicycle dynamics.
 Later, it was applied to control formations of unicycles \cite{lawton_hand-position-formation_2003}.
@@ -96,7 +99,7 @@ The use of Euler angles inherently introduces singularities into the system.
 
 The goal of this chapter is thus to further extend the hand position concept to AUVs moving in three dimensions.
 We employ a more realistic AUV model than in \cite{li_hand-position-rigidity-3d_2021}. We model the full 6DOF motion and use rotation matrices to describe the orientation of the vehicle, thus avoiding singularities.
-Using Lyapunov analysis, we show the sufficient conditions for boundedness of the internal states, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
+Using Lyapunov analysis, we derive the sufficient conditions for boundedness of the internal states, \emph{i.e.,} the orientation and the angular velocities, for a generic hand position-based controller.
 
 \subsubsection{Chapter~\ref{chap:handpos_trajectory}: \nameref{chap:handpos_trajectory}}
 
@@ -140,7 +143,7 @@ With regards to the stability analysis, differing from most of the existing work
 This chapter presents an extended \acrfull{nsb} algorithm for vehicles with second-order dynamics.
 The \gls{nsb} algorithm, as presented in the existing literature, is developed for kinematic single-integrator systems \cite{arrichiello_formation_2006,matous_singularity_2023,eek_formation_2021}.
 Although existing \gls{nsb} methods are developed for first-order systems, \gls{auv} dynamics are inherently second-order. Therefore, any first-order solution is necessarily perturbed by the dynamics of the maneuvering controller.
-In Chapter~\ref{chap:handpos_NSB}, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common, due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Compared to the existing methods, our formulation handles the second-order dynamics directly in the task space as interpretable spring-damper systems.
+In Chapter~\ref{chap:handpos_NSB}, we extend the \gls{nsb} method to vehicles with double integrator dynamics and propose an algorithm that uses the \acrlong{soclik} equation to control the task variables through desired acceleration. The procedure is inspired by robotic manipulators, where second-order methods are more common, due to the inherent second-order dynamics of mechanical systems \cite{siciliano_differential_2009, chiaverini_kinematically_2008}. Compared to the existing methods, our formulation handles the second-order dynamics directly in the task space as interpretable mass-spring-damper systems.
 
 We apply the proposed \gls{nsb} method to a fleet of \glspl{auv}.
 To make the proposed method applicable to \glspl{auv}, we use the hand position transformation.
