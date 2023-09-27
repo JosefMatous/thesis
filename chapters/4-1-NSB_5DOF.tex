@@ -73,9 +73,14 @@ The vehicles should converge to a dynamic formation that rotates with the desire
 Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,n}^f$ be the position vectors that represent the desired formation.
 The objective is to control the vehicles so that
 \begin{align}
-    \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f + \mat{p}_b, &
-    i &\in \left\{1, \ldots, N \right\}.
+    \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f, &
+    \forall i &\in \left\{1, \ldots, N \right\}.
 \end{align}
+
+We propose to solve this problem using an \gls{nsb} algorithm.
+We note that the proposed algorithm is \emph{centralized}.
+Consequently, to implement this algorithm in a real-life situation, there must be a central node that can communicate and coordinate with all the \glspl{auv}.
+Alternatively, every \gls{auv} must have access to the complete state of all other \glspl{auv}.
 
 \section{Control System}
 \label{sec:nsb_5dof_control}
@@ -177,9 +182,9 @@ The task variable of the formation-keeping task is
 and its desired values are
 \begin{equation}
     \bs{\sigma}_{d,2} = \begin{bmatrix}
-        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,1}^p \\
+        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,1}^f \\
         \vdots \\
-        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^p
+        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^f
     \end{bmatrix}. \label{eq:nsb_5dof_sigma_d_2}
 \end{equation}
 The desired velocity of the formation keeping task is given by
@@ -219,16 +224,20 @@ where $U_{\rm LOS} > 0$ is the desired path-following speed.
 The three tasks are then combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
 If the \gls{colav} task is active, the \gls{nsb} velocity is given by
 \begin{equation}
-    \ivel_{\rm NSB} = \ivel_1 + \mat{N}_1 \left(\ivel_2 + \mat{N}_2 \ivel_3\right).
+    \ivel_{\rm NSB} = \ivel_{d, 1} + \mat{N}_1 \left(\ivel_{d, 2} + \mat{N}_2 \ivel_{d, 3}\right).
     \label{eq:nsb_5dof_v_NSB_COLAV}
 \end{equation}
 If the \gls{colav} task is inactive, \eqref{eq:nsb_5dof_v_NSB_COLAV} is simplified to
 \begin{equation}
-    \ivel_{\rm NSB} = \ivel_2 + \ivel_3,
+    \ivel_{\rm NSB} = \ivel_{d, 2} + \ivel_{d, 3},
 \end{equation}
 thanks to the independence and orthogonality of the formation-keeping and path-following task.
 
-The NSB velocities must be decomposed into surge, pitch, and yaw references that can be tracked by the attitude control system presented in Section~\ref{sec:nsb_5dof_ACS}.
+Let $\ivel_{{\rm NSB}, i}$ be the desired \gls{nsb} velocity associated with vehicle $i$, \emph{i.e.,}
+\begin{equation}
+    \left[\ivel_{{\rm NSB}, 1}\T, \ldots, \ivel_{{\rm NSB}, N}\T\right] = \ivel_{\rm NSB}\T.
+\end{equation}
+These velocities must be decomposed into surge, pitch, and yaw references that can be tracked by the attitude control system presented in Section~\ref{sec:nsb_5dof_ACS}.
 Similarly to \cite{arrichiello_formation_2006}, we propose a method with angle of attack and sideslip compensation
 \begin{align}
     \scale[0.96]{u_{d, i}} & \scale[0.96]{= U_{{\rm NSB}, i}\,\frac{1 + \cos\left(\gamma_{{\rm NSB}, i} - \gamma_i\right)\cos\left(\chi_{{\rm NSB}, i} - \chi_i\right)}{2},} \label{eq:nsb_5dof_u_d}\\
@@ -512,7 +521,7 @@ Therefore, all conditions of \cite[Proposition 9]{pettersen_lyapunov_2017} are s
 \label{sec:nsb_5dof_simulations}
 
 \pgfplotsset{table/search path={figures/nsb_5dof/data}}
-\begin{figure}[b]
+\begin{figure}[p]
     \centering
     %\resizebox{0.99\textwidth}{!}{\input{figures/simout.tex}}
     \input{figures/nsb_5dof/simout.tex}
@@ -520,6 +529,13 @@ Therefore, all conditions of \cite[Proposition 9]{pettersen_lyapunov_2017} are s
     \caption{Simulation results. The top-left plot shows the $x$-, $y$- and $z$-components of the path-following error $\mathbf{p}_b^p$, as defined in \eqref{eq:nsb_5dof_barycenter}. The bottom-left plot shows the distance between the vehicles ($d_{i,j} = \|\mathbf{p}_i - \mathbf{p}_j\|$). The plots on the right show the $x$-, $y$- and $z$-components of the formation-keeping error $\tilde{\bs{\sigma}} = \bs{\sigma}_2 - \bs{\sigma}_{d,2}$ with $\bs{\sigma}_2$ given by \eqref{eq:nsb_5dof_sigma_2} and $\bs{\sigma}_{d,2}$ given by \eqref{eq:nsb_5dof_sigma_d_2}. The grey rectangles mark the intervals when the COLAV task is active.}
     \label{fig:nsb_5dof_results}
     \vspace{-5mm}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \def\svgwidth{.8\textwidth}
+    \import{figures/nsb_5dof}{trajectory_3d.pdf_tex}
+    \caption{3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 25, 50, \ldots, 150$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
+    \label{fig:nsb_5dof_trajectory}
 \end{figure}
 
 In this section, we present the results of a numerical simulation of three \glspl{lauv} \cite{sousa_LAUV_2012}.
@@ -571,16 +587,12 @@ The path-following error seems to converge linearly at first, and then exponenti
 This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
 The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
 The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
+The path-following error seems to increase at $t = \SI{150}{\second}$.
+This increase is probably caused by low-level tracking errors.
+To avoid chattering, the sign functions in the low-level sliding-mode controllers \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_5dof_t_r} are replaced with hyperbolic tan.
+These approximations result in a non-zero steady-state error.
 
-\begin{figure}[t]
-    \centering
-    \def\svgwidth{.8\textwidth}
-    \import{figures/nsb_5dof}{trajectory_3d.pdf_tex}
-    \caption{3D trajectory of the vehicles. The markers represent the position of the vehicles at times $t = 0, 25, 50, \ldots, 150$ seconds. Markers with corresponding times are connected by dotted lines to better illustrate the resulting formation.}
-    \label{fig:nsb_5dof_trajectory}
-\end{figure}
-
-\begin{table}[b]
+\begin{table}[t]
     \centering
     \begin{tabular}[t]{r|l}
         {\bf Parameter} & {\bf Value} \\ \hline

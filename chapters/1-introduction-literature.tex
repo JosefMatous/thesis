@@ -33,6 +33,11 @@ This section presents the various control problems for \glspl{auv} studied in th
 Arguably, the trajectory-tracking and path-following problems are the most interesting and significant ones,
 since many high-level mission planners assume that the vehicle is able to follow a given path or trajectory.
 
+For the purposes of this thesis, a path is a curve (\emph{i.e.,} a one-dimensional object in two- or three-dimensional Euclidean space), while a trajectory is a time-varying reference position.
+In the literature, it is often stated that a trajectory is a ``path with temporal constraints'' \cite{paliotta_trajectory_2019}.
+Consequently, in trajectory tracking, the desired position of the vehicle for a given time is fixed, while in path following, we have some freedom in choosing which point on the desired path should be followed at a given time.
+A more detailed discussion on the differences between trajectory tracking and path following is presented in Section~\ref{sec:background_formation_path_following}.
+
 To solve the trajectory-tracking problem, numerous methods based on backstepping \cite{rezazadegan_trajectory-tracking-backstepping_2015,alonge_trajectory-tracking-backstepping_2001}, sliding-mode control \cite{elmokadem_trajectory-tracking-SMC_2016}, \glspl{clf} \cite{aguiar_trajectory-tracking-CLF_2007}, and \gls{mpc} \cite{abdelaal_trajectory-tracking-MPC_2015} have been proposed. 
 
 To solve the path-following problem, most controllers utilize \gls{los} guidance.
