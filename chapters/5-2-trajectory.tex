@@ -114,20 +114,20 @@ From \eqref{eq:handpos_def_R_dot_CL}, we can conclude that $\dot{\mat{R}} = \mat
 Substituting $\bs{\Xi} = \mat{0}_9$ and $\bs{\omega} = \mat{0}_3$ into \eqref{eq:handpos_def_omega_dot_CL} yields
 \begin{equation}
     %\begin{split}
-        \dot{\bs{\omega}} = \Bar{\mat{L}} \times \left(\mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r)\right) 
-        - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right).
+        \dot{\bs{\omega}} = \Bar{\mat{l}} \times \left(\mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r)\right) 
+        - \left(\Bar{\mat{l}}\mat{l}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right).
     %\end{split}
     \label{eq:handpos_trajectory_omega_dot_SS}
 \end{equation}
 Note that the right-hand-side of \eqref{eq:handpos_trajectory_omega_dot_SS} has the following form
 \begin{equation}
-    \dot{\bs{\omega}} = \Bar{\mat{L}} \times \mat{a} + \left(\Bar{\mat{L}}\mat{L}\T\right) \mat{b},
+    \dot{\bs{\omega}} = \Bar{\mat{l}} \times \mat{a} + \left(\Bar{\mat{l}}\mat{l}\T\right) \mat{b},
 \end{equation}
 where $\mat{a} = \inlinevector{a_1, a_2, a_3}$, $\mat{b} = \inlinevector{b_1, b_2, b_3}$ are vectors in $\mathbb{R}^3$.
-From the definition of $\mat{L}$ and $\Bar{\mat{L}}$, the following two equalities hold for any $\mat{a}$ and $\mat{b}$:
+From the definition of $\mat{l}$ and $\Bar{\mat{l}}$, the following two equalities hold for any $\mat{a}$ and $\mat{b}$:
 \begin{align}
-    \Bar{\mat{L}} \times \mat{a} &= \frac{1}{h} \inlinevector{0, -a_3, a_2}, &
-    \left(\Bar{\mat{L}}\mat{L}\T\right) \mat{b} &= \inlinevector{b_1, 0, 0}.
+    \Bar{\mat{l}} \times \mat{a} &= \frac{1}{h} \inlinevector{0, -a_3, a_2}, &
+    \left(\Bar{\mat{l}}\mat{l}\T\right) \mat{b} &= \inlinevector{b_1, 0, 0}.
 \end{align}
 Consequently, $\dot{\bs{\omega}}$ is zero if and only if both terms of the right-hand-side of \eqref{eq:handpos_trajectory_omega_dot_SS} are zero.
 
@@ -213,8 +213,8 @@ The motivation behind the change of coordinates is to simplify the relation betw
 From, \eqref{eq:handpos_def_nu_r_transformed}, $\bvel_r$ is given by
 \begin{equation}
     \begin{split}
-    \bvel_r &= \mathbf{R}\T\left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \mat{L} \\
-        &= \tilde{\bs{\xi}}_2^{\prime} + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1 - \bs{\omega} \times \mat{L},
+    \bvel_r &= \mathbf{R}\T\left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \mat{l} \\
+        &= \tilde{\bs{\xi}}_2^{\prime} + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1 - \bs{\omega} \times \mat{l},
     \end{split}
 \end{equation}
 where ${\rm expm}: \ball[3]{\pi} \mapsto SO(3)$ is the inverse of ${\rm logm}$.
@@ -226,9 +226,9 @@ The complete closed-loop system is then given by
         \dot{\tilde{\bs{\xi}}}_1^{\prime} &= \tilde{\bs{\xi}}_2^{\prime} - \bs{\omega} \times \tilde{\bs{\xi}}_1^{\prime}, \\
         \dot{\tilde{\bs{\xi}}}_2^{\prime} &= -k_I \tilde{\bs{\xi}}_I^{\prime} - k_p \tilde{\bs{\xi}}_1^{\prime} - k_d \tilde{\bs{\xi}}_2^{\prime} - \bs{\omega} \times \tilde{\bs{\xi}}_2^{\prime}, \\
         \dot{\bs{\delta}} &= \bs{\omega}, \\
-        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \bigg(-k_I \tilde{\bs{\xi}}_I^{\prime} - k_p \tilde{\bs{\xi}}_1^{\prime} - k_d \tilde{\bs{\xi}}_2^{\prime} + \mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r) \nonumber \\
+        \dot{\bs{\omega}} &= \Bar{\mat{l}} \times \bigg(-k_I \tilde{\bs{\xi}}_I^{\prime} - k_p \tilde{\bs{\xi}}_1^{\prime} - k_d \tilde{\bs{\xi}}_2^{\prime} + \mathcal{D}_{\bvel}(\vel_r) + \mathcal{C}_{\bvel}(\vel_r) \nonumber \\
         &\qquad \qquad - \bs{\omega} \times \left(\tilde{\bs{\xi}}_2^{\prime} + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1\right)\bigg) \nonumber \\
-        &\quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right).
+        &\quad - \left(\Bar{\mat{l}}\mat{l}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel_r) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right).
     \end{align}
 \end{subequations}
 Next, we define a vector $\mat{z}\T = \left[{\tilde{\bs{\xi}}_I^{\prime\,{\rm T}}}, {\tilde{\bs{\xi}}_1^{\prime\,{\rm T}}}, {\tilde{\bs{\xi}}_2^{\prime\,{\rm T}}}, \bs{\delta}\T, \bs{\omega}\T\right]$ and a function $f$ such that $\dot{\mat{z}} = f(\mat{z})$.
@@ -268,7 +268,7 @@ where
     \end{align}
     \label{eq:handpos_trajectory_jacobian_blocks}
 \end{subequations}
-where $\theta$ is the steady-state pitch angle.
+\hspace*{-0.2em}where $\theta$ is the steady-state pitch angle.
 The components of $\mat{J}_{\bs{\xi}_2}$, $\mat{J}_{\bs{\omega}}$, and $\mat{J}_{\bs{\delta}}$ are shown in Appendix~\ref{app:jacobian}.
 
 \begin{prop}
@@ -547,10 +547,10 @@ Using the orientation error $\bs{\delta}$, as defined in \eqref{eq:handpos_traje
         \dot{\tilde{\bs{\xi}}}_1 &= \tilde{\bs{\xi}}_2, \\
         \dot{\tilde{\bs{\xi}}}_2 &= -k_I \hat{\mat{I}} \tilde{\bs{\xi}}_I - k_p \hat{\mat{I}} \tilde{\bs{\xi}}_1 - k_d \tilde{\bs{\xi}}_2, \\
         \dot{\bs{\delta}} &= \bs{\omega}, \\
-        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \bigg(-k_I \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_I - k_p \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_1 \nonumber \\
+        \dot{\bs{\omega}} &= \Bar{\mat{l}} \times \bigg(-k_I \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_I - k_p \mathbf{R}\T \mat{R}_p \hat{\mat{I}} \tilde{\bs{\xi}}_1 \nonumber \\
         &\qquad \qquad - k_d \mathbf{R}\T \mat{R}_p \tilde{\bs{\xi}}_2 + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) \nonumber \\
         &\qquad \qquad - \bs{\omega} \times \left(\mathbf{R}\T\! \mat{R}_p \tilde{\bs{\xi}}_2 + {\rm expm}(\bs{\delta})\T \norm{\bs{\xi}_{2_{d,r}}}\mat{e}_1\right)\!\bigg) \nonumber \\
-        &\quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right),
+        &\quad - \left(\Bar{\mat{l}}\mat{l}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}\left(Wz_{gb} \mat{e}_3 \times \mathbf{R}\T \mat{e}_3\right)\right),
     \end{align}
 \end{subequations}
 Next, we define a vector $\Bar{\mat{z}}\T = \left[\bs{\Xi}\T, \bs{\delta}\T, \bs{\omega}\T\right]$ and a function $\Bar{f}$ such that $\dot{\Bar{\mat{z}}} = \Bar{f}(\Bar{\mat{z}})$.
