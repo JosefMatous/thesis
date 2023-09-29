@@ -29,8 +29,8 @@ Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the tra
         \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \label{eq:handpos_tracking_x_1_dot_transformed}\\
         \dot{\mat{x}}_2 &= \bs{\mu}, \label{eq:handpos_tracking_x_2_dot_transformed}\\
         \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \label{eq:handpos_tracking_R_dot_CL} \\
-        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_tracking_omega_dot_CL} \\
-            & \quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right). \nonumber
+        \dot{\bs{\omega}} &= \Bar{\handl} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_tracking_omega_dot_CL} \\
+            & \quad - \left(\Bar{\handl}\handl\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right). \nonumber
     \end{align} \label{eq:handpos_tracking_hand_position_dynamics}
 \end{subequations}
 
@@ -52,7 +52,7 @@ where $M$ is the cardinality of $\mathcal{E}$.
 For each $k\leq M$, let $\delta_k$ and ${\Delta_k}$ be, the minimal and maximal distances between agents $i$ and $j$ so that collisions are avoided and that the communication through edge $e_k$ is reliable, respectively.
 Then, the set of inter-agent output constraints is defined as
 \begin{equation}
-\label{eq:setDk} \mathcal D_k = \big\{z_{1k}\in\mathbb{R}^{2}:\delta_k<|z_{1k}|<{\Delta_k}\big\},\quad \forall\, k\leq M.
+\label{eq:setDk} \mathcal D_k = \big\{\mat{z}_{1k}\in\mathbb{R}^{3}:\delta_k<\norm{\mat{z}_{1k}}<{\Delta_k}\big\},\quad \forall\, k\leq M.
 \end{equation}
 
 Coming back to each individual agent, it is important to note that, in practice, marine vehicles are not optimized for moving backwards. However, backwards motion is not prevented from the dynamical model \eqref{eq:handpos_tracking_hand_position_dynamics}.
@@ -68,7 +68,7 @@ We formulate these soft constraints as follows:
 \begin{equation}
 \label{eq:soft} u_{r, i}(t) + \rho_i(t) > 0,\quad \forall\, i\leq N, \quad \forall t\geq 0,
 \end{equation}
-where $\rho_i:\mathbb{R}_{\geq 0}\to\mathbb{R}_{\geq 0}$ will be defined later, such that $\rho_i(t)\approxeq0$ when there are no conflicts with the hard constraints and $\rho_i(t)>0$ otherwise, allowing $u_{r, i}(t)$ to become negative. Akin, to \eqref{eq:setDk} we may define the set of soft constraints as
+where $\rho_i:\mathbb{R}_{\geq 0}\to\mathbb{R}_{\geq 0}$ will be defined later, such that $\rho_i(t)\approxeq0$ when there are no conflicts with the hard constraints and $\rho_i(t)>0$ otherwise, allowing $u_{r, i}(t)$ to become negative. Akin to \eqref{eq:setDk}, we may define the set of soft constraints as
 \begin{equation}
 \label{eq:setC} \mathcal{C}_i = \big\{u_{r, i}\in\mathbb{R}:u_{r, i}>-\rho_i(t)\big\},\quad \forall\, i\leq N.
 \end{equation}
@@ -104,7 +104,7 @@ The formation error, in turn, is defined as
 \tilde{\mat{z}}_1=[\mat{E}\T \otimes \mat{I}_3] \mat{x}_1 - \mat{z}_1^d, \qquad
 \mat{z}_1^{d, {\rm T}} = \left[\mat{z}_{1, 1}^{d{\rm T}}\cdots \mat{z}_{1, M}^{d{\rm T}}\right]
 \end{aligned}\end{equation}
-where $\mat{z}_{1, k}^d\in\mathbb{R}^{2}$ denotes the desired relative position between a pair of neighboring agents over edge $e_k$.
+where $\mat{z}_{1, k}^d\in\mathbb{R}^{3}$ denotes the desired relative position between a pair of neighboring agents over edge $e_k$.
 In the same way, let $\mat{x}_2\T=\left[\mat{x}_{2, 1}\T\,\cdots\,\mat{x}_{2, N}\T\right]$ be the collection of the hand-position velocities.
 Then, the relative hand-position velocities in the edge coordinates, $\mat{z}_2$, are given by
 \begin{equation}\begin{aligned}\label{eq:z2-def}
@@ -119,15 +119,17 @@ Then, mathematically, the tracking-in-formation problem translates into designin
 
 Now, as observed in \cite{restrepo_edge-directed_2020}, using an appropriate labeling of the edges, the incidence matrix can be expressed as $\mat{E} = \left[\mat{E}_t\quad \mat{E}_c\right],$
 where $\mat{E}_t\in\mathbb{R}^{N\times(N-1)}$ denotes the full column-rank incidence matrix corresponding to an arbitrary spanning tree $\mathcal G_t \subset \mathcal G$ and $\mat{E}_c \in \mathbb{R}^{N\times(M-N+1)}$ represents the incidence matrix corresponding to the remaining edges in $\mathcal G \setminus \mathcal G_t$.
-Similarly, the error edge states may be split as $\mat{z}_\iota=\left[\mat{z}_{\iota, t}\T\;\;\mat{z}_{\iota, c}\T\right]\T$, $\iota=\{1,2\}$, where $\mat{z}_{\iota, t}\in\mathbb{R}^{2(N-1)}$ are the states corresponding to the edges of $\mathcal G_t$ and $\mat{z}_{\iota, c} \in \mathbb{R}^{n(M-N+1)}$ denote the states of the remaining edges, $\mathcal G \setminus \mathcal G_t$.
-Moreover, defining 
+Similarly, the error edge states may be split as $\mat{z}_\iota=\left[\mat{z}_{\iota, t}\T\;\;\mat{z}_{\iota, c}\T\right]\T$, $\iota=\{1,2\}$, where $\mat{z}_{\iota, t}\in\mathbb{R}^{3(N-1)}$ are the states corresponding to the edges of $\mathcal G_t$ and $\mat{z}_{\iota, c} \in \mathbb{R}^{n(M-N+1)}$ denote the states of the remaining edges, $\mathcal G \setminus \mathcal G_t$.
+Note that the spanning tree and the error variables associated with its edges are sufficient to describe the errors of the multi-agent system.
+Indeed, defining the following transformation matrix
 \begin{equation}\label{n205}
 \mathcal{R} = \left[\mat{I}_{N-1}\quad \mat{T}\right], \quad \mat{T}=\left(\mat{E}_t\T \mat{E}_t\right)^{-1}\mat{E}_t\T \mat{E}_c,
 \end{equation}
-we have the following identities
+we get the following identities
 \begin{equation}\label{n209}
-\mat{E} = \mat{E}_t \mathcal{R}, \quad \mat{z}_1 = \big[\mathcal{R}\T\otimes \mat{I}_3\big] \tilde{\mat{z}}_{1, t}, \;\; \iota\in\{1,2\}.
+\mat{E} = \mat{E}_t \mathcal{R}, \quad \mat{z}_{\iota} = \big[\mathcal{R}\T\otimes \mat{I}_3\big] \tilde{\mat{z}}_{\iota, t}, \;\; \iota\in\{1,2\}.
 \end{equation}
+We have thus shown that is is possible to obtain the incidence matrix and the error variables corresponding to the original graph from its spanning tree.
 
 %Then, akin to \eqref{n209}, after \eqref{eq:tildez1-def}, \eqref{eq:z2-def}, \eqref{n209}, and \eqref{n203}, denoting $z_{1t}^d\in\mathbb{R}^{n(N-1)}$ as the vector of desired relative displacements corresponding to $\mathcal G_t$, we have
 %\begin{equation}
@@ -145,7 +147,7 @@ More precisely, we consider the following problem.
 
 {\it Tracking-in-formation under hard and soft constraints:} Consider a system of $N$ autonomous marine vehicles with dynamics given by \eqref{eq:handpos_tracking_hand_position_dynamics}, interacting over a directed graph which is either a spanning tree or a cycle.
 Assume, in addition, that the agents are subject to the hard inter-agent output constraints given by the set defined in \eqref{eq:setDk} and the soft constraints given by \eqref{eq:setC}.
-Under these conditions, find distributed controllers $bs{\mu}_i$, $i\leq N$, that asymptotically stabilize the origin of \eqref{n216} and render the sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant, \emph{i.e.}, $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ ($u_{r, i}(t_0)\in\mathcal{C}_i$) implies that $\mat{z}_{1, k}(t)\in \mathcal{D}_k$ ($u_{r, i}(t)\in\mathcal{C}_i$), $\forall k\leq M$ ($\forall i\leq N$) and $\forall t\geq t_0$.
+Under these conditions, find distributed controllers $\bs{\mu}_i$, $i\leq N$, that asymptotically stabilize the origin of \eqref{n216} and render the sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant, \emph{i.e.}, $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ ($u_{r, i}(t_0)\in\mathcal{C}_i$) implies that $\mat{z}_{1, k}(t)\in \mathcal{D}_k$ ($u_{r, i}(t)\in\mathcal{C}_i$), $\forall k\leq M$ ($\forall i\leq N$) and $\forall t\geq t_0$.
 
 \section{Control Design for Tracking under Proximity and Safety Constraints}
 \label{sec:ctrl}
@@ -213,7 +215,7 @@ where $a_{1}, a_2 > 0$ and $\dst{\tilde{\mat{z}}_{1}}{\mathcal{W}} = \min \big\{
 
 \subsection{Control Design for Systems over Directed Graphs}
 
-Let us define the so-called in-incidence matrix $\mat{E}_\odot \in \mathbb{R}^{N\times M}$, whose elements are defined as follows: $\left[\mat{E}_\odot\right]_{i, k} = -1$ if $i$ is the terminal node of edge $e_k$ and $\left[\mat{E}_\odot\right]_{ik} = 0$ otherwise. Then, in the edge-agreement framework, the virtual controllers are given by
+Let us define the so-called in-incidence matrix $\mat{E}_\odot \in \mathbb{R}^{N\times M}$, whose elements are defined as follows: $\left[\mat{E}_\odot\right]_{i, k} = -1$ if $i$ is the terminal node of edge $e_k$ and $\left[\mat{E}_\odot\right]_{ik} = 0$ otherwise. Then, in the edge-agreement framework, the virtual controllers are
 \begin{equation}\label{n284}\begin{aligned}[b]
 \mat{z}_{2, t}^*&=[\mat{E}_t\T \otimes \mat{I}_3] \mat{x}_2^*\\
 \mat{x}_2^*&=-c_1[\mat{E}_\odot\otimes \mat{I}_3] \nabla W(\tilde{\mat{z}}_{1, t})-c_1[\mat{C}\otimes \mat{I}_3]\tilde{\mat{z}}_{1, o} - \oceanhat,
@@ -440,7 +442,7 @@ Initially, we set $\rho_i(t_0)=0$.
 \begin{rmk}
 	The definition of \eqref{631} is loosely inspired by the framework developed in \cite{mehdifar2022funnel} to deal with hard and soft constraints in the setting of prescribed-performance control of single-agent systems.
 	The signal $\rho_i(t)$ adjusts the soft constraints whenever the hard constraints become conflicting. 
-	Note that when the term $\abs{F_{u}+f_{u, i}}$ is less than or eaual to a given positive constant $\sigma$, it means that the edges connected to vehicle $i$ are far from the border of the set $\tilde{\mathcal{D}}_k$, since under the barrier-function-based law \eqref{n338} the controller $f_{u, i}$ grows unbounded as $\mat{z}_{1, k}\rightarrow\partial\tilde{\mathcal{D}}_k$ for any $k\leq M$.
+	Note that when the term $\abs{F_{u}+f_{u, i}}$ is less than or equal to a given positive constant $\sigma$, it means that the edges connected to vehicle $i$ are far from the border of the set $\tilde{\mathcal{D}}_k$, since under the barrier-function-based law \eqref{n338} the controller $f_{u, i}$ grows unbounded as $\mat{z}_{1, k}\rightarrow\partial\tilde{\mathcal{D}}_k$ for any $k\leq M$.
 	In this case, the second term on the right-hand side of \eqref{631} is equal to zero. Hence, assuming that in an interval $t\in[t_0,t_0+T]$, $\abs{F_{u}+f_{u, i}}\leq \sigma$, then \eqref{eq:soft}, with $\rho(t)=0$, corresponds to a positive-velocity constraint.
 	Conversely, when $\abs{F_{u}+f_{u, i}}>\sigma$, the right-hand side of \eqref{631} becomes positive and $\rho_i$ grows. Hence, $u_{r, i}$ may take negative values, \emph{i.e.,} $u_{r, i}>-\rho_i(t)$, avoiding possible conflicts between the constraints. Then, as the vehicles move away from the border of the set $\tilde{\mathcal{D}}_k$, $\abs{F_{u}+f_{u, i}}\leq\sigma$ again and $\rho_i(t)\rightarrow0$ exponentially fast, recovering the non-negativity constraint.
 \end{rmk}

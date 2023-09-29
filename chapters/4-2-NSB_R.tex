@@ -121,9 +121,9 @@ Similarly to the previous chapter, we define three tasks: \gls{colav}, formation
 Each task will be described in detail in Sections~\ref{sec:NSB_R_COLAV}, \ref{sec:NSB_R_formation}, and \ref{sec:NSB_R_LOS}.
 As we will explain in Section \ref{sec:NSB_R_OA}, obstacle avoidance and depth limiting will not be defined as separate tasks but rather achieved through a modification to the path-following task.
 Let us denote the variables associated with the \gls{colav}, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
-Define the so-called \emph{task variables} as $\bs{\sigma}_i = \bs{f}_i\left(\mat{p}_1, \ldots, \mat{p}_N\right), i \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,i}, i \in \left\{1,2,3\right\}$.
+Define the so-called \emph{task variables} as $\bs{\sigma}_m = \bs{f}_m\left(\mat{p}_1, \ldots, \mat{p}_N\right), m \in \left\{1,2,3\right\}$, and their desired values as $\bs{\sigma}_{d,m}, m \in \left\{1,2,3\right\}$.
 
-Furthermore, let $\ivel_i, i \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
+Furthermore, let $\ivel_{m}, m \in \left\{1,2,3\right\}$ be the desired velocities of each task.    
 These velocities are combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
 \begin{equation} 
     \ivel_{\rm NSB} = \ivel_1 + \mat{N}_1\left(\ivel_2 + \mat{N}_2\ivel_3\right). \label{eq:NSB_R_NSB_with_COLAV}

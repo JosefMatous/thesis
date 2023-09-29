@@ -21,48 +21,48 @@ This modified \gls{nsb} algorithm provides the acceleration input $\bm{\mu}$ to 
     \end{align}
 \end{subequations}
 
-For each task, we design a task variable $\bm{\sigma}_i \in \mathbb{R}^{m_i}$ as a function of $\mathbf{p}$
+For each task, we design a task variable $\bm{\sigma}_m \in \mathbb{R}^{n_m}$ as a function of $\mathbf{p}$
 \begin{equation}
-    \bm{\sigma}_i = \mathbf{f}_i(\mathbf{p}).
+    \bm{\sigma}_m = \mathbf{f}_m(\mathbf{p}).
 \end{equation}
 The first and second time-derivatives of $\bm{\sigma}_i$ are
 \begin{subequations}\label{eq:task_derivatives}
     \begin{align}
-        \dot{\bm{\sigma}}_i &= \mathbf{J}_i(\mathbf{p})\ivel,\\
-        \ddot{\bm{\sigma}}_i &= \mathbf{J}_i(\mathbf{p})\dot{\ivel} + \dot{\mathbf{J}}_i \ivel,\label{eq:task_second_derivative}
+        \dot{\bm{\sigma}}_m &= \mathbf{J}_m(\mathbf{p})\ivel,\\
+        \ddot{\bm{\sigma}}_m &= \mathbf{J}_m(\mathbf{p})\dot{\ivel} + \dot{\mathbf{J}}_m \ivel,\label{eq:task_second_derivative}
     \end{align}
 \end{subequations}
-where $\mathbf{J}_i = \partial \mathbf{f}_i/\partial \mathbf{p}$ is the task Jacobian. We denote the desired value of the task variable by $\bm{\sigma}_{d, i}$.
+where $\mathbf{J}_m = \partial \mathbf{f}_m/\partial \mathbf{p}$ is the task Jacobian. We denote the desired value of the task variable by $\bm{\sigma}_{d, m}$.
 
 In Section~\ref{sec:background_NSB}, we introduced the \acrfull{clik} equation as a method for finding the desired velocity associtated with a given task.
-Recalling \eqref{eq:background_CLIK}, the desired velocity of task $i$, $\ivel_i$, is given by
+Recalling \eqref{eq:background_CLIK}, the desired velocity of task $m$, $\ivel_m$, is given by
 \begin{equation}
-    \ivel_i = \mathbf{J}_i^\dagger\bigl(\dot{\bm{\sigma}}_{d, i} - \bm{\Lambda}_i \Tilde{\bm{\sigma}}_i\bigr),
+    \ivel_m = \mathbf{J}_m^\dagger\bigl(\dot{\bm{\sigma}}_{d, m} - \bm{\Lambda}_m \Tilde{\bm{\sigma}}_m\bigr),
 \end{equation}
-where $\bm{\Lambda}_i$ is a positive definite gain matrix, $\Tilde{\bm{\sigma}}_i = \bm{\sigma}_i - \bm{\sigma}_{d,i}$ is the task error, and $\mathbf{J}_i^\dagger$ is the pseudo-inverse of the task Jacobian. 
+where $\bm{\Lambda}_m$ is a positive definite gain matrix, $\Tilde{\bm{\sigma}}_m = \bm{\sigma}_m - \bm{\sigma}_{d,i}$ is the task error, and $\mathbf{J}_m^\dagger$ is the pseudo-inverse of the task Jacobian. 
 To achieve second-order differential control, we instead propose the \gls{soclik} equation inspired by robotic manipulators \cite{siciliano_closed-loop_1990}
 \begin{equation}
-    \dot{\ivel}_i = \mathbf{J}_i^\dagger \bigl(\ddot{\bm{\sigma}}_{d,i} - \mathbf{\Lambda}_{p,i}\Tilde{\bm{\sigma}}_i - \mathbf{\Lambda}_{d,i} \dot{\Tilde{\bm{\sigma}}}_i - \dot{\mathbf{J}}_i \ivel\bigr), \label{eq:general_acceleration}
+    \dot{\ivel}_m = \mathbf{J}_m^\dagger \bigl(\ddot{\bm{\sigma}}_{d,m} - \mathbf{\Lambda}_{p,m}\Tilde{\bm{\sigma}}_m - \mathbf{\Lambda}_{d,m} \dot{\Tilde{\bm{\sigma}}}_m - \dot{\mathbf{J}}_m \ivel\bigr), \label{eq:general_acceleration}
 \end{equation}
-where $\mathbf{\Lambda}_{p,i}$ and $\mathbf{\Lambda}_{d,i}$ are positive definite gain matrices.
+where $\mathbf{\Lambda}_{p,m}$ and $\mathbf{\Lambda}_{d,m}$ are positive definite gain matrices.
 
 In first-order systems, there exists a subspace of velocities that do not conflict with a given task.
 Similarly, in second-order systems, there exists a subspace of non-conflicting accelerations.
-Let $\dot{\ivel}_i$ be the \gls{soclik} solution to task $i$, and let $\dot{\ivel}_{\rm add}$ be some additional desired acceleration.
+Let $\dot{\ivel}_m$ be the \gls{soclik} solution to task $m$, and let $\dot{\ivel}_{\rm add}$ be some additional desired acceleration.
 Then, the following control input
 \begin{equation}
-    \dot{\ivel} = \dot{\ivel}_i +\mathbf{N}_i \dot{\ivel}_{\rm add},
+    \dot{\ivel} = \dot{\ivel}_m +\mathbf{N}_m \dot{\ivel}_{\rm add},
     \label{eq:NSB_two_tasks}
 \end{equation}
-where $\mathbf{N}_i$ is the null space projector of the task, guarantees the desired behavior of the task.
+where $\mathbf{N}_m$ is the null space projector of the task, guarantees the desired behavior of the task.
 
 Similarly to first-order \gls{nsb} methods, we can combine the tasks by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
 The desired acceleration is then given by
 \begin{equation}
-    \bm{\mu} = \dot{\ivel}_1 + \sum_{i=2}^N \bar{\mathbf{N}}_{i-1}\dot{\ivel}_i,
+    \bm{\mu} = \dot{\ivel}_1 + \sum_{m=2}^N \bar{\mathbf{N}}_{m-1}\dot{\ivel}_m,
     \label{eq:NSB_double}
 \end{equation}
-where $\bar{\mathbf{N}}_i$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
+where $\bar{\mathbf{N}}_m$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
 With this choice of acceleration, the highest priority task is always fulfilled, whereas the lower priority tasks are fulfilled as well as possible in the subspace that does not conflict with higher priority tasks.
 
 \subsection{Stability Analysis}
@@ -118,21 +118,21 @@ Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the transformed dynamic
         \dot{\mathbf{x}}_1 &= \mathbf{x}_2 + \ocean,\\
         \dot{\mathbf{x}}_2 &= \bm{\mu},\\
         \dot{\mathbf{R}} &=  \mathbf{R} \mathbf{S}(\bm{\omega}),\\
-        \dot{\bs{\omega}} &= \Bar{\mat{L}} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:internal_dynamics} \\
-            & \quad - \left(\Bar{\mat{L}}\mat{L}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right). \nonumber
+        \dot{\bs{\omega}} &= \Bar{\handl} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:internal_dynamics} \\
+            & \quad - \left(\Bar{\handl}\handl\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right). \nonumber
     \end{align}
 \end{subequations}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Formation Path Following}\label{sec:formation_path_following}
 The formation path-following problem considered in this chapter is analogous to the one defined in Section~\ref{sec:background_formation_path_following}.
-We consider a fleet of $N$ \glspl{auv} and define the stacked position and velocity vectors $\mathbf{p} = [\mathbf{x}_{1,1}\T, \, \ldots,\, \mathbf{x}_{1,N}\T]\T$ and $\mathbf{v} = [\mathbf{x}_{2,1}\T, \, \ldots,\, \mathbf{x}_{2,N}\T]\T$, respectively. We also define the stacked ocean current vector $\stackedocean = \mathbf{1}_{N} \otimes \ocean$. In the following sections, we denote the hand position of a single \gls{auv} by $\mathbf{p}_i = \mathbf{x}_{1,i}$ and its velocity relative to the ocean current by $\mathbf{v}_i = \mathbf{x}_{2,i}$.
+We consider a fleet of $N$ \glspl{auv} and define the stacked position and velocity vectors $\mathbf{x}_1 = [\mathbf{x}_{1,1}\T, \, \ldots,\, \mathbf{x}_{1,N}\T]\T$ and $\mathbf{x}_2 = [\mathbf{x}_{2,1}\T, \, \ldots,\, \mathbf{x}_{2,N}\T]\T$, respectively. We also define the stacked ocean current vector $\stackedocean = \mathbf{1}_{N} \otimes \ocean$.
 
 The desired path is parametrized by a smooth function $\mathbf{p}_p : \mathbb{R} \mapsto \mathbb{R}^3$ that is assumed to be $\mathcal{C}^\infty$ and regular.
 For every point $\mathbf{p}_p(s)$, there exists a path-tangential coordinate-frame with a corresponding rotation matrix $\mathbf{R}_p$ (see Section~\ref{sec:background_paths}). 
 The path-following error $\mathbf{p}_b^p$ is defined in terms of the barycenter of the fleet in the path-tangential coordinate frame
 \begin{equation}
-    \mathbf{p}_b^p = \mathbf{R}_p\T\left(\mathbf{p}_b - \mathbf{p}_p(s)\right), \quad \mathbf{p}_b = \frac{1}{n}\sum_{i=1}^n \mathbf{p}_i.
+    \mathbf{p}_b^p = \mathbf{R}_p\T\left(\mathbf{p}_b - \mathbf{p}_p(s)\right), \quad \mathbf{p}_b = \frac{1}{N}\sum_{i=1}^N \mathbf{x}_{1,i}.
 \end{equation}
 The goal of path following is to control the vehicles so that $\mat{p}_b^p \rightarrow \mat{0}_3$.
 
@@ -140,8 +140,8 @@ The vehicles should converge to a dynamic formation that rotates with the desire
 Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that represent the desired formation.
 The objective is to control the vehicles so that
 \begin{align}
-    \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p \mat{p}_{f,i}^f + \mat{p}_b, &
-    i &\in \left\{1, \ldots, N \right\}.
+    \mat{x}_{1,i} - \mat{p}_b &\rightarrow \mat{R}_p \mat{p}_{f,i}^f, &
+    \forall i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
 \subsection{NSB Controller}\label{sec:NSB_case_study}
@@ -153,8 +153,8 @@ We let the control system consist of three tasks in decreasing order of priority
 The highest priority task is inter-vehicle \acrfull{colav}. The task variable is given by a stacked vector $\bm{\sigma}_1 = [\sigma_{1,1}\T, \ldots, \sigma_{1,l}\T]\T$ of relative distances between vehicles closer than the activation distance $d_{COLAV}$:
 \begin{equation}
 \begin{split}
-    \sigma_{1,k} = \|\mathbf{p}_i - \mathbf{p}_j\|, \quad &\forall i,j \in \{1, \ldots, N\}: j > i,\\
-    &\|\mathbf{p}_i - \mathbf{p}_j\| < d_{COLAV}.
+    \sigma_{1,k} = \|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|, \quad &\forall i,j \in \{1, \ldots, N\}: j > i,\\
+    &\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\| < d_{COLAV}.
     \end{split}
 \end{equation}
 The task size varies depending on the number of vehicles that are within the activation distance, and it is empty under nominal conditions. The desired values of the task are given by
@@ -166,34 +166,34 @@ We note that $\ddot{\bm{\sigma}}_{d,1} = \dot{\bm{\sigma}}_{d,1}= \mat{0}$.
 The task Jacobian is given by the stacked partial derivatives for each active collision
 \begin{subequations}
 \begin{align}
-    \mathbf{J}_1 &= \left[\left(\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)\T, \ldots, \left(\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)\T\right]\T,\\
-    \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i} &=\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}, \qquad
-    \frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_j} = -\frac{\left(\mathbf{p}_i-\mathbf{p}_j\right) \T}{\|\mathbf{p}_i - \mathbf{p}_j\|}.
+    \mathbf{J}_1 &= \left[\left(\frac{\partial \sigma_{1,1}}{\partial \mathbf{x}_1}\right)\T, \ldots, \left(\frac{\partial \sigma_{1,l}}{\partial \mathbf{x}_1}\right)\T\right]\T,\\
+    \frac{\partial \sigma_{1,k}}{\partial \mathbf{x}_{1,i}} &=\frac{\left(\mathbf{x}_{1,i}-\mathbf{x}_{1,j}\right) \T}{\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|}, \qquad
+    \frac{\partial \sigma_{1,k}}{\partial \mathbf{x}_{1,j}} = -\frac{\left(\mathbf{x}_{1,i}-\mathbf{x}_{1,j}\right) \T}{\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|}.
 \end{align}
 \end{subequations}
 The derivative of the task Jacobian is similarly given by a stack of time-differentiated partial derivatives
 \begin{subequations}
 \begin{align}
-    \dot{\mathbf{J}}_1 &= \left[{\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,1}}{\partial \mathbf{p}}\right)}\T, \ldots, {\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,l}}{\partial \mathbf{p}}\right)}\T\right]\T,\\
-    {\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,k}}{\partial \mathbf{p}_i}} &= \bigg(\frac{\mathbf{I}_3}{\|\mathbf{p}_i - \mathbf{p}_j\|} - \frac{\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\bigl(\mathbf{p}_i-\mathbf{p}_j\bigr)\T}{\|\mathbf{p}_i - \mathbf{p}_j\|^3}\bigg)\bigl(\mathbf{v}_i-\mathbf{v}_j\bigr),
+    \dot{\mathbf{J}}_1 &= \left[{\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,1}}{\partial \mathbf{x}_1}\right)}\T, \ldots, {\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,l}}{\partial \mathbf{x}_1}\right)}\T\right]\T,\\
+    {\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,k}}{\partial \mathbf{x}_{1,i}}} &= \bigg(\frac{\mathbf{I}_3}{\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|} - \frac{\bigl(\mathbf{x}_{1,i}-\mathbf{x}_{1,j}\bigr)\bigl(\mathbf{x}_{1,i}-\mathbf{x}_{1,j}\bigr)\T}{\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|^3}\bigg)\bigl(\mathbf{x}_{2,i}-\mathbf{x}_{2,j}\bigr),
 \end{align}
 \end{subequations}
 
 The resulting \gls{soclik} equation for the task is
 \begin{equation}
-    \dot{\mathbf{v}}_1 = -\mathbf{J}_1^\dagger \bigl( \mathbf{\Lambda}_{p,1}\Tilde{\bm{\sigma}}_1 + \mathbf{\Lambda}_{d,1} \dot{\bm{\sigma}}_1 + \dot{\mathbf{J}}_1 (\mathbf{v}+\stackedocean)\bigr),
+    \dot{\mathbf{v}}_1 = -\mathbf{J}_1^\dagger \bigl( \mathbf{\Lambda}_{p,1}\Tilde{\bm{\sigma}}_1 + \mathbf{\Lambda}_{d,1} \dot{\bm{\sigma}}_1 + \dot{\mathbf{J}}_1 (\mathbf{x}_2+\stackedocean)\bigr),
 \end{equation}
-with $\dot{\bm{\sigma}}_{1\,} \!\!= \mathbf{J}_1 (\mathbf{v}\! + \!\stackedocean)$. %We note that because of the symmetry of the task and the structure of the task Jacobian, the constant ocean currents will cancel out in $\dot{\mathbf{v}}_1$ under the assumption that it is equal for all vehicles.
+with $\dot{\bm{\sigma}}_{1\,} \!\!= \mathbf{J}_1 (\mathbf{x}_2\! + \!\stackedocean)$. %We note that because of the symmetry of the task and the structure of the task Jacobian, the constant ocean currents will cancel out in $\dot{\mathbf{v}}_1$ under the assumption that it is equal for all vehicles.
 Note that due to the structure of the task Jacobian, it follows that $\mathbf{J}_1 \stackedocean \!\!= \dot{\mathbf{J}}_1 \stackedocean \!\!= \mathbf{0}$. Consequently, $\dot{\mathbf{v}}_1$ is independent of the ocean current velocity.
 
 \subsubsection{Formation-Keeping Task}
 The formation-keeping task moves the vehicles into a predefined formation in the formation-centered frame. The task variable is given by
 \begin{equation}
-    \bm{\sigma}_2 = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,N-1}\T\right]\T, \quad \bm{\sigma}_{2,i}  = \mathbf{p}_i - \mathbf{p}_b.
+    \bm{\sigma}_2\T = \left[ \bm{\sigma}_{2,1}\T, ..., \bm{\sigma}_{2,N-1}\T\right], \quad \bm{\sigma}_{2,i}  = \mathbf{x}_{1,i} - \mathbf{p}_b.
 \end{equation}
 The desired values are
 \begin{equation}
-    \bm{\sigma}_{d,2} = [\bigl(\mathbf{R}_p \mathbf{p}_{f,1}^f\bigr)\T, ..., \bigl(\mathbf{R}_p \mathbf{p}_{f,N-1}^f\bigr) \T] \T.
+    \bm{\sigma}_{d,2}\T = \left[\bigl(\mathbf{R}_p \mathbf{p}_{f,1}^f\bigr)\T, ..., \bigl(\mathbf{R}_p \mathbf{p}_{f,N-1}^f\bigr)\T \right].
 \end{equation}
 The Jacobian is given by 
 \begin{equation}
@@ -223,7 +223,7 @@ With the saturated task acceleration, we further require that the product of the
 Similarly to the inter-vehicle collision avoidance task, this task is independent of the ocean current.% because it concerns the relative movement of the vehicles in relation to each other.
 
 \subsubsection{Path-Following Task}
-The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a desired constant path-following speed $U_{LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
+The path following task concerns moving the barycenter along the predefined path. Moreover, we want the formation to move at a desired constant path-following speed $U_{\rm LOS}$. We apply the same acceleration to all vehicles to ensure that the barycenter moves without changing the relative formation.
 
 We apply the coupled \acrfull{los} guidance algorithm defined in Section~\ref{sec:background_LOS}, and modify it to work with double-integrator systems. We denote the components of the path following error $\mathbf{p}_b^p$ as $x_b^p$, $y_b^p$, and $z_b^p$. Similarly to Chapter~\ref{chap:NSB_R}, we let $\Delta(\mathbf{p}_b^p)$ be the error-dependent look-ahead distance of the \gls{los} guidance law given by
 \begin{equation}
@@ -231,7 +231,7 @@ We apply the coupled \acrfull{los} guidance algorithm defined in Section~\ref{se
 \end{equation}
 where $\Delta_0$ is a positive constant. The \gls{los} velocity is then given by
 \begin{equation}\label{eq:desired_LOS}
-    \mathbf{v}_{LOS, d} = \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D},
+    \mathbf{v}_{{\rm LOS}, d} = \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{\rm LOS}}{D},
 \end{equation}
 where 
 $
@@ -242,22 +242,22 @@ is a normalization term.
 Since the second-order \gls{nsb} algorithm requires the desired acceleration, we need to find the time-derivative of the line-of-sight velocity \eqref{eq:desired_LOS}
 \begin{equation}\label{eq:desired_LOS_derivative}
 \begin{split}
-        \dot{\mathbf{v}}_{LOS,d} &= \dot{\mathbf{R}}_p\left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D} \\ & \quad + \mathbf{R}_p \left[ \dot{\Delta}(\mathbf{p}_b^p, \dot{\mathbf{p}}_b^p), -\dot{y}_b^p, -\dot{z}_b^p \right]\T \frac{U_{LOS}}{D}\\ & \quad - \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{LOS}}{D^2}\dot{D}.
+        \dot{\mathbf{v}}_{{\rm LOS}, d} &= \dot{\mathbf{R}}_p\left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{\rm LOS}}{D} \\ & \quad + \mathbf{R}_p \left[ \dot{\Delta}(\mathbf{p}_b^p, \dot{\mathbf{p}}_b^p), -\dot{y}_b^p, -\dot{z}_b^p \right]\T \frac{U_{\rm LOS}}{D}\\ & \quad - \mathbf{R}_p \left[ \Delta(\mathbf{p}_b^p), -y_b^p, -z_b^p \right]\T \frac{U_{\rm LOS}}{D^2}\dot{D}.
     \end{split}
 \end{equation}
 
 We want to eliminate the error caused by the constant unknown ocean current at this stage of the control hierarchy, as all higher-priority tasks are independent of it. To this end, we introduce the virtual integral state $\mathbf{p}_v$ defined by
 \begin{equation}\label{eq:los_integral_state}
-    \dot{\mathbf{p}}_v = \mathbf{v}_{LOS,d},
+    \dot{\mathbf{p}}_v = \mathbf{v}_{{\rm LOS}, d},
 \end{equation}
 and define the following task acceleration
 \begin{equation} \label{eq:LOS_controller}
-    \dot{\mathbf{v}}_{LOS} = \dot{\mathbf{v}}_{LOS,d} + \mathbf{\Lambda}_{p,3} (\mathbf{v}_{LOS,d} - \mathbf{v}_b) + \mathbf{\Lambda}_{i,3} (\mathbf{p}_v-\mathbf{p}_b),
+    \dot{\mathbf{v}}_{\rm LOS} = \dot{\mathbf{v}}_{{\rm LOS}, d} + \mathbf{\Lambda}_{p,3} (\mathbf{v}_{{\rm LOS}, d} - \mathbf{v}_b) + \mathbf{\Lambda}_{i,3} (\mathbf{p}_v-\mathbf{p}_b),
 \end{equation}
-where $\mathbf{v}_b = \tfrac{1}{N} \sum_{i=1}^N \mathbf{v}_i$.
+where $\mathbf{v}_b = \tfrac{1}{N} \sum_{i=1}^N \mathbf{x}_{2,i}$.
 
 \begin{lemma}\label{lemma:LOS_controller}
-    Let $\bm{\Lambda}_{p,3}$ and $\bm{\Lambda}_{i,3}$ be two symmetric positive definite matrices. The relative barycenter velocity $\mathbf{v}_b$ converges exponentially to the relative \gls{los} velocity $\mathbf{v}_{LOS,d}-\ocean$ under controller \eqref{eq:NSB_double}, with the path-following task-acceleration given by \eqref{eq:LOS_controller}.
+    Let $\bm{\Lambda}_{p,3}$ and $\bm{\Lambda}_{i,3}$ be two symmetric positive definite matrices. The relative barycenter velocity $\mathbf{v}_b$ converges exponentially to the relative \gls{los} velocity $\mathbf{v}_{{\rm LOS}, d}-\ocean$ under controller \eqref{eq:NSB_double}, with the path-following task-acceleration given by \eqref{eq:LOS_controller}.
 \end{lemma}
 
 \begin{proof}
@@ -265,7 +265,7 @@ where $\mathbf{v}_b = \tfrac{1}{N} \sum_{i=1}^N \mathbf{v}_i$.
 \begin{subequations}\label{eq:LOS_integral_errors}
  \begin{align}
      \Tilde{\mathbf{p}}_{\rm LOS} &= \mathbf{p}_b-\mathbf{p}_v - \bm{\Lambda}_{i,3}^{-1}\bm{\Lambda}_{p,3} \ocean,\\
-     \Tilde{\mathbf{v}}_{\rm LOS} &= \mathbf{v}_b + \ocean - \mathbf{v}_{LOS,d}.
+     \Tilde{\mathbf{v}}_{\rm LOS} &= \mathbf{v}_b + \ocean - \mathbf{v}_{{\rm LOS}, d}.
  \end{align}
 \end{subequations}
 The time-derivatives of these variables are
@@ -289,17 +289,17 @@ The time-derivatives of these variables are
 \end{equation}
 The matrices $\mathbf{\Lambda}_{i,3}$ and $\mathbf{\Lambda}_{p,3}$ are positive definite by design.
 Consequently, the matrix $\mat{M}_{\rm LOS}$ is Hurwitz, and $\left[\Tilde{\mathbf{p}}_{\rm LOS}\T, \Tilde{\mathbf{v}}_{\rm LOS}\T\right] = \mat{0}\T$ is a \glspl{ges} equilibrium of \eqref{eq:LOS_integral_errors_dynamics}.
-From \eqref{eq:LOS_integral_errors}, we conclude that if $\Tilde{\mathbf{v}}_{\rm LOS}$ exponentially converges to zero, then $\mathbf{v}_b$ exponentially converges to $\mathbf{v}_{LOS,d}-\ocean$.
+From \eqref{eq:LOS_integral_errors}, we conclude that if $\Tilde{\mathbf{v}}_{\rm LOS}$ exponentially converges to zero, then $\mathbf{v}_b$ exponentially converges to $\mathbf{v}_{{\rm LOS}, d}-\ocean$.
 \end{proof}
 
 The desired acceleration of the path-following task is then given by
 \begin{equation}
-    \dot{\mathbf{v}}_3 = \mathbf{1}_{N} \otimes \dot{\mathbf{v}}_{LOS}.
+    \dot{\mathbf{v}}_3 = \mathbf{1}_{N} \otimes \dot{\mathbf{v}}_{\rm LOS}.
 \end{equation}
 
 Similarly to Chapter~\ref{chap:NSB_R}, the update of the path-parameter $s$ is used as an extra degree of freedom to stability of the along-track error
 \begin{equation}\label{eq:path_update}
-    \dot{s} = U_{LOS}\left \| \frac{\partial \mathbf{p}_p(s)}{\partial s}\right \|^{-1} \left (\frac{\Delta(\mathbf{p}_b^p)}{D} +  k_s\frac{x_b^p}{\sqrt{1 + (x_b^p)^2}} \right ).
+    \dot{s} = U_{\rm LOS}\left \| \frac{\partial \mathbf{p}_p(s)}{\partial s}\right \|^{-1} \left (\frac{\Delta(\mathbf{p}_b^p)}{D} +  k_s\frac{x_b^p}{\sqrt{1 + (x_b^p)^2}} \right ).
 \end{equation}
 In Section~\ref{sec:NSB_R_path_stability}, we showed that the \gls{los} guidance law \eqref{eq:desired_LOS} guarantees \acrfull{usges} of the path-following task.
 
@@ -307,7 +307,7 @@ In Section~\ref{sec:NSB_R_path_stability}, we showed that the \gls{los} guidance
 \subsubsection{Obstacle Avoidance}\label{sec:obstacle_avoidance}
 We implement an obstacle avoidance method that enables the fleet to avoid external obstacles while keeping the formation. This approach mitigates the issue of vehicles straying out of communication range while evading obstacles. We modify the collision cones method from Chapter~\ref{chap:NSB_R} to be compatible with double integrator dynamics and focus on obstacle avoidance in the $xy$-plane.
 
-We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_b-x_o, y_b-y_o]\T$, $\mathbf{v}_{rel} = [\dot{x}_{LOS,d}-\dot{x}_o, \dot{y}_{LOS,d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{LOS,d},  \ddot{y}_{LOS,d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.
+We assume a constant velocity model for the obstacle. Its position and velocity vectors are denoted by $\mathbf{p}_o = [x_o, y_o, z_o]\T$ and $\mathbf{v}_o = [\dot{x}_o, \dot{y}_o, \dot{z}_o]\T$. We define an obstacle avoidance radius $r_o$ that is large enough to account for both the size of the obstacle and the \gls{auv}. The formation radius $r_f$ is defined as the maximum distance between any vehicle in the fleet and the formation center, and it is assumed to be constant throughout the avoidance maneuver. We further define $\mathbf{p}_{rel} = [x_b-x_o, y_b-y_o]\T$, $\mathbf{v}_{rel} = [\dot{x}_{{\rm LOS}, d}-\dot{x}_o, \dot{y}_{{\rm LOS}, d} - \dot{y}_o ]\T$, and $\dot{\mathbf{v}}_{rel} = \left[ \ddot{x}_{{\rm LOS}, d},  \ddot{y}_{{\rm LOS}, d}\right]\T$. Note that $\mathbf{v}_{rel}$ is defined in terms of the desired \gls{los} velocity \eqref{eq:desired_LOS}, so $\dot{\mathbf{p}}_{rel} \neq \mathbf{v}_{rel}$.
 
 Obstacle avoidance is guaranteed if we ensure that
 \begin{equation}
@@ -321,7 +321,7 @@ A conflict between the \glspl{auv} and the obstacle arises if $\mathbf{v}_{rel}$
     \label{eq:collision-conflict}
 \end{equation}
 The obstacle avoidance task is activated if the cone angle satisfies $\alpha > \alpha_{\min}$. 
-When the task is active, the $x$- and $y$-components of  $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$  given by \eqref{eq:desired_LOS} and \eqref{eq:desired_LOS_derivative} are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$, given by
+When the task is active, the $x$- and $y$-components of  $\mathbf{v}_{{\rm LOS}, d}$ and $\dot{\mathbf{v}}_{{\rm LOS}, d}$  given by \eqref{eq:desired_LOS} and \eqref{eq:desired_LOS_derivative} are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$, given by
 \begin{align}
     \mathbf{v}_{OA,d} &= \|\mathbf{v}_{rel}\| \left[\cos{(\psi_{OA})}, \sin{(\psi_{OA})}\right]\T \!+\! \left[\dot{x}_o, \dot{y}_o \right]\T,\label{eq:v_OA}\\
     \begin{split}\label{eq:v_OA_dot}
@@ -343,12 +343,17 @@ In this section, we analyze the closed-loop stability of the external states and
 \begin{equation}\label{eq:commanded_acceleration_inactive_colav}
     \dot{\mathbf{v}} = \dot{\mathbf{v}}_2 + \dot{\mathbf{v}}_3.
 \end{equation}
-Furthermore, because of the following independence relations
+Let $\dot{\mathbf{v}}_{2,i}$ and $\dot{\mathbf{v}}_{3,i}$ denote the desired accelerations for the individual vehicles, \emph{i.e.,}
+\begin{align}
+    \dot{\mathbf{v}}_{2}\T &= \left[\dot{\mathbf{v}}_{2,1}\T, \ldots, \dot{\mathbf{v}}_{2,N}\T\right], &
+    \dot{\mathbf{v}}_{3}\T &= \left[\dot{\mathbf{v}}_{3,1}\T, \ldots, \dot{\mathbf{v}}_{3,N}\T\right].
+\end{align}
+Because the tasks are independent, the following two relations hold
 \begin{align}
     \ddot{\bm{\sigma}}_2 &= \mathbf{J}_2\dot{\mathbf{v}}_2 + \mathbf{J}_2\dot{\mathbf{v}}_3 = \mathbf{J}_2\dot{\mathbf{v}}_2,\\
-    \dot{\mathbf{v}}_b &= \frac{1}{N}\sum_{i=1}^N (\dot{\mathbf{v}}_2 + \dot{\mathbf{v}}_3) = \frac{1}{N}\sum_{i=1}^N \dot{\mathbf{v}}_3,
+    \dot{\mathbf{v}}_b &= \frac{1}{N}\sum_{i=1}^N (\dot{\mathbf{v}}_{2,i} + \dot{\mathbf{v}}_{3,i}) = \frac{1}{N}\sum_{i=1}^N \dot{\mathbf{v}}_{3,i},
 \end{align}
-the closed-loop properties of each task can be analyzed independently.
+and the closed-loop properties of each task can thus be analyzed separately.
 
 
 % Prove external state stability
@@ -382,7 +387,7 @@ Let $S = \{\bigl[\dot{\Tilde{\bm{\sigma}}}_2\T,\, \Tilde{\bm{\sigma}}_2\T\bigr]\
 
 
 \subsubsection{Stability of the Path-Following Task}
-Let $\Tilde{\mathbf{p}}$ and $\Tilde{\mathbf{v}}$ be given by \eqref{eq:LOS_integral_errors}. Using the definition
+Let $\Tilde{\mathbf{p}}_{\rm LOS}$ and $\Tilde{\mathbf{v}}_{\rm LOS}$ be given by \eqref{eq:LOS_integral_errors}. Using the definition
 \begin{equation}
     \mathbf{p}_b^p = \mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),
 \end{equation}
@@ -390,22 +395,22 @@ we get the following error system
 \begin{subequations}
 \begin{align}
     \begin{split}\label{eq:velocity_perturbation_dynamics}
-        \dot{\Tilde{\mathbf{p}}} &= \Tilde{\mathbf{v}},\\
-        \dot{\Tilde{\mathbf{v}}} &= -\mathbf{\Lambda}_{p,3} \Tilde{\mathbf{v}} - \mathbf{\Lambda}_{i,3}\Tilde{\mathbf{p}},
+        \dot{\Tilde{\mathbf{p}}}_{\rm LOS} &= \Tilde{\mathbf{v}}_{\rm LOS},\\
+        \dot{\Tilde{\mathbf{v}}}_{\rm LOS} &= -\mathbf{\Lambda}_{p,3} \Tilde{\mathbf{v}}_{\rm LOS} - \mathbf{\Lambda}_{i,3}\Tilde{\mathbf{p}}_{\rm LOS},
     \end{split} \\
         \begin{split}
             \dot{\mathbf{p}}_b^p &= \mathbf{R}_p\T(\mathbf{v}_b \!+\! \ocean\!-\!\dot{\mathbf{p}}_p) +  \bigl(\mathbf{S}(\omega_p \dot{s})\bigr)\T\mathbf{R}_p\T(\mathbf{p}_b - \mathbf{p}_p),\\
-            &= \mathbf{R}_p\T(\mathbf{v}_{LOS,d} -\dot{\mathbf{p}}_p) - \mathbf{S}(\omega_p \dot{s})\mathbf{p}_b^p +\mathbf{R}_p\T\Tilde{\mathbf{v}}.\label{eq:path_error_dynamics}
+            &= \mathbf{R}_p\T(\mathbf{v}_{{\rm LOS}, d} -\dot{\mathbf{p}}_p) - \mathbf{S}(\omega_p \dot{s})\mathbf{p}_b^p +\mathbf{R}_p\T\Tilde{\mathbf{v}}_{\rm LOS}.\label{eq:path_error_dynamics}
         \end{split} 
 \end{align}
 \end{subequations}
 \begin{theorem}\label{theorem:path_error}
-    Let $\bm{\Lambda}_{p,3}$, $\bm{\Lambda}_{i,3}$ be positive definite matrices. Then, the point $\left[\Tilde{\mathbf{p}}\T,\, \Tilde{\mathbf{v}}\T, \,(\mathbf{p}_b^p)\T\right] = \mathbf{0}\T$ is a \glspl{usges} equilibrium of the system \eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics}.    
+    Let $\bm{\Lambda}_{p,3}$, $\bm{\Lambda}_{i,3}$ be positive definite matrices. Then, the point $\left[\Tilde{\mathbf{p}}_{\rm LOS}\T,\, \Tilde{\mathbf{v}}_{\rm LOS}\T, \,(\mathbf{p}_b^p)\T\right] = \mathbf{0}\T$ is a \glspl{usges} equilibrium of the system \eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics}.    
 \end{theorem}
 
 
 \begin{proof}
-    Note that the error system is in a cascaded form where the velocity error $\Tilde{\mathbf{v}}$ from \eqref{eq:velocity_perturbation_dynamics} perturbs the system \eqref{eq:path_error_dynamics}. The dynamics of the perturbing system \eqref{eq:velocity_perturbation_dynamics} are \glspl{ges} according to Lemma~\ref{lemma:LOS_controller}. The nominal system \eqref{eq:path_error_dynamics} with $\Tilde{\mathbf{v}}=\mathbf{0}$ was proved to be \glspl{usges} in Section~\ref{sec:NSB_R_path_stability} using the following Lyapunov function
+    Note that the error system is in a cascaded form where the velocity error $\Tilde{\mathbf{v}}_{\rm LOS}$ from \eqref{eq:velocity_perturbation_dynamics} perturbs the system \eqref{eq:path_error_dynamics}. The dynamics of the perturbing system \eqref{eq:velocity_perturbation_dynamics} are \glspl{ges} according to Lemma~\ref{lemma:LOS_controller}. The nominal system \eqref{eq:path_error_dynamics} with $\Tilde{\mathbf{v}}_{\rm LOS}=\mathbf{0}$ was proved to be \glspl{usges} in Section~\ref{sec:NSB_R_path_stability} using the following Lyapunov function
 \begin{equation}
     V(\mathbf{p}_b^p) = \frac{1}{2}\left(\mathbf{p}_b^p\right)\T\mathbf{p}_b^p.
 \end{equation}
@@ -414,7 +419,7 @@ Therefore, if the two assumptions of Proposition~\ref{prop:background_cascade} (
 Because $\|\partial V/\partial \mathbf{p}_b^p\| = \|\mathbf{p}_b^p\|$, the first assumption \eqref{eq:background_USGES_cascade_assumption_1} is satisfied with $c_1 = 2, \, c_2 = \eta$ for any $\eta \in \mathbb{R}_{\geq 0}$.
 
 %In the second assumption, $\|g(\cdot)\| = \|\mathbf{R}_p\T\| = 1$, and 
-The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds with $\alpha_1(\|\Tilde{\mathbf{v}}\|) = 1, \alpha_2(\|\Tilde{\mathbf{v}}\|) = 0$, because $\|g(\cdot)\| = \|\mathbf{R}_p\T\| = 1$. As a result, all assumptions of \cite[Proposition 9]{pettersen_lyapunov_2017} are satisfied, and the origin of the closed-loop path-following system~\eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics} is \glspl{usges}.
+The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds with $\alpha_1(\|\Tilde{\mathbf{v}}_{\rm LOS}\|) = \|\Tilde{\mathbf{v}}_{\rm LOS}\|, \alpha_2(\|\Tilde{\mathbf{v}}_{\rm LOS}\|) = 0$, because the norm of the perturbing term is given by $\|\mathbf{R}_p\T \Tilde{\mathbf{v}}_{\rm LOS}\| = \|\Tilde{\mathbf{v}}_{\rm LOS}\|$. As a result, all assumptions of \cite[Proposition 9]{pettersen_lyapunov_2017} are satisfied, and the origin of the closed-loop path-following system~\eqref{eq:velocity_perturbation_dynamics}-\eqref{eq:path_error_dynamics} is \glspl{usges}.
 \end{proof}
 
 
@@ -425,7 +430,7 @@ Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\
 
 \begin{prop}
     \label{prop:angular_velocities}
-    Let us define $\bs{\xi}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, N$ in accordance with \eqref{eq:handpos_def_a_bounds}.
+    Let us define $\mat{x}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, N$ in accordance with \eqref{eq:handpos_def_a_bounds}.
     The internal dynamics of the vehicles are ultimately bounded if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$.
 \end{prop}
 
@@ -496,7 +501,7 @@ where \begin{equation}
 \end{equation}
 The barycenter relative formation is given by
 \begin{equation}
-    \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
+    \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,2}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,3}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
 \end{equation}
 and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$ both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $\mathbf{r}_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
 \begin{equation}
@@ -505,4 +510,4 @@ and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\
     \end{bmatrix}\T \,\mathrm{m/s}.
 \end{equation}
 
-The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{LOS,d}$ and $\dot{\mathbf{v}}_{LOS,d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.
+The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{{\rm LOS}, d}$ and $\dot{\mathbf{v}}_{{\rm LOS}, d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.

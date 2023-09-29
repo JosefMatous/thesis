@@ -47,7 +47,7 @@ Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that repr
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f, &
-    \forall i &\in \left\{1, \ldots, n \right\}.
+    \forall i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
 \section{NSB Algorithm for the Formation Path Following Problem}
@@ -386,7 +386,7 @@ To perform this analysis, we split the system into several connected subsystems 
 We begin by analyzing the subsystem given by \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}.
 \begin{lemma}
     \label{lemma1}
-    The origin, $\left[\widetilde{\mat{P}}_b\T, \widetilde{\bs{\Sigma}}\T\right] = \mat{0}\T$, is a \acrfullpl{ges} equilibrium of the subsystem \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_sigma_CL} if the control gains $k_b$ and $k_f$ are chosen such that $k_b, k_f > \frac{3U_d}{\Delta}$.
+    The origin, $\left[\widetilde{\mat{P}}_b\T, \widetilde{\bs{\Sigma}}\T\right] = \mat{0}\T$, is a \acrfullpl{ges} equilibrium of the subsystem \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_sigma_CL} if the communications graph $\mathcal{G}$ is connected and the control gains $k_b$ and $k_f$ are chosen such that $k_b, k_f > \frac{3U_d}{\Delta}$.
 \end{lemma}
 \begin{proof}        
     From \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}, this subsystem can be written in the following form
@@ -549,7 +549,7 @@ To apply the proposed distributed \gls{nsb} algorithm to underactuated \glspl{au
 Firstly, unlike vehicles with single-integrator dynamics \eqref{eq:distr_NSB_kinematics}, the position of \glspl{auv} cannot be controlled directly.
 Specifically, due to underactuation, there is no input to directly control the sway and heave dynamics, so these states must be controlled indirectly through the surge, pitch, and yaw dynamics.
 Secondly, in real-life situations, the continuous-time consensus algorithm \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter} cannot be implemented, as the vehicles communicate at discrete time instances.
-In fact, the limited bandwidth of most underwater communication methods (\emph{e.g.,} acoustics) causes a significant delay and long periods between transmissions.
+In fact, the limited bandwidth of most underwater communication methods (\emph{e.g.,} acoustics) introduce a significant delay and long periods between transmissions.
 In this section, we introduce the model of underactuated \glspl{auv} and propose solutions to the two aforementioned problems.
 
 \subsection{AUV Model}
@@ -724,8 +724,6 @@ The adjacency matrix of the communication graph is
 \end{equation}
 
 \subsection{Continuous-Time Consensus}
-\pgfplotsset{table/search path={figures/distr_NSB/data}}
-\input{figures/distr_NSB/figure_simulation.tex}
 
 The purpose of this simulation is to demonstrate that the path-following, formation-keeping, and consensus errors of the continuous-time scheme converge to zero.
 To satisfy the assumptions of Lemma~\ref{lemma2}, the consensus gain $c_s$ must be greater than $\frac{2 U_d k_s}{\lambda_2} = 0.65$. We choose $c_s = c_p = 1$.
@@ -740,6 +738,9 @@ Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and
 
 Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
 It may be possible to extend the results of Section~\ref{sec:distr_NSB_distributed_NSB} to curved paths and more complex vehicle models by assuming that the curvature of the desired path is small enough and that the low-level control system is capable of exponential tracking, similarly to the proofs in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}.
+
+\pgfplotsset{table/search path={figures/distr_NSB/data}}
+\input{figures/distr_NSB/figure_simulation.tex}
 
 \subsection{Event-Triggered Consensus}
 

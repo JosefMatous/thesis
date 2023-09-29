@@ -297,6 +297,8 @@ The modified optimization problem is defined as follows
     \end{align}
     \label{eq:ccta_combined_avoidance_allocation_modified}
 \end{subequations}
+\vspace*{-1em}
+
 \noindent where $\mathbf{Q}$ is a positive definite matrix that penalizes the difference between the desired and actual forces, and $\mathbf{R}_{\rm abs}$ and $\mathbf{R}_{\rm rel}$ are positive semidefinite matrices that penalize the absolute and incremental usage of actuators, respectively.
 
 Note that both \eqref{eq:ccta_combined_avoidance_allocation} and \eqref{eq:ccta_combined_avoidance_allocation_modified} use only local information and measurements, and can thus be solved locally for each vehicle.
@@ -306,7 +308,7 @@ The matrix $\mathbf{Q}$ should penalize them differently.
 In the simulations in Section~\ref{sec:ccta_simulations}, we choose
 \vspace{-1mm}
 \begin{equation}
-   \mathbf{Q} = \diag{(1,1,\frac{1}{L^2})},
+   \mathbf{Q} = \diag{\left(1,1,\frac{1}{L^2}\right)},
    \label{eq:ccta_Q_matrix}
 \end{equation}
 where $\diag(\cdot)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.

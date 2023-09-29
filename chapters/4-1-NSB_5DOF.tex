@@ -147,7 +147,7 @@ where $k_{\psi}$, $k_r$, $k_d$ and $c_r$ are positive gains.
 \subsection{NSB Tasks}
 \label{sec:nsb_5dof_NSB}
 Let us denote the variables associated with the \gls{colav}, formation keeping, and path following tasks by lower indices $1$, $2$, and $3$, respectively.
-Each task produces a vector of desired velocities, $\ivel_{d,1}, \ivel_{d,2}, \ivel_{d,3} \in \mathbb{R}^{3N}$.
+Each task produces a vector of desired velocities, $\ivel_{1}, \ivel_{2}, \ivel_{3} \in \mathbb{R}^{3N}$.
 
 First, let us consider the \gls{colav} task.
 Let {$d_{\rm COLAV}$} be the \emph{activation distance}, \emph{i.e.,} the distance at which the vehicles need to start performing the evasive maneuvers.
@@ -166,7 +166,7 @@ The desired value of the task variable is
 where $\mat{1}$ is a vector of ones of the corresponding size.
 The velocity associated with the \gls{colav} task is given by
 \begin{equation}
-    \ivel_{d,1} = - \mat{J}_1^{\dagger}\, \bs{\Lambda}_1\,\widetilde{\bs{\sigma}}_1,
+    \ivel_{1} = - \mat{J}_1^{\dagger}\, \bs{\Lambda}_1\,\widetilde{\bs{\sigma}}_1,
 \end{equation}
 where $\bs{\Lambda}_1$ is a positive definite gain matrix, and $\widetilde{\bs{\sigma}}_1 = \bs{\sigma}_1 - \bs{\sigma}_{d,1}$.
 Note that this task does not guarantee robust collision avoidance.
@@ -189,7 +189,7 @@ and its desired values are
 \end{equation}
 The desired velocity of the formation keeping task is given by
 \begin{align}
-    \ivel_{d,2} &= \mat{J}_2^{\dagger}\,\left(\dot{\bs{\sigma}}_{d,2} - \bs{\Lambda}_2\,\tilde{\bs{\sigma}}_2\right), \label{eq:nsb_5dof_CLIK}
+    \ivel_{2} &= \mat{J}_2^{\dagger}\,\left(\dot{\bs{\sigma}}_{d,2} - \bs{\Lambda}_2\,\tilde{\bs{\sigma}}_2\right), \label{eq:nsb_5dof_CLIK}
 \end{align}
 where $\widetilde{\bs{\sigma}}_2 = \bs{\sigma}_2 - \bs{\sigma}_{d,2}$ is the error, and $\mat{\Lambda}_2$ is a positive definite gain matrix.
 
@@ -203,7 +203,7 @@ Inspired by \cite{belleter_2019_observer}, we employ a time-varying error-depend
 where $\Delta_0 > 0$ is a constant.
 The desired velocity of the path-following task is then given by
 \begin{equation}
-    \ivel_{d, 3} = \mat{1}_N \otimes \ivel_{\rm LOS},
+    \ivel_{ 3} = \mat{1}_N \otimes \ivel_{\rm LOS},
 \end{equation}
 where
 \begin{align}
@@ -224,12 +224,12 @@ where $U_{\rm LOS} > 0$ is the desired path-following speed.
 The three tasks are then combined using the recursive \gls{nsb} algorithm \eqref{eq:background_NSB_recursive}.
 If the \gls{colav} task is active, the \gls{nsb} velocity is given by
 \begin{equation}
-    \ivel_{\rm NSB} = \ivel_{d, 1} + \mat{N}_1 \left(\ivel_{d, 2} + \mat{N}_2 \ivel_{d, 3}\right).
+    \ivel_{\rm NSB} = \ivel_{ 1} + \mat{N}_1 \left(\ivel_{ 2} + \mat{N}_2 \ivel_{ 3}\right).
     \label{eq:nsb_5dof_v_NSB_COLAV}
 \end{equation}
 If the \gls{colav} task is inactive, \eqref{eq:nsb_5dof_v_NSB_COLAV} is simplified to
 \begin{equation}
-    \ivel_{\rm NSB} = \ivel_{d, 2} + \ivel_{d, 3},
+    \ivel_{\rm NSB} = \ivel_{ 2} + \ivel_{ 3},
 \end{equation}
 thanks to the independence and orthogonality of the formation-keeping and path-following task.
 
@@ -287,14 +287,14 @@ Differentiating \eqref{eq:nsb_5dof_barycenter} with respect to time and substitu
 where
 \begin{subequations}
     \begin{align}
-        \scale[0.90]{\Omega_x(\cdot)} & \mathrlap{\scale[0.90]{= \sin\left(\theta_p\right)\sin\left(\gamma_i\right) + \cos\left(\theta_p\right)\cos\left(\gamma_i\right)\cos\left(\psi_p-\chi_i\right),}} \\
-        \scale[0.90]{\Omega_y(\cdot)} & \mathrlap{\scale[0.90]{= -\cos\left(\gamma_i\right)\sin\left(\psi_p - \chi_i\right),}} \\
-        \scale[0.90]{\Omega_z(\cdot)} & \mathrlap{\scale[0.90]{=-\cos\left(\theta_p\right)\sin\left(\gamma_i\right) + \cos\left(\gamma_i\right)\sin(\theta_p)\cos\left(\psi_p-\chi_i\right)}} \\
-        \scale[0.90]{\omega_x} & \scale[0.90]{= -\iota\dot{s}\sin(\theta_p),} &
-        \scale[0.90]{\omega_y} & \scale[0.90]{= \kappa\dot{s},} &
-        \scale[0.90]{\omega_z} & \scale[0.90]{= \iota\dot{s}\cos(\theta_p),} \\
-        \scale[0.90]{\kappa(s)} & \scale[0.90]{= \frac{\partial \theta_p(s)}{\partial s},} &
-        \scale[0.90]{\iota(s)} & \scale[0.90]{= \frac{\partial \psi_p(s)}{\partial s}.}
+        \scale[1]{\Omega_x(\cdot)} & \mathrlap{\scale[1]{= \sin\left(\theta_p\right)\sin\left(\gamma_i\right) + \cos\left(\theta_p\right)\cos\left(\gamma_i\right)\cos\left(\psi_p-\chi_i\right),}} \\
+        \scale[1]{\Omega_y(\cdot)} & \mathrlap{\scale[1]{= -\cos\left(\gamma_i\right)\sin\left(\psi_p - \chi_i\right),}} \\
+        \scale[1]{\Omega_z(\cdot)} & \mathrlap{\scale[1]{=-\cos\left(\theta_p\right)\sin\left(\gamma_i\right) + \cos\left(\gamma_i\right)\sin(\theta_p)\cos\left(\psi_p-\chi_i\right)}} \\
+        \scale[1]{\omega_x} & \scale[1]{= -\iota\dot{s}\sin(\theta_p),} &
+        \scale[1]{\omega_y} & \scale[1]{= \kappa\dot{s},} &
+        \scale[1]{\omega_z} & \scale[1]{= \iota\dot{s}\cos(\theta_p),} \\
+        \scale[1]{\kappa(s)} & \scale[1]{= \frac{\partial \theta_p(s)}{\partial s},} &
+        \scale[1]{\iota(s)} & \scale[1]{= \frac{\partial \psi_p(s)}{\partial s}.}
     \end{align}
 \end{subequations}
 To stabilize the along-track error dynamics, we choose the following path variable update 
@@ -589,7 +589,7 @@ The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_
 The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
 The path-following error seems to increase at $t = \SI{150}{\second}$.
 This increase is probably caused by low-level tracking errors.
-To avoid chattering, the sign functions in the low-level sliding-mode controllers \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_5dof_t_r} are replaced with hyperbolic tan.
+To avoid chattering, the sign functions in the low-level sliding-mode controllers \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_5dof_t_r} are approximated using hyperbolic tan.
 These approximations result in a non-zero steady-state error.
 
 \begin{table}[t]
