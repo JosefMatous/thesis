@@ -24,9 +24,9 @@ Then, we define the objective of formation path-following and pose it as an opti
 \subsection{Vehicle Model}
 \label{ssec:MPC_vehicle-model}
 
-As mentioned in the introduction to this chapter, the proposed \gls{mpc} algorithm can be applied to a wide range of vehicles, not just \glspl{auv}.
+\dt{As mentioned in the introduction to this chapter, the proposed \gls{mpc} algorithm can be applied to a wide range of vehicles, not just \glspl{auv}.
 Consequently, the model presented in this section is more general than the hand position model presented in Chapter~\ref{chap:handpos_definition}.
-A case study showing how the theory developed in this chapter can be applied to \glspl{auv} will be presented in Section~\ref{sec:MPC_case_study_AUV}.
+A case study showing how the theory developed in this chapter can be applied to \glspl{auv} will be presented in Section~\ref{sec:MPC_case_study_AUV}.}
 
 Here, we discuss the dynamics of a single agent in the network. Let $\mat{x} \in \mathbb{R}^{n_{\mat{x}}}$ be the vector of states.
 We assume that the state vector includes the position of the agent.
@@ -170,7 +170,7 @@ We thus propose to formulate the \emph{centralized} problem of optimizing a part
     \end{split}
 \label{eq:MPC_optimization_centralized}
 \end{equation}
-with $T$ being the prediction horizon, $\bm{Q}_{\mat{p}}$ and $Q_s$ positive weight matrices, $\widetilde{\mat{q}}_{i}$ the position error as defined in~\eqref{eq:MPC_y_tilde}, and subject to, for every agent $i = 1, \ldots, N$, to the constraints~\ref{constraint:io} to~\ref{constraint:initial-condition} below:
+with $T$ being the prediction horizon, $\bm{Q}_{\mat{p}}$ and $Q_s$ positive weight matrices, $\dm{\widetilde{\mat{q}}_{i}}$ the position error as defined in~\eqref{eq:MPC_y_tilde}, and subject to, for every agent $i = 1, \ldots, N$, to the constraints~\ref{constraint:io} to~\ref{constraint:initial-condition} below:
 \begin{enumerate}[label=C\arabic*]
     \item the implicit constraint on the inputs and states, \emph{i.e.}, $$\mat{h} \left( \mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau) \right) \geq \bm{0}, \quad \forall \tau \in [t, t + T],$$
     \label{constraint:io}
@@ -184,10 +184,10 @@ We note that the variational problem above may not be solvable using off-the-she
 
 \subsection{A Distributed Solution}
 
-To make the centralized approach from the previous section distributed, we assume \emph{synchronous bidirectional reliable} communication.
+\da{To make the centralized approach from the previous section distributed, we assume \emph{synchronous bidirectional reliable} communication.
 In other words, we assume that all vehicles exchange information simultaneously and there are no packet losses.
 Bidirectional communication implies that the communication network can be described by an undirected graph $\mathcal{G} = \left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V} = \left\{1, \ldots, N\right\}$ correspond to the agents, and $\mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ represents the communication between pairs of agents. We further assume that $\mathcal{G}$ is connected.
-Similarly to Chapter~\ref{chap:distr_NSB}, we denote the set of neighbors of agent $i$ as $\mathcal{N}_i$.
+Similarly to Chapter~\ref{chap:distr_NSB}, we denote the set of neighbors of agent $i$ as $\mathcal{N}_i$.}
 
 Before doing the rewriting, we note that it is possible to make \eqref{eq:MPC_optimization_centralized} distributed by letting the path parameter $s(t)$ be a local variable (\emph{i.e.}, $s_i(t)$), and adding a synchronization constraint on the set of $s_i(t)$'s. This leads to the local reformulation
 
@@ -205,7 +205,7 @@ Before doing the rewriting, we note that it is possible to make \eqref{eq:MPC_op
         \end{split} \label{eq:MPC_criterion}\\
         & \text{subject to } \, h\left(\mat{y}_i^{(-r'')}(\tau), \ldots, \mat{y}^{(r')}_i(\tau)\right) \geq \bm{0}, \label{eq:MPC_constraint_h} \\
         & \phantom{\text{subject to } \,} \bm{\phi}_{\mat{x}} \left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}^{(r')}_i(t)\right) = \mat{x}_{i}(t), \label{eq:MPC_constraint_x0} \\
-        & \phantom{\text{subject to } \,} s_i(\tau) = s_j(\tau), \quad \forall i \in \mathcal{V}, \forall j \in \mathcal{N}_i, \forall \tau \in [t, t+T] \label{eq:MPC_constraint_gamma_s}
+        & \phantom{\text{subject to } \,} s_i(\tau) = s_j(\tau), \quad \dm{\forall i \in \mathcal{V}, \forall j \in \mathcal{N}_i, \forall \tau \in [t, t+T]} \label{eq:MPC_constraint_gamma_s}
     \end{align}
 \label{eq:MPC_optimization_distributed}
 
@@ -272,7 +272,7 @@ The optimization problem \eqref{eq:MPC_optimization_distributed} can then be ref
             \opt_{\coefm{y}_i, \coefm{s}_i} &\, J_i\left(\coefm{y}_i, \coefm{s}_i\right), \\
         \text{subject to } & \coefm{y}_i \in \coef{Y}_i, \\
         & \coefm{s}_i \in \coef{S}_i, \\
-        & \coefm{s}_i = \coefm{s}_j, \quad \forall i \in \mathcal{V}, \forall j \in \mathcal{N}_i, \label{eq:MPC_s_constraint}
+        & \coefm{s}_i = \coefm{s}_j, \quad \dm{\forall i \in \mathcal{V}, \forall j \in \mathcal{N}_i}, \label{eq:MPC_s_constraint}
     \end{align} \label{eq:MPC_optimization_spline} 
 \end{subequations}
 \vspace*{-1em}
@@ -295,7 +295,7 @@ We do this by extrapolating the previous results over the new horizon (see \figr
 
 \subsection{ADMM}
 
-We solve the distributed optimization problem \eqref{eq:MPC_optimization_spline} using the \acrfull{admm}.
+\da{We solve the distributed optimization problem \eqref{eq:MPC_optimization_spline} using the \acrfull{admm}.
 In \cite{boyd_2011_distributed}, it is discussed that \gls{admm} tends to converge to ``modest accuracy'' within a few iterations.
 Due to this property, \gls{admm} is often used to solve distributed \gls{mpc} problems.
 Specifically, we use the relaxed \gls{admm} algorithm proposed in \cite{bastianello_asynchronous_2021} to solve the problem.
@@ -316,7 +316,7 @@ The optimization problem \eqref{eq:MPC_optimization_spline} can then be reformul
 
 It is then possible to apply the so-called Peaceman-Rachford splitting \cite{dacis_splitting_2016} and solve the optimization problem iteratively.
 We omit the derivations, as they can be found in \cite{bastianello_asynchronous_2021}, and only show the algorithm.
-The problem is solved iteratively in two steps.
+The problem is solved iteratively in two steps.}
 First, we compute $\coefm{y}_i$ and $\coefm{s}_i$ by solving
 \begin{equation}
     \coefm{y}_i, \coefm{s}_i
@@ -327,11 +327,11 @@ First, we compute $\coefm{y}_i$ and $\coefm{s}_i$ by solving
         \coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji}
     \right), \label{eq:MPC_ADMM_primal_update}
 \end{equation}
-where $\mathcal{L}_i(\coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji})$ is the so-called augmented Lagrangian given by
+where $\mathcal{L}_i(\coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji})$ is the \dt{so-called} augmented Lagrangian given by
 \begin{equation}
     \mathcal{L}_i(\coefm{y}_i, \coefm{s}_i, \coefm{z}_{ji}) = J_i(\coefm{y}_i, \coefm{s}_i) - \sum_{j \in \mathcal{N}_i} \coefm{z}_{ji}\T\coefm{s}_i + \frac{\rho}{2}d_i\norm{\coefm{s}_i}^2,
 \end{equation}
-where $\rho > 0$ is a penalty weight and $d_i$ is the cardinality of $\mathcal{N}_i$.
+where $\rho > 0$ is a penalty \dt{weight} and $d_i$ is the cardinality of $\mathcal{N}_i$.
 In the second step, we update the auxiliary variables
 \begin{equation}
     \coefm{z}_{ji} \leftarrow (1 - \alpha) \coefm{z}_{ji} + \alpha \left(2\rho\coefm{s}_j - \coefm{z}_{ij}\right), \label{eq:MPC_ADMM_dual_update}
@@ -350,10 +350,10 @@ To further reduce the needed communication bandwidth, we only perform one \gls{a
 \begin{algorithm}[t]
     \caption{\gls{admm} for Distributed \gls{mpc}}\label{alg:admm}
     \begin{algorithmic}[1]
-        \State {\bf Initialization:} Perform several \gls{admm} iterations \eqref{eq:MPC_ADMM_primal_update}, \eqref{eq:MPC_ADMM_dual_update} to converge to $\coefm{y}_i(0), \coefm{s}_i(0)$ and $\coefm{z}_{ij}(0)$
+        \State {\bf Initialization:} Perform several \gls{admm} iterations \da{\eqref{eq:MPC_ADMM_primal_update}, \eqref{eq:MPC_ADMM_dual_update} to converge to $\coefm{y}_i(0), \coefm{s}_i(0)$ and $\coefm{z}_{ij}(0)$}
         \For{$k = 1,2,\ldots$} every $\Delta T$
-            \State Use extrapolation (see \figref{fig:MPC_warm_start}) to provide an initial guess for ${\coefm{y}}_i(k\Delta T), {\coefm{s}}_i(k\Delta T)$ and ${\coefm{z}}_{ij}(k\Delta T)$
-            \State Perform one \gls{admm} iteration \eqref{eq:MPC_ADMM_primal_update}, \eqref{eq:MPC_ADMM_dual_update}
+            \State Use extrapolation \da{(see \figref{fig:MPC_warm_start}) to provide an initial guess for ${\coefm{y}}_i(k\Delta T), {\coefm{s}}_i(k\Delta T)$ and ${\coefm{z}}_{ij}(k\Delta T)$}
+            \State Perform one \gls{admm} iteration \da{\eqref{eq:MPC_ADMM_primal_update}, \eqref{eq:MPC_ADMM_dual_update}}
         \EndFor
     \end{algorithmic}
 \end{algorithm}

@@ -47,7 +47,7 @@ Let $\mat{p}_{f,1}^f, \ldots, \mat{p}_{f,N}^f$ be the position vectors that repr
 The objective is to control the vehicles so that
 \begin{align}
     \mat{p}_i - \mat{p}_b &\rightarrow \mat{R}_p(s) \mat{p}_{f,i}^f, &
-    \forall i &\in \left\{1, \ldots, N \right\}.
+    \dm{\forall i &\in \left\{1, \ldots, N \right\}.}
 \end{align}
 
 \section{NSB Algorithm for the Formation Path Following Problem}
@@ -122,6 +122,7 @@ Now, let us discuss how to make the algorithm presented in the previous section 
 To perform the \gls{nsb} algorithm in a distributed manner, the vehicles do not need to know the exact positions of each other.
 They only need to know the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
 
+\da{
 In this section, we assume that the \glspl{auv} excahnge information continuously.
 The connections between the vehicles can be represented using an undirected graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$, where $\mathcal{V} = \{1, \ldots, N\}$ is the set of vertices corresponding to the \glspl{auv}, and $\mathcal{E} \subset \mathcal{V} \times \mathcal{V}$ is the set of edges, where $(i, j) \in \mathcal{E}$ means that vehicle $i$ can exchange information with vehicle $j$.
 Let $\mat{A}$ be the adjacency matrix and let $\mat{L}$ be the Laplacian matrix of the communications graph, respectively.
@@ -134,6 +135,7 @@ The set of neighbors is defined as $\mathcal{N}_i = \left\{ j \, \big| \, \mat{A
     However, optical communications tend to be unreliable.
     We address this issue in Section~\ref{sec:distr_NSB_event_triggered}, where we modify the distributed \gls{nsb} algorithm to handle discrete-time delayed communications.
 \end{rmk*}
+}
 
 Let $\mat{p}_{b, i}$, $r_{f, i}$, and $s_i$ denote vehicle $i$'s estimates of the barycenter, formation radius, and path parameter, respectively.
 The vehicle can then calculate its \gls{los} velocity as
@@ -305,7 +307,7 @@ From \eqref{eq:distr_NSB_v_f_distributed}, we get
     \begin{split}
     \frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T \ivel_{f, i\!} &= -\frac{1}{N} \! \sum_{i=1}^N \! \mat{R}_p\T k_f \!\! \left(\mat{p}_i - \mat{p}_{b,i} - \mat{R}_p\mat{p}_{f, i}^f\right) \\
     &= -\frac{1}{N} \!\! \sum_{i=1}^N \! \mat{R}_p\T k_{\!f\!} \! \left(\! \mat{p}_{i\!} -\! \mat{p}_{b\!} -\! \widetilde{\mat{p}}_{b, i\!} -\! \mat{R}_p\mat{p}_{f, i\!}^f\right) \\
-    &= -\frac{k_f}{N} \mat{R}_p\T \!\! \left( \sum_{i=1}^N \bigl(\mat{p}_{i\!} -\! \mat{p}_{b\!}\bigr) - \sum_{i=1}^N\! \widetilde{\mat{p}}_{b, i\!} - \sum_{i=1}^N\! \mat{R}_p\mat{p}_{f, i\!}^f \right) \\
+    &\dm{= -\frac{k_f}{N} \mat{R}_p\T \!\! \left( \sum_{i=1}^N \bigl(\mat{p}_{i\!} -\! \mat{p}_{b\!}\bigr) - \sum_{i=1}^N\! \widetilde{\mat{p}}_{b, i\!} - \sum_{i=1}^N\! \mat{R}_p\mat{p}_{f, i\!}^f \right)} \\
     &= \frac{k_f}{N} \mat{R}_p\T \! \sum_{i=1}^N \! \widetilde{\mat{p}}_{b, i}.
     \end{split}
     \label{eq:distr_NSB_v_f_sum}
@@ -334,9 +336,9 @@ This equation can be rewritten in a more compact form.
 To do so, let us define the following concatenated error vectors
 \begin{subequations}
     \begin{align}
-        \widetilde{\mat{V}}_{\rm LOS\!}\T &= \left[\widetilde{\ivel}_{{\rm LOS}, 1}\T, \ldots, \widetilde{\ivel}_{{\rm LOS}, N}\T\right], &
-        \widetilde{\bs{\Sigma}}\T\!\!\! &= \left[\widetilde{\bs{\sigma}}_1\T, \ldots, \widetilde{\bs{\sigma}}_N\T\right]\mathrlap{,} \\
-        \widetilde{\mat{P}}_{b\!}\T &= \left[\widetilde{\mat{p}}_{b, 1}\T, \ldots, \widetilde{\mat{p}}_{b, N}\T\right], &
+        \widetilde{\mat{V}}_{\rm LOS\!}\T &= \left[\widetilde{\ivel}_{{\rm LOS}, 1}^{\dm{\rm T}}, \ldots, \widetilde{\ivel}_{{\rm LOS}, N}^{\dm{\rm T}}\right], &
+        \widetilde{\bs{\Sigma}}\T\!\!\! &= \left[\widetilde{\bs{\sigma}}_1^{\dm{\rm T}}, \ldots, \widetilde{\bs{\sigma}}_N^{\dm{\rm T}}\right]\mathrlap{,} \\
+        \widetilde{\mat{P}}_{b\!}\T &= \left[\widetilde{\mat{p}}_{b, 1}^{\dm{\rm T}}, \ldots, \widetilde{\mat{p}}_{b, N}^{\dm{\rm T}}\right], &
         \widetilde{\mat{S}}\T\! &= \left[\Tilde{s}_1, \ldots, \Tilde{s}_N\right].
     \end{align}
 \end{subequations}
@@ -386,7 +388,7 @@ To perform this analysis, we split the system into several connected subsystems 
 We begin by analyzing the subsystem given by \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}.
 \begin{lemma}
     \label{lemma1}
-    The origin, $\left[\widetilde{\mat{P}}_b\T, \widetilde{\bs{\Sigma}}\T\right] = \mat{0}\T$, is a \acrfullpl{ges} equilibrium of the subsystem \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_sigma_CL} if the communications graph $\mathcal{G}$ is connected and the control gains $k_b$ and $k_f$ are chosen such that $k_b, k_f > \frac{3U_d}{\Delta}$.
+    The origin, $\left[\widetilde{\mat{P}}_b\T, \widetilde{\bs{\Sigma}}\T\right] = \mat{0}\T$, is a \acrfullpl{ges} equilibrium of the subsystem \eqref{eq:distr_NSB_P_tilde_CL}, \eqref{eq:distr_NSB_sigma_CL} if \dt{the communications graph $\mathcal{G}$ is connected and} the control gains $k_b$ and $k_f$ are chosen such that $k_b, k_f > \frac{3U_d}{\Delta}$.
 \end{lemma}
 \begin{proof}        
     From \eqref{eq:distr_NSB_P_tilde_CL} and \eqref{eq:distr_NSB_sigma_CL}, this subsystem can be written in the following form
@@ -549,7 +551,7 @@ To apply the proposed distributed \gls{nsb} algorithm to underactuated \glspl{au
 Firstly, unlike vehicles with single-integrator dynamics \eqref{eq:distr_NSB_kinematics}, the position of \glspl{auv} cannot be controlled directly.
 Specifically, due to underactuation, there is no input to directly control the sway and heave dynamics, so these states must be controlled indirectly through the surge, pitch, and yaw dynamics.
 Secondly, in real-life situations, the continuous-time consensus algorithm \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter} cannot be implemented, as the vehicles communicate at discrete time instances.
-In fact, the limited bandwidth of most underwater communication methods (\emph{e.g.,} acoustics) introduce a significant delay and long periods between transmissions.
+In fact, the limited bandwidth of \dt{most underwater communication methods (\emph{e.g.,} acoustics) introduce} a significant delay and long periods between transmissions.
 In this section, we introduce the model of underactuated \glspl{auv} and propose solutions to the two aforementioned problems.
 
 \subsection{AUV Model}
@@ -640,9 +642,9 @@ The desired orientation can then be calculated as
 In this section, we discuss the issue of discrete-time delayed communications.
 We assume that the \glspl{auv} can broadcast data via an acoustic modem.
 However, due to the relatively low bitrate and propagation speed of underwater acoustics, there is a significant delay between transmission and reception.
-To model the communications, we assume that when vehicle $i$ transmits a packet at a time $t$, vehicle $j$ receives the packet at a time $t + \Delta T_{ij}$, where $\Delta T_{ij} > 0$ is the dealy.
+\da{To model the communications, we assume that when vehicle $i$ transmits a packet at a time $t$, vehicle $j$ receives the packet at a time $t + \Delta T_{ij}$, where $\Delta T_{ij} > 0$ is the dealy.
 Since the acoustic communications channel has a range of several kilometers \cite{stojanovic_underwater_acoustic_2009}, we can assume that all vehicles can recieve the transmitted packet (in other words, that the communications graph is fully connected).
-To address the issues with discrete-time communications, delays, and limited bandwidth, we need to discretize the consensus scheme \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter}, compensate for the delays, and reduce the number of transmissions.
+To address the issues with discrete-time communications, delays, and limited bandwidth,} we need to discretize the consensus scheme \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter}, compensate for the delays, and reduce the number of transmissions.
 
 To discretize the consensus scheme, we propose the following method.
 Each vehicle continuously updates its variables using the following equations
@@ -737,7 +739,7 @@ The results are shown in \figref{fig:distr_NSB_simulation}.
 Figs.~\ref{fig:distr_NSB_sim_barycenter}, \ref{fig:distr_NSB_sim_parameter}, and \ref{fig:distr_NSB_sim_radius} show the errors of the consensus variables. These plots are in a logarithmic scale to demonstrate the exponential rate of convergence. Initially, the logarithmic error is clearly bounded by a decreasing straight line, demonstrating the exponential convergence. The norm of the error decreases by a factor of 10 approximately every 25 seconds. When obstacle avoidance is active, the errors start diverging but remain bounded. After avoiding the obstacle, the errors continue to decrease exponentially, but eventually, the convergence stagnates. We cannot expect that the errors continue to fall indefinitely due to numerical innacuracies, that come mostly from two sources: the inaccuracies in floating-point arithmetics and the tolerances of the ODE solver.
 
 Note that although Section~\ref{sec:distr_NSB_closed_loop} presents stability proof for a simplified case of straight-line paths and vehicles with single-integrator dynamics, the simulation results show stability for curved paths and more complex vehicle models.
-It may be possible to extend the results of Section~\ref{sec:distr_NSB_distributed_NSB} to curved paths and more complex vehicle models by assuming that the curvature of the desired path is small enough and that the low-level control system is capable of exponential tracking, similarly to the proofs in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}.
+\dt{It may be possible to extend the results of Section~\ref{sec:distr_NSB_distributed_NSB} to curved paths and more complex vehicle models by assuming that the curvature of the desired path is small enough and that the low-level control system is capable of exponential tracking, similarly to the proofs in Chapters~\ref{chap:5dof_nsb} and \ref{chap:NSB_R}.}
 
 \pgfplotsset{table/search path={figures/distr_NSB/data}}
 \input{figures/distr_NSB/figure_simulation.tex}

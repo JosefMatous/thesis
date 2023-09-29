@@ -77,10 +77,12 @@ The objective is to control the vehicles so that
     \forall i &\in \left\{1, \ldots, N \right\}.
 \end{align}
 
+\dt{
 We propose to solve this problem using an \gls{nsb} algorithm.
 We note that the proposed algorithm is \emph{centralized}.
 Consequently, to implement this algorithm in a real-life situation, there must be a central node that can communicate and coordinate with all the \glspl{auv}.
 Alternatively, every \gls{auv} must have access to the complete state of all other \glspl{auv}.
+}
 
 \section{Control System}
 \label{sec:nsb_5dof_control}
@@ -182,9 +184,9 @@ The task variable of the formation-keeping task is
 and its desired values are
 \begin{equation}
     \bs{\sigma}_{d,2} = \begin{bmatrix}
-        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,1}^f \\
+        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,1}^{\dm{f}} \\
         \vdots \\
-        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^f
+        \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^{\dm{f}}
     \end{bmatrix}. \label{eq:nsb_5dof_sigma_d_2}
 \end{equation}
 The desired velocity of the formation keeping task is given by
@@ -233,11 +235,12 @@ If the \gls{colav} task is inactive, \eqref{eq:nsb_5dof_v_NSB_COLAV} is simplifi
 \end{equation}
 thanks to the independence and orthogonality of the formation-keeping and path-following task.
 
+\da{
 Let $\ivel_{{\rm NSB}, i}$ be the desired \gls{nsb} velocity associated with vehicle $i$, \emph{i.e.,}
 \begin{equation}
     \left[\ivel_{{\rm NSB}, 1}\T, \ldots, \ivel_{{\rm NSB}, N}\T\right] = \ivel_{\rm NSB}\T.
 \end{equation}
-These velocities must be decomposed into surge, pitch, and yaw references that can be tracked by the attitude control system presented in Section~\ref{sec:nsb_5dof_ACS}.
+These velocities} must be decomposed into surge, pitch, and yaw references that can be tracked by the attitude control system presented in Section~\ref{sec:nsb_5dof_ACS}.
 Similarly to \cite{arrichiello_formation_2006}, we propose a method with angle of attack and sideslip compensation
 \begin{align}
     \scale[0.96]{u_{d, i}} & \scale[0.96]{= U_{{\rm NSB}, i}\,\frac{1 + \cos\left(\gamma_{{\rm NSB}, i} - \gamma_i\right)\cos\left(\chi_{{\rm NSB}, i} - \chi_i\right)}{2},} \label{eq:nsb_5dof_u_d}\\
@@ -587,10 +590,10 @@ The path-following error seems to converge linearly at first, and then exponenti
 This phenomenon is caused by the LOS guidance law \eqref{eq:nsb_5dof_v_LOS}, \emph{cf.} \cite{fossen_uniform_2014}, and the path parameter update law \eqref{eq:nsb_5dof_path_update}.
 The inverse tan in \eqref{eq:nsb_5dof_v_LOS} and the last term in \eqref{eq:nsb_5dof_path_update} act as a saturation, slowing the convergence for large errors.
 The rate of convergence of the along-track error ($x_b^p$) is given by the path parameter update gain $k_{s}$, while the rate of convergence of the cross-track errors ($y_b^p, z_b^p$) is given by the lookahead distance $\Delta_0$.
-The path-following error seems to increase at $t = \SI{150}{\second}$.
+\da{The path-following error seems to increase at $t = \SI{150}{\second}$.
 This increase is probably caused by low-level tracking errors.
 To avoid chattering, the sign functions in the low-level sliding-mode controllers \eqref{eq:nsb_5dof_t_u}--\eqref{eq:nsb_5dof_t_r} are approximated using hyperbolic tan.
-These approximations result in a non-zero steady-state error.
+These approximations result in a non-zero steady-state error.}
 
 \begin{table}[t]
     \centering

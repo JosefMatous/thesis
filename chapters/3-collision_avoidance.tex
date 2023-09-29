@@ -10,7 +10,7 @@ The contents of this chapter are based on \cite{matous_unifying_2021}.
 
 The chapter is organized as follows.
 Section \ref{sec:ccta_model} defines the notation and describes the model of the vehicle.
-Section \ref{sec:ccta_problem} defines the combined control allocation/collision avoidance problem.
+\dt{Section \ref{sec:ccta_problem} defines the combined control allocation/collision avoidance problem.}
 The proposed control allocation method and \glspl{cbf} for solving this problem are then introduced in Sections \ref{sec:ccta_alloc} and \ref{sec:ccta_CBF}.
 %Section \ref{sec:ccta_alloc} introduces control allocation and Section \ref{sec:ccta_CBF} introduces CBFs.
 Section \ref{sec:ccta_optimization} describes the resulting combined \gls{colav} and control allocation optimization problem.
@@ -96,6 +96,7 @@ This equation describes a large class of systems, including the matrix-vector mo
 
 \noindent This model can be converted to the form in \eqref{eq:ccta_affine_model} since the matrix $\mathbf{M}$ is invertible.
 
+\da{
 \section{Problem Definition}
 \label{sec:ccta_problem}
 
@@ -112,13 +113,14 @@ To avoid collisions, we want the vehicle $i$ to satisfy
     &\forall j \in \{1, \ldots, N\} \setminus \{i\},
 \end{align}
 where $d_{\min} > 0$ is some minimum safety distance.
+}
 
 \section{Control Allocation}
 \label{sec:ccta_alloc}
 
 As stated in the Introduction, the goal of the control allocation is to find the inputs that generate the desired forces given by the high-level controller.
 For details on control allocation techniques for both linear and nonlinear systems, the reader is referred to \cite{johansen_control_2013}.
-Since control allocation is done individually for each vehicle, we can omit the lower index $i$ in this section.
+\dt{Since control allocation is done individually for each vehicle, we can omit the lower index $i$ in this section.}
 
 In this chapter, we consider systems where the function $b$ can be nonlinear.
 In the literature, nonlinear control allocation is commonly solved by linearizing the function $b$ \cite{harkegard_dynamic_2004,johansen_constrained_2004}%, \emph{i.e.,}
@@ -175,7 +177,7 @@ If there exists an input $\mathbf{u}$ such that \eqref{eq:ccta_cbf_inequality} i
 
 \subsection{CBFs for Reactive Collision Avoidance}
 %First, we need to extend the notation from Section~\ref{sec:ccta_notation} to multi-vehicle systems.
-Let us define the relative position of vehicles $i$ and $j$ as
+\dt{Let us define the relative position of vehicles $i$ and $j$ as}
 \begin{equation}
     \mathbf{p}_{ij} = \mathbf{p}_{i} - \mathbf{p}_{j}.
     \label{eq:ccta_p_ij}
@@ -224,7 +226,7 @@ For $\dot{\mathbf{p}}_{ij}$, we split the derivative of $\pose$ from \eqref{eq:c
     \label{eq:ccta_p_dot}
 \end{equation}
 
-\noindent For $\ddot{\mathbf{p}}_{ij}$, we assume that the other vehicle maintains its velocity, \emph{i.e.,}
+\noindent For $\ddot{\mathbf{p}}_{ij}$, we assume that the \dt{other vehicle} maintains its velocity, \emph{i.e.,}
 \begin{equation}
     \ddot{\mathbf{p}}_{ij} \approx \ddot{\mathbf{p}}_{i},
 \end{equation}
@@ -312,9 +314,9 @@ In the simulations in Section~\ref{sec:ccta_simulations}, we choose
    \label{eq:ccta_Q_matrix}
 \end{equation}
 where $\diag(\cdot)$ is a diagonal matrix and $L$ is the smallest distance of the thrusters from the center of mass.
-The matrix $\mathbf{Q}$ is chosen according to \eqref{eq:ccta_Q_matrix} because the term $\boldsymbol{\tau}_{d, i}$ contains both forces and torques.
+\da{The matrix $\mathbf{Q}$ is chosen according to \eqref{eq:ccta_Q_matrix} because the term $\boldsymbol{\tau}_{d, i}$ contains both forces and torques.
 Specifically, the third element of $\boldsymbol{\tau}_{d, i}$ is the desired yaw torque.
-If we divide the squared toruqe error by $L^2$, we effectively convert it to a squared force error.
+If we divide the squared toruqe error by $L^2$, we effectively convert it to a squared force error.}
 
 \section{Simulations}
 \label{sec:ccta_simulations}
@@ -335,7 +337,7 @@ The function that maps the inputs to the generalized forces is \vspace{-1mm}
 \begin{equation}
     \scale[0.93]{b(\mathbf{u}) = \sum_{i=1}^k f_i \left[ \cos\alpha_i, \sin\alpha_i, L_x^i\,\sin\alpha_i - L_y^i\,\cos\alpha_i \right]^{\rm T},}
 \end{equation}
-where $L_x^i$ and $L_y^i$ are the $x$- and $y$-components of the position of the $i^{\rm th}$ thruster, relative to the center of mass.
+where $L_x^i$ and $L_y^i$ \da{are the $x$- and $y$-components of} the position of the $i^{\rm th}$ thruster, relative to the center of mass.
 
 \pgfplotsset{table/search path={figures/ccta/data}}
 \begin{figure*}[t]
@@ -478,9 +480,9 @@ We also tested a scenario where one of the vessels is uncontrolled.
 The results are shown in Figure~\ref{fig:ccta_uncontrolled}.
 In this scenario, the uncontrolled vessel (plotted in black) solves the control allocation problem without the \gls{cbf} constraints \eqref{eq:ccta_combined_avoidance_allocation_constraint}.
 Although the time it takes the vessels to converge to their goal positions is greater, the minimum safe distance is still maintained.
-Note that in \figref{fig:ccta_drillship_unc}, the red vessel does not seem to converge to its desired position.
+\dt{Note that in \figref{fig:ccta_drillship_unc}, the red vessel does not seem to converge to its desired position.
 This is because the simulation was terminated too early, after 100 seconds.
-Given more time, the vessel would eventually converge to its desired position.
+Given more time, the vessel would eventually converge to its desired position.}
 
 In this section, we have provided some insight into how to chose some of the parameters for the simulated models.
 When it comes to the choice of the coefficient $k_v$, introduced in \eqref{eq:ccta_CBF}, and the extended class-$\mathcal{K}_{\infty}$ function $\gamma$, introduced in \eqref{eq:ccta_combined_avoidance_allocation}, the following considerations can be made.

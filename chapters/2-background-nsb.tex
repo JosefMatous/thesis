@@ -14,41 +14,41 @@ Let there be $M$ tasks arranged by priority in descending order (\emph{i.e.,} ta
 Let $\bs{\sigma}_1, \ldots, \bs{\sigma}_M$ denote the so-called \emph{task variables}.
 Each variable is a function of the system coordinates
 \begin{align}
-    \bs{\sigma}_m &= f_m(\mat{p}), &
-    f_m &: \mathbb{R}^n \mapsto \mathbb{R}^{n_m}, &
+    \bs{\sigma}_{\dm{m}} &= f_{\dm{m}}(\mat{p}), &
+    f_{\dm{m}} &: \mathbb{R}^n \mapsto \mathbb{R}^{n_{\dm{m}}}, &
     &\forall m = 1, \ldots, M,
 \end{align}
-where $n_m \leq n$ is the dimensionality of task $m$.
-Applying the chain rule, the time-derivative of $\bs{\sigma}_m$ is
+where $n_{\dm{m}} \leq n$ is the dimensionality of task $m$.
+Applying the chain rule, the time-derivative of $\bs{\sigma}_{\dm{m}}$ is
 \begin{equation}
-    \dot{\bs{\sigma}}_m = \frac{\partial f_m(\mat{p})}{\partial \mat{p}} \ivel \triangleq \mat{J}_m(\mat{p}) \ivel.
+    \dot{\bs{\sigma}}_{\dm{m}} = \frac{\partial f_{\dm{m}}(\mat{p})}{\partial \mat{p}} \ivel \triangleq \mat{J}_{\dm{m}}(\mat{p}) \ivel.
 \end{equation}
-Let $\dot{\bs{\sigma}}_m^{*}$ be the desired closed-loop behavior of the task variable.
+Let $\dot{\bs{\sigma}}_{\dm{m}}^{*}$ be the desired closed-loop behavior of the task variable.
 Then, the smallest input (in terms of Euclidean norm) that guarantees the desired behavior is
 \begin{equation}
-    \ivel_m = \mat{J}_m^{\dagger} \dot{\bs{\sigma}}_m^{*},
+    \ivel_{\dm{m}} = \mat{J}_{\dm{m}}^{\dagger} \dot{\bs{\sigma}}_{\dm{m}}^{*},
     \label{eq:background_NSB_velocity_i}
 \end{equation}
-where $\mat{J}_m^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
+where $\mat{J}_{\dm{m}}^{\dagger}$ is the Moore-Penrose pseudoinverse of the task Jacobian.
 
 \begin{rmk*}
     In many applications, the task variable should track some pre-defined desired value, $\bs{\sigma}_{d, m}$.
     In such cases, we typically choose
     \begin{equation}
-        \dot{\bs{\sigma}}_m^{*} = \dot{\bs{\sigma}}_{d, m} - \bs{\Lambda}_m \left(\bs{\sigma}_m - \bs{\sigma}_{d,m}\right),  
+        \dot{\bs{\sigma}}_{\dm{m}}^{*} = \dot{\bs{\sigma}}_{d, m} - \bs{\Lambda}_{\dm{m}} \left(\bs{\sigma}_{\dm{m}} - \bs{\sigma}_{d,m}\right),  
         \label{eq:background_CLIK}  
     \end{equation}
-    where $\bs{\Lambda}_m$ is a positive definite gain matrix.
+    where $\bs{\Lambda}_{\dm{m}}$ is a positive definite gain matrix.
     In the literature, \eqref{eq:background_CLIK} is commonly referred to as the \gls{clik} equation \cite{antonelli_2006_kinematic}.
 \end{rmk*}
 
-If the task is \emph{redundant}, \emph{i.e.}, if the inequality $n_m < n$ strictly holds, then there exists a subspace of control inputs that do not interfere with the task.
+If the task is \emph{redundant}, \emph{i.e.}, if the inequality $n_{\dm{m}} < n$ strictly holds, then there exists a subspace of control inputs that do not interfere with the task.
 Let $\ivel_{\rm add}$ be an additional input.
 Then, the following control input
 \begin{equation}
-    \ivel = \ivel_m + \mat{N}_m \ivel_{\rm add},
+    \ivel = \ivel_{\dm{m}} + \mat{N}_{\dm{m}} \ivel_{\rm add},
 \end{equation}
-where $\mat{N}_m = \mat{I}_{N} - \mat{J}_m^{\dagger}\mat{J}_m$ is the null-space projector of $\mat{J}_m$, guarantees the desired behavior of the task.
+where $\mat{N}_{\dm{m}} = \mat{I}_{N} - \mat{J}_{\dm{m}}^{\dagger}\mat{J}_{\dm{m}}$ is the null-space projector of $\mat{J}_{\dm{m}}$, guarantees the desired behavior of the task.
 The additional control input is satisfied only if it does not interfere with the task.
 
 In the \gls{nsb} algorithm, the control inputs from the individual tasks are composed by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
@@ -58,17 +58,17 @@ The first variant calculates the control input $\ivel$ using the following equat
     \ivel &= \ivel_{1} + \mat{N}_1 \biggl(\ivel_{2} + \mat{N}_2\Bigl(\ivel_3 \cdots + \mat{N}_{M-2}\bigl(\ivel_{M-1} + \mat{N}_{M-1}\ivel_M\bigr)\Bigr)\biggr),
     \label{eq:background_NSB_recursive}
 \end{align}
-with $\ivel_{m}$ given by \eqref{eq:background_NSB_velocity_i}.
+with $\ivel_{\dm{m}}$ given by \eqref{eq:background_NSB_velocity_i}.
 
 The second variant uses the so-called \emph{augmented} Jacobians
 \begin{align}
-    \Bar{\mat{J}}_m &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_m\T}.
+    \Bar{\mat{J}}_{\dm{m}} &= \inlinevector{\mat{J}_1\T, \ldots, \mat{J}_{\dm{m}}\T}.
     \label{eq:background_NSB_augmented}
 \end{align}
-Let $\Bar{\mat{N}}_m$ denote the null-space projector of $\Bar{\mat{J}}_m$.
+Let $\Bar{\mat{N}}_{\dm{m}}$ denote the null-space projector of $\Bar{\mat{J}}_{\dm{m}}$.
 Then, the control input $\ivel$ is given by
 \begin{equation}
-    \ivel = \ivel_1 + \sum_{m=2}^M \Bar{\mat{N}}_{m-1} \ivel_m.
+    \ivel = \ivel_1 + \sum_{\dm{m}=2}^M \Bar{\mat{N}}_{\dm{m}-1} \ivel_{\dm{m}}.
 \end{equation}
 The advantages and disadvantages of both approaches are discussed in \cite{antonelli_stability_2008}.
 In this thesis, we will mostly use the first variant.
@@ -79,22 +79,22 @@ The concepts of independence and orthogonality are important when analyzing the 
 Specifically, these concepts determine whether the tasks can be executed simultaneously, and how the null-space projector affects the lower-priority tasks.
 
 Two tasks are \emph{independent} if the pseudoinverses of their Jacobians are linearly independent.
-Let $\mat{J}_a$ and $\mat{J}_b$ denote the Jacobians of task $a$ and $b$, respectively.
+Let $\mat{J}_{\dm{a}}$ and $\mat{J}_{\dm{b}}$ denote the Jacobians of task $\dm{a}$ and $\dm{b}$, respectively.
 These tasks are independent if
 \begin{equation}
-    {\rank} \left(\mat{J}_a^{\dagger}\right) + {\rank} \left(\mat{J}_b^{\dagger}\right) = {\rm rank} \left(\left[ \mat{J}_a^{\dagger},\, \mat{J}_b^{\dagger} \right]\right),
+    {\rank} \left(\mat{J}_{\dm{a}}^{\dagger}\right) + {\rank} \left(\mat{J}_{\dm{b}}^{\dagger}\right) = {\rm rank} \left(\left[ \mat{J}_{\dm{a}}^{\dagger},\, \mat{J}_{\dm{b}}^{\dagger} \right]\right),
     \label{eq:background_independence_pseudo}
 \end{equation}
 Antonelli \emph{et al.} \cite{antonelli_stability_2008} remark that the pseudoinverse and the transpose of the task Jacobian share the same span.
 Consequently, \eqref{eq:background_independence_pseudo} is equivalent to
 \begin{equation}
-    {\rank} \left(\mat{J}_a\T\right) + {\rank} \left(\mat{J}_b\T\right) = {\rm rank} \left(\left[ \mat{J}_a\T,\, \mat{J}_b\T \right]\right).
+    {\rank} \left(\mat{J}_{\dm{a}}\T\right) + {\rank} \left(\mat{J}_{\dm{b}}\T\right) = {\rm rank} \left(\left[ \mat{J}_{\dm{a}}\T,\, \mat{J}_{\dm{b}}\T \right]\right).
     \label{eq:background_independence}
 \end{equation}
 
 Two tasks are \emph{orthogonal} if the subspaces spanned by their Jacobians tasks are orthogonal, \emph{i.e.,} if
 \begin{equation}
-    \mat{J}_a \, \mat{J}_b^{\dagger} = \mat{O}_{n_a \times n_b}.
+    \mat{J}_{\dm{a}} \, \mat{J}_{\dm{b}}^{\dagger} = \mat{O}_{n_{\dm{a}} \times n_{\dm{b}}}.
 \end{equation}
 
 Now, let us consider two consecutive tasks that are independent and orthogonal. 

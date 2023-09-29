@@ -114,22 +114,22 @@ The procedure is inspired by the 2D transformation in \cite{paliotta_trajectory_
 We begin with the following change of coordinates: \vspace*{-0.5em}
 \begin{subequations}
     \begin{align}
-        \mat{x}_1 &= \mat{p} + \mat{R}\handl, \label{eq:handpos_def_hand_position} \\
-        \mat{x}_2 &= \mat{R}\bvel_r + \mat{R}\left(\bs{\omega} \times \handl\right),
+        \mat{x}_1 &= \mat{p} + \mat{R}\dm{\handl}, \label{eq:handpos_def_hand_position} \\
+        \mat{x}_2 &= \mat{R}\bvel_r + \mat{R}\left(\bs{\omega} \times \dm{\handl}\right),
     \end{align} \label{eq:handpos_def_hand_transform_initial}
 \end{subequations}
 
 \vspace*{-1.5em}
 
-\noindent where $\handl = \inlinevector{h, 0, 0}$, where $h > 0$ is the \emph{hand length}.
+\noindent where $\dm{\handl} = \inlinevector{h, 0, 0}$, where $h > 0$ is the \emph{hand length}.
 
 We will treat $\mat{x}_1$ as the output of our system, and perform an output feedback linearization.
 Differentiating \eqref{eq:handpos_def_hand_transform_initial} with respect to time yields: \vspace*{-0.3em}
 \begin{subequations}
     \begin{align}
         \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \\
-        \dot{\mat{x}}_2 &= \mat{R}\Big(\inlinevector{f_u, hf_r, -hf_q}\! - \!\mathcal{D}_{\bvel}(\vel) - \mathcal{C}_{\bvel}(\vel) + \bs{\omega} \!\times\! \bvel_r + \bs{\omega} \times \left(\bs{\omega} \times \handl\right) \label{eq:handpos_def_x_2_dot} \\
-        & \qquad + \handl \times \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right) \Big). \nonumber
+        \dot{\mat{x}}_2 &= \mat{R}\Big(\inlinevector{f_u, hf_r, -hf_q}\! - \!\mathcal{D}_{\bvel}(\vel) - \mathcal{C}_{\bvel}(\vel) + \bs{\omega} \!\times\! \bvel_r + \bs{\omega} \times \left(\bs{\omega} \times \dm{\handl}\right) \label{eq:handpos_def_x_2_dot} \\
+        & \qquad + \dm{\handl} \times \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right) \Big). \nonumber
     \end{align}
 \end{subequations}
 
@@ -149,8 +149,8 @@ To linearize the output dynamics, we employ the following change of input
         1 & 0 & 0 \\ 0 & 0 & \!\!-\frac{1}{h} \\ 0 & \frac{1}{h} & 0
     \end{bmatrix}
     \!\!
-    \bigg(\!\mat{R}\T\!\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \bvel_r - \bs{\omega} \times \left(\bs{\omega} \times \handl\right) \nonumber \\
-    & \qquad \qquad - \handl \times \Bigl(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\!\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\Bigr)\! \bigg),
+    \bigg(\!\mat{R}\T\!\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \bvel_r - \bs{\omega} \times \left(\bs{\omega} \times \dm{\handl}\right) \nonumber \\
+    & \qquad \qquad - \dm{\handl} \times \Bigl(\mathcal{D}_{\bs{\omega}}(\vel) + \mathcal{C}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\!\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\Bigr)\! \bigg),
 \end{align}
 where $\bs{\mu} \in \mathbb{R}^3$ is the new control input.
 This procedure transforms the system \eqref{eq:handpos_def_ode_velocities} into the following form
@@ -159,12 +159,12 @@ This procedure transforms the system \eqref{eq:handpos_def_ode_velocities} into 
         \dot{\mat{x}}_1 &= \mat{x}_2 + \ocean, \label{eq:handpos_def_x_1_dot_transformed}\\
         \dot{\mat{x}}_2 &= \bs{\mu}, \label{eq:handpos_def_x_2_dot_transformed}\\
         \dot{\mat{R}} &= \mat{R}\mat{S}(\bs{\omega}), \label{eq:handpos_def_R_dot_CL} \\
-        \dot{\bs{\omega}} &= \Bar{\handl} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_def_omega_dot_CL} \\
-            & \quad - \left(\Bar{\handl}\handl\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right), \nonumber
+        \dot{\bs{\omega}} &= \Bar{\dm{\handl}} \times \left(\mat{R}\T\bs{\mu} + \mathcal{D}_{\bvel}(\vel) + \mathcal{C}_{\bvel}(\vel) - \bs{\omega} \times \mat{R}\T \mat{x}_2\right) \label{eq:handpos_def_omega_dot_CL} \\
+            & \quad - \left(\Bar{\dm{\handl}}\dm{\handl}\T\right) \left(\mathcal{D}_{\bs{\omega}}(\vel) + \mat{M}_{22}^{\prime}\left(Wz_{gb} \mat{e}_3 \times \mat{R}\T \mat{e}_3\right)\right), \nonumber
     \end{align} \label{eq:handpos_def_hand_position_dynamics}
 \end{subequations}
 
-\noindent where $\Bar{\handl} = \inlinevector{1/h, 0, 0}$.
+\noindent where $\Bar{\dm{\handl}} = \inlinevector{1/h, 0, 0}$.
 Note that \eqref{eq:handpos_def_x_1_dot_transformed} and \eqref{eq:handpos_def_x_2_dot_transformed} form a double integrator with a constant disturbance caused by the ocean current.
 
 \subsection{Hand Position-Based Controller}
@@ -264,7 +264,7 @@ From \eqref{eq:handpos_def_omega_dot_CL}, we get
 \end{align}
 Note that the linear velocities of the vehicle can be expressed in terms of the external dynamics as
 \begin{equation}
-    \bvel_r = \mat{R}\T \left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \handl. \label{eq:handpos_def_nu_r_transformed}
+    \bvel_r = \mat{R}\T \left(\tilde{\bs{\xi}}_2 + \bs{\xi}_{2, d} - \ocean\right) - \bs{\omega} \times \dm{\handl}. \label{eq:handpos_def_nu_r_transformed}
 \end{equation}
 Let us define
 \begin{equation}
@@ -357,6 +357,7 @@ The remaining coefficients are shown in Appendix~\ref{app:V_omega_dot}.
     The angular rate dynamics are thus ultimately bounded.        
 \end{proof}
 
+\da{
 In the remainder of the chapter, we provide an interpretation of the results of Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
 Specifically, we analyze the condition $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, and compare it to our intuition.
 
@@ -385,7 +386,7 @@ In the figure, we show that if the lateral acceleration of the hand position poi
 Consequently, a greater hand length results in smaller angular velocities.
 
 Finally, the variables $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the term $\abs{a_{xyz}\LBomega}$.
-This term represents the cross-coupling between the roll dynamics and the sway and heave dynamics of the vehicle.
+This term represents the cross-coupling between the roll dynamics and the sway and heave dynamics of the vehicle.}
 \begin{figure}[h]
     \centering
     \begin{subfigure}{0.45\textwidth}    
@@ -404,5 +405,5 @@ This term represents the cross-coupling between the roll dynamics and the sway a
     \end{subfigure}
     \caption{Illustrations of the hand position concept.}
 \end{figure}
-Note that the Lyapunov analysis in the proof is conservative and always considers the worst-case scenario.
-Consequently, we assume that the cross-coupling has a destabilizing effect.
+\dt{Note that the Lyapunov analysis in the proof is conservative and always considers the worst-case scenario.
+Consequently, we assume that the cross-coupling has a destabilizing effect.}
