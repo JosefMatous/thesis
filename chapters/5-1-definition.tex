@@ -367,7 +367,7 @@ In a typical pendulum, the pivot is fixed and the weight is affected by gravity.
 In the case of the hand position, the pivot moves and drags the weight through a resistive medium.
 The resulting hydrodynamic forces have a similar effect on the vehicle as gravity would have on the pendulum.
 
-Using the pendulum analogy, let us investigate the variables $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ defined in \eqref{eq:handpos_def_a_bounds}.
+Using the pendulum analogy, let us investigate the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ defined in \eqref{eq:handpos_def_a_bounds}.
 We can see that these variables depend on the physical parameters of the vehicle, the hand length $h$, and the steady-state trajectory.
 
 First, let us investigate the terms $a_y$ and $a_z$.
@@ -375,17 +375,18 @@ These terms correspond to hydrodynamic damping in sway and heave.
 These terms have a stabilizing effect, meaning that angular rate dynamics are ultimately bounded if $a_y$ and $a_z$ are sufficiently large.
 This fact is consistent with our pendulum analogy, since hydrodynamic forces have a dampening effect on the ``swinging'' motion of the \gls{auv}.
 
-Next, the variables $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the norm of the steady-state trajectory, $\LBnu$.
+Next, the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the norm of the steady-state velocity, $\LBnu$.
 We can see that the norm has a destabilizing effect, meaning that the angular rates may grow unboundedly if $\LBnu$ is too large.
-Oncea again, this fact is consistent with our pendulum analogy, since dragging the pendulum at a high speed is likely to result in large oscillations.
+Once again, this fact is consistent with our pendulum analogy, since dragging the pendulum at a high speed is likely to result in large oscillations.
 
 Next, we investigate the effect of the hand length $h$.
 We can see that $h$ has a stabilizing effect, since it divides the destabilizing term $\LBnu$.
 The intuition behind this effect is illustrated in \figref{fig:handpos_def_lever}.
+A greater hand length gives us more ``leverage''.
 In the figure, we show that if the lateral acceleration of the hand position point is $\mu$, then the angular acceleration of the vehicle must be $\tau = \frac{\mu}{h}$.
 Consequently, a greater hand length results in smaller angular velocities.
 
-Finally, the variables $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the term $\abs{a_{xyz}\LBomega}$.
+Finally, the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the term $\abs{a_{xyz}\LBomega}$.
 This term represents the cross-coupling between the roll dynamics and the sway and heave dynamics of the vehicle.}
 \begin{figure}[h]
     \centering
