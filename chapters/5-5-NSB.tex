@@ -59,10 +59,10 @@ where $\mathbf{N}_{\dm{m}}$ is the null space projector of the task, guarantees 
 Similarly to first-order \gls{nsb} methods, we can combine the tasks by projecting the inputs from the lower-priority tasks onto the null space of the higher-priority tasks.
 The desired acceleration is then given by
 \begin{equation}
-    \bm{\mu} = \dot{\ivel}_1 + \sum_{\dm{m}=2}^N \bar{\mathbf{N}}_{\dm{m}-1}\dot{\ivel}_{\dm{m}},
+    \bm{\mu} = \dot{\ivel}_1 + \sum_{\dm{m}=2}^{\dm{M}} \bar{\mathbf{N}}_{\dm{m}-1}\dot{\ivel}_{\dm{m}},
     \label{eq:NSB_double}
 \end{equation}
-where $\bar{\mathbf{N}}_{\dm{m}}$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
+where \da{$M$ is the number of tasks and} $\bar{\mathbf{N}}_m$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
 With this choice of acceleration, the highest priority task is always fulfilled, whereas the lower priority tasks are fulfilled as well as possible in the subspace that does not conflict with higher priority tasks.
 
 \subsection{Stability Analysis}
