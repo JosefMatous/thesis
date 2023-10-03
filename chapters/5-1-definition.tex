@@ -219,6 +219,7 @@ Let us define
 \begin{align}
     a_x &= \frac{d_{44}}{m_{44}}, &
     b_x &= \frac{Wz_{gb}}{m_{44}},
+    \label{eq:handpos_def_a_x_b_x}
 \end{align}
 and prove the following proposition:
 
@@ -297,8 +298,8 @@ The remaining coefficients are shown in Appendix~\ref{app:V_omega_dot}.
         \begin{align}
             \LBomega &= b_x / a_x, \qquad
             \LBnu = \max_{t \in \mathbb{R}_{\geq 0}}\norm{\bs{\xi}_{2, d}(t) - \ocean}, \\
-            \Bar{\alpha}_y &= a_y - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ye}\LBnu}\right), \\
-            \Bar{\alpha}_z &= a_z - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ze}\LBnu}\right).
+            \Bar{\alpha}_y &= a_y - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ye}\LBnu}\right), \label{eq:handpos_def_a_y_bounds} \\
+            \Bar{\alpha}_z &= a_z - \left(\frac{1}{h}\,\LBnu + \frac{1}{2}\abs{a_{xyz}\LBomega} + \abs{a_{ze}\LBnu}\right). \label{eq:handpos_def_a_z_bounds}
         \end{align} \label{eq:handpos_def_a_bounds}
     \end{subequations}
 
@@ -358,37 +359,33 @@ The remaining coefficients are shown in Appendix~\ref{app:V_omega_dot}.
 \end{proof}
 
 \da{
-In the remainder of the chapter, we provide an interpretation of the results of Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
-Specifically, we analyze the condition $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, and compare it to our intuition.
+In Lemma~\ref{lemma:handpos_def_ultimate_boundedness}, we derived the sufficient conditions for ultimate boundedness of a hand position-based controller.
+In the remainder of the chapter, we provide an interpretation of the condition $a_x, \Bar{\alpha}_y, \Bar{\alpha}_z > 0$, and compare it to our intuition.
 
+First, we analyze the term $a_x$.
+This term represents the effects of hydrodynamic damping on the roll rate of the vehicle.
+Based on the definition \eqref{eq:handpos_def_a_x_b_x} and the fact that the inertia and damping matrices $\mat{M}$ and $\mat{D}$ are positive definite (\emph{c.f.,} Section~\ref{sec:background_model_dynamics}), the term $a_x$ must be positive.
+
+Next, we analyze the terms $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ defined in \eqref{eq:handpos_def_a_bounds}.
 First, we remark that there are some similarities between the hand position concept and a three-dimensional pendulum.
 In \figref{fig:handpos_def_pendulum}, we illustrate that the hand position point can be understood as a pivot, and the \gls{auv} can be understood as the weight of the pendulum.
-In a typical pendulum, the pivot is fixed and the weight is affected by gravity.
+In a typical pendulum, the pivot is fixed, and the weight is affected by gravity.
 In the case of the hand position, the pivot moves and drags the weight through a resistive medium.
 The resulting hydrodynamic forces have a similar effect on the vehicle as gravity would have on the pendulum.
 
-Using the pendulum analogy, let us investigate the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ defined in \eqref{eq:handpos_def_a_bounds}.
-We can see that these variables depend on the physical parameters of the vehicle, the hand length $h$, and the steady-state trajectory.
+Using the pendulum analogy, let us analyze the terms $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$.
+We can see that these terms depend on the physical parameters of the vehicle (\emph{i.e.,} the terms $a_x$, $a_y$, $a_{xyz}$, $a_{ye}$, and $a_{ze}$), the hand length $h$, and the steady-state trajectory, represented by the term $\LBnu$.
 
 First, let us investigate the terms $a_y$ and $a_z$.
-These terms correspond to hydrodynamic damping in sway and heave.
-These terms have a stabilizing effect, meaning that angular rate dynamics are ultimately bounded if $a_y$ and $a_z$ are sufficiently large.
+These terms represent the effects of hydrodynamic damping on the sway and heave velocities.
+These terms have a stabilizing effect, meaning that the angular rate dynamics are ultimately bounded if $a_y$ and $a_z$ are sufficiently large.
 This fact is consistent with our pendulum analogy, since hydrodynamic forces have a dampening effect on the ``swinging'' motion of the \gls{auv}.
 
-Next, the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the norm of the steady-state velocity, $\LBnu$.
-We can see that the norm has a destabilizing effect, meaning that the angular rates may grow unboundedly if $\LBnu$ is too large.
+Next, the terms $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the norm of the steady-state velocity, $\LBnu$.
+We can see that $\LBnu$ has a destabilizing effect, meaning that the angular rates may grow unboundedly if $\LBnu$ is too large.
 Once again, this fact is consistent with our pendulum analogy, since dragging the pendulum at a high speed is likely to result in large oscillations.
-
-Next, we investigate the effect of the hand length $h$.
-We can see that $h$ has a stabilizing effect, since it divides the destabilizing term $\LBnu$.
-The intuition behind this effect is illustrated in \figref{fig:handpos_def_lever}.
-A greater hand length gives us more ``leverage''.
-In the figure, we show that if the lateral acceleration of the hand position point is $\mu$, then the angular acceleration of the vehicle must be $\tau = \frac{\mu}{h}$.
-Consequently, a greater hand length results in smaller angular velocities.
-
-Finally, the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the term $\abs{a_{xyz}\LBomega}$.
-This term represents the cross-coupling between the roll dynamics and the sway and heave dynamics of the vehicle.}
-\begin{figure}[h]
+In \eqref{eq:handpos_def_a_y_bounds} and \eqref{eq:handpos_def_a_z_bounds}, $\LBnu$ is multiplied by the terms $a_{ye}$ and $a_{ze}$, respectively.}
+\begin{figure}[hb]
     \centering
     \begin{subfigure}{0.45\textwidth}    
         \centering
@@ -406,5 +403,21 @@ This term represents the cross-coupling between the roll dynamics and the sway a
     \end{subfigure}
     \caption{Illustrations of the hand position concept.}
 \end{figure}
-\dt{Note that the Lyapunov analysis in the proof is conservative and always considers the worst-case scenario.
-Consequently, we assume that the cross-coupling has a destabilizing effect.}
+\da{
+These terms represent the cross-coupling between the surge dynamics and the sway and heave dynamics of the vehicle.
+Note that the Lyapunov analysis in the proof is conservative and always considers the worst-case scenario.
+Consequently, we assume that the cross-coupling terms have a destabilizing effect.
+
+Next, we investigate the effect of the hand length $h$.
+We can see that $h$ has a stabilizing effect, since it divides the destabilizing term $\LBnu$.
+The intuition behind this effect is illustrated in \figref{fig:handpos_def_lever}.
+A greater hand length gives us more ``leverage''.
+In the figure, we show that if the lateral acceleration of the hand position point is $\mu$, then the angular acceleration of the vehicle must be $\tau = \frac{\mu}{h}$.
+Consequently, a greater hand length results in smaller angular velocities.
+
+Finally, the constants $\Bar{\alpha}_y$ and $\Bar{\alpha}_z$ depend on the term $\abs{a_{xyz}\LBomega}$.
+This term represents the cross-coupling between the roll dynamics and the sway and heave dynamics of the vehicle.
+Once again, due to the conservative nature of the underlying Lyapunov analysis, we assume that the cross-coupling has a destabilizing effect.
+
+To summarize, when we design a hand position-based controller, we must ensure that the hand length $h$ is sufficiently large and the steady-state velocity $\LBnu$ is sufficiently small to satisfy the requirements of Lemma~\ref{lemma:handpos_def_ultimate_boundedness}.
+Otherwise, the angular rate dynamics may become unbounded.}
