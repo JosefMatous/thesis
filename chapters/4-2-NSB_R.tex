@@ -1,9 +1,9 @@
 \chapter{Formation Path-Following Control of 6DOF Underactuated AUVs}
 \label{chap:NSB_R}
 
-This chapter presents a method for formation path following control of a fleet of underactuated autonomous underwater vehicles.
+This chapter presents a method for formation path-following control of a fleet of underactuated autonomous underwater vehicles.
 The proposed method combines several hierarchic tasks in a \acrlong{nsb} algorithm to safely guide the vehicles.
-Compared to the existing literature, the algorithm includes both inter-vehicle and obstacle collision avoidance, and employs a scheme that keeps the vehicles within given operation limits.
+Compared to the previous chapter, the algorithm includes both inter-vehicle and obstacle collision avoidance, and employs a scheme that keeps the vehicles within given operation limits.
 The algorithm is applied to a six degree-of-freedom model, using rotation matrices to describe the attitude to avoid singularities.
 Using the results of cascaded systems theory, we prove that the closed-loop system is \acrlongpl{usges}.
 We use numerical simulations to validate the results.
@@ -73,7 +73,7 @@ Recalling \eqref{eq:background_component_form}, the underactuated dynamics have 
 \end{subequations}
 where $X(\cdot), Y(\cdot), Z(\cdot)$ are affine functions of the respective variables.
 
-\subsection{Formation Path Following Problem}
+\subsection{Formation Path-Following Problem}
 \label{sec:NSB_R_objectives}
 
 Similarly to the previous chapter, the goal is to control a fleet of $N$ \glspl{auv} so that they move in a prescribed formation and their barycenter follows a given path.
@@ -107,7 +107,7 @@ avoid collisions with other vehicles and obstacles, and remain within a given ra
 An upper limit on the depth of the \glspl{auv} is needed to prevent them from colliding with the seabed or exceeding their depth rating.
 A lower limit is needed in busy environments (\emph{e.g.,} harbors), where the \glspl{auv} may otherwise collide or interfere with surface vessels.
 
-To solve the formation path following problem, we propose a method that combines inter-vehicle \acrfull{colav}, formation keeping, \acrfull{los} path following, obstacle avoidance, and depth limiting in a hierarchic manner using an \gls{nsb} algorithm.
+To solve the formation path-following problem, we propose a method that combines inter-vehicle \acrfull{colav}, formation keeping, \acrfull{los} path following, obstacle avoidance, and depth limiting in a hierarchic manner using an \gls{nsb} algorithm.
 Similarly to Chapter~\ref{chap:5dof_nsb}, the proposed algorithm is centralized, meaning that to implement it in a real-life scenario, we require a central node that can communicate and coordinate with the \glspl{auv}.
 Since the \gls{nsb} algorithm outputs inertial velocity references, we also need a method for converting these to surge and orientation.
 

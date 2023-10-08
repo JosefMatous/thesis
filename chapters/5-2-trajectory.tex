@@ -295,7 +295,7 @@ The components of $\mat{J}_{\bs{\xi}_2}$, $\mat{J}_{\bs{\omega}}$, and $\mat{J}_
             \mat{J}_{21} & \mat{J}_{22}
         \end{bmatrix}.
     \end{equation}
-    Due to its block triangular structure, the eigenvalues of $J$ are equal to the union of eigenvalues of $\mat{H}_{\xi}$ and $\mat{J}_{22}$.
+    Due to its block triangular structure, the eigenvalues of $\mathbf{J}$ are equal to the union of eigenvalues of $\mat{H}_{\xi}$ and $\mat{J}_{22}$.
     Note that $\mat{H}_{\xi}$ is Hurwitz by design.
     Furthermore, the eigenvalues of $\mat{J}_{22}$, $\lambda_1, \ldots, \lambda_6$ are given by
     \begin{subequations}
@@ -624,8 +624,8 @@ After the transient period, $\dot{s}$ converges to $U_d$.
 
 Since the vehicle model and parameters of the controller are identical for both simulations, the results of these simulations are very similar.
 The main difference between the proposed controllers is that in path following, one has an additional ``degree of freedom'' when choosing the path parameter, while in trajectory tracking, the trajectory is parametrized in time and thus fixed.
-In \cite{aguiar_trajectory_tracking_2007}, it is argued that the control signals of path following controllers are smoother and have a lower peak value than in the case of trajectory tracking controllers.
-This fact is confirmed by the simulations, as the peak value of the control input $\bs{\mu}$ is $\SI{0.1}{\meter\per\second\squared}$ lower, and the surge velocity $u_r$ is $\SI{0.2}{\meter\per\second}$ lower in the path following simulation.
+In \cite{aguiar_trajectory_tracking_2007}, it is argued that the control signals of path-following controllers are smoother and have a lower peak value than in the case of trajectory-tracking controllers.
+This fact is confirmed by the simulations, as the peak value of the control input $\bs{\mu}$ is $\SI{0.1}{\meter\per\second\squared}$ lower, and the surge velocity $u_r$ is $\SI{0.2}{\meter\per\second}$ lower in the path-following simulation.
 
 \subsection{Straight-Line Path Following}
 \label{sec:handpos_trajectory_simulation_waypoints}

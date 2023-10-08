@@ -17,7 +17,7 @@ Finally, Section~\ref{sec:MPC_case_studies} presents two numerical case studies.
 \label{sec:MPC_problem-description}
 
 In this section, we first introduce the assumptions on the model of the vehicles.
-Then, we define the objective of formation path-following and pose it as an optimization problem.
+Then, we define the objective of formation path following and pose it as an optimization problem.
 
 
 
@@ -148,7 +148,7 @@ Thanks to \eqref{eq:MPC_phi_q}, we can express $\widetilde{\mat{q}}_i(t)$ in ter
 \begin{equation}
     \widetilde{\mat{q}}_i(t)
     =
-    \bm{\phi}_{\mat{q}}\left(\mat{y}^{(-r'')}(t), \ldots, \mat{y}^{(r')}(t)\right)
+    \bm{\phi}_{\mat{q}}\left(\mat{y}_i^{(-r'')}(t), \ldots, \mat{y}_i^{(r')}(t)\right)
     -
     \mat{q}_{d,i} \big( s(t) \big), \label{eq:MPC_y_tilde}
 \end{equation}
@@ -186,7 +186,7 @@ We note that the variational problem above may not be solvable using off-the-she
 
 To make the centralized approach from the previous section distributed, we assume \emph{synchronous bidirectional reliable} communication.
 In other words, we assume that all vehicles exchange information simultaneously and there are no packet losses.
-Bidirectional communication implies that the communication network can be described by an undirected graph $\mathcal{G} = \left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V} = \left\{1, \ldots, N\right\}$ correspond to the agents, and $\mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ represents the communication between pairs of agents. We further assume that $\mathcal{G}$ is connected.
+Bidirectional communication implies that the communication network can be described by an undirected graph $\mathcal{G} = \left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V} = \left\{1, \ldots, N\right\}$ correspond to the agents, and $\mathcal{E} \subset \mathcal{V} \times \mathcal{V}$ represents the communication between pairs of agents. We further assume that $\mathcal{G}$ is connected.
 Similarly to Chapter~\ref{chap:distr_NSB}, we denote the set of neighbors of agent $i$ as $\mathcal{N}_i$.
 
 Before doing the rewriting, we note that it is possible to make \eqref{eq:MPC_optimization_centralized} distributed by letting the path parameter $s(t)$ be a local variable (\emph{i.e.}, $s_i(t)$), and adding a synchronization constraint on the set of $s_i(t)$'s. This leads to the local reformulation
@@ -231,7 +231,7 @@ For the sake of readability, we will use the convention for which sans-serif fon
 
 
 
-Let $\coefm{b} = \inlinevector{\coef{b}_1, \ldots, \coef{b}_n}$ be the vector of basis functions of a B-spline, and let $\coefm{y}_i = \inlinevector{\coefm{y}_{i,1}\T, \ldots, \coefm{y}_{i,n}\T}$ be a generic matrix and $\coefm{s}_i = \inlinevector{\coef{s}_{i,1}, \ldots, \coef{s}_{i,n}}$ a generic vector of spline coefficients. Assume then that the trajectories and path parameters may be expressed as B-splines, i.e., as
+Let $\coefm{b} = \inlinevector{\coef{b}_1, \ldots, \coef{b}_n}$ be the vector of basis functions of a B-spline, and let $\coefm{y}_i = \inlinevector{\coefm{y}_{i,1}\T, \ldots, \coefm{y}_{i,n}\T}$ be a generic matrix and $\coefm{s}_i = \inlinevector{\coef{s}_{i,1}, \ldots, \coef{s}_{i,n}}$ a generic vector of spline coefficients. Assume then that the trajectories and path parameters may be expressed as B-splines, \emph{i.e.,} as
 %
 \begin{align}
     \mat{y}_i(\tau) &= \sum_{l=1}^n \coefm{y}_{i,l}\,\coef{b}_l(\tau) = \coefm{y}_i\T\,\coefm{b}(\tau), \\

@@ -63,7 +63,7 @@ The desired acceleration is then given by
     \label{eq:NSB_double}
 \end{equation}
 where $M$ is the number of tasks and $\bar{\mathbf{N}}_m$ is the null space projector of the augmented Jacobian \eqref{eq:background_NSB_augmented}.
-With this choice of acceleration, the highest priority task is always fulfilled, whereas the lower priority tasks are fulfilled as well as possible in the subspace that does not conflict with higher priority tasks.
+With this choice of acceleration, the highest-priority task is always fulfilled, whereas the lower-priority tasks are fulfilled as well as possible in the subspace that does not conflict with higher-priority tasks.
 
 \subsection{Stability Analysis}
 In this section, we investigate the stability of an \gls{nsb} algorithm consisting of two tasks.
@@ -129,7 +129,7 @@ The formation path-following problem considered in this chapter is analogous to 
 We consider a fleet of $N$ \glspl{auv} and define the stacked position and velocity vectors $\mathbf{x}_1 = [\mathbf{x}_{1,1}\T, \, \ldots,\, \mathbf{x}_{1,N}\T]\T$ and $\mathbf{x}_2 = [\mathbf{x}_{2,1}\T, \, \ldots,\, \mathbf{x}_{2,N}\T]\T$, respectively. We also define the stacked ocean current vector $\stackedocean = \mathbf{1}_{N} \otimes \ocean$.
 
 The desired path is parametrized by a smooth function $\mathbf{p}_p : \mathbb{R} \mapsto \mathbb{R}^3$ that is assumed to be $\mathcal{C}^\infty$ and regular.
-For every point $\mathbf{p}_p(s)$, there exists a path-tangential coordinate-frame with a corresponding rotation matrix $\mathbf{R}_p$ (see Section~\ref{sec:background_paths}). 
+For every point $\mathbf{p}_p(s)$, there exists a path-tangential coordinate frame with a corresponding rotation matrix $\mathbf{R}_p$ (see Section~\ref{sec:background_paths}). 
 The path-following error $\mathbf{p}_b^p$ is defined in terms of the barycenter of the fleet in the path-tangential coordinate frame
 \begin{equation}
     \mathbf{p}_b^p = \mathbf{R}_p\T\left(\mathbf{p}_b - \mathbf{p}_p(s)\right), \quad \mathbf{p}_b = \frac{1}{N}\sum_{i=1}^N \mathbf{x}_{1,i}.
@@ -150,7 +150,7 @@ We let the control system consist of three tasks in decreasing order of priority
 
 \subsubsection{Inter-Vehicle Collision Avoidance}
 
-The highest priority task is inter-vehicle \acrfull{colav}. The task variable is given by a stacked vector $\bm{\sigma}_1 = [\sigma_{1,1}\T, \ldots, \sigma_{1,l}\T]\T$ of relative distances between vehicles closer than the activation distance $d_{COLAV}$:
+The highest-priority task is inter-vehicle \acrfull{colav}. The task variable is given by a stacked vector $\bm{\sigma}_1 = [\sigma_{1,1}\T, \ldots, \sigma_{1,l}\T]\T$ of relative distances between vehicles closer than the activation distance $d_{COLAV}$:
 \begin{equation}
 \begin{split}
     \sigma_{1,k} = \|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|, \quad &\forall i,j \in \{1, \ldots, N\}: j > i,\\
@@ -358,7 +358,7 @@ and the closed-loop properties of each task can thus be analyzed separately.
 
 % Prove external state stability
 \subsubsection{Stability of the Formation-Keeping Task}
-The closed-loop dynamics of the formation-task error $\Tilde{\bm{\sigma}}_2$ under the saturated formation-keeping acceleration, \eqref{eq:saturated_formation_keeping}, are given by the system
+The closed-loop dynamics of the formation-keeping error $\Tilde{\bm{\sigma}}_2$ under the saturated formation-keeping acceleration, \eqref{eq:saturated_formation_keeping}, are given by the system
 \begin{equation}\label{eq:task_2_dynamics}
     \ddot{\Tilde{\bm{\sigma}}}_2 = - v_{2_{\max}}\mathrm{sat}\bigl(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_2\bigr) - \mathbf{\Lambda}_{d,2} \dot{\Tilde{\bm{\sigma}}}_2.
 \end{equation}
@@ -374,7 +374,7 @@ Let $\mathbf{\Lambda}_{p,2}, \, \mathbf{\Lambda}_{d,2}$ be two symmetric positiv
   V(\Tilde{\bm{\sigma}}_2, \dot{\Tilde{\bm{\sigma}}}_2) \!=\! v_{2,\max}\log\left(\cosh{\|\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\|}\right) + \frac{1}{2}\dot{\Tilde{\bm{\sigma}}}_2\T\mathbf{\Lambda}_{p,2}\dot{\Tilde{\bm{\sigma}}}_2.
   %\end{split}
 \end{equation}
-Inserting for \eqref{eq:task_2_dynamics}, the time-derivative is given by
+Substituting \eqref{eq:task_2_dynamics}, the time-derivative of $V$ is given by
 \begin{align}
 %\begin{split}
     \dot{V} &= v_{2,\max}\mathrm{sat}\left(\mathbf{\Lambda}_{p,2}\Tilde{\bm{\sigma}}_{2}\right)\T \mathbf{\Lambda}_{p,2} \dot{\Tilde{\bm{\sigma}}}_2 
@@ -426,12 +426,12 @@ The second assumption \eqref{eq:background_USGES_cascade_assumption_2} holds wit
 \subsubsection{Boundedness of Internal States}
 Let $\mathbf{p}_{{\rm d}, i} = \mathbf{p}_p(s) + \mathbf{R}_p\mathbf{p}_{f, i}^f$ denote the desired position of vehicle $i$. Note that because the path function is $\mathcal{C}^{\infty}$ and thanks to the choice of the path parameter update law \eqref{eq:path_update}, the time-derivative of $\mathbf{p}_{{\rm d}, i}$ is bounded.
 In the previous section, we proved the stability of the external dynamics.
-Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$ converges to $\mathbf{p}_{{\rm d}, i}$, and the relative hand velocity of vehicle $i$, $\mat{x}_{2, i}$, converges to $\dot{\mathbf{p}}_{{\rm d}, i} - \ocean$.
+Consequently, the hand position of vehicle $i$, $\mat{x}_{1, i}$, converges to $\mathbf{p}_{{\rm d}, i}$, and the relative hand velocity of vehicle $i$, $\mat{x}_{2, i}$, converges to $\dot{\mathbf{p}}_{{\rm d}, i} - \ocean$.
 
 \begin{prop}
     \label{prop:angular_velocities}
     Let us define $\mat{x}_{2, d, i} = \dot{\mathbf{p}}_{{\rm d}, i} - \ocean$, and $a_{x, i}$, $\Bar{\alpha}_{y, i}$, and $\Bar{\alpha}_{z, i}$ for each vehicle $i = 1, \ldots, N$ in accordance with \eqref{eq:handpos_def_a_bounds}.
-    The internal dynamics of the vehicles are ultimately bounded if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, n\}$.
+    The internal dynamics of the vehicles are ultimately bounded if $a_{x, i}, \Bar{\alpha}_{y, i}, \Bar{\alpha}_{z, i} > 0$ for all $i \in \{1, \ldots, N\}$.
 \end{prop}
 
 \begin{proof}
@@ -503,11 +503,11 @@ The barycenter relative formation is given by
 \begin{equation}
     \mathbf{p}_{f,1}^f = \begin{bmatrix}0 \\ 10 \\ 5\end{bmatrix}, \quad \mathbf{p}_{f,2}^f = \begin{bmatrix}0 \\ -10 \\ 5\end{bmatrix},\quad \mathbf{p}_{f,3}^f = \begin{bmatrix}0 \\ 0 \\ -10\end{bmatrix},
 \end{equation}
-and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$ both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $\mathbf{r}_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
+and we want the collision avoidance task to ensure a safe distance of $\SI{10}{\meter}$, both between vehicles in the fleet and external obstacles. Therefore, the avoidance radius of the cylinder, $r_o$, is $\SI{20}{\meter}$. The vehicles are subject to an ocean current 
 \begin{equation}
     \ocean = \begin{bmatrix}
         0 & 0.25 & 0.05
     \end{bmatrix}\T \,\mathrm{m/s}.
 \end{equation}
 
-The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10 \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10 \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{{\rm LOS}, d}$ and $\dot{\mathbf{v}}_{{\rm LOS}, d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.
+The resulting trajectory of the mission is shown in \figref{fig:3d_plot}. The vehicles avoid the obstacle with a margin and return to the desired path. \figref{fig:angular_velocities} shows that the angular velocities remain bounded, in accordance with Proposition~\ref{prop:angular_velocities}. \figref{fig:formation_keeping_error} shows that the fleet converges to the desired formation while the obstacle avoidance mode is active. Except for during the inter-vehicle collision avoidance, the convergence seems linear, which can be expected because the task velocity is saturated by $v_{2,\max}$. \figref{fig:collision_avoidance} shows that the inter-vehicle \gls{colav} task activates when the distance between vehicles is below $d_{COLAV}$, and the distance does not decrease further. Because the obstacle avoidance radius $r_o$ was chosen $10\, \mathrm{m}$ wider than the obstacle, the obstacle is avoided with a $10\, \mathrm{m}$ margin. \figref{fig:path_following_error} shows that the path-following error initially increases as the fleet avoids the obstacle because the $x$- and $y$-components of $\mathbf{v}_{{\rm LOS}, d}$ and $\dot{\mathbf{v}}_{{\rm LOS}, d}$ are replaced with $\mathbf{v}_{OA,d}$ and $\dot{\mathbf{v}}_{OA,d}$ given by \eqref{eq:v_OA}, \eqref{eq:v_OA_dot}. As expected from Theorem~\ref{theorem:path_error}, the error converges to zero after the obstacle is passed when the LOS task is activated again.

@@ -38,7 +38,7 @@ Recalling \eqref{eq:handpos_def_hand_position_dynamics}, the dynamics of the tra
 
 We consider a multi-agent system composed of $N$ marine vehicles modeled by \eqref{eq:handpos_tracking_hand_position_dynamics}.
 The states of the vehicles are denoted by double subscripts (\emph{e.g.,} the hand position of vehicle $i$ is $\mat{x}_{1, i}$).
-The interaction between the \glspl{auv} is given by a directed graph $\mathcal{G}=(\mathcal{V},\mathcal{E})$ which is either a spanning tree or a cycle.
+The interaction between the \glspl{auv} is given by a directed graph $\mathcal{G}=(\mathcal{V},\mathcal{E})$ which has either a spanning tree or a cycle.
 Moreover, we consider that the multi-agent system is subject to inter-agent output constraints.
 For one part, these constraints may come from embedded relative-measurements devices, which are reliable only if used within a limited range. Hence, the vehicles must remain within a limited distance from their neighbors in order to maintain the connectivity of the graph.
 Furthermore, to ensure the safety of the system, the agents must avoid collisions among themselves, that is, they must always guarantee a minimal distance with respect to their neighbors.
@@ -52,7 +52,7 @@ where $M$ is the cardinality of $\mathcal{E}$.
 For each $k\leq M$, let $\delta_k$ and ${\Delta_k}$ be, the minimal and maximal distances between agents $i$ and $j$ so that collisions are avoided and that the communication through edge $e_k$ is reliable, respectively.
 Then, the set of inter-agent output constraints is defined as
 \begin{equation}
-\label{eq:setDk} \mathcal D_k = \big\{\mat{z}_{1k}\in\mathbb{R}^{3}:\delta_k<\norm{\mat{z}_{1k}}<{\Delta_k}\big\},\quad \forall\, k\leq M.
+\label{eq:setDk} \mathcal D_k = \big\{\mat{z}_{1k}\in\mathbb{R}^{3} \,|\, \delta_k<\norm{\mat{z}_{1k}}<{\Delta_k}\big\},\quad \forall\, k\leq M.
 \end{equation}
 
 Coming back to each individual agent, it is important to note that, in practice, marine vehicles are not optimized for moving backwards. However, backwards motion is not prevented from the dynamical model \eqref{eq:handpos_tracking_hand_position_dynamics}.
@@ -70,7 +70,7 @@ We formulate these soft constraints as follows:
 \end{equation}
 where $\rho_i:\mathbb{R}_{\geq 0}\to\mathbb{R}_{\geq 0}$ will be defined later, such that $\rho_i(t)\approxeq0$ when there are no conflicts with the hard constraints and $\rho_i(t)>0$ otherwise, allowing $u_{r, i}(t)$ to become negative. Akin to \eqref{eq:setDk}, we may define the set of soft constraints as
 \begin{equation}
-\label{eq:setC} \mathcal{C}_i = \big\{u_{r, i}\in\mathbb{R}:u_{r, i}>-\rho_i(t)\big\},\quad \forall\, i\leq N.
+\label{eq:setC} \mathcal{C}_i = \big\{u_{r, i}\in\mathbb{R} \,|\, u_{r, i}>-\rho_i(t)\big\},\quad \forall\, i\leq N.
 \end{equation}
 
 Now, let $\mat{x}_{1, o}$, $\mat{x}_{2, o}$, and $\bs{\mu}_o$ define the position, velocity, and acceleration of a virtual target, and let its dynamics be modeled as a second-order integrator
@@ -145,14 +145,14 @@ Then, using \eqref{n209} and denoting $\mat{z}_{1, t}^d\in\mathbb{R}^{n(N-1)}$ a
 In these coordinates, the control objective as defined in \eqref{n194} is achieved if the origin of system \eqref{n216} is asymptotically stabilized.
 More precisely, we consider the following problem. 
 
-{\it Tracking-in-formation under hard and soft constraints:} Consider a system of $N$ autonomous marine vehicles with dynamics given by \eqref{eq:handpos_tracking_hand_position_dynamics}, interacting over a directed graph which is either a spanning tree or a cycle.
+{\it Tracking-in-formation under hard and soft constraints:} Consider a system of $N$ autonomous marine vehicles with dynamics given by \eqref{eq:handpos_tracking_hand_position_dynamics}, interacting over a directed graph which has either a spanning tree or a cycle.
 Assume, in addition, that the agents are subject to the hard inter-agent output constraints given by the set defined in \eqref{eq:setDk} and the soft constraints given by \eqref{eq:setC}.
 Under these conditions, find distributed controllers $\bs{\mu}_i$, $i\leq N$, that asymptotically stabilize the origin of \eqref{n216} and render the sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant, \emph{i.e.}, $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ ($u_{r, i}(t_0)\in\mathcal{C}_i$) implies that $\mat{z}_{1, k}(t)\in \mathcal{D}_k$ ($u_{r, i}(t)\in\mathcal{C}_i$), $\forall k\leq M$ ($\forall i\leq N$) and $\forall t\geq t_0$.
 
-\section{Control Design for Tracking under Proximity and Safety Constraints}
+\section{Designing a Tracking Controller under Proximity and Safety Constraints}
 \label{sec:ctrl}
 
-For clarity of exposition, in this section we begin by presenting the control design considering \emph{only} the hard constraints, i.e. connectivity maintenance and collision avoidance. The inclusion of the soft constraints is addressed in Section~\ref{sec:soft}.
+For clarity of exposition, in this section we begin by presenting the control design considering \emph{only} the hard constraints, \emph{i.e.,} connectivity maintenance and collision avoidance. The inclusion of the soft constraints is addressed in Section~\ref{sec:soft}.
 
 We will show how the tracking-in-formation problem, with the previously formulated inter-agent constraints, can be solved following a backstepping approach which is well adapted to the normal form of the external dynamics \eqref{n216}. We start by defining a virtual control law for \eqref{n217-t}-\eqref{n217} with $\mat{z}_{2, o}$ and $\mat{z}_{2, t}$ as inputs. 
 In order to account for the output constraints, a good choice of control design for the virtual inputs consists in using the gradient of a \acrfull{blf} \cite{tee_barrier_2009}.
@@ -201,10 +201,10 @@ Now, we define a \gls{blf} for the multi-agent system as
 \begin{equation}\label{512}
 W(\tilde{\mat{z}}_{1})=\sum_{k\leq M} \varrho_k W_k(\tilde{\mat{z}}_{1, k}), \quad \varrho_k>0,
 \end{equation}
-and, in light of Remark~\ref{rmk:V:equilibria}, let $\tilde{\mat{z}}_1^*\in\mathbb{R}^{nM}$ denote the vector containing the saddle points of the \gls{blf} for each edge \eqref{317}.
+and, in light of Remark~\ref{rmk:V:equilibria}, let $\tilde{\mat{z}}_1^*\in\mathbb{R}^{3M}$ denote the vector containing the saddle points of the \gls{blf} for each edge \eqref{317}.
 Moreover, let us define the disjoint set
 \begin{equation}\label{517}
-\mathcal{W}=\{0\}\cup\{\tilde{\mat{z}}_1^*\},
+\mathcal{W}=\{\mathbf{0}\}\cup\{\tilde{\mat{z}}_1^*\},
 \end{equation}
 which corresponds to the critical points of $W$ in \eqref{317}.
 Then, $W$ satisfies
@@ -305,7 +305,7 @@ where
 
 The first part of the main result is stated as follows:
 \begin{prop}\label{thm:USV}
-	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which is either a spanning tree or a cycle.
+	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which has either a spanning tree or a cycle.
 	Then, under Assumption~\ref{hyp:target} and
 	\begin{equation}
 		\gamma\geq\bar\mu^*+\sqrt{2N}\bar\mu_o, \label{590}
@@ -322,7 +322,7 @@ The first part of the main result is stated as follows:
 	\begin{equation}\label{n587}
 	W_1(\bs{\varsigma}_1)=\frac{1}{2}\norm{\tilde{\mat{z}}_{1, o}}^2 + W(\tilde{\mat{z}}_{1, t}),
 	\end{equation}
-	where, with a slight abuse of notation, $\tilde{\mat{z}}_{1, t} \mapsto W(\tilde z_{1t})$ is defined in \eqref{512}.
+	where, with a slight abuse of notation, $\tilde{\mat{z}}_{1, t} \mapsto W(\tilde{\mat{z}}_{1, t})$ is defined in \eqref{512}.
 	The derivative of $W_1$ along the trajectories of \eqref{n560-a} yields
 	\begin{equation}\label{n744}
 	\dot W_1(\bs{\varsigma}_1) =-c_1\bar{\bs{\varsigma}}_1\T\mathcal{L}_1\bar{\bs{\varsigma}}_1+\bar{\bs{\varsigma}}_1\T\bs{\varsigma}_2+\bar{\bs{\varsigma}}_1\T\mathcal{T}_1\tilde{\mat{V}}_c.
@@ -373,7 +373,7 @@ The first part of the main result is stated as follows:
 	Now, let $\mathcal{W}_\varsigma$ be the set of the equilibria of the closed-loop system \eqref{n560}.
 	Recalling Remark~\ref{rmk:V:equilibria}, $\mathcal{W}_\varsigma$ is given by
 	\begin{equation}
-	\mathcal{W}_\varsigma = \{0\}\times\mathcal{W}\times\{0\}\times\{0\}^{2(N-1)}\times\{0\}^{2N}
+	\mathcal{W}_\varsigma = \{\mathbf{0}\}\times\mathcal{W}\times\{\mathbf{0}\}\times\{\mathbf{0}\}^{2(N-1)}\times\{\mathbf{0}\}^{2N}
 	\end{equation}
 	where $\mathcal{W}$ is defined in \eqref{517}. Then, from \eqref{eq:BLF-bounds} we have
 	\begin{equation}\label{n799}\begin{aligned}
@@ -409,7 +409,7 @@ The first part of the main result is stated as follows:
 \section{Control Design for Tracking with Hard and Soft Constraints}
 \label{sec:soft}
 
-In this section we build on the results of Section~\ref{sec:ctrl} to include the soft constraints defined in \eqref{eq:soft} that act on the surge velocity of the marine vehicles.
+In this section, we build on the results of Section~\ref{sec:ctrl} to include the soft constraints defined in \eqref{eq:soft} that act on the surge velocity of the marine vehicles.
 For this purpose we explicitly design the additional control input $f_{u, i}^*$ introduced in Eq. \eqref{417} and we analyze the closed-loop system in terms of the barrier function framework.
 
 %\subsection{Control design for soft-constraints satisfaction}
@@ -449,7 +449,7 @@ Initially, we set $\rho_i(t_0)=0$.
 
 Then, the second part of our main result is stated as follows:
 \begin{prop}\label{thm:USV-2}
-	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which is either a spanning tree or a cycle.
+	Consider $N$ \glspl{auv}, each described by the model \eqref{eq:handpos_tracking_hand_position_dynamics}, and interconnected over a directed graph which has either a spanning tree or a cycle.
 	Then, under the same assumptions as in Proposition~\ref{thm:USV}, and with initial conditions such that $\mat{z}_{1, k}(t_0)\in\mathcal{D}_k$ for all $k\leq M$ and $u_{r, i}(t_0)\in\mathcal{C}_i$ for all $i\leq N$, the controller \eqref{n338}, with $f_{u, i}^*$ given by \eqref{630}, achieves the tracking-in-formation objective \eqref{n194} almost everywhere and renders the constraints sets \eqref{eq:setDk} and \eqref{eq:setC} forward invariant.
 	Moreover, the internal dynamics are ultimately bounded.
 \end{prop}
@@ -567,7 +567,7 @@ The trajectory of the virtual target is
 where $a = 60$, $b = 40$, $c = 10$, and $\omega_o = \frac{\pi}{150}$.
 
 The maximal and minimal distance parameters are $\Delta_k=\SI{50}{\meter}$ and $\delta_k=\SI{5}{\meter}$.
-The hand position point is chosen at $l=\SI{5}{\meter}$, and the control gains are set to $c_1=0.1$, $c_2=0.5$, $\gamma=0.25$, $c_v=0.2$, $\kappa_u=0.1$, $\kappa_\rho=4$, and $\sigma=0.3$.
+The hand position length is chosen as $h=\SI{5}{\meter}$, and the control gains are set to $c_1=0.1$, $c_2=0.5$, $\gamma=0.25$, $c_v=0.2$, $\kappa_u=0.1$, $\kappa_\rho=4$, and $\sigma=0.3$.
 Furthermore, in order to avoid discontinuities in the control, the non-smooth ${\rm sign}(s)$ function in \eqref{n338} and \eqref{631} is replaced by the smooth approximation $\tanh\left(c_a\, s\right)$, with $c_a = 10^3$.
 
 \figref{fig:handpos_tracking_sim} presents the results of the simulation scenario.

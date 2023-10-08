@@ -257,7 +257,7 @@ If we choose
 \end{align}
 the effect of the actuators on the dynamics of $\vel^{\prime}$ is given by
 \begin{equation}
-    {\mat{M}^{\prime}}^{-1}\mat{H}\T\mat{B}\mat{u} =
+    {\mat{M}^{\prime}}^{-1}\mat{H}\T\mat{B}\mat{f} =
     \begin{bmatrix}
         \frac{b_{11}}{m_{11}} T_{u} \\
         0 \\ 
@@ -270,10 +270,10 @@ the effect of the actuators on the dynamics of $\vel^{\prime}$ is given by
 We have thus shown that \eqref{eq:neutral_point_force} is satisfied with
 \begin{subequations}
     \begin{align}
-        t_u &= \frac{b_{11}}{m_{11}} f_{u}, &
-        t_p &= \frac{b_{42}}{m_{44}} t_{p}, \\
-        t_q &= \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} t_{q}, &
-        t_r &= \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} t_{r}.
+        t_u &= \frac{b_{11}}{m_{11}} T_{u}, &
+        t_p &= \frac{b_{42}}{m_{44}} T_{p}, \\
+        t_q &= \frac{\left(b_{53}\,m_{33}-b_{33}\,m_{35}\right)}{m_{33}\,m_{55}-{m_{35}}^2} T_{q}, &
+        t_r &= \frac{\left(b_{64}\,m_{22}-b_{24}\,m_{26}\right)}{m_{22}\,m_{66}-{m_{26}}^2} T_{r}.
     \end{align} 
     \label{eq:tau_upqr}
 \end{subequations}
@@ -319,14 +319,14 @@ Then, the model in the component form is given by
 
 The expressions for $F_u$, $X_v$, $Y_v$, $Z_v$, $X_w$, $Y_w$, $Z_w$, $G$, $F_p$, $F_q$, and $F_r$ are shown in Appendix~\ref{app:component_form}.
 Note that $\dot{u}_r$, $\dot{p}$, $\dot{q}$, and $\dot{r}$ depend on the control inputs.
-Consequently, it is possible to stabilize these states using output feedback linearization.
+Consequently, it is possible to stabilize these states using feedback control.
 The states $v$ and $w$ are commonly referred to as the \emph{underactuated} dynamics of the vehicle, as these states cannot be controlled directly.
 The terms $Y_v$ and $Y_w$ represent the effects of hydrodynamic damping.
 Because hydrodynamic damping is dissipative, the terms $Y_v$ and $Y_w$ are negative.
 The term $G$ represents the effects of gravity and buoyancy on the heave velocity.
 The remaining terms represent the Coriolis and centripetal forces.
 
-In the remainder of this section, we derive a component form for absolute velocities.
+In the remainder of this section, we derive a component form for the absolute velocities.
 From \eqref{eq:background_component_form}, we have
 \begin{subequations}
     \begin{align}

@@ -58,7 +58,7 @@ The algorithm is a simplified version of the two methods presented in Chapters~\
 For the sake of simplicity, we do not consider inter-vehicle collision avoidance.
 Instead, we focus on the formation path-following problem with obstacle avoidance.
 To solve the problem, we define two tasks: path following and formation keeping.
-Obstacle avoidance is not implemented as a separate task but rather as an extension of path-following.
+Obstacle avoidance is not implemented as a separate task but rather as an extension of path following.
 
 In the \emph{nominal} case (\emph{i.e.,} when obstacle avoidance is not active), the path-following velocity is given by the coupled \acrfull{los} guidance law \eqref{eq:background_los_coupled}
 \begin{align}
@@ -112,7 +112,7 @@ Similarly to \eqref{eq:NSB_R_path_update}, we choose the following update law fo
 \end{equation}
 where
 \begin{equation}
-    f_s(x) = \frac{x}{\sqrt{1 + x}},
+    f_s(x) = \frac{x}{\sqrt{1 + x^2}},
 \end{equation}
 and $k_s$ is a positive gain.
 
@@ -122,7 +122,7 @@ Now, let us discuss how to make the algorithm presented in the previous section 
 To perform the \gls{nsb} algorithm in a distributed manner, the vehicles do not need to know the exact positions of each other.
 They only need to know the position of the barycenter and the radius of the formation, and converge to a common value of the path parameter.
 
-In this section, we assume that the \glspl{auv} excahnge information continuously.
+In this section, we assume that the \glspl{auv} exchange information continuously.
 The connections between the vehicles can be represented using an undirected graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$, where $\mathcal{V} = \{1, \ldots, N\}$ is the set of vertices corresponding to the \glspl{auv}, and $\mathcal{E} \subset \mathcal{V} \times \mathcal{V}$ is the set of edges, where $(i, j) \in \mathcal{E}$ means that vehicle $i$ can exchange information with vehicle $j$.
 Let $\mat{A}$ be the adjacency matrix and let $\mat{L}$ be the Laplacian matrix of the communications graph, respectively.
 Moreover, let $\mathcal{N}_i$ denote the set of neighbors of vehicle $i$.
@@ -640,7 +640,7 @@ The desired orientation can then be calculated as
 In this section, we discuss the issue of discrete-time delayed communications.
 We assume that the \glspl{auv} can broadcast data via an acoustic modem.
 However, due to the relatively low bitrate and propagation speed of underwater acoustics, there is a significant delay between transmission and reception.
-To model the communications, we assume that when vehicle $i$ transmits a packet at a time $t$, vehicle $j$ receives the packet at a time $t + \Delta T_{ij}$, where $\Delta T_{ij} > 0$ is the dealy.
+To model the communications, we assume that when vehicle $i$ transmits a packet at a time $t$, vehicle $j$ receives the packet at a time $t + \Delta T_{ij}$, where $\Delta T_{ij} > 0$ is the delay.
 Since the acoustic communications channel has a range of several kilometers \cite{stojanovic_underwater_acoustic_2009}, we can assume that all vehicles can recieve the transmitted packet (in other words, that the communications graph is fully connected).
 To address the issues with discrete-time communications, delays, and limited bandwidth, we need to discretize the consensus scheme \eqref{eq:distr_NSB_consensus_barycenter}, \eqref{eq:distr_NSB_consensus_parameter}, compensate for the delays, and reduce the number of transmissions.
 
@@ -747,7 +747,7 @@ It may be possible to extend the results of Section~\ref{sec:distr_NSB_distribut
 In this section, we test the event-triggered scheme proposed in Section~\ref{sec:distr_NSB_event_triggered}.
 We choose the mixing gains $a_p = a_s = 0.4$, and the penalty gains: $b_p = 10^{-4}, b_s = 4$.
 
-We compare our algorithm with an event-triggered cooperative path following algorithm proposed in \cite{praveen_cooperative_2018}.
+We compare our algorithm with an event-triggered cooperative path-following algorithm proposed in \cite{praveen_cooperative_2018}.
 In this algorithm, each vehicle follows its own desired path given by $\mat{p}_{d,i}(s) = \mat{p}_p(s) + \mat{R}_p(s) \mat{p}_{f, i}^f$.
 Coordination is then achieved by running a consensus scheme on the path parameter.
 

@@ -101,7 +101,7 @@ This equation describes a large class of systems, including the matrix-vector mo
 
 We consider a scenario with $N$ vehicles.
 We shall denote the variables that belong to a given vehicle by a lower index (\emph{e.g.,} $\mathbf{x}_{i}$ is the state of the $i^{\rm th}$ vehicle).
-Let us assume that each vehicle has access to the position ($\mathbf{p}_i$) and the inertial velocity ($\dot{\mathbf{p}}_i$) of all other vehicles.
+Let us assume that each vehicle has access to the position ($\mathbf{p}_j$) and the inertial velocity ($\dot{\mathbf{p}}_j$) of all other vehicles.
 
 Furthermore, let $\boldsymbol{\tau}_{d, i}$ be the desired forces and torques obtained from the high-level controller of vehicle $i$ (see~\figref{fig:ccta_diagram}).
 The goal of this chapter is to design a control allocation block that incorporates safety constraints.
@@ -220,7 +220,7 @@ For $\dot{\mathbf{p}}_{ij}$, we split the derivative of $\pose$ from \eqref{eq:c
 
 \noindent Substituting this into the time-derivative of \eqref{eq:ccta_p_ij} yields
 \begin{equation}
-    \dot{\mathbf{p}}_{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \vel_{i} - \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{j}) \, \vel_{j}.
+    \dot{\mathbf{p}}_{ij} = \mathbf{J}_{\mathbf{p}}(\bs{\Theta}_{i}) \, \vel_{i} - \dot{\mathbf{p}}_{j}.
     \label{eq:ccta_p_dot}
 \end{equation}
 
@@ -265,6 +265,9 @@ where $\Delta\mathbf{u}_{i}^*$ is obtained by solving the following \gls{qp}
     \end{align}
     \label{eq:ccta_combined_avoidance_allocation}
 \end{subequations}
+
+\vspace*{-1em}
+
 \noindent where $\mathbf{u}_{i,\min}$ and $\mathbf{u}_{i,\max}$ are the absolute actuator limits, and $\Delta\mathbf{u}_{i,\min}$ and $\Delta\mathbf{u}_{i,\max}$ are the actuator rate limits.
 The absolute limits are usually given by the physical limitations of the vehicle (\emph{e.g.,} the thrust of a propeller or the deflection of control surfaces) whereas the rate limits are user-defined to reduce the rapid changes that wear out the actuators.
 
@@ -470,7 +473,7 @@ Figure \ref{fig:ccta_orig} shows the results of algorithm \eqref{eq:ccta_combine
 Figure \ref{fig:ccta_modified} shows the results of algorithm \eqref{eq:ccta_combined_avoidance_allocation_modified}.
 Each figure consists of two plots.
 The plot on the left displays the trajectory of the vessels.
-The colored lines show the trajectory of each vessel, the boat-shaped polygons represent the pose of the vessels at several evenly spaced time-instances, and the colored crosses show the reference of each vessel.
+The colored lines show the trajectory of each vessel and the boat-shaped polygons represent the pose of the vessels at several evenly spaced time-instances.
 The plot on the right shows the smallest distance between the vessels compared to the minimum safe distance $d_{\min}$.
 In both scenarios, the vessels reach their reference position while maintaining safe distance.
 

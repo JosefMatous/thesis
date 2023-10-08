@@ -189,7 +189,7 @@ The dynamics of these error states are given by
 \begin{subequations}
     \begin{align}
         \dot{\tilde{\bs{\xi}}}_1 &= \tilde{\bs{\xi}}_2, \\
-        \dot{\tilde{\bs{\xi}}}_2 &= \bs{\mu} - \dot{\bs{\xi}}_2.
+        \dot{\tilde{\bs{\xi}}}_2 &= \bs{\mu} - \dot{\bs{\xi}}_{2,d}.
     \end{align} \label{eq:handpos_def_hand_transform_CL_dynamics}
 \end{subequations}
 
@@ -407,7 +407,7 @@ Note that the Lyapunov analysis in the proof is conservative and always consider
 Consequently, we assume that the cross-coupling terms have a destabilizing effect.
 
 Next, we investigate the effect of the hand length $h$.
-We can see that $h$ has a stabilizing effect, since it divides the destabilizing term $\LBnu$.
+We can see that $h$ has a stabilizing effect, the destabilizing term $\LBnu$ is divided by $h$.
 The intuition behind this effect is illustrated in \figref{fig:handpos_def_lever}.
 A greater hand length gives us more ``leverage''.
 In the figure, we show that if the lateral acceleration of the hand position point is $\mu$, then the angular acceleration of the vehicle must be $\tau = \frac{\mu}{h}$.

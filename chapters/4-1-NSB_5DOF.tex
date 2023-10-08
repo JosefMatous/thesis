@@ -137,8 +137,8 @@ where $\lambda_r$ is a positive constant.
 The yaw controller is analogous to the pitch controller introduced previously
 \begin{align}        
     \begin{split}
-        \scale[0.95]{t_r} &\scale[0.95]{= - F_r(\cdot) - \bs{\phi}_r(\cdot)\T\,\hat{\mathbb{V}}_r - r\,\tan(\theta)\dot{\theta}} \\
-        & \scale[0.95]{ + \cos(\theta)\left(\ddot{\psi}_d - \lambda_r\,\dot{\tilde{\lambda}} - k_{\psi}\,\tilde{\psi} - k_r\,s_r - k_d\,{\rm sign}(s_r)\right), }
+        \scale[0.95]{t_r\,} &\scale[0.95]{= - F_r(\cdot) - \bs{\phi}_r(\cdot)\T\,\hat{\mathbb{V}}_r - r\,\tan(\theta)\dot{\theta}} \\
+        &\quad \scale[0.95]{ + \cos(\theta)\left(\ddot{\psi}_d - \lambda_r\,\dot{\tilde{\lambda}} - k_{\psi}\,\tilde{\psi} - k_r\,s_r - k_d\,{\rm sign}(s_r)\right), }
     \end{split} \label{eq:nsb_5dof_t_r} \\
     \scale[0.95]{\dot{\hat{\mathbb{V}}}_r} & \scale[0.95]{= c_r\,\bs{\phi}_r(\cdot)\,s_r,} \label{eq:nsb_5dof_V_hat_r}
 \end{align}
@@ -146,7 +146,7 @@ where $k_{\psi}$, $k_r$, $k_d$ and $c_r$ are positive gains.
 
 \subsection{NSB Tasks}
 \label{sec:nsb_5dof_NSB}
-Let us denote the variables associated with the \gls{colav}, formation keeping, and path following tasks by lower indices $1$, $2$, and $3$, respectively.
+Let us denote the variables associated with the \gls{colav}, formation-keeping, and path-following tasks by lower indices $1$, $2$, and $3$, respectively.
 Each task produces a vector of desired velocities, $\ivel_{1}, \ivel_{2}, \ivel_{3} \in \mathbb{R}^{3N}$.
 
 First, let us consider the \gls{colav} task.
@@ -187,7 +187,7 @@ and its desired values are
         \mat{R}\left(\theta_p(s), \psi_p(s)\right)\,\mat{p}_{f,N-1}^f
     \end{bmatrix}. \label{eq:nsb_5dof_sigma_d_2}
 \end{equation}
-The desired velocity of the formation keeping task is given by
+The desired velocity of the formation-keeping task is given by
 \begin{align}
     \ivel_{2} &= \mat{J}_2^{\dagger}\,\left(\dot{\bs{\sigma}}_{d,2} - \bs{\Lambda}_2\,\tilde{\bs{\sigma}}_2\right), \label{eq:nsb_5dof_CLIK}
 \end{align}
@@ -231,7 +231,7 @@ If the \gls{colav} task is inactive, \eqref{eq:nsb_5dof_v_NSB_COLAV} is simplifi
 \begin{equation}
     \ivel_{\rm NSB} = \ivel_{ 2} + \ivel_{ 3},
 \end{equation}
-thanks to the independence and orthogonality of the formation-keeping and path-following task.
+thanks to the independence and orthogonality of the formation-keeping and path-following tasks.
 
 Let $\ivel_{{\rm NSB}, i}$ be the desired \gls{nsb} velocity associated with vehicle $i$, \emph{i.e.,}
 \begin{equation}
@@ -417,7 +417,7 @@ The lemmas follow the same structure as the 2D case for two ASVs in \cite{eek_fo
     \end{align}
 
     \noindent where $F_v$ and $F_w$ grow at most linearly with $v_i$ and $w_i$, respectively.
-    Then, we conclude that for a sufficiently large $v_i, w_i$, the quadratic terms will dominate the linear terms.
+    Then, we conclude that for a sufficiently large $v_i$ and $w_i$, the quadratic terms will dominate the linear terms.
     Therefore, the underactuated dynamics are bounded if the quadratic terms are negative, which is equivalent to condition \eqref{eq:nsb_5dof_curvature_limit}.
 \end{proof}
 
@@ -503,8 +503,8 @@ Thus, the conditions of \cite[Theorem 5]{pettersen_lyapunov_2017} are fulfilled 
 As discussed in the proof of Lemma~\ref{lemma_1}, the perturbing system \eqref{eq:nsb_5dof_perturbing} is UGES, implying both UGAS and USGES.
 Furthermore, it is straightforward to show that the following holds for the Lyapunov function \eqref{eq:nsb_5dof_LCF}
 \begin{align}
-    \left\| \frac{\partial V}{\partial \tilde{\mat{X}}_1} \right\| \, \left\|\tilde{\mat{X}}_1\right\| &= \left\|\tilde{\mat{X}}_1\right\|^2 = 2\,V\left(\tilde{\mat{X}}_1\right), \quad \forall \tilde{\mat{X}}_1, \\
-    \left\| \frac{\partial V}{\partial \tilde{\mat{X}}_1} \right\| &= \left\|\tilde{\mat{X}}_1\right\| \leq \mu, \quad \quad \forall \left\|\tilde{\mat{X}}_1\right\| \leq \mu.
+    \left\| \frac{\partial V}{\partial \tilde{\mat{X}}_1} \right\| \, \left\|\tilde{\mat{X}}_1\right\| &= \left\|\tilde{\mat{X}}_1\right\|^2 = 2\,V\!\left(\tilde{\mat{X}}_1\right),& \forall& \tilde{\mat{X}}_1, \\
+    \left\| \frac{\partial V}{\partial \tilde{\mat{X}}_1} \right\| &= \left\|\tilde{\mat{X}}_1\right\| \leq \mu,& \forall& \left\|\tilde{\mat{X}}_1\right\| \leq \mu.
 \end{align}
 Therefore, \cite[Assumption 1]{pettersen_lyapunov_2017} is satisfied with $c_1 = 2$ and $c_2 = \mu$ for any $\mu > 0$.
 
