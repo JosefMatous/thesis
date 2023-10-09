@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg2"
    width="495.41824"
    height="311.97339"
    viewBox="0 0 495.41824 311.97339"
    sodipodi:docname="trajectory_3d.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -23,7 +23,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -76,7 +75,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1009"
+     inkscape:window-height="1011"
      id="namedview4"
      showgrid="false"
      fit-margin-top="0"
@@ -84,13 +83,14 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:zoom="2.0387597"
-     inkscape:cx="264.54253"
-     inkscape:cy="170.62658"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:cx="176.57795"
+     inkscape:cy="170.69201"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="g10"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:pagecheckerboard="0" />
   <g
      inkscape:groupmode="layer"
      inkscape:label="Image"
@@ -216,23 +216,23 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:1.25;font-family:serif;-inkscape-font-specification:serif"
-       x="43.015312"
+       x="41.015312"
        y="209.3425"
        id="text849-1"><tspan
          sodipodi:role="line"
          id="tspan847-3"
-         x="43.015312"
+         x="41.015312"
          y="209.3425"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:serif;-inkscape-font-specification:serif">0</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:1.25;font-family:serif;-inkscape-font-specification:serif"
-       x="16.635109"
+       x="20.635109"
        y="182.85582"
        id="text849-8-3-1"><tspan
          sodipodi:role="line"
          id="tspan847-8-5-6"
-         x="16.635109"
+         x="20.635109"
          y="182.85582"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:serif;-inkscape-font-specification:serif">$-10$</tspan></text>
     <text

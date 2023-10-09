@@ -171,7 +171,7 @@ The task Jacobian is given by the stacked partial derivatives for each active co
     \frac{\partial \sigma_{1,k}}{\partial \mathbf{x}_{1,j}} = -\frac{\left(\mathbf{x}_{1,i}-\mathbf{x}_{1,j}\right) \T}{\|\mathbf{x}_{1,i} - \mathbf{x}_{1,j}\|}.
 \end{align}
 \end{subequations}
-The derivative of the task Jacobian is similarly given by a stack of time-differentiated partial derivatives
+The derivative of the task Jacobian is given by
 \begin{subequations}
 \begin{align}
     \dot{\mathbf{J}}_1 &= \left[{\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,1}}{\partial \mathbf{x}_1}\right)}\T, \ldots, {\left(\frac{{\rm d}}{{\rm d}t}\frac{\partial \sigma_{1,l}}{\partial \mathbf{x}_1}\right)}\T\right]\T,\\

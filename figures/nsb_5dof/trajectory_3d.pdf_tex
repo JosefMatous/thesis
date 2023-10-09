@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.0.1 (3bc2e813f5, 2020-09-07), www.inkscape.org
+%% Creator: Inkscape 1.1.2 (0a00cf5339, 2022-02-04), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'trajectory_3d.pdf' (pdf, eps, ps)
 %%
@@ -64,8 +64,8 @@
     \put(0.83746518,0.14278696){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0\end{tabular}}}}%
     \put(0.87607755,0.22100176){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$-50$\end{tabular}}}}%
     \put(0.9162787,0.2982265){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$-100$\end{tabular}}}}%
-    \put(0.07001441,0.25268371){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0\end{tabular}}}}%
-    \put(0.01676606,0.30614698){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$-10$\end{tabular}}}}%
+    \put(0.06597741,0.25268371){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0\end{tabular}}}}%
+    \put(0.02484004,0.30614698){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$-10$\end{tabular}}}}%
     \put(0.04883177,0.19724029){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}10\end{tabular}}}}%
     \put(0.05024893,0.1427869){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}20\end{tabular}}}}%
     \put(0.35941137,0.0218005){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$ [m]\end{tabular}}}}%
